@@ -1,12 +1,13 @@
 # VTex (vtex)
-
-VTEX enables brands and retailers to achieve faster time to market, reach
-their customers across any channel, and uncover new growth areas.
+VTex is an innovative company that specializes in providing e-commerce solutions for businesses looking to optimize their online operations. Their platform offers a range of tools and services designed to streamline the purchasing process, enhance customer experience, and increase sales growth. VTex helps clients to create responsive and efficient online stores, manage their inventory, process payments securely, and analyze data to make informed business decisions. With a focus on scalability and customization, VTex is committed to helping businesses of all sizes thrive in the competitive digital marketplace.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-search/commerce/main/_apis/vtex/apis.md)
 
 ## Scope
 
+- **Type:** Contract 
+- **Position:** Consuming 
+- **Access:** 3rd-Party 
 
 ## Tags:
 
@@ -15,7 +16,7 @@ their customers across any channel, and uncover new growth areas.
 ## Timestamps
 
 - **Created:** 2024-06-07 
-- **Modified:** 2025-01-01 
+- **Modified:** 2025-01-04 
 
 ## APIs
 
