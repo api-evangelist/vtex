@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Anti-fraud Provider API
+  title: VTex Anti-fraud Provider API
   description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
   version: '1.0'
 servers:
@@ -15,7 +15,7 @@ paths:
     post:
       tags:
         - Anti-fraud Flow
-      summary: Send Anti-fraud Pre-Analysis Data (optional)
+      summary: VTex Send Anti-fraud Pre-Analysis Data (optional)
       description: "Receives a new transaction anti-fraud data for (synchronous) pre-analysis. This step is performed before payments authorization.\r\n\r\n>⚠️ This endpoint can only be used if your anti-fraud provider already has the pre-analysis function configured within VTEX. To check if it is already configured, in the VTEX Admin, go to **Store Settings > Payments > Settings> Gateway affiliations tab > {your anti-fraud provider option}** and verify if the **Enable risk Pre-Analysis** field is available to be selected. If the **Enable risk Pre-Analysis** field is not available, check with your anti-fraud provider if this feature is available in their integration and open a ticket in our VTEX support to update the connector.\r\n\r\n>⚠️ The pre-analysis does not exclude the need for full analysis after payments authorization.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: SendAntifraudPreAnalysisData
       parameters:
@@ -56,7 +56,7 @@ paths:
     post:
       tags:
         - Anti-fraud Flow
-      summary: Send Anti-fraud Data
+      summary: VTex Send Anti-fraud Data
       description: "Receives a new transaction anti-fraud data. This step is performed only if all payments are authorized.\r\n\r\nVTEX expects that your anti-fraud provider process this request and retrieves the process result. After that, the VTEX order flow will check the response status to cancel or approve the transaction.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: SendAntifraudData
       parameters:
@@ -95,7 +95,7 @@ paths:
     put:
       tags:
         - Anti-fraud Flow
-      summary: Update Anti-fraud Transactions (optional)
+      summary: VTex Update Anti-fraud Transactions (optional)
       description: "Receives a new transaction anti-fraud data. This step is performed only if all payments are authorized.\r\n\r\nVTEX expects that your anti-fraud provider process this request and retrieves the process result. After that, the VTEX order flow will check the response status to cancel or approve the transaction.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: UpdateAntifraudTransactions(optional)
       parameters:
@@ -212,13 +212,13 @@ paths:
                 status: approved
                 fraudRiskPercentage: 0
                 analysisType: automatic
-                responses: null
+                responses:
       deprecated: false
   /manifest:
     get:
       tags:
         - Anti-fraud Flow
-      summary: List Anti-fraud Provider Manifest
+      summary: VTex List Anti-fraud Provider Manifest
       description: "Returns the custom fields of the anti-fraud provider manifest.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [authentication](https://developers.vtex.com/docs/guides/authentication) or [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: Manifest
       security: []
@@ -251,7 +251,7 @@ paths:
     get:
       tags:
         - Anti-fraud Flow
-      summary: Get Anti-fraud Status
+      summary: VTex Get Anti-fraud Status
       description: "Retrieves the anti-fraud analysis status. This request is performed every two hours up to 5 days. After 5 days in `undefined` status, the order will expire and be cancelled.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: GetAntifraudStatus
       parameters:
@@ -283,7 +283,7 @@ paths:
     delete:
       tags:
         - Anti-fraud Flow
-      summary: Stop Anti-fraud Analysis (optional)
+      summary: VTex Stop Anti-fraud Analysis (optional)
       description: "Notifies whether the order has been canceled by the store or the buyer before completing the anti-fraud analysis status.\r\n\r\n This endpoint is not mandatory for the antifraud flow to work. Check this [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works) for more details.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: StopAntifraudAnalysis(optional)
       parameters:
@@ -315,7 +315,7 @@ paths:
     post:
       tags:
         - OAuth Flow
-      summary: 1. Retrieve Token
+      summary: VTex 1. Retrieve Token
       description: "This endpoint is used to retrieve a payment provider token.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: 1.RetrieveToken
       parameters:
@@ -346,7 +346,7 @@ paths:
     get:
       tags:
         - OAuth Flow
-      summary: 2. Redirect
+      summary: VTex 2. Redirect
       description: "Through this endpoint, VTEX will redirect the store administrator to the Payment provider website using the `token` retrieved in the [previous request](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token).\r\n\r\nAt this point in the flow, the provider shows the login site to the store admin and authorizes VTEX to use its integration as a valid Payment Provider Processor. After that, your server generates an `authorizationCode`.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: 2.Redirect
       parameters:
@@ -405,7 +405,7 @@ paths:
     get:
       tags:
         - OAuth Flow
-      summary: 4. Get Credentials
+      summary: VTex 4. Get Credentials
       description: "Retrieves merchant credentials.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: 4.GetCredentials
       parameters:

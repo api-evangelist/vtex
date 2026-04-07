@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Payment Provider Protocol API
+  title: VTex Payment Provider Protocol API
   description: ">ℹ️ The Payment Provider Protocol is a set of definitions to help you integrate your payment processing API into the VTEX platform, including sub-acquirers, acquirers, gateways, and custom payment services. \r\n\r\nTo achieve this, you must implement a web API (REST) following the specifications described in this documentation.\r\n\r\nTo learn more about the Payment Provider Protocol, check our [Help Center article](https://help.vtex.com/en/tutorial/payment-provider-protocol--RdsT2spdq80MMwwOeEq0m).\r\n\r\n## Endpoint requirements\r\n\r\n  * Must use a standard subdomain/domain name, not an IP address.\r\n  * Must be served over HTTPS on port 443 with TLS 1.2 support.\r\n  * Must respond in less than 5 seconds when running the tests.\r\n  * Must respond in less than 20 seconds when in production.\r\n  * Must be [PCI-DSS compliant](https://developers.vtex.com/docs/guides/payments-integration-pci-dss-compliance) or use [Secure Proxy](https://developers.vtex.com/docs/guides/payments-integration-secure-proxy) to accept branded cards like Visa, Mastercard, Amex, etc.\r\n\r\n## Testing\r\n\r\nYou can perform tests on your payment provider using our [VTEX - Payment Provider Test Suite](https://apps.vtex.com/vtex-payment-provider-test-suite/p).\r\n\r\n>ℹ An extra header `X-VTEX-API-Is-TestSuite` = `true` will be sent for every test suite request, to help you easily identify it and mock any required scenarios.\r\n\r\nFor more details about testing a Payment Provider, check our [Payment Provider Homologation](https://developers.vtex.com/docs/guides/payments-integration-payment-provider-homologation) article.\r\n\r\n## Common parameters in the documentation\r\n\r\n<table>\r\n  <tr>\r\n    <td><code>{{providerApiEndpoint}}</code></td>\r\n    <td>Provider's endpoint for the implementation.</td>\r\n  </tr>\r\n  <tr>\r\n    <td><code>{{X-PROVIDER-API-AppKey}}</code></td>\r\n    <td>Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX).</td>\r\n  </tr>\r\n  <tr>\r\n    <td><code>{{X-PROVIDER-API-AppToken}}</code></td>\r\n    <td>Unique token created by the provider and configured on the provider configuration page (Admin VTEX).</td>\r\n  </tr>\r\n</table> \r\n\r\n## Payment Provider Protocol API Index\r\n\r\n### Payment Flow\r\n\r\n- `GET` [List Payment Provider Manifest](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#get-/manifest)\r\n- `POST` [Create payment](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/payments)\r\n- `POST` [Cancel payment](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/payments/-paymentId-/cancellations)\r\n- `POST` [Settle payment](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/payments/-paymentId-/settlements)\r\n- `POST` [Refund payment](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/payments/-paymentId-/refunds)\r\n- `POST` [Inbound request (BETA)](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/payments/-paymentId-/inbound-request/-action-)\r\n\r\n### Configuration Flow\r\n\r\n- `POST` [Create authorization token](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/authorization/token)\r\n- `GET` [Provider authentication](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#get-/authorization/redirect)\r\n- `GET` [Get credentials](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#get-/authorization/credentials)"
   version: '1.0'
 servers:
@@ -15,8 +15,9 @@ paths:
     get:
       tags:
         - Payment Flow
-      summary: List Payment Provider Manifest
-      description: "Exposes the provider manifest, including metadata settings such as payment methods, split configuration, and custom fields.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Available payment methods\r\n\r\n<table>\r\n    <tr>\r\n        <th>Payment Method</th>\r\n        <th>Type</th>\r\n        <th>Country</th>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Visa</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Mastercard</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>American Express</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Discover</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>JCB</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Diners</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Elo</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Hipercard</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Aura</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Banricompras</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Credz</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Cabal</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Argentina, Brazil, Uruguay, Paraguay</td>\r\n    </tr>\r\n        <td><code>Cartes Bancaires (CB)</code></td>\r\n        <td>Credit Card</td>\r\n        <td>France</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>VirtualDebitElo</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Visa Electron</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Maestro</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Mastercard Debit</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Débito Online</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Cobranded</code></td>\r\n        <td>Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Privatelabels</code></td>\r\n        <td>Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Promissories</code></td>\r\n        <td>Generic</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Cash</code></td>\r\n        <td>Generic</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Pix</code></td>\r\n        <td>Online Transfer</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Safetypay</code></td>\r\n        <td>Online Transfer</td>\r\n        <td>Americas and Europe</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>BankInvoice</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Brazil (Boleto Bancário)</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>FichaDeposito</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Mexico</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Rapipago</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Argentina</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>OXXO</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Mexico</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Voucher</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Mexico</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Bitcoin</code></td>\r\n        <td>Cryptocurrency</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Venda Direta Credito</code></td>\r\n        <td>Credit Card (Physical)</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Venda Direta Debito</code></td>\r\n        <td>Debit Card (Physical)</td>\r\n        <td>Global</td>\r\n    </tr>\r\n</table> \r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+      summary: VTex List Payment Provider Manifest
+      description: "Exposes the provider manifest, including metadata settings such as payment methods, split configuration, and custom fields.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Available payment methods\r\n\r\n<table>\r\n    <tr>\r\n        <th>Payment Method</th>\r\n        <th>Type</th>\r\n        <th>Country</th>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Visa</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Mastercard</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>American Express</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Discover</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>JCB</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Diners</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Elo</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Hipercard</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Aura</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Banricompras</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Credz</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Cabal</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Argentina, Brazil, Uruguay, Paraguay</td>\r\n    </tr>\r\n        <td><code>Cartes Bancaires (CB)</code></td>\r\n        <td>Credit Card</td>\r\n        <td>France</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>VirtualDebitElo</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Visa Electron</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Maestro</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Mastercard Debit</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Débito Online</code></td>\r\n        <td>Debit Card</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Cobranded</code></td>\r\n        <td>Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Privatelabels</code></td>\r\n        <td>Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Promissories</code></td>\r\n        <td>Generic</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Cash</code></td>\r\n        <td>Generic</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Pix</code></td>\r\n        <td>Online Transfer</td>\r\n        <td>Brazil</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Safetypay</code></td>\r\n        <td>Online Transfer</td>\r\n        <td>Americas and Europe</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>BankInvoice</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Brazil (Boleto Bancário)</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>FichaDeposito</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Mexico</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Rapipago</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Argentina</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>OXXO</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Mexico</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Voucher</code></td>\r\n        <td>Offline/Voucher</td>\r\n        <td>Mexico</td>\r\
+        \n    </tr>\r\n    <tr>\r\n        <td><code>Bitcoin</code></td>\r\n        <td>Cryptocurrency</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Venda Direta Credito</code></td>\r\n        <td>Credit Card (Physical)</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Venda Direta Debito</code></td>\r\n        <td>Debit Card (Physical)</td>\r\n        <td>Global</td>\r\n    </tr>\r\n</table> \r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: Manifest
       security: []
       parameters:
@@ -68,8 +69,9 @@ paths:
     post:
       tags:
         - Payment Flow
-      summary: Create payment
-      description: "Creates a new payment and initiates the payment flow.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\nPayment providers must:\r\n\r\n- Execute authorization on payments made through credit/debit card or any synchronized payments;\r\n\r\n- Return the required information to the customer on payments made through bank-issued invoice, redirect, or any async payments.\r\n\r\n >ℹ️ This endpoint has to meet the principle of [idempotence](https://en.wikipedia.org/wiki/Idempotence). When calling this endpoint for the first time of a payment, without a `paymentId`, it should create a new payment. When calling this endpoint for an existing `paymentId`, it should not create another payment, but return the updated status of the existing payment instead.\r\n\r\n## Callbacks (asynchronous flow)\r\n\r\nCallbacks are used for asynchronous payments, which do not receive the final status immediately. At first, an `undefined` status is returned, and the final status will be received from a callback request in the future as `authorized` or `denied`. There are two types of callbacks:\r\n\r\n- **Notification:** If a payment returns with `undefined` status, you are expected to send us a callback/notification to update it later, sending a POST with an updated version of your response (same structure as above) to the `callbackUrl` we have provided.\r\n\r\n- **Retry:** If a payment returns with `undefined` status, you are expected to call the retry endpoint provided by the `callbackUrl` when the processing of the payment is completed, so we make another Create Payment request to update the status with the new value (`authorized` or `denied`).\r\n\r\nCallback requests should be authenticated using a Key and Token which you can [generate from your VTEX partner account License Manager](https://help.vtex.com/en/tutorial/application-keys--2iffYzlvvz4BDMr6WGUtet#generating-app-keys-in-your-account). To do so, `POST` your request passing the `X-VTEX-API-AppKey` and `X-VTEX-API-AppToken` headers with your credentials. **Note:** do not mix up these credentials with the ones we send on behalf of the merchant when sending our requests.\r\n\r\n>⚠ For integrations not using VTEX IO, use the **Notification** callback. For integrations developed using VTEX IO infrastructure, use the **Retry** callback.\r\n\r\n### Callback URL\r\n\r\nThe `callbackUrl` field contains an URL that the payment provider uses to make a callback and inform our gateway of the final payment status: `approved` or `denied`. \r\n\r\nThis URL has some query parameters, including the `X-VTEX-signature`. This parameter is mandatory and contains a signature token to identify that the request has been generated from VTEX as a security measure. The signature token has at most 32 characters. You can check an example of callback URL with the signature token below:\r\n\r\n```\r\nhttps://gatewayqa.vtexpayments.com.br/api/pvt/payment-provider/transactions/8FB0F111111122222333344449984ACB/payments/A2A9A25B11111111222222333327883C/callback?accountName=teampaymentsintegrations&X-VTEX-signature=R******tk\r\n```\r\n\r\nIn the [Transactions page of the Admin](https://help.vtex.com/en/tutorial/how-to-view-the-orders-details--tutorials_452), the signature token appears masked for security reasons, as in this example: `X-VTEX-signature=Rj******tk`.\r\n\r\nWhen making the callback request, we recommend that payment providers use the callback URL exactly as received, which guarantees that all the parameters are included.\r\n\r\nSee below an example of a payload forwarded along with the callback URL:\r\n\r\n```json\r\n{\r\n    \"paymentId\": \"8B3BA2F4352545A8B1C5A215F356A01C\",\r\n    \"status\": \"approved\",\r\n    \"authorizationId\": \"184520\",\r\n    \"nsu\": \"21705348\",\r\n    \"tid\": \"21705348\",\r\n    \"acquirer\": \"pagmm\",\r\n    \"code\": \"0000\",\r\n    \"message\": \"Successfully approved transaction\",\r\n    \"delayToAutoSettle\": 1200,\r\n    \"delayToAutoSettleAfterAntifraud\": 1200,\r\n    \"delayToCancel\": 86400,\r\n    \"cardBrand\": \"Mastercard\",\r\n    \"firstDigits\": \"534696\",\r\n    \"lastDigits\": \"6921\",\r\n    \"maxValue\": 16.6\r\n}\r\n```\r\n\r\n>ℹ️ The parameter values sent in the callback payload replace the original values informed in the **Create Payment** request.\r\n\r\n>⚠️ If the waiting parameters (`delayToAutoSettle` and `delayToAutoSettleAfterAntifraud`) are not sent with the callback URL, the values for these parameters will be automatically set to 24 hours.\r\n\r\n## Beta features\r\n\r\nThe beta features available for payment providers are:\r\n\r\n- `inboundRequestsUrl`: Allows to forward external requests back to your payment provider implementation, including the configured credentials (`X-VTEX-API-*` headers), and settings.\r\n\r\n>ℹ You can reach out to our team by [opening a ticket](https://help.vtex.com/en/tutorial/opening-tickets-to-vtex-support--16yOEqpO32UQYygSmMSSAM) to know more about any beta features.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+      summary: VTex Create payment
+      description: "Creates a new payment and initiates the payment flow.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\nPayment providers must:\r\n\r\n- Execute authorization on payments made through credit/debit card or any synchronized payments;\r\n\r\n- Return the required information to the customer on payments made through bank-issued invoice, redirect, or any async payments.\r\n\r\n >ℹ️ This endpoint has to meet the principle of [idempotence](https://en.wikipedia.org/wiki/Idempotence). When calling this endpoint for the first time of a payment, without a `paymentId`, it should create a new payment. When calling this endpoint for an existing `paymentId`, it should not create another payment, but return the updated status of the existing payment instead.\r\n\r\n## Callbacks (asynchronous flow)\r\n\r\nCallbacks are used for asynchronous payments, which do not receive the final status immediately. At first, an `undefined` status is returned, and the final status will be received from a callback request in the future as `authorized` or `denied`. There are two types of callbacks:\r\n\r\n- **Notification:** If a payment returns with `undefined` status, you are expected to send us a callback/notification to update it later, sending a POST with an updated version of your response (same structure as above) to the `callbackUrl` we have provided.\r\n\r\n- **Retry:** If a payment returns with `undefined` status, you are expected to call the retry endpoint provided by the `callbackUrl` when the processing of the payment is completed, so we make another Create Payment request to update the status with the new value (`authorized` or `denied`).\r\n\r\nCallback requests should be authenticated using a Key and Token which you can [generate from your VTEX partner account License Manager](https://help.vtex.com/en/tutorial/application-keys--2iffYzlvvz4BDMr6WGUtet#generating-app-keys-in-your-account). To do so, `POST` your request passing the `X-VTEX-API-AppKey` and `X-VTEX-API-AppToken` headers with your credentials. **Note:** do not mix up these credentials with the ones we send on behalf of the merchant when sending our requests.\r\n\r\n>⚠ For integrations not using VTEX IO, use the **Notification** callback. For integrations developed using VTEX IO infrastructure, use the **Retry** callback.\r\n\r\n### Callback URL\r\n\r\nThe `callbackUrl` field contains an URL that the payment provider uses to make a callback and inform our gateway of the final payment status: `approved` or `denied`. \r\n\r\nThis URL has some query parameters, including the `X-VTEX-signature`. This parameter is mandatory and contains a signature token to identify that the request has been generated from VTEX as a security measure. The signature token has at most 32 characters. You can check an example of callback URL with the signature token below:\r\n\r\n```\r\nhttps://gatewayqa.vtexpayments.com.br/api/pvt/payment-provider/transactions/8FB0F111111122222333344449984ACB/payments/A2A9A25B11111111222222333327883C/callback?accountName=teampaymentsintegrations&X-VTEX-signature=R******tk\r\n```\r\n\r\nIn the [Transactions page of the Admin](https://help.vtex.com/en/tutorial/how-to-view-the-orders-details--tutorials_452), the signature token appears masked for security reasons, as in this example: `X-VTEX-signature=Rj******tk`.\r\n\r\nWhen making the callback request, we recommend that payment providers use the callback URL exactly as received, which guarantees that all the parameters are included.\r\n\r\nSee below an example of a payload forwarded along with the callback URL:\r\n\r\n```json\r\n{\r\n    \"paymentId\": \"8B3BA2F4352545A8B1C5A215F356A01C\",\r\n    \"status\": \"approved\",\r\n    \"authorizationId\": \"184520\",\r\n    \"nsu\": \"21705348\",\r\n    \"tid\": \"21705348\",\r\n    \"acquirer\": \"pagmm\",\r\n    \"code\": \"0000\",\r\n    \"message\": \"Successfully approved transaction\",\r\n    \"delayToAutoSettle\": 1200,\r\n    \"delayToAutoSettleAfterAntifraud\": 1200,\r\n    \"delayToCancel\": 86400,\r\n    \"cardBrand\": \"Mastercard\"\
+        ,\r\n    \"firstDigits\": \"534696\",\r\n    \"lastDigits\": \"6921\",\r\n    \"maxValue\": 16.6\r\n}\r\n```\r\n\r\n>ℹ️ The parameter values sent in the callback payload replace the original values informed in the **Create Payment** request.\r\n\r\n>⚠️ If the waiting parameters (`delayToAutoSettle` and `delayToAutoSettleAfterAntifraud`) are not sent with the callback URL, the values for these parameters will be automatically set to 24 hours.\r\n\r\n## Beta features\r\n\r\nThe beta features available for payment providers are:\r\n\r\n- `inboundRequestsUrl`: Allows to forward external requests back to your payment provider implementation, including the configured credentials (`X-VTEX-API-*` headers), and settings.\r\n\r\n>ℹ You can reach out to our team by [opening a ticket](https://help.vtex.com/en/tutorial/opening-tickets-to-vtex-support--16yOEqpO32UQYygSmMSSAM) to know more about any beta features.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: CreatePayment
       parameters:
         - $ref: '#/components/parameters/X-PROVIDER-API-AppKey'
@@ -135,7 +137,7 @@ paths:
                   type: string
                   description: Configurable for Cobranded and Privatelabels payment methods.
                   nullable: true
-                  example: null
+                  example:
                 merchantName:
                   type: string
                   description: VTEX merchant name that will receive the payment.
@@ -598,7 +600,7 @@ paths:
                   transactionId: 2F023FD5A72A49D48A8633252B7CCBD6
                   paymentId: 01693EB95BE443AC85874E395CD91565
                   paymentMethod: Diners
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   card:
                     holder: John Doe
@@ -608,7 +610,7 @@ paths:
                       month: '12'
                       year: '2020'
                     document: '39295416023'
-                    token: null
+                    token:
                   value: 31.9
                   referenceValue: 31.9
                   currency: BRL
@@ -624,9 +626,9 @@ paths:
                       lastName: Doe
                       document: '01234567890'
                       documentType: cpf
-                      corporateName: null
-                      tradeName: null
-                      corporateDocument: null
+                      corporateName:
+                      tradeName:
+                      corporateDocument:
                       isCorporate: false
                       email: john.doe@example.com
                       phone: '+5521999999999'
@@ -689,7 +691,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: Pix
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4307.23
@@ -697,12 +699,12 @@ paths:
                   installments: 1
                   deviceFingerprint: 15ace369587ha
                   card:
-                    holder: null
-                    number: null
-                    csc: null
+                    holder:
+                    number:
+                    csc:
                     expiration:
-                      month: null
-                      year: null
+                      month:
+                      year:
                   miniCart:
                     shippingValue: 11.44
                     taxValue: 10.01
@@ -754,7 +756,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: Visa
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4000
@@ -819,7 +821,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: BankInvoice
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4307.23
@@ -827,12 +829,12 @@ paths:
                   installments: 1
                   deviceFingerprint: 12ade389087fe
                   card:
-                    holder: null
-                    number: null
-                    csc: null
+                    holder:
+                    number:
+                    csc:
                     expiration:
-                      month: null
-                      year: null
+                      month:
+                      year:
                   miniCart:
                     shippingValue: 11.44
                     taxValue: 10.01
@@ -884,7 +886,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: Visa
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4000
@@ -949,7 +951,7 @@ paths:
                   transactionId: 2F023FD5A72A49D48A8633252B7CCBD6
                   paymentId: 01693EB95BE443AC85874E395CD91565
                   paymentMethod: BankInvoice
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   card:
                     holder: 'null'
@@ -958,8 +960,8 @@ paths:
                     expiration:
                       month: 'null'
                       year: 'null'
-                  document: null
-                  token: null
+                  document:
+                  token:
                   value: 31.9
                   referenceValue: 31.9
                   currency: BRL
@@ -975,9 +977,9 @@ paths:
                       lastName: Doe
                       document: '01234567890'
                       documentType: cpf
-                      corporateName: null
-                      tradeName: null
-                      corporateDocument: null
+                      corporateName:
+                      tradeName:
+                      corporateDocument:
                       isCorporate: false
                       email: john.doe@example.com
                       phone: '+5521999999999'
@@ -1037,7 +1039,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: CustomPay
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4307.23
@@ -1045,12 +1047,12 @@ paths:
                   installments: 1
                   deviceFingerprint: 12ade389087fe
                   card:
-                    holder: null
-                    number: null
-                    csc: null
+                    holder:
+                    number:
+                    csc:
                     expiration:
-                      month: null
-                      year: null
+                      month:
+                      year:
                   miniCart:
                     shippingValue: 11.44
                     taxValue: 10.01
@@ -1103,7 +1105,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: FakePay
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4307.23
@@ -1111,12 +1113,12 @@ paths:
                   installments: 1
                   deviceFingerprint: 12ade389087fe
                   card:
-                    holder: null
-                    number: null
-                    csc: null
+                    holder:
+                    number:
+                    csc:
                     expiration:
-                      month: null
-                      year: null
+                      month:
+                      year:
                   miniCart:
                     shippingValue: 11.44
                     taxValue: 10.01
@@ -1168,7 +1170,7 @@ paths:
                   transactionId: 2F023FD5A72A49D48A8633252B7CCBD6
                   paymentId: 01693EB95BE443AC85874E395CD91565
                   paymentMethod: RedirectPay
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 31.9
                   referenceValue: 31.9
@@ -1185,9 +1187,9 @@ paths:
                       lastName: Doe
                       document: '01234567890'
                       documentType: cpf
-                      corporateName: null
-                      tradeName: null
-                      corporateDocument: null
+                      corporateName:
+                      tradeName:
+                      corporateDocument:
                       isCorporate: false
                       email: john.doe@example.com
                       phone: '+5521999999999'
@@ -1247,7 +1249,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: Visa
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4000
@@ -1312,7 +1314,7 @@ paths:
                   transactionId: D3AA1FC8372E430E8236649DB5EBD08E
                   paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                   paymentMethod: Visa
-                  paymentMethodCustomCode: null
+                  paymentMethodCustomCode:
                   merchantName: mystore
                   value: 4307.23
                   referenceValue: 4000
@@ -1397,8 +1399,8 @@ paths:
                     paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                     status: undefined
                     tid: TID1578324421
-                    authorizationId: null
-                    nsu: null
+                    authorizationId:
+                    nsu:
                     code: APP123
                     paymentAppData:
                       payload: '{"code":"https://bacen.pix/pix/code","qrCodeBase64Image":"iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAABQGlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGDiSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAxSDMwMkgwiCZmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsgspwWXFu+Xeyundb6w0WL33C5M9SiAKyW1OBlI/wHihOSCohIGBsYYIFu5vKQAxG4AskWKgI4CsqeA2OkQ9goQOwnC3gNWExLkDGRfALIFkjMSU4DsB0C2ThKSeDoSG2ovCLAZGZkbhBNwKKmgJLWiBEQ75xdUFmWmZ5QoOAJDJ1XBMy9ZT0fByMDIgIEBFNYQ1Z9vgMOQUYwDIZapzMBgmQEUfIQQSxNmYNiZzsDAU4UQU5/PwMBrxMBw5GJBYlEi3AGM31iK04yNIGzu7QwMrNP+//8M9Ca7JgPD3+v////e/v//32UMDMy3GBgOfAMA4+RdqZ9YRkcAAABWZVhJZk1NACoAAAAIAAGHaQAEAAAAAQAAABoAAAAAAAOShgAHAAAAEgAAAESgAgAEAAAAAQAAAAKgAwAEAAAAAQAAAAIAAAAAQVNDSUkAAABTY3JlZW5zaG900Fpo3gAAAdJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8ZXhpZjpQaXhlbFhEaW1lbnNpb24+MjwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlVzZXJDb21tZW50PlNjcmVlbnNob3Q8L2V4aWY6VXNlckNvbW1lbnQ+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj4yPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Cl89Cn4AAAASSURBVAgdY/wPBAxAwAQiQAAAPfgEAIAu9DkAAAAASUVORK5CYII="}'
@@ -1415,7 +1417,7 @@ paths:
                     tid: TID-7B58BE1A08
                     acquirer: TestPay
                     code: '2000'
-                    message: null
+                    message:
                     delayToAutoSettle: 21600
                     delayToAutoSettleAfterAntifraud: 1800
                     delayToCancel: 21600
@@ -1436,7 +1438,7 @@ paths:
                     tid: TID-F3FB9B3FDB-ASYNC
                     acquirer: TestPay
                     code: 2000-ASYNC
-                    message: null
+                    message:
                     delayToAutoSettle: 21600
                     delayToAutoSettleAfterAntifraud: 1800
                     delayToCancel: 21600
@@ -1452,7 +1454,7 @@ paths:
                     tid: TID-DBE4BFFB19
                     acquirer: TestPay
                     code: '2001'
-                    message: null
+                    message:
                     delayToAutoSettle: 21600
                     delayToAutoSettleAfterAntifraud: 1800
                     delayToCancel: 21600
@@ -1467,11 +1469,11 @@ paths:
                     paymentId: 7ee64e51-a0d3-4405-874c-d7497ab84572
                     status: approved
                     authorizationId: 3baafb4097d6c8ad3883
-                    paymentUrl: null
+                    paymentUrl:
                     nsu: 214c699cb408ce6a7110
                     tid: 214c699cb408ce6a7110
-                    acquirer: null
-                    code: null
+                    acquirer:
+                    code:
                     message: Payment with custom installments approved
                     delayToAutoSettle: 21600
                     delayToAutoSettleAfterAntifraud: 1800
@@ -1501,7 +1503,7 @@ paths:
     post:
       tags:
         - Payment Flow
-      summary: Cancel payment
+      summary: VTex Cancel payment
       description: "Cancels a payment that was not yet approved or settled.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: CancelPayment
       parameters:
@@ -1530,7 +1532,7 @@ paths:
               example:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                 cancellationId: '1231323234234'
-                code: null
+                code:
                 message: Successfully cancelled
                 requestId: D12D9B80972C462980F5067A3A126837
                 connectorMetadata:
@@ -1544,7 +1546,7 @@ paths:
                 $ref: '#/components/schemas/Fail-GenericError1'
               example:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-                cancellationId: null
+                cancellationId:
                 code: ERR123
                 message: Cancellation has failed due to an internal error
                 requestId: D12D9B80972C462980F5067A3A126837
@@ -1556,7 +1558,7 @@ paths:
                 $ref: '#/components/schemas/Fail-GenericError1'
               example:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-                cancellationId: null
+                cancellationId:
                 code: cancel-manually
                 message: This payment needs to be manually cancelled
                 requestId: D12D9B80972C462980F5067A3A126837
@@ -1565,7 +1567,7 @@ paths:
     post:
       tags:
         - Payment Flow
-      summary: Settle payment
+      summary: VTex Settle payment
       description: "Settles a payment that was previously approved.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: SettlePayment
       parameters:
@@ -1595,7 +1597,7 @@ paths:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                 settleId: 2EA354989E7E4BBC9F9D7B66674C2574
                 value: 57
-                code: null
+                code:
                 message: Successfully settled
                 requestId: DCEAA1FC8372E430E8236649DB5EBD08E
                 connectorMetadata:
@@ -1609,7 +1611,7 @@ paths:
                 $ref: '#/components/schemas/Fail-GenericError2'
               example:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-                settleId: null
+                settleId:
                 value: 0
                 code: ERR123
                 message: Settlement has failed due to an internal error
@@ -1619,7 +1621,7 @@ paths:
     post:
       tags:
         - Payment Flow
-      summary: Refund payment
+      summary: VTex Refund payment
       description: "Refunds a payment (in full or in part) that was previously settled.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: RefundPayment
       parameters:
@@ -1649,7 +1651,7 @@ paths:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
                 refundId: 2EA354989E7E4BBC9F9D7B66674C2574
                 value: 57
-                code: null
+                code:
                 message: Successfully refunded
                 requestId: LA4E20D3B4E07B7E871F5B5BC9F91
                 connectorMetadata:
@@ -1663,7 +1665,7 @@ paths:
                 $ref: '#/components/schemas/Fail-GenericError3'
               example:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-                refundId: null
+                refundId:
                 value: 0
                 code: ERR123
                 message: Refund has failed due to an internal error
@@ -1676,7 +1678,7 @@ paths:
                 $ref: '#/components/schemas/Fail-GenericError3'
               example:
                 paymentId: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-                refundId: null
+                refundId:
                 value: 0
                 code: refund-manually
                 message: This payment needs to be manually refunded
@@ -1686,7 +1688,7 @@ paths:
     post:
       tags:
         - Payment Flow
-      summary: Inbound request (BETA)
+      summary: VTex Inbound request (BETA)
       description: "The Inbound request (BETA) implements an URL that facilitates a direct connection between VTEX Gateway service and the Payment Provider. This functionality allows the payment provider to create other types of specific routes, in addition to those described in the other PPP endpoints, according to their type of operation (e.g. hook or enrollment routes, among others). \r\n\r\nThis endpoint forwards a request back to your endpoint using the `inboundRequestsUrl` provided in the [Create Payment](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/payments?endpoint=post-/payments) endpoint payload.\r\n\r\nThe `{action}` part of the path will be the same you have used to call the `inboundRequestsUrl` (e.g. hook, enrollment, among others).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: InboundRequest(BETA)
       parameters:
@@ -1735,7 +1737,7 @@ paths:
     post:
       tags:
         - Configuration Flow
-      summary: Create authorization token
+      summary: VTex Create authorization token
       description: "Creates the authorization token that will be used for VTEX to redirect the merchant to the provider's authentication application. For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: CreateAuthorizationToken
       parameters:
@@ -1768,7 +1770,7 @@ paths:
     get:
       tags:
         - Configuration Flow
-      summary: Provider authentication
+      summary: VTex Provider authentication
       description: "Use the application of provider for merchant's authentication.\r\n\r\nVTEX will redirect the merchant to your application using the `token` we retrieved earlier.\r\n\r\nYou're expected to have a signup/signin process on your side in order to authenticate the merchant, either as a new or as an existent user.\r\n\r\nAt this point, you can present your terms an conditions, a contract, and ask for merchant's final agreement to use your services.\r\n\r\nFinally, you need to generate an `authorizationCode` that you must concatenate to the `returnUrl` we send earlier.\r\n\r\nExample:\r\n\r\n`returnUrl` = `https://admin.mystore.example.com/provider-return?authorizationCode=`\r\n\r\n`authorizationCode` = `7940597D-A63B`\r\n\r\nRedirect the merchant to:\r\n\r\n`https://admin.mystore.example.com/provider-return?authorizationCode=7940597D-A63B` \r\n\r\n For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: ProviderAuthentication
       parameters:
@@ -1798,7 +1800,7 @@ paths:
     get:
       tags:
         - Configuration Flow
-      summary: Get credentials
+      summary: VTex Get credentials
       description: "Retrieves the merchant credentials (applicationId, appKey and appToken) registered with the payment provider. These credentials will be saved in the VTEX system and activated when the retailer decides to enable the connector.\r\n\r\n For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
       operationId: GetCredentials
       parameters:

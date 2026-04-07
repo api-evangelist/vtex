@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Session Manager API
+  title: VTex Session Manager API
   description: "Session Manager tracks the current browsing sessions of all customers on the VTEX platform. Important session information is automatically captured and stored in a secure and easily accessible location. This includes data such as relevant cookies, query strings, authentication credentials, current profile and pricing information, if applicable. Session Manager API allows developers to retrieve and manage information about sessions. No authentication is required.\r\n\r\nFor more information, read the [Session Manager guide](https://developers.vtex.com/docs/guides/session-manager).\r\n\r\n## Index\r\n\r\n### Sessions\r\n\r\n- `POST` [Create new session](https://developers.vtex.com/docs/api-reference/session-manager-api#post-/api/sessions)\r\n- `GET` [Get session](https://developers.vtex.com/docs/api-reference/session-manager-api#get-/api/sessions)\r\n- `PATCH` [Edit session](https://developers.vtex.com/docs/api-reference/session-manager-api#patch-/api/sessions)\r\n\r\n### Segment\r\n\r\n- `GET` [Get segment](https://developers.vtex.com/docs/api-reference/session-manager-api#get-/api/segments)"
   contact: {}
   version: '1.0'
@@ -21,7 +21,7 @@ paths:
     post:
       tags:
         - Session
-      summary: Create new session
+      summary: VTex Create new session
       description: "Creates a new session and returns a session token and a segment token. Also stores `vtex_session` and `vtex_segment` cookies, with the same values returned in the response.\n\r\n\rAll parameters in the body that are not within the public namespace will be ignored. Query string items will automatically be added to the public namespace.\n\r\n\rNo authentication is required.\n\r\n\r>⚠️ The Session Manager API uses the `vtex_session` and `vtex_segment` cookies to store the data required to identify the user and the session. These cookies are stored in the user's browser when the session is created and sent automatically in every request to that domain. You will have to reproduce that by sending these cookies as headers in other requests to Session Manager API in order for it to work outside of a browser environment."
       operationId: Createnewsession
       parameters: []
@@ -52,7 +52,7 @@ paths:
     get:
       tags:
         - Session
-      summary: Get session
+      summary: VTex Get session
       description: "Retrieves information from a previously created sesssion.\n\r\n\r>⚠️ The Session Manager API uses the `vtex_session` and `vtex_segment` cookies to store the data required to identify the user and the session. These cookies are stored in the user's browser when the session is created and sent automatically in every request to that domain. You will have to reproduce that by sending these cookies as headers to Session Manager API in order for it to work outside of a browser environment."
       operationId: GetSession
       parameters:
@@ -109,7 +109,7 @@ paths:
     patch:
       tags:
         - Session
-      summary: Edit session
+      summary: VTex Edit session
       description: "Edits information from a previously created sesssion.\n\r\n\rThis endpoint works the same way as the [Create new session](https://developers.vtex.com/docs/api-reference/session-manager-api#post-/api/sessions) endpoint, but when the request is sent with a `vtex_session` and the `vtex_segment` cookies in the header, it retrieves the session first and then applies the changes instead of generating a new one.\n\r\n\rOnly keys inside the `public` namespace in the request body are considered, and query parameters are automatically added to the public namespace.\n\r\n\r>⚠️ The Session Manager API uses the `vtex_session` and `vtex_segment` cookies to store the data required to identify the user and the session. These cookies are stored in the user's browser when the session is created and sent automatically in every request to that domain. You will have to reproduce that by sending these cookies as headers to Session Manager API in order for it to work outside of a browser environment."
       operationId: Editsession
       parameters: []
@@ -144,7 +144,7 @@ paths:
     get:
       tags:
         - Segment
-      summary: Get segment
+      summary: VTex Get segment
       description: "Retrieves information about the segment, which contains additional data related to the session's context.\n\r\n\rYou can add certain public fields as the query string and the system will attempt to fulfill it. Values such as `cultureInfo` and `utm` are overwriteable, just keep in mind such changes will not be reflected in the client's session.\n\r\n\rIf you wish to change the value on the session (and thus be reflected on the segment without special query strings), then use the [Edit session](https://developers.vtex.com/docs/api-reference/session-manager-api#patch-/api/sessions) endpoint. ## Permissions\r\n\r\nThis endpoint does not require [authentication](https://developers.vtex.com/docs/guides/authentication) or [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
       operationId: GetSegment
       parameters: []
@@ -156,13 +156,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Segment'
               example:
-                campaigns: null
+                campaigns:
                 channel: '1'
-                priceTables: null
+                priceTables:
                 regionId: v2.1BB18CE648B5111D0933734ED83EC783
-                utm_campaign: null
-                utm_source: null
-                utmi_campaign: null
+                utm_campaign:
+                utm_source:
+                utmi_campaign:
                 currencyCode: BRL
                 currencySymbol: R$
                 countryCode: BRA
@@ -395,13 +395,13 @@ components:
           type: string
           description: Defines whether or not the channel is private.
       example:
-        campaigns: null
+        campaigns:
         channel: '1'
-        priceTables: null
+        priceTables:
         regionId: v2.1BB18CE648B5111D0933734ED83EC783
-        utm_campaign: null
-        utm_source: null
-        utmi_campaign: null
+        utm_campaign:
+        utm_source:
+        utmi_campaign:
         currencyCode: BRL
         currencySymbol: R$
         countryCode: BRA
