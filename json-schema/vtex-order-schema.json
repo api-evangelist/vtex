@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/vtex/json-schema/vtex-order-schema.json",
+  "title": "VTEX Order",
+  "description": "Schema for a VTEX order object returned by the Orders API",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "description": "Unique order identifier in VTEX format (e.g., v1234567890-01)"
+    },
+    "sequence": {
+      "type": "string",
+      "description": "Sequential order number for display purposes"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "waiting-for-sellers-confirmation",
+        "payment-pending",
+        "payment-approved",
+        "ready-for-handling",
+        "handling",
+        "invoiced",
+        "canceled"
+      ],
+      "description": "Current order status in the VTEX workflow"
+    },
+    "statusDescription": {
+      "type": "string",
+      "description": "Human-readable description of the current order status"
+    },
+    "value": {
+      "type": "integer",
+      "description": "Total order value in cents (smallest currency unit)"
+    },
+    "creationDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the order was created"
+    },
+    "lastChange": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the last order update"
+    },
+    "clientProfileData": {
+      "type": "object",
+      "description": "Customer profile information",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "documentType": { "type": "string" },
+        "document": { "type": "string" },
+        "phone": { "type": "string" },
+        "isCorporate": { "type": "boolean" }
+      }
+    },
+    "shippingData": {
+      "type": "object",
+      "description": "Shipping and delivery information",
+      "properties": {
+        "address": {
+          "type": "object",
+          "properties": {
+            "addressType": { "type": "string" },
+            "receiverName": { "type": "string" },
+            "addressId": { "type": "string" },
+            "postalCode": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "country": { "type": "string" },
+            "street": { "type": "string" },
+            "number": { "type": "string" },
+            "complement": { "type": "string" }
+          }
+        },
+        "logisticsInfo": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "itemIndex": { "type": "integer" },
+              "selectedSla": { "type": "string" },
+              "shippingEstimate": { "type": "string" },
+              "deliveryWindow": {
+                "type": "object",
+                "properties": {
+                  "startDateUtc": { "type": "string", "format": "date-time" },
+                  "endDateUtc": { "type": "string", "format": "date-time" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "description": "Line items in the order",
+      "items": {
+        "type": "object",
+        "properties": {
+          "uniqueId": { "type": "string" },
+          "id": { "type": "string" },
+          "productId": { "type": "string" },
+          "productName": { "type": "string" },
+          "skuName": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "price": { "type": "integer" },
+          "listPrice": { "type": "integer" },
+          "sellingPrice": { "type": "integer" },
+          "imageUrl": { "type": "string", "format": "uri" }
+        },
+        "required": ["id", "productId", "quantity"]
+      }
+    },
+    "paymentData": {
+      "type": "object",
+      "description": "Payment information",
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transactionId": { "type": "string" },
+              "payments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "paymentSystem": { "type": "string" },
+                    "paymentSystemName": { "type": "string" },
+                    "value": { "type": "integer" },
+                    "installments": { "type": "integer" },
+                    "status": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "invoicedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the order was invoiced"
+    }
+  },
+  "required": ["orderId", "status", "value", "creationDate", "items"]
+}

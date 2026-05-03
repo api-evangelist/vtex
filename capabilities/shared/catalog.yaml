@@ -1,0 +1,247 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "VTEX Catalog API"
+  description: "Comprehensive product catalog management for VTEX stores covering categories, brands, products, SKUs, and product specifications."
+  tags:
+    - Catalog
+    - Commerce
+    - Products
+    - SKU
+    - VTEX
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      VTEX_APP_KEY: VTEX_APP_KEY
+      VTEX_APP_TOKEN: VTEX_APP_TOKEN
+      VTEX_ACCOUNT_NAME: VTEX_ACCOUNT_NAME
+
+capability:
+  consumes:
+    - type: http
+      namespace: vtex-catalog
+      baseUri: "https://{accountName}.vtexcommercestable.com.br"
+      description: "VTEX Catalog API for managing products, SKUs, categories and brands."
+      authentication:
+        type: apikey
+        key: X-VTEX-API-AppKey
+        value: "{{VTEX_APP_KEY}}"
+        placement: header
+      resources:
+        - name: categories
+          path: /api/catalog_system/pub/category/tree
+          description: "Product category tree management"
+          operations:
+            - name: get-category-tree
+              method: GET
+              description: "Get Category Tree"
+              inputParameters:
+                - name: categoryLevels
+                  in: path
+                  type: integer
+                  required: false
+                  description: "Number of levels to retrieve"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: array
+                  value: "$."
+
+        - name: products
+          path: /api/catalog/pvt/product
+          description: "Product management operations"
+          operations:
+            - name: create-product
+              method: POST
+              description: "Create Product"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  Name: "{{tools.name}}"
+                  CategoryId: "{{tools.categoryId}}"
+                  BrandId: "{{tools.brandId}}"
+
+            - name: get-product
+              method: GET
+              description: "Get Product by ID"
+              inputParameters:
+                - name: productId
+                  in: path
+                  type: integer
+                  required: true
+                  description: "Product identifier"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: skus
+          path: /api/catalog/pvt/stockkeepingunit
+          description: "SKU management operations"
+          operations:
+            - name: create-sku
+              method: POST
+              description: "Create SKU"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  ProductId: "{{tools.productId}}"
+                  Name: "{{tools.name}}"
+                  IsActive: "{{tools.isActive}}"
+
+            - name: get-sku
+              method: GET
+              description: "Get SKU by ID"
+              inputParameters:
+                - name: skuId
+                  in: path
+                  type: integer
+                  required: true
+                  description: "SKU identifier"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: vtex-catalog-rest
+      resources:
+        - path: /v1/categories
+          name: categories
+          description: "Product category management"
+          operations:
+            - method: GET
+              name: get-category-tree
+              description: "Get full category tree"
+              call: "vtex-catalog.get-category-tree"
+              outputParameters:
+                - type: array
+                  mapping: "$."
+
+        - path: /v1/products
+          name: products
+          description: "Product management"
+          operations:
+            - method: POST
+              name: create-product
+              description: "Create a new product"
+              call: "vtex-catalog.create-product"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/products/{productId}
+          name: product
+          description: "Single product operations"
+          operations:
+            - method: GET
+              name: get-product
+              description: "Get product by ID"
+              call: "vtex-catalog.get-product"
+              with:
+                productId: "rest.productId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/skus
+          name: skus
+          description: "SKU management"
+          operations:
+            - method: POST
+              name: create-sku
+              description: "Create a new SKU"
+              call: "vtex-catalog.create-sku"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/skus/{skuId}
+          name: sku
+          description: "Single SKU operations"
+          operations:
+            - method: GET
+              name: get-sku
+              description: "Get SKU by ID"
+              call: "vtex-catalog.get-sku"
+              with:
+                skuId: "rest.skuId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: vtex-catalog-mcp
+      transport: http
+      tools:
+        - name: get-category-tree
+          description: "Retrieve the product category tree from VTEX catalog"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-catalog.get-category-tree"
+          outputParameters:
+            - type: array
+              mapping: "$."
+
+        - name: create-product
+          description: "Create a new product in the VTEX catalog"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vtex-catalog.create-product"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-product
+          description: "Get a product by its ID from the VTEX catalog"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-catalog.get-product"
+          with:
+            productId: "tools.productId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: create-sku
+          description: "Create a new SKU associated with a product"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vtex-catalog.create-sku"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-sku
+          description: "Get a SKU by its ID from the VTEX catalog"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-catalog.get-sku"
+          with:
+            skuId: "tools.skuId"
+          outputParameters:
+            - type: object
+              mapping: "$."

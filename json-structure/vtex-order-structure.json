@@ -1,0 +1,93 @@
+{
+  "title": "VTEX Order Structure",
+  "description": "Structural documentation for the VTEX order object and its key sub-components",
+  "version": "1.0.0",
+  "root": "Order",
+  "entities": [
+    {
+      "name": "Order",
+      "description": "The top-level order entity representing a completed purchase transaction",
+      "fields": [
+        { "name": "orderId", "type": "string", "required": true, "description": "Unique order identifier" },
+        { "name": "sequence", "type": "string", "required": false, "description": "Display sequence number" },
+        { "name": "status", "type": "string", "required": true, "description": "Current order status" },
+        { "name": "value", "type": "integer", "required": true, "description": "Total value in cents" },
+        { "name": "creationDate", "type": "date-time", "required": true, "description": "Order creation timestamp" },
+        { "name": "clientProfileData", "type": "ClientProfile", "required": false, "description": "Customer profile" },
+        { "name": "shippingData", "type": "ShippingData", "required": false, "description": "Shipping information" },
+        { "name": "items", "type": "array[OrderItem]", "required": true, "description": "Line items" },
+        { "name": "paymentData", "type": "PaymentData", "required": false, "description": "Payment details" }
+      ]
+    },
+    {
+      "name": "ClientProfile",
+      "description": "Customer profile data associated with the order",
+      "fields": [
+        { "name": "email", "type": "string", "required": false, "description": "Customer email address" },
+        { "name": "firstName", "type": "string", "required": false, "description": "Customer first name" },
+        { "name": "lastName", "type": "string", "required": false, "description": "Customer last name" },
+        { "name": "phone", "type": "string", "required": false, "description": "Customer phone number" },
+        { "name": "isCorporate", "type": "boolean", "required": false, "description": "Whether the buyer is a company" },
+        { "name": "document", "type": "string", "required": false, "description": "Government document number" }
+      ]
+    },
+    {
+      "name": "ShippingData",
+      "description": "Delivery address and logistics information",
+      "fields": [
+        { "name": "address", "type": "Address", "required": false, "description": "Delivery address" },
+        { "name": "logisticsInfo", "type": "array[LogisticsInfo]", "required": false, "description": "Per-item logistics details" }
+      ]
+    },
+    {
+      "name": "Address",
+      "description": "Physical delivery address",
+      "fields": [
+        { "name": "street", "type": "string", "required": false },
+        { "name": "number", "type": "string", "required": false },
+        { "name": "city", "type": "string", "required": false },
+        { "name": "state", "type": "string", "required": false },
+        { "name": "country", "type": "string", "required": false },
+        { "name": "postalCode", "type": "string", "required": false }
+      ]
+    },
+    {
+      "name": "OrderItem",
+      "description": "Individual line item in an order",
+      "fields": [
+        { "name": "id", "type": "string", "required": true, "description": "SKU identifier" },
+        { "name": "productId", "type": "string", "required": true, "description": "Product identifier" },
+        { "name": "productName", "type": "string", "required": false, "description": "Product name at time of purchase" },
+        { "name": "quantity", "type": "integer", "required": true, "description": "Quantity ordered" },
+        { "name": "price", "type": "integer", "required": false, "description": "Unit price in cents" },
+        { "name": "sellingPrice", "type": "integer", "required": false, "description": "Final selling price after discounts" }
+      ]
+    },
+    {
+      "name": "PaymentData",
+      "description": "Payment transaction details for the order",
+      "fields": [
+        { "name": "transactions", "type": "array[Transaction]", "required": false, "description": "Payment transactions" }
+      ]
+    },
+    {
+      "name": "Transaction",
+      "description": "A payment transaction linked to the order",
+      "fields": [
+        { "name": "transactionId", "type": "string", "required": true, "description": "Payment transaction ID" },
+        { "name": "payments", "type": "array[Payment]", "required": false, "description": "Individual payments" }
+      ]
+    },
+    {
+      "name": "Payment",
+      "description": "An individual payment applied to the order",
+      "fields": [
+        { "name": "paymentSystem", "type": "string", "required": false, "description": "Payment system code" },
+        { "name": "paymentSystemName", "type": "string", "required": false, "description": "Payment method name" },
+        { "name": "value", "type": "integer", "required": false, "description": "Payment amount in cents" },
+        { "name": "installments", "type": "integer", "required": false, "description": "Number of installments" },
+        { "name": "status", "type": "string", "required": false, "description": "Payment status" }
+      ]
+    }
+  ]
+}

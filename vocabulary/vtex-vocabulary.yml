@@ -1,0 +1,243 @@
+name: VTEX Vocabulary
+description: >-
+  Domain vocabulary for VTEX e-commerce platform APIs covering core commerce
+  concepts, operational terms, and integration patterns used across all VTEX APIs.
+version: '1.0.0'
+created: '2026-05-03'
+modified: '2026-05-03'
+tags:
+  - Commerce
+  - E-Commerce
+  - Retail
+  - VTEX
+
+concepts:
+  - term: Account
+    definition: >-
+      A VTEX store account identified by an account name (e.g., mystore). Each account
+      has its own catalog, orders, customers, and configuration. The account name
+      appears in API base URLs as {accountName}.
+    related:
+      - Trade Policy
+      - Sales Channel
+
+  - term: SKU
+    definition: >-
+      Stock Keeping Unit. The smallest sellable unit in VTEX representing a specific
+      product variant (size, color, etc.). SKUs belong to Products and have their
+      own price, inventory, and images.
+    related:
+      - Product
+      - Inventory
+
+  - term: Product
+    definition: >-
+      A product group in VTEX containing one or more SKUs. Products hold catalog
+      attributes like name, description, brand, and category. The distinction between
+      Product and SKU enables managing product families with multiple variants.
+    related:
+      - SKU
+      - Category
+      - Brand
+
+  - term: Order Form
+    definition: >-
+      The VTEX representation of a shopping cart, also called orderForm. It is the
+      central object in the checkout flow, containing items, customer data, payment
+      options, shipping data, and promotions. Each cart has a unique orderFormId.
+    related:
+      - Checkout
+      - Order
+
+  - term: Trade Policy
+    definition: >-
+      A VTEX commercial configuration that defines which products, prices, and payment
+      conditions are available to a particular sales channel or customer segment.
+      Also known as Sales Channel.
+    related:
+      - Sales Channel
+      - Price Table
+
+  - term: Marketplace
+    definition: >-
+      In VTEX, a marketplace is a store that sells products from multiple sellers.
+      VTEX supports both native marketplaces (other VTEX accounts) and external
+      marketplace integrations (Amazon, Mercado Libre, etc.).
+    related:
+      - Seller
+      - SKU Binding
+
+  - term: Seller
+    definition: >-
+      An entity that sells products through a VTEX marketplace. Sellers can be VTEX
+      accounts (first-party or third-party) or external systems integrated via the
+      Marketplace Protocol.
+    related:
+      - Marketplace
+      - Fulfillment
+
+  - term: Fulfillment
+    definition: >-
+      The process of picking, packing, and delivering orders. In VTEX, fulfillment
+      is managed through the Logistics API, which handles warehouses, carriers,
+      docks, and shipping policies.
+    related:
+      - Logistics
+      - Warehouse
+      - Carrier
+
+  - term: Warehouse
+    definition: >-
+      A physical or virtual location where inventory is stored. VTEX warehouses
+      are associated with docks and carriers to define fulfillment routes.
+    related:
+      - Inventory
+      - Dock
+      - Fulfillment
+
+  - term: Dock
+    definition: >-
+      A loading/unloading point in the VTEX logistics infrastructure that connects
+      warehouses to carriers. Docks define shipping time estimates and costs.
+    related:
+      - Warehouse
+      - Carrier
+
+  - term: Carrier
+    definition: >-
+      A shipping company configured in VTEX logistics. Carriers have shipping policies
+      that define rates, delivery windows, and service regions.
+    related:
+      - Dock
+      - Shipping Policy
+
+  - term: SLA
+    definition: >-
+      Service Level Agreement. In VTEX, SLA refers to the specific shipping option
+      chosen for an item during checkout, including the carrier, delivery time
+      estimate, and price.
+    related:
+      - Carrier
+      - Shipping Policy
+
+  - term: Session
+    definition: >-
+      A VTEX shopper session that maintains contextual state across storefront
+      interactions. Sessions determine trade policy, price tables, campaign audiences,
+      and other context-sensitive behaviors.
+    related:
+      - Trade Policy
+      - Campaign Audience
+
+  - term: Master Data
+    definition: >-
+      VTEX's built-in NoSQL document store for custom data entities. Used for customer
+      profiles, wishlists, subscriptions, and any custom business data that needs
+      to be stored and queried.
+    related:
+      - Customer Profile
+      - Profile System
+
+  - term: App Key
+    definition: >-
+      A machine credential (X-VTEX-API-AppKey) used to authenticate API requests
+      to VTEX. App Keys are paired with App Tokens and associated with specific
+      License Manager roles that control API permissions.
+    related:
+      - App Token
+      - License Manager
+
+  - term: App Token
+    definition: >-
+      The secret credential (X-VTEX-API-AppToken) paired with an App Key for
+      authenticating VTEX API requests. Together, App Key and App Token form
+      the API authentication credentials.
+    related:
+      - App Key
+
+  - term: PII Architecture
+    definition: >-
+      VTEX's privacy-first data architecture where personally identifiable information
+      is stored encrypted in a dedicated vault, separate from order and catalog data.
+      Enables GDPR and LGPD compliance.
+    related:
+      - Profile System
+      - Data Subject Rights
+
+  - term: Headless Commerce
+    definition: >-
+      A VTEX deployment model where the storefront presentation layer (FastStore or
+      custom frontend) is decoupled from the commerce backend. APIs provide all
+      commerce capabilities consumed by the frontend.
+    related:
+      - FastStore
+      - Headless CMS
+
+  - term: Pick and Pack
+    definition: >-
+      VTEX's in-store fulfillment solution for physical retail locations acting as
+      fulfillment centers. Associates use a mobile app to pick items from store
+      shelves and pack orders for delivery or pickup.
+    related:
+      - Fulfillment
+      - Last Mile
+
+  - term: Promotion
+    definition: >-
+      A configured discount rule in VTEX that applies price reductions based on
+      conditions like cart value, product combination, customer segment, or campaign
+      participation. Managed through the Promotions and Taxes API.
+    related:
+      - Coupon
+      - Campaign Audience
+
+  - term: Coupon
+    definition: >-
+      A unique code that customers enter at checkout to apply a promotional discount.
+      Coupons are linked to promotions in VTEX and can have usage limits and
+      expiration dates.
+    related:
+      - Promotion
+
+operations:
+  - term: List Orders
+    api: VTEX Orders API
+    method: GET
+    path: /api/oms/pvt/orders
+    description: "Retrieve a paginated list of orders with optional filtering"
+
+  - term: Get Order
+    api: VTEX Orders API
+    method: GET
+    path: /api/oms/pvt/orders/{orderId}
+    description: "Retrieve full order details by order ID"
+
+  - term: Cancel Order
+    api: VTEX Orders API
+    method: POST
+    path: /api/oms/pvt/orders/{orderId}/cancel
+    description: "Cancel an order in a cancellable status"
+
+  - term: Send Invoice
+    api: VTEX Orders API
+    method: POST
+    path: /api/oms/pvt/orders/{orderId}/invoice
+    description: "Send invoice data to trigger order shipment status"
+
+  - term: Create Product
+    api: VTEX Catalog API
+    method: POST
+    path: /api/catalog/pvt/product
+    description: "Create a new product in the catalog"
+
+  - term: Order Simulation
+    api: VTEX Checkout API
+    method: POST
+    path: /api/checkout/pub/orderForms/simulation
+    description: "Simulate an order to get real-time pricing, availability, and shipping options"
+
+  - term: Update Inventory
+    api: VTEX Logistics API
+    method: PUT
+    path: /api/logistics/pvt/inventory/skus/{skuId}/warehouses/{warehouseId}
+    description: "Update the inventory quantity for a SKU at a specific warehouse"

@@ -1,0 +1,83 @@
+extends: spectral:oas
+rules:
+  # VTEX-specific naming conventions
+  vtex-operation-summary-title-case:
+    description: Operation summaries must use Title Case.
+    message: "Summary '{{value}}' should use Title Case."
+    severity: warn
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z]"
+
+  vtex-operation-id-kebab-case:
+    description: operationId should use kebab-case or camelCase consistently.
+    severity: info
+    given: "$.paths[*][*].operationId"
+    then:
+      function: truthy
+
+  vtex-has-tags:
+    description: Every operation must have at least one tag for grouping.
+    message: "Operation '{{path}}' must have at least one tag."
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: tags
+      function: truthy
+
+  vtex-server-variable-account-name:
+    description: VTEX APIs should use {accountName} server variable for multi-tenancy.
+    severity: info
+    given: "$.servers[*].variables"
+    then:
+      field: accountName
+      function: truthy
+
+  vtex-response-200-defined:
+    description: Every GET operation should define a 200 response.
+    severity: warn
+    given: "$.paths[*].get.responses"
+    then:
+      field: "200"
+      function: truthy
+
+  vtex-request-body-post:
+    description: POST operations should define a request body.
+    severity: warn
+    given: "$.paths[*].post"
+    then:
+      field: requestBody
+      function: truthy
+
+  vtex-security-defined:
+    description: VTEX APIs should define security schemes for authentication.
+    severity: warn
+    given: "$.components.securitySchemes"
+    then:
+      function: truthy
+
+  vtex-info-contact:
+    description: API info should include contact information.
+    severity: info
+    given: "$.info"
+    then:
+      field: contact
+      function: truthy
+
+  vtex-path-kebab-case:
+    description: Path segments should use kebab-case or camelCase, not underscores.
+    severity: info
+    given: "$.paths"
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^.*_[a-z].*$"
+
+  vtex-no-empty-descriptions:
+    description: Operations should have non-empty descriptions.
+    severity: info
+    given: "$.paths[*][*].description"
+    then:
+      function: truthy

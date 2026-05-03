@@ -1,0 +1,235 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "VTEX Catalog Management"
+  description: >-
+    Workflow capability for VTEX merchandising teams managing product catalogs.
+    Combines catalog, promotions, and pricing capabilities for catalog managers,
+    merchandisers, and content teams who create and maintain product listings,
+    pricing rules, and promotional campaigns.
+  tags:
+    - Catalog
+    - Commerce
+    - Merchandising
+    - Pricing
+    - Promotions
+    - VTEX
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      VTEX_APP_KEY: VTEX_APP_KEY
+      VTEX_APP_TOKEN: VTEX_APP_TOKEN
+
+capability:
+  consumes:
+    - import: vtex-catalog
+      location: ./shared/catalog.yaml
+    - import: vtex-promotions
+      location: ./shared/promotions.yaml
+
+  exposes:
+    - type: rest
+      port: 8081
+      namespace: vtex-catalog-management-api
+      description: "Unified REST API for VTEX catalog and promotional content management."
+      resources:
+        - path: /v1/categories
+          name: categories
+          description: "Product category management"
+          operations:
+            - method: GET
+              name: get-category-tree
+              description: "Get full product category tree"
+              call: "vtex-catalog.get-category-tree"
+              outputParameters:
+                - type: array
+                  mapping: "$."
+
+        - path: /v1/products
+          name: products
+          description: "Product management"
+          operations:
+            - method: POST
+              name: create-product
+              description: "Create a new product in the catalog"
+              call: "vtex-catalog.create-product"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/products/{productId}
+          name: product
+          description: "Single product operations"
+          operations:
+            - method: GET
+              name: get-product
+              description: "Get product by ID"
+              call: "vtex-catalog.get-product"
+              with:
+                productId: "rest.productId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/skus
+          name: skus
+          description: "SKU management"
+          operations:
+            - method: POST
+              name: create-sku
+              description: "Create a new SKU"
+              call: "vtex-catalog.create-sku"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/skus/{skuId}
+          name: sku
+          description: "Single SKU operations"
+          operations:
+            - method: GET
+              name: get-sku
+              description: "Get SKU by ID"
+              call: "vtex-catalog.get-sku"
+              with:
+                skuId: "rest.skuId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/promotions
+          name: promotions
+          description: "Promotion and discount management"
+          operations:
+            - method: GET
+              name: list-promotions
+              description: "List all promotions"
+              call: "vtex-promotions.list-promotions"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/coupons
+          name: coupons
+          description: "Coupon management"
+          operations:
+            - method: GET
+              name: list-coupons
+              description: "List all coupons"
+              call: "vtex-promotions.list-coupons"
+              outputParameters:
+                - type: array
+                  mapping: "$."
+
+            - method: POST
+              name: create-coupon
+              description: "Create a new coupon"
+              call: "vtex-promotions.create-coupon"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9091
+      namespace: vtex-catalog-management-mcp
+      transport: http
+      description: "MCP server for AI-assisted VTEX catalog and promotional content management."
+      tools:
+        - name: get-category-tree
+          description: "Retrieve the full product category hierarchy from the VTEX catalog"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-catalog.get-category-tree"
+          outputParameters:
+            - type: array
+              mapping: "$."
+
+        - name: create-product
+          description: "Create a new product entry in the VTEX catalog"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vtex-catalog.create-product"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-product
+          description: "Get product details from the VTEX catalog by product ID"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-catalog.get-product"
+          with:
+            productId: "tools.productId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: create-sku
+          description: "Create a new SKU variant for an existing product"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vtex-catalog.create-sku"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-sku
+          description: "Get SKU details by SKU ID"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-catalog.get-sku"
+          with:
+            skuId: "tools.skuId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-promotions
+          description: "List all active promotions and discount configurations in VTEX"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-promotions.list-promotions"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-promotion
+          description: "Get full details of a specific VTEX promotion"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-promotions.get-promotion"
+          with:
+            idCalculatorConfiguration: "tools.idCalculatorConfiguration"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-coupons
+          description: "List all discount coupons configured in VTEX"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "vtex-promotions.list-coupons"
+          outputParameters:
+            - type: array
+              mapping: "$."
+
+        - name: create-coupon
+          description: "Create a new discount coupon for a VTEX promotion"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vtex-promotions.create-coupon"
+          outputParameters:
+            - type: object
+              mapping: "$."
