@@ -1,0 +1,166 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Payments Gateway API — Transaction Flow
+  description: 'VTex Payments Gateway API — Transaction Flow. 3 operations. Lead operation: VTex Cancel the transaction. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Transaction Flow
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payments-gateway-transaction-flow
+    baseUri: https://{accountName}.vtexpayments.com.br
+    description: VTex Payments Gateway API — Transaction Flow business capability. Self-contained, no shared references.
+    resources:
+    - name: api-pvt-transactions-transactionId-cancellation-request
+      path: /api/pvt/transactions/{transactionId}/cancellation-request
+      operations:
+      - name: cancelthetransaction
+        method: POST
+        description: VTex Cancel the transaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-pvt-transactions-transactionId-refunding-request
+      path: /api/pvt/transactions/{transactionId}/refunding-request
+      operations:
+      - name: refundthetransaction
+        method: POST
+        description: VTex Refund the transaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-pvt-transactions-transactionId-settlement-request
+      path: /api/pvt/transactions/{transactionId}/settlement-request
+      operations:
+      - name: settlethetransaction
+        method: POST
+        description: VTex Settle the transaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: payments-gateway-transaction-flow-rest
+    port: 8080
+    description: REST adapter for VTex Payments Gateway API — Transaction Flow. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/pvt/transactions/{transactionid}/cancellation-request
+      name: api-pvt-transactions-transactionid-cancellation-request
+      description: REST surface for api-pvt-transactions-transactionId-cancellation-request.
+      operations:
+      - method: POST
+        name: cancelthetransaction
+        description: VTex Cancel the transaction
+        call: payments-gateway-transaction-flow.cancelthetransaction
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/pvt/transactions/{transactionid}/refunding-request
+      name: api-pvt-transactions-transactionid-refunding-request
+      description: REST surface for api-pvt-transactions-transactionId-refunding-request.
+      operations:
+      - method: POST
+        name: refundthetransaction
+        description: VTex Refund the transaction
+        call: payments-gateway-transaction-flow.refundthetransaction
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/pvt/transactions/{transactionid}/settlement-request
+      name: api-pvt-transactions-transactionid-settlement-request
+      description: REST surface for api-pvt-transactions-transactionId-settlement-request.
+      operations:
+      - method: POST
+        name: settlethetransaction
+        description: VTex Settle the transaction
+        call: payments-gateway-transaction-flow.settlethetransaction
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payments-gateway-transaction-flow-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Payments Gateway API — Transaction Flow. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-cancel-transaction
+      description: VTex Cancel the transaction
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payments-gateway-transaction-flow.cancelthetransaction
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-refund-transaction
+      description: VTex Refund the transaction
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payments-gateway-transaction-flow.refundthetransaction
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-settle-transaction
+      description: VTex Settle the transaction
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payments-gateway-transaction-flow.settlethetransaction
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

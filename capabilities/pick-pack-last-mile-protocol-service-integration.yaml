@@ -1,0 +1,78 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Pick and Pack Last Mile Protocol API — Service Integration
+  description: 'VTex Pick and Pack Last Mile Protocol API — Service Integration. 1 operations. Lead operation: VTex Create
+    service. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Service Integration
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: pick-pack-last-mile-protocol-service-integration
+    baseUri: https://auth.pickingnpacking.com/{environment}
+    description: VTex Pick and Pack Last Mile Protocol API — Service Integration business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: create-service
+      path: /create-service
+      operations:
+      - name: createservice
+        method: POST
+        description: VTex Create service
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+  exposes:
+  - type: rest
+    namespace: pick-pack-last-mile-protocol-service-integration-rest
+    port: 8080
+    description: REST adapter for VTex Pick and Pack Last Mile Protocol API — Service Integration. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/create-service
+      name: create-service
+      description: REST surface for create-service.
+      operations:
+      - method: POST
+        name: createservice
+        description: VTex Create service
+        call: pick-pack-last-mile-protocol-service-integration.createservice
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: pick-pack-last-mile-protocol-service-integration-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Pick and Pack Last Mile Protocol API — Service Integration. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: vtex-create-service
+      description: VTex Create service
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: pick-pack-last-mile-protocol-service-integration.createservice
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

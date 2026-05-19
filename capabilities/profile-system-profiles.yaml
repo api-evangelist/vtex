@@ -1,0 +1,270 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Profile System - PII data architecture — Profiles
+  description: 'VTex Profile System - PII data architecture — Profiles. 7 operations. Lead operation: VTex Create client profile.
+    Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Profiles
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: profile-system-profiles
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Profile System - PII data architecture — Profiles business capability. Self-contained, no shared references.
+    resources:
+    - name: api-storage-profile-system-profiles
+      path: /api/storage/profile-system/profiles
+      operations:
+      - name: createclientprofile
+        method: POST
+        description: VTex Create client profile
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-storage-profile-system-profiles-profileId
+      path: /api/storage/profile-system/profiles/{profileId}
+      operations:
+      - name: getprofile
+        method: GET
+        description: VTex Get profile
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateclientprofile
+        method: PATCH
+        description: VTex Update client profile
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleteclientprofile
+        method: DELETE
+        description: VTex Delete client profile
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-unmask
+      path: /api/storage/profile-system/profiles/{profileId}/unmask
+      operations:
+      - name: getunmaskedprofile
+        method: GET
+        description: VTex Get unmasked profile
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-versions-profileVersionId
+      path: /api/storage/profile-system/profiles/{profileId}/versions/{profileVersionId}
+      operations:
+      - name: getprofilebyversion
+        method: GET
+        description: VTex Get profile by version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-versions-profileVersionId-unmask
+      path: /api/storage/profile-system/profiles/{profileId}/versions/{profileVersionId}/unmask
+      operations:
+      - name: getunmaskedprofilebyversion
+        method: GET
+        description: VTex Get unmasked profile by version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: profile-system-profiles-rest
+    port: 8080
+    description: REST adapter for VTex Profile System - PII data architecture — Profiles. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/storage/profile-system/profiles
+      name: api-storage-profile-system-profiles
+      description: REST surface for api-storage-profile-system-profiles.
+      operations:
+      - method: POST
+        name: createclientprofile
+        description: VTex Create client profile
+        call: profile-system-profiles.createclientprofile
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}
+      name: api-storage-profile-system-profiles-profileid
+      description: REST surface for api-storage-profile-system-profiles-profileId.
+      operations:
+      - method: GET
+        name: getprofile
+        description: VTex Get profile
+        call: profile-system-profiles.getprofile
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateclientprofile
+        description: VTex Update client profile
+        call: profile-system-profiles.updateclientprofile
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteclientprofile
+        description: VTex Delete client profile
+        call: profile-system-profiles.deleteclientprofile
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/unmask
+      name: api-storage-profile-system-profiles-profileid-unmask
+      description: REST surface for api-storage-profile-system-profiles-profileId-unmask.
+      operations:
+      - method: GET
+        name: getunmaskedprofile
+        description: VTex Get unmasked profile
+        call: profile-system-profiles.getunmaskedprofile
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/versions/{profileversionid}
+      name: api-storage-profile-system-profiles-profileid-versions-profileversionid
+      description: REST surface for api-storage-profile-system-profiles-profileId-versions-profileVersionId.
+      operations:
+      - method: GET
+        name: getprofilebyversion
+        description: VTex Get profile by version
+        call: profile-system-profiles.getprofilebyversion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/versions/{profileversionid}/unmask
+      name: api-storage-profile-system-profiles-profileid-versions-profileversionid-unmask
+      description: REST surface for api-storage-profile-system-profiles-profileId-versions-profileVersionId-unmask.
+      operations:
+      - method: GET
+        name: getunmaskedprofilebyversion
+        description: VTex Get unmasked profile by version
+        call: profile-system-profiles.getunmaskedprofilebyversion
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: profile-system-profiles-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Profile System - PII data architecture — Profiles. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: vtex-create-client-profile
+      description: VTex Create client profile
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: profile-system-profiles.createclientprofile
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-profile
+      description: VTex Get profile
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-profiles.getprofile
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-client-profile
+      description: VTex Update client profile
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: profile-system-profiles.updateclientprofile
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-client-profile
+      description: VTex Delete client profile
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: profile-system-profiles.deleteclientprofile
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-profile
+      description: VTex Get unmasked profile
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-profiles.getunmaskedprofile
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-profile-version
+      description: VTex Get profile by version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-profiles.getprofilebyversion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-profile-version
+      description: VTex Get unmasked profile by version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-profiles.getunmaskedprofilebyversion
+      outputParameters:
+      - type: object
+        mapping: $.

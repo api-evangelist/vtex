@@ -1,0 +1,225 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API - Seller Portal — Brand
+  description: 'VTex Catalog API - Seller Portal — Brand. 4 operations. Lead operation: VTex Get List of Brands. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Brand
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-api-seller-portal-brand
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API - Seller Portal — Brand business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-seller-portal-brands
+      path: /api/catalog-seller-portal/brands
+      operations:
+      - name: listbrand
+        method: GET
+        description: VTex Get List of Brands
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          description: Search word.
+        - name: from
+          in: query
+          type: string
+          description: The first page of the interval of the brand list.
+        - name: to
+          in: query
+          type: string
+          description: The last page of the interval of the brand list.
+        - name: orderBy
+          in: query
+          type: string
+          description: 'The order that the list is displayed. You can select `name`, or `updated_at` to select the order criteria.
+            Then you can add `,` , `asc` or `desc` to define the '
+        - name: name
+          in: query
+          type: string
+          description: Brand name.
+      - name: postbrand
+        method: POST
+        description: VTex Create Brand
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-seller-portal-brands-brandId
+      path: /api/catalog-seller-portal/brands/{brandId}
+      operations:
+      - name: getbrand
+        method: GET
+        description: VTex Get Brand by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: brandId
+          in: path
+          type: string
+          description: Brand unique identifier number.
+          required: true
+      - name: putbrand
+        method: PUT
+        description: VTex Update Brand
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: brandId
+          in: path
+          type: string
+          description: Brand unique identifier number.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-api-seller-portal-brand-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API - Seller Portal — Brand. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog-seller-portal/brands
+      name: api-catalog-seller-portal-brands
+      description: REST surface for api-catalog-seller-portal-brands.
+      operations:
+      - method: GET
+        name: listbrand
+        description: VTex Get List of Brands
+        call: catalog-api-seller-portal-brand.listbrand
+        with:
+          q: rest.q
+          from: rest.from
+          to: rest.to
+          orderBy: rest.orderBy
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbrand
+        description: VTex Create Brand
+        call: catalog-api-seller-portal-brand.postbrand
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-seller-portal/brands/{brandid}
+      name: api-catalog-seller-portal-brands-brandid
+      description: REST surface for api-catalog-seller-portal-brands-brandId.
+      operations:
+      - method: GET
+        name: getbrand
+        description: VTex Get Brand by ID
+        call: catalog-api-seller-portal-brand.getbrand
+        with:
+          brandId: rest.brandId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putbrand
+        description: VTex Update Brand
+        call: catalog-api-seller-portal-brand.putbrand
+        with:
+          brandId: rest.brandId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-api-seller-portal-brand-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API - Seller Portal — Brand. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-get-list-brands
+      description: VTex Get List of Brands
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-api-seller-portal-brand.listbrand
+      with:
+        q: tools.q
+        from: tools.from
+        to: tools.to
+        orderBy: tools.orderBy
+        name: tools.name
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-brand
+      description: VTex Create Brand
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-api-seller-portal-brand.postbrand
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-brand-id
+      description: VTex Get Brand by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-api-seller-portal-brand.getbrand
+      with:
+        brandId: tools.brandId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-brand
+      description: VTex Update Brand
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-api-seller-portal-brand.putbrand
+      with:
+        brandId: tools.brandId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

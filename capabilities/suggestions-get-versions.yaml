@@ -1,0 +1,187 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Suggestions — Get Versions
+  description: 'VTex Suggestions — Get Versions. 2 operations. Lead operation: VTex Get all Versions. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Get Versions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: suggestions-get-versions
+    baseUri: https://api.vtex.com/{accountName}
+    description: VTex Suggestions — Get Versions business capability. Self-contained, no shared references.
+    resources:
+    - name: suggestions-sellerId-sellerskuid-versions
+      path: /suggestions/{sellerId}/{sellerskuid}/versions
+      operations:
+      - name: getversions
+        method: GET
+        description: VTex Get all Versions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Name of the VTEX account. Used as part of the URL
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace
+            and informed to the seller before the integration is built.
+          required: true
+        - name: sellerskuid
+          in: path
+          type: string
+          description: A string that identifies the SKU in the marketplace. This is the ID that the marketplace will use for
+            future references to this SKU, such as price and inventory
+          required: true
+    - name: suggestions-sellerId-sellerskuid-versions-version
+      path: /suggestions/{sellerId}/{sellerskuid}/versions/{version}
+      operations:
+      - name: getsuggestionbyversion
+        method: GET
+        description: VTex Get Version by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Name of the VTEX account. Used as part of the URL
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace
+            and informed to the seller before the integration is built.
+          required: true
+        - name: sellerskuid
+          in: path
+          type: string
+          description: A string that identifies the SKU in the marketplace. This is the ID that the marketplace will use for
+            future references to this SKU, such as price and inventory
+          required: true
+        - name: version
+          in: path
+          type: string
+          description: Whenever an SKU Suggestion is updated or changed, a new version of the original one is created. All
+            versions are logged, so you can search for previous our curr
+          required: true
+  exposes:
+  - type: rest
+    namespace: suggestions-get-versions-rest
+    port: 8080
+    description: REST adapter for VTex Suggestions — Get Versions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/suggestions/{sellerid}/{sellerskuid}/versions
+      name: suggestions-sellerid-sellerskuid-versions
+      description: REST surface for suggestions-sellerId-sellerskuid-versions.
+      operations:
+      - method: GET
+        name: getversions
+        description: VTex Get all Versions
+        call: suggestions-get-versions.getversions
+        with:
+          accountName: rest.accountName
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          sellerId: rest.sellerId
+          sellerskuid: rest.sellerskuid
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/suggestions/{sellerid}/{sellerskuid}/versions/{version}
+      name: suggestions-sellerid-sellerskuid-versions-version
+      description: REST surface for suggestions-sellerId-sellerskuid-versions-version.
+      operations:
+      - method: GET
+        name: getsuggestionbyversion
+        description: VTex Get Version by ID
+        call: suggestions-get-versions.getsuggestionbyversion
+        with:
+          accountName: rest.accountName
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          sellerId: rest.sellerId
+          sellerskuid: rest.sellerskuid
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: suggestions-get-versions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Suggestions — Get Versions. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-get-all-versions
+      description: VTex Get all Versions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: suggestions-get-versions.getversions
+      with:
+        accountName: tools.accountName
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        sellerId: tools.sellerId
+        sellerskuid: tools.sellerskuid
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-version-id
+      description: VTex Get Version by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: suggestions-get-versions.getsuggestionbyversion
+      with:
+        accountName: tools.accountName
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        sellerId: tools.sellerId
+        sellerskuid: tools.sellerskuid
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,136 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Marketplace API — Matched Offers
+  description: 'VTex Marketplace API — Matched Offers. 3 operations. Lead operation: VTex Get Matched Offers List. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Matched Offers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: marketplace-matched-offers
+    baseUri: https://{accountName}.{environment}.com.br/api
+    description: VTex Marketplace API — Matched Offers business capability. Self-contained, no shared references.
+    resources:
+    - name: offer-manager-pvt-offers
+      path: /offer-manager/pvt/offers
+      operations:
+      - name: getofferslist
+        method: GET
+        description: VTex Get Matched Offers List
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: offer-manager-pvt-product-productId
+      path: /offer-manager/pvt/product/{productId}
+      operations:
+      - name: getproductoffers
+        method: GET
+        description: VTex Get Matched Offer's Data by Product ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: offer-manager-pvt-product-productId-sku-skuId
+      path: /offer-manager/pvt/product/{productId}/sku/{skuId}
+      operations:
+      - name: getskuoffers
+        method: GET
+        description: VTex Get Matched Offer's Data by SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: marketplace-matched-offers-rest
+    port: 8080
+    description: REST adapter for VTex Marketplace API — Matched Offers. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/offer-manager/pvt/offers
+      name: offer-manager-pvt-offers
+      description: REST surface for offer-manager-pvt-offers.
+      operations:
+      - method: GET
+        name: getofferslist
+        description: VTex Get Matched Offers List
+        call: marketplace-matched-offers.getofferslist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/offer-manager/pvt/product/{productid}
+      name: offer-manager-pvt-product-productid
+      description: REST surface for offer-manager-pvt-product-productId.
+      operations:
+      - method: GET
+        name: getproductoffers
+        description: VTex Get Matched Offer's Data by Product ID
+        call: marketplace-matched-offers.getproductoffers
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/offer-manager/pvt/product/{productid}/sku/{skuid}
+      name: offer-manager-pvt-product-productid-sku-skuid
+      description: REST surface for offer-manager-pvt-product-productId-sku-skuId.
+      operations:
+      - method: GET
+        name: getskuoffers
+        description: VTex Get Matched Offer's Data by SKU ID
+        call: marketplace-matched-offers.getskuoffers
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: marketplace-matched-offers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Marketplace API — Matched Offers. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-matched-offers-list
+      description: VTex Get Matched Offers List
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-matched-offers.getofferslist
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-matched-offer-s-data
+      description: VTex Get Matched Offer's Data by Product ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-matched-offers.getproductoffers
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-matched-offer-s-data-2
+      description: VTex Get Matched Offer's Data by SKU ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-matched-offers.getskuoffers
+      outputParameters:
+      - type: object
+        mapping: $.

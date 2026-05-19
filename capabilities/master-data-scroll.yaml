@@ -1,0 +1,72 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Master Data API - v2 — Scroll
+  description: 'VTex Master Data API - v2 — Scroll. 1 operations. Lead operation: VTex Scroll documents. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Scroll
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: master-data-scroll
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Master Data API - v2 — Scroll business capability. Self-contained, no shared references.
+    resources:
+    - name: api-dataentities-dataEntityName-scroll
+      path: /api/dataentities/{dataEntityName}/scroll
+      operations:
+      - name: scrolldocuments
+        method: GET
+        description: VTex Scroll documents
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: master-data-scroll-rest
+    port: 8080
+    description: REST adapter for VTex Master Data API - v2 — Scroll. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/dataentities/{dataentityname}/scroll
+      name: api-dataentities-dataentityname-scroll
+      description: REST surface for api-dataentities-dataEntityName-scroll.
+      operations:
+      - method: GET
+        name: scrolldocuments
+        description: VTex Scroll documents
+        call: master-data-scroll.scrolldocuments
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: master-data-scroll-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Master Data API - v2 — Scroll. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-scroll-documents
+      description: VTex Scroll documents
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: master-data-scroll.scrolldocuments
+      outputParameters:
+      - type: object
+        mapping: $.

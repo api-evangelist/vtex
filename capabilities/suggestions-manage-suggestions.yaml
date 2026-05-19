@@ -1,0 +1,180 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Suggestions — Manage Suggestions
+  description: 'VTex Suggestions — Manage Suggestions. 2 operations. Lead operation: VTex Send SKU Suggestion. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Manage Suggestions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: suggestions-manage-suggestions
+    baseUri: https://api.vtex.com/{accountName}
+    description: VTex Suggestions — Manage Suggestions business capability. Self-contained, no shared references.
+    resources:
+    - name: suggestions-sellerId-sellerSkuId
+      path: /suggestions/{sellerId}/{sellerSkuId}
+      operations:
+      - name: savesuggestion
+        method: PUT
+        description: VTex Send SKU Suggestion
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Name of the VTEX account to which the seller wants to suggest a new SKU. It is used as part of the
+            request URL.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace
+            and informed to the seller before the integration is built.
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: A string that identifies the SKU in the seller. This is the ID that the marketplace will use for future
+            references to this SKU, such as price and inventory noti
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletesuggestion
+        method: DELETE
+        description: VTex Delete SKU Suggestion
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Name of the VTEX account. Used as part of the URL.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace
+            and informed to the seller before the integration is built.
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: A string that identifies the SKU in the marketplace. This is the ID that the marketplace will use for
+            future references to this SKU, such as price and inventory
+          required: true
+  exposes:
+  - type: rest
+    namespace: suggestions-manage-suggestions-rest
+    port: 8080
+    description: REST adapter for VTex Suggestions — Manage Suggestions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/suggestions/{sellerid}/{sellerskuid}
+      name: suggestions-sellerid-sellerskuid
+      description: REST surface for suggestions-sellerId-sellerSkuId.
+      operations:
+      - method: PUT
+        name: savesuggestion
+        description: VTex Send SKU Suggestion
+        call: suggestions-manage-suggestions.savesuggestion
+        with:
+          accountName: rest.accountName
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletesuggestion
+        description: VTex Delete SKU Suggestion
+        call: suggestions-manage-suggestions.deletesuggestion
+        with:
+          accountName: rest.accountName
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: suggestions-manage-suggestions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Suggestions — Manage Suggestions. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-send-sku-suggestion
+      description: VTex Send SKU Suggestion
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: suggestions-manage-suggestions.savesuggestion
+      with:
+        accountName: tools.accountName
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-sku-suggestion
+      description: VTex Delete SKU Suggestion
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: suggestions-manage-suggestions.deletesuggestion
+      with:
+        accountName: tools.accountName
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+      outputParameters:
+      - type: object
+        mapping: $.

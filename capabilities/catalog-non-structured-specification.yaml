@@ -1,0 +1,194 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Non-Structured Specification
+  description: 'VTex Catalog API — Non-Structured Specification. 4 operations. Lead operation: VTex Get non-structured specification
+    by SKU ID. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Non-Structured Specification
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-non-structured-specification
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Non-Structured Specification business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-specification-nonstructured
+      path: /api/catalog/pvt/specification/nonstructured
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get non-structured specification by SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuId
+          in: query
+          type: integer
+          description: SKU's unique numerical identifier.
+          required: true
+      - name: delete
+        method: DELETE
+        description: VTex Delete non-structured specification by SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuId
+          in: query
+          type: integer
+          description: SKU's unique numerical identifier.
+          required: true
+    - name: api-catalog-pvt-specification-nonstructured-Id
+      path: /api/catalog/pvt/specification/nonstructured/{Id}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get non-structured specification by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Id
+          in: path
+          type: integer
+          description: Non-structured specification's unique numerical identifier.
+          required: true
+      - name: delete
+        method: DELETE
+        description: VTex Delete non-structured specification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Id
+          in: path
+          type: integer
+          description: Non-structured specification's unique numerical identifier.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-non-structured-specification-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Non-Structured Specification. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/specification/nonstructured
+      name: api-catalog-pvt-specification-nonstructured
+      description: REST surface for api-catalog-pvt-specification-nonstructured.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get non-structured specification by SKU ID
+        call: catalog-non-structured-specification.get
+        with:
+          skuId: rest.skuId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete
+        description: VTex Delete non-structured specification by SKU ID
+        call: catalog-non-structured-specification.delete
+        with:
+          skuId: rest.skuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/specification/nonstructured/{id}
+      name: api-catalog-pvt-specification-nonstructured-id
+      description: REST surface for api-catalog-pvt-specification-nonstructured-Id.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get non-structured specification by ID
+        call: catalog-non-structured-specification.get
+        with:
+          Id: rest.Id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete
+        description: VTex Delete non-structured specification
+        call: catalog-non-structured-specification.delete
+        with:
+          Id: rest.Id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-non-structured-specification-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Non-Structured Specification. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: vtex-get-non-structured-specification
+      description: VTex Get non-structured specification by SKU ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-non-structured-specification.get
+      with:
+        skuId: tools.skuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-non-structured-specification
+      description: VTex Delete non-structured specification by SKU ID
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: catalog-non-structured-specification.delete
+      with:
+        skuId: tools.skuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-non-structured-specification-2
+      description: VTex Get non-structured specification by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-non-structured-specification.get
+      with:
+        Id: tools.Id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-non-structured-specification-2
+      description: VTex Delete non-structured specification
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: catalog-non-structured-specification.delete
+      with:
+        Id: tools.Id
+      outputParameters:
+      - type: object
+        mapping: $.

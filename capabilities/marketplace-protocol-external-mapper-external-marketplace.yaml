@@ -1,0 +1,835 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Marketplace Protocol — External Marketplace
+  description: 'VTex Marketplace Protocol — External Marketplace. 11 operations. Lead operation: VTex Retrieve channel. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - External Marketplace
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: marketplace-protocol-external-mapper-external-marketplace
+    baseUri: https://portal.{environment}.com.br
+    description: VTex Marketplace Protocol — External Marketplace business capability. Self-contained, no shared references.
+    resources:
+    - name: api-channel-manager-channel-:channelId
+      path: /api/channel-manager/channel/:channelId
+      operations:
+      - name: retrievechannel
+        method: GET
+        description: VTex Retrieve channel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: enviroment
+          in: path
+          type: string
+          description: Environment used as part of the URL.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: VTEX's account name owned by the connector/partner.
+          required: true
+        - name: channelId
+          in: path
+          type: number
+          description: Channel's ID in Channel Manager, available through the List All Channels endpoint.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+    - name: api-channel-manager-channel-all
+      path: /api/channel-manager/channel/all
+      operations:
+      - name: listallchannels
+        method: GET
+        description: VTex List all channels
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: enviroment
+          in: path
+          type: string
+          description: Environment used as part of the URL.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: VTEX's account name owned by the connector/partner.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+    - name: api-channel-manager-connector
+      path: /api/channel-manager/connector
+      operations:
+      - name: registerconnector
+        method: POST
+        description: VTex Register connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: environment
+          in: path
+          type: string
+          description: Environment used as part of URL.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: VTEX's account name owned by the connector/partner, ex. `apiexemple`
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-channel-manager-connector-:connectorId
+      path: /api/channel-manager/connector/:connectorId
+      operations:
+      - name: retrieveconnector
+        method: GET
+        description: VTex Retrieve connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment used as part of URL.
+          required: true
+        - name: connectorId
+          in: path
+          type: integer
+          description: Connector's ID in Channel Manager, available through the List all connectors, or in the response of
+            the registration.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: VTEX's account name owned by the connector/partner.
+          required: true
+        - name: accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: content-type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+      - name: upsertmerchantconnection
+        method: POST
+        description: VTex Upsert merchant connection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: environment
+          in: path
+          type: string
+          description: Environment used as part of URL.
+          required: true
+        - name: connectorId
+          in: path
+          type: integer
+          description: Connector's ID in Channel Manager, available through the list all connectors route, or in the response
+            of the registration.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Merchant's account name in VTEX, ex. `apiexemple`.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeconnector
+        method: DELETE
+        description: VTex Remove connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment used as part of URL.
+          required: true
+        - name: connectorId
+          in: path
+          type: number
+          description: Connector's ID in Channel Manager, available through the List all connectors route, or in the response
+            of the registration.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Merchant's account name in VTEX, ex. `apiexemple`.
+          required: true
+      - name: fullupdateconnector
+        method: PUT
+        description: VTex Full update connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: environment
+          in: path
+          type: string
+          description: Environment used as part of URL.
+          required: true
+        - name: connectorId
+          in: path
+          type: number
+          description: Connector's ID in Channel Manager, available through the list all connectors route, or in the response
+            of the registration.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: VTEX's account name owned by the connector or partner, ex. `apiexemple`.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: partialupdateconnector
+        method: PATCH
+        description: VTex Partial update connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment used as part of URL.
+          required: true
+        - name: connectorId
+          in: path
+          type: number
+          description: Connector's ID in Channel Manager, available through the list all connectors route, or in the response
+            of the registration.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: VTEX's account name owned by the connector/partner, ex. `apiexemple`.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-type
+          in: header
+          type: string
+          description: Required header to indicate the request is a PATCH.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-channel-manager-connector-all
+      path: /api/channel-manager/connector/all
+      operations:
+      - name: listallconnectors
+        method: GET
+        description: VTex List all connectors
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment used as part of URL.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Merchant's account name in VTEX, ex. `apiexemple`.
+          required: true
+        - name: segment
+          in: query
+          type: string
+          description: Filter data by connector's segment.
+        - name: orderByConnectorType
+          in: query
+          type: string
+          description: Order data using a custom logic by connector's' type, and not alphabetically.
+        - name: active
+          in: query
+          type: string
+          description: Filter data by the connector's status.
+        - name: name
+          in: query
+          type: string
+          description: Filter data by the connector's name.
+        - name: page
+          in: query
+          type: integer
+          description: Current page to load data from.
+        - name: pageSize
+          in: query
+          type: integer
+          description: Page size to define number of results returned.
+          required: true
+        - name: country
+          in: query
+          type: string
+          description: Filter by connector's country.
+        - name: type
+          in: query
+          type: string
+          description: Filter by connector's type.
+        - name: account
+          in: query
+          type: string
+          description: Filter by connector's owner account.
+        - name: accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: content-type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+    - name: api-mkp-category-mapper-categories-marketplace-id
+      path: /api/mkp-category-mapper/categories/marketplace/{id}
+      operations:
+      - name: sendcategorymappingvtexmapper
+        method: POST
+        description: Send Category Mapping to VTEX Mapper
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: id
+          in: path
+          type: string
+          description: Code identifying returned in the *VTEX Mapper Registration* endpoint.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-mkp-category-mapper-connector-register
+      path: /api/mkp-category-mapper/connector/register
+      operations:
+      - name: vtexmapperregistration
+        method: POST
+        description: VTEX Mapper Registration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: marketplace-protocol-external-mapper-external-marketplace-rest
+    port: 8080
+    description: REST adapter for VTex Marketplace Protocol — External Marketplace. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/channel-manager/channel/channelid
+      name: api-channel-manager-channel-channelid
+      description: REST surface for api-channel-manager-channel-:channelId.
+      operations:
+      - method: GET
+        name: retrievechannel
+        description: VTex Retrieve channel
+        call: marketplace-protocol-external-mapper-external-marketplace.retrievechannel
+        with:
+          enviroment: rest.enviroment
+          an: rest.an
+          channelId: rest.channelId
+          Accept: rest.Accept
+          Content-type: rest.Content-type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/channel-manager/channel/all
+      name: api-channel-manager-channel-all
+      description: REST surface for api-channel-manager-channel-all.
+      operations:
+      - method: GET
+        name: listallchannels
+        description: VTex List all channels
+        call: marketplace-protocol-external-mapper-external-marketplace.listallchannels
+        with:
+          enviroment: rest.enviroment
+          an: rest.an
+          Accept: rest.Accept
+          Content-type: rest.Content-type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/channel-manager/connector
+      name: api-channel-manager-connector
+      description: REST surface for api-channel-manager-connector.
+      operations:
+      - method: POST
+        name: registerconnector
+        description: VTex Register connector
+        call: marketplace-protocol-external-mapper-external-marketplace.registerconnector
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          environment: rest.environment
+          an: rest.an
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/channel-manager/connector/connectorid
+      name: api-channel-manager-connector-connectorid
+      description: REST surface for api-channel-manager-connector-:connectorId.
+      operations:
+      - method: GET
+        name: retrieveconnector
+        description: VTex Retrieve connector
+        call: marketplace-protocol-external-mapper-external-marketplace.retrieveconnector
+        with:
+          environment: rest.environment
+          connectorId: rest.connectorId
+          an: rest.an
+          accept: rest.accept
+          content-type: rest.content-type
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: upsertmerchantconnection
+        description: VTex Upsert merchant connection
+        call: marketplace-protocol-external-mapper-external-marketplace.upsertmerchantconnection
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          environment: rest.environment
+          connectorId: rest.connectorId
+          an: rest.an
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeconnector
+        description: VTex Remove connector
+        call: marketplace-protocol-external-mapper-external-marketplace.removeconnector
+        with:
+          environment: rest.environment
+          connectorId: rest.connectorId
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          an: rest.an
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: fullupdateconnector
+        description: VTex Full update connector
+        call: marketplace-protocol-external-mapper-external-marketplace.fullupdateconnector
+        with:
+          Accept: rest.Accept
+          environment: rest.environment
+          connectorId: rest.connectorId
+          an: rest.an
+          Content-Type: rest.Content-Type
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: partialupdateconnector
+        description: VTex Partial update connector
+        call: marketplace-protocol-external-mapper-external-marketplace.partialupdateconnector
+        with:
+          environment: rest.environment
+          connectorId: rest.connectorId
+          an: rest.an
+          Accept: rest.Accept
+          Content-type: rest.Content-type
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/channel-manager/connector/all
+      name: api-channel-manager-connector-all
+      description: REST surface for api-channel-manager-connector-all.
+      operations:
+      - method: GET
+        name: listallconnectors
+        description: VTex List all connectors
+        call: marketplace-protocol-external-mapper-external-marketplace.listallconnectors
+        with:
+          environment: rest.environment
+          an: rest.an
+          segment: rest.segment
+          orderByConnectorType: rest.orderByConnectorType
+          active: rest.active
+          name: rest.name
+          page: rest.page
+          pageSize: rest.pageSize
+          country: rest.country
+          type: rest.type
+          account: rest.account
+          accept: rest.accept
+          content-type: rest.content-type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/mkp-category-mapper/categories/marketplace/{id}
+      name: api-mkp-category-mapper-categories-marketplace-id
+      description: REST surface for api-mkp-category-mapper-categories-marketplace-id.
+      operations:
+      - method: POST
+        name: sendcategorymappingvtexmapper
+        description: Send Category Mapping to VTEX Mapper
+        call: marketplace-protocol-external-mapper-external-marketplace.sendcategorymappingvtexmapper
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/mkp-category-mapper/connector/register
+      name: api-mkp-category-mapper-connector-register
+      description: REST surface for api-mkp-category-mapper-connector-register.
+      operations:
+      - method: POST
+        name: vtexmapperregistration
+        description: VTEX Mapper Registration
+        call: marketplace-protocol-external-mapper-external-marketplace.vtexmapperregistration
+        with:
+          an: rest.an
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: marketplace-protocol-external-mapper-external-marketplace-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Marketplace Protocol — External Marketplace. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: vtex-retrieve-channel
+      description: VTex Retrieve channel
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-protocol-external-mapper-external-marketplace.retrievechannel
+      with:
+        enviroment: tools.enviroment
+        an: tools.an
+        channelId: tools.channelId
+        Accept: tools.Accept
+        Content-type: tools.Content-type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-list-all-channels
+      description: VTex List all channels
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-protocol-external-mapper-external-marketplace.listallchannels
+      with:
+        enviroment: tools.enviroment
+        an: tools.an
+        Accept: tools.Accept
+        Content-type: tools.Content-type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-register-connector
+      description: VTex Register connector
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-mapper-external-marketplace.registerconnector
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        environment: tools.environment
+        an: tools.an
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-retrieve-connector
+      description: VTex Retrieve connector
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-protocol-external-mapper-external-marketplace.retrieveconnector
+      with:
+        environment: tools.environment
+        connectorId: tools.connectorId
+        an: tools.an
+        accept: tools.accept
+        content-type: tools.content-type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-upsert-merchant-connection
+      description: VTex Upsert merchant connection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-mapper-external-marketplace.upsertmerchantconnection
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        environment: tools.environment
+        connectorId: tools.connectorId
+        an: tools.an
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-connector
+      description: VTex Remove connector
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: marketplace-protocol-external-mapper-external-marketplace.removeconnector
+      with:
+        environment: tools.environment
+        connectorId: tools.connectorId
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        an: tools.an
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-full-update-connector
+      description: VTex Full update connector
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: marketplace-protocol-external-mapper-external-marketplace.fullupdateconnector
+      with:
+        Accept: tools.Accept
+        environment: tools.environment
+        connectorId: tools.connectorId
+        an: tools.an
+        Content-Type: tools.Content-Type
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-partial-update-connector
+      description: VTex Partial update connector
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: marketplace-protocol-external-mapper-external-marketplace.partialupdateconnector
+      with:
+        environment: tools.environment
+        connectorId: tools.connectorId
+        an: tools.an
+        Accept: tools.Accept
+        Content-type: tools.Content-type
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-list-all-connectors
+      description: VTex List all connectors
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-protocol-external-mapper-external-marketplace.listallconnectors
+      with:
+        environment: tools.environment
+        an: tools.an
+        segment: tools.segment
+        orderByConnectorType: tools.orderByConnectorType
+        active: tools.active
+        name: tools.name
+        page: tools.page
+        pageSize: tools.pageSize
+        country: tools.country
+        type: tools.type
+        account: tools.account
+        accept: tools.accept
+        content-type: tools.content-type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: send-category-mapping-vtex-mapper
+      description: Send Category Mapping to VTEX Mapper
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-mapper-external-marketplace.sendcategorymappingvtexmapper
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-mapper-registration
+      description: VTEX Mapper Registration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-mapper-external-marketplace.vtexmapperregistration
+      with:
+        an: tools.an
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

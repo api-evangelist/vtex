@@ -1,0 +1,466 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — SKU
+  description: 'VTex Catalog API — SKU. 10 operations. Lead operation: VTex Get SKU by RefId. Self-contained Naftiko capability
+    covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - SKU
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-sku
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — SKU business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-stockkeepingunit
+      path: /api/catalog/pvt/stockkeepingunit
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get SKU by RefId
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: RefId
+          in: query
+          type: string
+          description: SKU reference ID.
+          required: true
+      - name: post
+        method: POST
+        description: VTex Create SKU
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-stockkeepingunit-skuId
+      path: /api/catalog/pvt/stockkeepingunit/{skuId}
+      operations:
+      - name: sku
+        method: GET
+        description: VTex Get SKU
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuId
+          in: path
+          type: integer
+          description: SKU unique identifier number.
+          required: true
+      - name: put
+        method: PUT
+        description: VTex Update SKU
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuId
+          in: path
+          type: integer
+          description: SKU's unique numerical identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog_system-pub-sku-stockkeepingunitidsbyrefids
+      path: /api/catalog_system/pub/sku/stockkeepingunitidsbyrefids
+      operations:
+      - name: skuidlistbyrefidlist
+        method: POST
+        description: VTex Retrieve SKU ID list by reference ID list
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog_system-pvt-sku-stockkeepingunitByProductId-productId
+      path: /api/catalog_system/pvt/sku/stockkeepingunitByProductId/{productId}
+      operations:
+      - name: skulistbyproductid
+        method: GET
+        description: VTex Get SKU list by product ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+    - name: api-catalog_system-pvt-sku-stockkeepingunitbyalternateId-alternateId
+      path: /api/catalog_system/pvt/sku/stockkeepingunitbyalternateId/{alternateId}
+      operations:
+      - name: skubyalternateid
+        method: GET
+        description: VTex Get SKU by alternate ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: alternateId
+          in: path
+          type: integer
+          description: Product EAN or `RefId`.
+          required: true
+    - name: api-catalog_system-pvt-sku-stockkeepingunitbyid-skuId
+      path: /api/catalog_system/pvt/sku/stockkeepingunitbyid/{skuId}
+      operations:
+      - name: skucontext
+        method: GET
+        description: VTex Get SKU and context
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuId
+          in: path
+          type: integer
+          description: SKU's unique identifier number.
+          required: true
+        - name: sc
+          in: query
+          type: integer
+          description: Trade policy's unique identifier number.
+    - name: api-catalog_system-pvt-sku-stockkeepingunitidbyrefid-refId
+      path: /api/catalog_system/pvt/sku/stockkeepingunitidbyrefid/{refId}
+      operations:
+      - name: skuidbyrefid
+        method: GET
+        description: VTex Get SKU ID by reference ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: RefId
+          in: path
+          type: string
+          description: SKU reference ID.
+          required: true
+    - name: api-catalog_system-pvt-sku-stockkeepingunitids
+      path: /api/catalog_system/pvt/sku/stockkeepingunitids
+      operations:
+      - name: listallskuids
+        method: GET
+        description: VTex List all SKU IDs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: page
+          in: query
+          type: integer
+          description: Number of the page from where you need to retrieve SKU IDs.
+          required: true
+        - name: pagesize
+          in: query
+          type: integer
+          description: Size of the page from where you need retrieve SKU IDs. The maximum value is `1000`.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-sku-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — SKU. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/stockkeepingunit
+      name: api-catalog-pvt-stockkeepingunit
+      description: REST surface for api-catalog-pvt-stockkeepingunit.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get SKU by RefId
+        call: catalog-sku.get
+        with:
+          RefId: rest.RefId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: post
+        description: VTex Create SKU
+        call: catalog-sku.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/stockkeepingunit/{skuid}
+      name: api-catalog-pvt-stockkeepingunit-skuid
+      description: REST surface for api-catalog-pvt-stockkeepingunit-skuId.
+      operations:
+      - method: GET
+        name: sku
+        description: VTex Get SKU
+        call: catalog-sku.sku
+        with:
+          skuId: rest.skuId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: put
+        description: VTex Update SKU
+        call: catalog-sku.put
+        with:
+          skuId: rest.skuId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pub/sku/stockkeepingunitidsbyrefids
+      name: api-catalog-system-pub-sku-stockkeepingunitidsbyrefids
+      description: REST surface for api-catalog_system-pub-sku-stockkeepingunitidsbyrefids.
+      operations:
+      - method: POST
+        name: skuidlistbyrefidlist
+        description: VTex Retrieve SKU ID list by reference ID list
+        call: catalog-sku.skuidlistbyrefidlist
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/sku/stockkeepingunitbyproductid/{productid}
+      name: api-catalog-system-pvt-sku-stockkeepingunitbyproductid-productid
+      description: REST surface for api-catalog_system-pvt-sku-stockkeepingunitByProductId-productId.
+      operations:
+      - method: GET
+        name: skulistbyproductid
+        description: VTex Get SKU list by product ID
+        call: catalog-sku.skulistbyproductid
+        with:
+          productId: rest.productId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/sku/stockkeepingunitbyalternateid/{alternateid}
+      name: api-catalog-system-pvt-sku-stockkeepingunitbyalternateid-alternateid
+      description: REST surface for api-catalog_system-pvt-sku-stockkeepingunitbyalternateId-alternateId.
+      operations:
+      - method: GET
+        name: skubyalternateid
+        description: VTex Get SKU by alternate ID
+        call: catalog-sku.skubyalternateid
+        with:
+          alternateId: rest.alternateId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/sku/stockkeepingunitbyid/{skuid}
+      name: api-catalog-system-pvt-sku-stockkeepingunitbyid-skuid
+      description: REST surface for api-catalog_system-pvt-sku-stockkeepingunitbyid-skuId.
+      operations:
+      - method: GET
+        name: skucontext
+        description: VTex Get SKU and context
+        call: catalog-sku.skucontext
+        with:
+          skuId: rest.skuId
+          sc: rest.sc
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/sku/stockkeepingunitidbyrefid/{refid}
+      name: api-catalog-system-pvt-sku-stockkeepingunitidbyrefid-refid
+      description: REST surface for api-catalog_system-pvt-sku-stockkeepingunitidbyrefid-refId.
+      operations:
+      - method: GET
+        name: skuidbyrefid
+        description: VTex Get SKU ID by reference ID
+        call: catalog-sku.skuidbyrefid
+        with:
+          RefId: rest.RefId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/sku/stockkeepingunitids
+      name: api-catalog-system-pvt-sku-stockkeepingunitids
+      description: REST surface for api-catalog_system-pvt-sku-stockkeepingunitids.
+      operations:
+      - method: GET
+        name: listallskuids
+        description: VTex List all SKU IDs
+        call: catalog-sku.listallskuids
+        with:
+          page: rest.page
+          pagesize: rest.pagesize
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-sku-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — SKU. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: vtex-get-sku-refid
+      description: VTex Get SKU by RefId
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku.get
+      with:
+        RefId: tools.RefId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-sku
+      description: VTex Create SKU
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-sku.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku
+      description: VTex Get SKU
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku.sku
+      with:
+        skuId: tools.skuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-sku
+      description: VTex Update SKU
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-sku.put
+      with:
+        skuId: tools.skuId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-retrieve-sku-id-list
+      description: VTex Retrieve SKU ID list by reference ID list
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: catalog-sku.skuidlistbyrefidlist
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku-list-product
+      description: VTex Get SKU list by product ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku.skulistbyproductid
+      with:
+        productId: tools.productId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku-alternate-id
+      description: VTex Get SKU by alternate ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku.skubyalternateid
+      with:
+        alternateId: tools.alternateId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku-and-context
+      description: VTex Get SKU and context
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku.skucontext
+      with:
+        skuId: tools.skuId
+        sc: tools.sc
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku-id-reference
+      description: VTex Get SKU ID by reference ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku.skuidbyrefid
+      with:
+        RefId: tools.RefId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-list-all-sku-ids
+      description: VTex List all SKU IDs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku.listallskuids
+      with:
+        page: tools.page
+        pagesize: tools.pagesize
+      outputParameters:
+      - type: object
+        mapping: $.

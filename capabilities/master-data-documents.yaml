@@ -1,0 +1,252 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Master Data API - v2 — Documents
+  description: 'VTex Master Data API - v2 — Documents. 6 operations. Lead operation: VTex Create new document. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Documents
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: master-data-documents
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Master Data API - v2 — Documents business capability. Self-contained, no shared references.
+    resources:
+    - name: api-dataentities-dataEntityName-documents
+      path: /api/dataentities/{dataEntityName}/documents
+      operations:
+      - name: createnewdocument
+        method: POST
+        description: VTex Create new document
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: createorupdatepartialdocument
+        method: PATCH
+        description: VTex Create partial document
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-dataentities-dataEntityName-documents-id
+      path: /api/dataentities/{dataEntityName}/documents/{id}
+      operations:
+      - name: getdocument
+        method: GET
+        description: VTex Get document
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateentiredocument
+        method: PUT
+        description: VTex Create document with custom ID or Update entire document
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the document. If you inform an **unused ID**, this endpoint will create a new document with the
+            informed custom ID, differently from the [Create new docum
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: updatepartialdocument
+        method: PATCH
+        description: VTex Update partial document
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletedocument
+        method: DELETE
+        description: VTex Delete document
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: master-data-documents-rest
+    port: 8080
+    description: REST adapter for VTex Master Data API - v2 — Documents. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/dataentities/{dataentityname}/documents
+      name: api-dataentities-dataentityname-documents
+      description: REST surface for api-dataentities-dataEntityName-documents.
+      operations:
+      - method: POST
+        name: createnewdocument
+        description: VTex Create new document
+        call: master-data-documents.createnewdocument
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: createorupdatepartialdocument
+        description: VTex Create partial document
+        call: master-data-documents.createorupdatepartialdocument
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/dataentities/{dataentityname}/documents/{id}
+      name: api-dataentities-dataentityname-documents-id
+      description: REST surface for api-dataentities-dataEntityName-documents-id.
+      operations:
+      - method: GET
+        name: getdocument
+        description: VTex Get document
+        call: master-data-documents.getdocument
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateentiredocument
+        description: VTex Create document with custom ID or Update entire document
+        call: master-data-documents.updateentiredocument
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatepartialdocument
+        description: VTex Update partial document
+        call: master-data-documents.updatepartialdocument
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedocument
+        description: VTex Delete document
+        call: master-data-documents.deletedocument
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: master-data-documents-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Master Data API - v2 — Documents. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-new-document
+      description: VTex Create new document
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: master-data-documents.createnewdocument
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-partial-document
+      description: VTex Create partial document
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: master-data-documents.createorupdatepartialdocument
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-document
+      description: VTex Get document
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: master-data-documents.getdocument
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-document-custom-id
+      description: VTex Create document with custom ID or Update entire document
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: master-data-documents.updateentiredocument
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-partial-document
+      description: VTex Update partial document
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: master-data-documents.updatepartialdocument
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-document
+      description: VTex Delete document
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: master-data-documents.deletedocument
+      outputParameters:
+      - type: object
+        mapping: $.

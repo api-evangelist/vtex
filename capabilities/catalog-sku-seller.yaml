@@ -1,0 +1,233 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — SKU Seller
+  description: 'VTex Catalog API — SKU Seller. 4 operations. Lead operation: VTex Change notification with seller ID and seller
+    SKU ID. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - SKU Seller
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-sku-seller
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — SKU Seller business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog_system-pvt-skuseller-changenotification-sellerId-sellerSkuId
+      path: /api/catalog_system/pvt/skuseller/changenotification/{sellerId}/{sellerSkuId}
+      operations:
+      - name: post
+        method: POST
+        description: VTex Change notification with seller ID and seller SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: ID of the binding of the seller with the SKU.
+          required: true
+    - name: api-catalog_system-pvt-skuseller-changenotification-skuId
+      path: /api/catalog_system/pvt/skuseller/changenotification/{skuId}
+      operations:
+      - name: changenotification
+        method: POST
+        description: VTex Change notification with SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuId
+          in: path
+          type: string
+          description: A string that identifies the SKU in the marketplace. This is the ID that the marketplace will use to
+            look for the SKU whose change the seller wants to inform. I
+          required: true
+    - name: api-catalog_system-pvt-skuseller-remove-sellerId-sellerSkuId
+      path: /api/catalog_system/pvt/skuseller/remove/{sellerId}/{sellerSkuId}
+      operations:
+      - name: deleteskusellerassociation
+        method: POST
+        description: VTex Remove a seller's SKU binding
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: SKU ID in the seller's store.
+          required: true
+    - name: api-catalog_system-pvt-skuseller-sellerId-sellerSkuId
+      path: /api/catalog_system/pvt/skuseller/{sellerId}/{sellerSkuId}
+      operations:
+      - name: getskuseller
+        method: GET
+        description: VTex Get details of a seller's SKU
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: SKU ID in the seller's store.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-sku-seller-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — SKU Seller. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/catalog-system/pvt/skuseller/changenotification/{sellerid}/{sellerskuid}
+      name: api-catalog-system-pvt-skuseller-changenotification-sellerid-sellerskuid
+      description: REST surface for api-catalog_system-pvt-skuseller-changenotification-sellerId-sellerSkuId.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Change notification with seller ID and seller SKU ID
+        call: catalog-sku-seller.post
+        with:
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/skuseller/changenotification/{skuid}
+      name: api-catalog-system-pvt-skuseller-changenotification-skuid
+      description: REST surface for api-catalog_system-pvt-skuseller-changenotification-skuId.
+      operations:
+      - method: POST
+        name: changenotification
+        description: VTex Change notification with SKU ID
+        call: catalog-sku-seller.changenotification
+        with:
+          skuId: rest.skuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/skuseller/remove/{sellerid}/{sellerskuid}
+      name: api-catalog-system-pvt-skuseller-remove-sellerid-sellerskuid
+      description: REST surface for api-catalog_system-pvt-skuseller-remove-sellerId-sellerSkuId.
+      operations:
+      - method: POST
+        name: deleteskusellerassociation
+        description: VTex Remove a seller's SKU binding
+        call: catalog-sku-seller.deleteskusellerassociation
+        with:
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/skuseller/{sellerid}/{sellerskuid}
+      name: api-catalog-system-pvt-skuseller-sellerid-sellerskuid
+      description: REST surface for api-catalog_system-pvt-skuseller-sellerId-sellerSkuId.
+      operations:
+      - method: GET
+        name: getskuseller
+        description: VTex Get details of a seller's SKU
+        call: catalog-sku-seller.getskuseller
+        with:
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-sku-seller-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — SKU Seller. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-change-notification-seller-id
+      description: VTex Change notification with seller ID and seller SKU ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-sku-seller.post
+      with:
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-change-notification-sku-id
+      description: VTex Change notification with SKU ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-sku-seller.changenotification
+      with:
+        skuId: tools.skuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-seller-s-sku-binding
+      description: VTex Remove a seller's SKU binding
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-sku-seller.deleteskusellerassociation
+      with:
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-details-seller-s-sku
+      description: VTex Get details of a seller's SKU
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku-seller.getskuseller
+      with:
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+      outputParameters:
+      - type: object
+        mapping: $.

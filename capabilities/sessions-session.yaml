@@ -1,0 +1,152 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Session Manager API — Session
+  description: 'VTex Session Manager API — Session. 3 operations. Lead operation: VTex Create new session. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Session
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sessions-session
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Session Manager API — Session business capability. Self-contained, no shared references.
+    resources:
+    - name: api-sessions
+      path: /api/sessions
+      operations:
+      - name: createnewsession
+        method: POST
+        description: VTex Create new session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: getsession
+        method: GET
+        description: VTex Get session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: items
+          in: query
+          type: string
+          description: Items are the keys of the values you wish to get. They follow the format `namespace1.key1,namespace2.key2`.
+          required: true
+      - name: editsession
+        method: PATCH
+        description: VTex Edit session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: vtex_session
+      value: '{{env.VTEX_API_KEY}}'
+      placement: cookie
+  exposes:
+  - type: rest
+    namespace: sessions-session-rest
+    port: 8080
+    description: REST adapter for VTex Session Manager API — Session. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/sessions
+      name: api-sessions
+      description: REST surface for api-sessions.
+      operations:
+      - method: POST
+        name: createnewsession
+        description: VTex Create new session
+        call: sessions-session.createnewsession
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getsession
+        description: VTex Get session
+        call: sessions-session.getsession
+        with:
+          items: rest.items
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: editsession
+        description: VTex Edit session
+        call: sessions-session.editsession
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sessions-session-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Session Manager API — Session. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-new-session
+      description: VTex Create new session
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sessions-session.createnewsession
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-session
+      description: VTex Get session
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sessions-session.getsession
+      with:
+        items: tools.items
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-edit-session
+      description: VTex Edit session
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: sessions-session.editsession
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,166 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Specification Value
+  description: 'VTex Catalog API — Specification Value. 3 operations. Lead operation: VTex Create specification value. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Specification Value
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-specification-value
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Specification Value business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-specificationvalue
+      path: /api/catalog/pvt/specificationvalue
+      operations:
+      - name: post
+        method: POST
+        description: VTex Create specification value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-specificationvalue-specificationValueId
+      path: /api/catalog/pvt/specificationvalue/{specificationValueId}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get specification value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: specificationValueId
+          in: path
+          type: integer
+          description: Specification value's unique numerical identifier.
+          required: true
+      - name: put
+        method: PUT
+        description: VTex Update specification value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: specificationValueId
+          in: path
+          type: integer
+          description: specification value's unique numerical identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-specification-value-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Specification Value. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/specificationvalue
+      name: api-catalog-pvt-specificationvalue
+      description: REST surface for api-catalog-pvt-specificationvalue.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Create specification value
+        call: catalog-specification-value.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/specificationvalue/{specificationvalueid}
+      name: api-catalog-pvt-specificationvalue-specificationvalueid
+      description: REST surface for api-catalog-pvt-specificationvalue-specificationValueId.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get specification value
+        call: catalog-specification-value.get
+        with:
+          specificationValueId: rest.specificationValueId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: put
+        description: VTex Update specification value
+        call: catalog-specification-value.put
+        with:
+          specificationValueId: rest.specificationValueId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-specification-value-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Specification Value. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-specification-value
+      description: VTex Create specification value
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-specification-value.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-specification-value
+      description: VTex Get specification value
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-specification-value.get
+      with:
+        specificationValueId: tools.specificationValueId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-specification-value
+      description: VTex Update specification value
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-specification-value.put
+      with:
+        specificationValueId: tools.specificationValueId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,253 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Logistics API — Polygons
+  description: 'VTex Logistics API — Polygons. 4 operations. Lead operation: VTex List paged polygons. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Polygons
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: logistics-polygons
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Logistics API — Polygons business capability. Self-contained, no shared references.
+    resources:
+    - name: api-logistics-pvt-configuration-geoshape
+      path: /api/logistics/pvt/configuration/geoshape
+      operations:
+      - name: pagedpolygons
+        method: GET
+        description: VTex List paged polygons
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: page
+          in: query
+          type: string
+          required: true
+        - name: perPage
+          in: query
+          type: string
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: createupdatepolygon
+        method: PUT
+        description: VTex Create/update polygon
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-logistics-pvt-configuration-geoshape-polygonName
+      path: /api/logistics/pvt/configuration/geoshape/{polygonName}
+      operations:
+      - name: polygonbyid
+        method: GET
+        description: VTex List polygon by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: polygonName
+          in: path
+          type: string
+          required: true
+      - name: deletepolygon
+        method: DELETE
+        description: VTex Delete polygon
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: polygonName
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: logistics-polygons-rest
+    port: 8080
+    description: REST adapter for VTex Logistics API — Polygons. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/logistics/pvt/configuration/geoshape
+      name: api-logistics-pvt-configuration-geoshape
+      description: REST surface for api-logistics-pvt-configuration-geoshape.
+      operations:
+      - method: GET
+        name: pagedpolygons
+        description: VTex List paged polygons
+        call: logistics-polygons.pagedpolygons
+        with:
+          page: rest.page
+          perPage: rest.perPage
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: createupdatepolygon
+        description: VTex Create/update polygon
+        call: logistics-polygons.createupdatepolygon
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/logistics/pvt/configuration/geoshape/{polygonname}
+      name: api-logistics-pvt-configuration-geoshape-polygonname
+      description: REST surface for api-logistics-pvt-configuration-geoshape-polygonName.
+      operations:
+      - method: GET
+        name: polygonbyid
+        description: VTex List polygon by ID
+        call: logistics-polygons.polygonbyid
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          polygonName: rest.polygonName
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepolygon
+        description: VTex Delete polygon
+        call: logistics-polygons.deletepolygon
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          polygonName: rest.polygonName
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: logistics-polygons-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Logistics API — Polygons. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-list-paged-polygons
+      description: VTex List paged polygons
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: logistics-polygons.pagedpolygons
+      with:
+        page: tools.page
+        perPage: tools.perPage
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-update-polygon
+      description: VTex Create/update polygon
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: logistics-polygons.createupdatepolygon
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-list-polygon-id
+      description: VTex List polygon by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: logistics-polygons.polygonbyid
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        polygonName: tools.polygonName
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-polygon
+      description: VTex Delete polygon
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: logistics-polygons.deletepolygon
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        polygonName: tools.polygonName
+      outputParameters:
+      - type: object
+        mapping: $.

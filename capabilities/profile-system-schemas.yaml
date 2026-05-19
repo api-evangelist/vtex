@@ -1,0 +1,139 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Profile System - PII data architecture — Schemas
+  description: 'VTex Profile System - PII data architecture — Schemas. 3 operations. Lead operation: VTex Get full schema.
+    Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Schemas
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: profile-system-schemas
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Profile System - PII data architecture — Schemas business capability. Self-contained, no shared references.
+    resources:
+    - name: api-storage-profile-system-schemas-profileSystem
+      path: /api/storage/profile-system/schemas/profileSystem
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get full schema
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-schemas-profileSystem-custom
+      path: /api/storage/profile-system/schemas/profileSystem/custom
+      operations:
+      - name: createorupdateprofileschema
+        method: PUT
+        description: VTex Create or delete custom fields
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: get
+        method: GET
+        description: VTex Get custom fields
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: profile-system-schemas-rest
+    port: 8080
+    description: REST adapter for VTex Profile System - PII data architecture — Schemas. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/storage/profile-system/schemas/profilesystem
+      name: api-storage-profile-system-schemas-profilesystem
+      description: REST surface for api-storage-profile-system-schemas-profileSystem.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get full schema
+        call: profile-system-schemas.get
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/schemas/profilesystem/custom
+      name: api-storage-profile-system-schemas-profilesystem-custom
+      description: REST surface for api-storage-profile-system-schemas-profileSystem-custom.
+      operations:
+      - method: PUT
+        name: createorupdateprofileschema
+        description: VTex Create or delete custom fields
+        call: profile-system-schemas.createorupdateprofileschema
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: get
+        description: VTex Get custom fields
+        call: profile-system-schemas.get
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: profile-system-schemas-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Profile System - PII data architecture — Schemas. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: vtex-get-full-schema
+      description: VTex Get full schema
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-schemas.get
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-delete-custom-fields
+      description: VTex Create or delete custom fields
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: profile-system-schemas.createorupdateprofileschema
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-custom-fields
+      description: VTex Get custom fields
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-schemas.get
+      outputParameters:
+      - type: object
+        mapping: $.

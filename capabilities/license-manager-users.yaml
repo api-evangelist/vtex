@@ -1,0 +1,218 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex License Manager API — Users
+  description: 'VTex License Manager API — Users. 4 operations. Lead operation: VTex Get list of users. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Users
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: license-manager-users
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex License Manager API — Users business capability. Self-contained, no shared references.
+    resources:
+    - name: api-license-manager-site-pvt-logins-list-paged
+      path: /api/license-manager/site/pvt/logins/list/paged
+      operations:
+      - name: getlistusers
+        method: GET
+        description: VTex Get list of users
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: numItems
+          in: query
+          type: integer
+          description: Number of items in the returned page.
+        - name: pageNumber
+          in: query
+          type: integer
+          description: Which page from the whole list will be returned.
+        - name: sort
+          in: query
+          type: string
+          description: Chooses the field that the list will be sorted by.
+        - name: sortType
+          in: query
+          type: string
+          description: Defines the sorting order. `ASC` is used for ascendant order. `DSC` is used for descendant order.
+    - name: api-license-manager-users
+      path: /api/license-manager/users
+      operations:
+      - name: createuser
+        method: POST
+        description: VTex Create user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-license-manager-users-userId
+      path: /api/license-manager/users/{userId}
+      operations:
+      - name: getuser
+        method: GET
+        description: VTex Get user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          description: ID from queried user.
+          required: true
+      - name: delete
+        method: DELETE
+        description: VTex Delete user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          description: ID from queried user.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: license-manager-users-rest
+    port: 8080
+    description: REST adapter for VTex License Manager API — Users. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/license-manager/site/pvt/logins/list/paged
+      name: api-license-manager-site-pvt-logins-list-paged
+      description: REST surface for api-license-manager-site-pvt-logins-list-paged.
+      operations:
+      - method: GET
+        name: getlistusers
+        description: VTex Get list of users
+        call: license-manager-users.getlistusers
+        with:
+          numItems: rest.numItems
+          pageNumber: rest.pageNumber
+          sort: rest.sort
+          sortType: rest.sortType
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/license-manager/users
+      name: api-license-manager-users
+      description: REST surface for api-license-manager-users.
+      operations:
+      - method: POST
+        name: createuser
+        description: VTex Create user
+        call: license-manager-users.createuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/license-manager/users/{userid}
+      name: api-license-manager-users-userid
+      description: REST surface for api-license-manager-users-userId.
+      operations:
+      - method: GET
+        name: getuser
+        description: VTex Get user
+        call: license-manager-users.getuser
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete
+        description: VTex Delete user
+        call: license-manager-users.delete
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: license-manager-users-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex License Manager API — Users. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-list-users
+      description: VTex Get list of users
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: license-manager-users.getlistusers
+      with:
+        numItems: tools.numItems
+        pageNumber: tools.pageNumber
+        sort: tools.sort
+        sortType: tools.sortType
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-user
+      description: VTex Create user
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: license-manager-users.createuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-user
+      description: VTex Get user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: license-manager-users.getuser
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-user
+      description: VTex Delete user
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: license-manager-users.delete
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: object
+        mapping: $.

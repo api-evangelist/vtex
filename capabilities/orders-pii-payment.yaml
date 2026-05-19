@@ -1,0 +1,72 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Orders API - PII data architecture — Payment
+  description: 'VTex Orders API - PII data architecture — Payment. 1 operations. Lead operation: VTex Send payment notification.
+    Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Payment
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: orders-pii-payment
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Orders API - PII data architecture — Payment business capability. Self-contained, no shared references.
+    resources:
+    - name: api-orders-pvt-document-orderId-payment-paymentId-notify-payment
+      path: /api/orders/pvt/document/{orderId}/payment/{paymentId}/notify-payment
+      operations:
+      - name: sendpaymentnotification2
+        method: POST
+        description: VTex Send payment notification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: orders-pii-payment-rest
+    port: 8080
+    description: REST adapter for VTex Orders API - PII data architecture — Payment. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/orders/pvt/document/{orderid}/payment/{paymentid}/notify-payment
+      name: api-orders-pvt-document-orderid-payment-paymentid-notify-payment
+      description: REST surface for api-orders-pvt-document-orderId-payment-paymentId-notify-payment.
+      operations:
+      - method: POST
+        name: sendpaymentnotification2
+        description: VTex Send payment notification
+        call: orders-pii-payment.sendpaymentnotification2
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: orders-pii-payment-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Orders API - PII data architecture — Payment. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: vtex-send-payment-notification
+      description: VTex Send payment notification
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: orders-pii-payment.sendpaymentnotification2
+      outputParameters:
+      - type: object
+        mapping: $.

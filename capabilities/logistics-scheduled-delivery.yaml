@@ -1,0 +1,382 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Logistics API — Scheduled Delivery
+  description: 'VTex Logistics API — Scheduled Delivery. 5 operations. Lead operation: VTex Search capacity reservations in
+    time range. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Scheduled Delivery
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: logistics-scheduled-delivery
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Logistics API — Scheduled Delivery business capability. Self-contained, no shared references.
+    resources:
+    - name: api-logistics-capacity-resources-carrier@{capacityType}@{shippingPolicyId}-time-
+      path: /api/logistics-capacity/resources/carrier@{capacityType}@{shippingPolicyId}/time-frames
+      operations:
+      - name: get
+        method: GET
+        description: VTex Search capacity reservations in time range
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: capacityType
+          in: path
+          type: string
+          description: How the delivery capacity is measured as defined in the shipping policy. Capacity can be measured by
+            maximum number of orders (`"orders_quantity"`) or SKUs (`"s
+          required: true
+        - name: shippingPolicyId
+          in: path
+          type: string
+          description: ID of shipping policy to search.
+          required: true
+        - name: rangeStart
+          in: query
+          type: string
+          description: Starting date of time range
+          required: true
+        - name: rangeEnd
+          in: query
+          type: string
+          description: End date of time range.
+          required: true
+    - name: api-logistics-capacity-resources-carrier@{capacityType}@{shippingPolicyId}-time-
+      path: /api/logistics-capacity/resources/carrier@{capacityType}@{shippingPolicyId}/time-frames/{windowDay}F{windowStartTime}T{windowEndTime}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get capacity reservation usage by window
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: capacityType
+          in: path
+          type: string
+          description: How the delivery capacity is measured as defined in the shipping policy. Capacity can be measured by
+            maximum number of orders (`"orders_quantity"`) or SKUs (`"s
+          required: true
+        - name: shippingPolicyId
+          in: path
+          type: string
+          description: ID of shipping policy to search.
+          required: true
+        - name: windowDay
+          in: path
+          type: string
+          description: Day of the specific scheduled delivery window to be consulted for reservations.
+          required: true
+        - name: windowStartTime
+          in: path
+          type: string
+          description: Start time of specific scheduled delivery window to be consulted for reservations.
+          required: true
+        - name: windowEndTime
+          in: path
+          type: string
+          description: End time of specific scheduled delivery window to be consulted for reservations.
+          required: true
+    - name: api-logistics-pvt-configuration-carriers-carrierId-adddayofweekblocked
+      path: /api/logistics/pvt/configuration/carriers/{carrierId}/adddayofweekblocked
+      operations:
+      - name: addblockeddeliverywindows
+        method: POST
+        description: VTex Add blocked delivery windows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: carrierId
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-logistics-pvt-configuration-carriers-carrierId-getdayofweekblocked
+      path: /api/logistics/pvt/configuration/carriers/{carrierId}/getdayofweekblocked
+      operations:
+      - name: retrieveblockeddeliverywindows
+        method: GET
+        description: VTex Retrieve blocked delivery windows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: carrierId
+          in: path
+          type: string
+          required: true
+    - name: api-logistics-pvt-configuration-carriers-carrierId-removedayofweekblocked
+      path: /api/logistics/pvt/configuration/carriers/{carrierId}/removedayofweekblocked
+      operations:
+      - name: removeblockeddeliverywindows
+        method: POST
+        description: VTex Remove blocked delivery windows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: carrierId
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: logistics-scheduled-delivery-rest
+    port: 8080
+    description: REST adapter for VTex Logistics API — Scheduled Delivery. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/logistics-capacity/resources/carrier-capacitytype-shippingpolicyid/time-frames
+      name: api-logistics-capacity-resources-carrier-capacitytype-shippingpolicyid-time
+      description: REST surface for api-logistics-capacity-resources-carrier@{capacityType}@{shippingPolicyId}-time-.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Search capacity reservations in time range
+        call: logistics-scheduled-delivery.get
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          capacityType: rest.capacityType
+          shippingPolicyId: rest.shippingPolicyId
+          rangeStart: rest.rangeStart
+          rangeEnd: rest.rangeEnd
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/logistics-capacity/resources/carrier-capacitytype-shippingpolicyid/time-frames/{windowday-f-windowstarttime-t-windowendtime}
+      name: api-logistics-capacity-resources-carrier-capacitytype-shippingpolicyid-time
+      description: REST surface for api-logistics-capacity-resources-carrier@{capacityType}@{shippingPolicyId}-time-.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get capacity reservation usage by window
+        call: logistics-scheduled-delivery.get
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          capacityType: rest.capacityType
+          shippingPolicyId: rest.shippingPolicyId
+          windowDay: rest.windowDay
+          windowStartTime: rest.windowStartTime
+          windowEndTime: rest.windowEndTime
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/logistics/pvt/configuration/carriers/{carrierid}/adddayofweekblocked
+      name: api-logistics-pvt-configuration-carriers-carrierid-adddayofweekblocked
+      description: REST surface for api-logistics-pvt-configuration-carriers-carrierId-adddayofweekblocked.
+      operations:
+      - method: POST
+        name: addblockeddeliverywindows
+        description: VTex Add blocked delivery windows
+        call: logistics-scheduled-delivery.addblockeddeliverywindows
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          carrierId: rest.carrierId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/logistics/pvt/configuration/carriers/{carrierid}/getdayofweekblocked
+      name: api-logistics-pvt-configuration-carriers-carrierid-getdayofweekblocked
+      description: REST surface for api-logistics-pvt-configuration-carriers-carrierId-getdayofweekblocked.
+      operations:
+      - method: GET
+        name: retrieveblockeddeliverywindows
+        description: VTex Retrieve blocked delivery windows
+        call: logistics-scheduled-delivery.retrieveblockeddeliverywindows
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          carrierId: rest.carrierId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/logistics/pvt/configuration/carriers/{carrierid}/removedayofweekblocked
+      name: api-logistics-pvt-configuration-carriers-carrierid-removedayofweekblocked
+      description: REST surface for api-logistics-pvt-configuration-carriers-carrierId-removedayofweekblocked.
+      operations:
+      - method: POST
+        name: removeblockeddeliverywindows
+        description: VTex Remove blocked delivery windows
+        call: logistics-scheduled-delivery.removeblockeddeliverywindows
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          carrierId: rest.carrierId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: logistics-scheduled-delivery-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Logistics API — Scheduled Delivery. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-search-capacity-reservations-time
+      description: VTex Search capacity reservations in time range
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: logistics-scheduled-delivery.get
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        capacityType: tools.capacityType
+        shippingPolicyId: tools.shippingPolicyId
+        rangeStart: tools.rangeStart
+        rangeEnd: tools.rangeEnd
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-capacity-reservation-usage
+      description: VTex Get capacity reservation usage by window
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: logistics-scheduled-delivery.get
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        capacityType: tools.capacityType
+        shippingPolicyId: tools.shippingPolicyId
+        windowDay: tools.windowDay
+        windowStartTime: tools.windowStartTime
+        windowEndTime: tools.windowEndTime
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-blocked-delivery-windows
+      description: VTex Add blocked delivery windows
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: logistics-scheduled-delivery.addblockeddeliverywindows
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        carrierId: tools.carrierId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-retrieve-blocked-delivery-windows
+      description: VTex Retrieve blocked delivery windows
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: logistics-scheduled-delivery.retrieveblockeddeliverywindows
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        carrierId: tools.carrierId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-blocked-delivery-windows
+      description: VTex Remove blocked delivery windows
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: logistics-scheduled-delivery.removeblockeddeliverywindows
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        carrierId: tools.carrierId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

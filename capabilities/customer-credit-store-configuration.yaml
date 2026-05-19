@@ -1,0 +1,107 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Customer Credit API — Store Configuration
+  description: 'VTex Customer Credit API — Store Configuration. 2 operations. Lead operation: VTex Retrieve store configuration.
+    Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Store Configuration
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customer-credit-store-configuration
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Customer Credit API — Store Configuration business capability. Self-contained, no shared references.
+    resources:
+    - name: api-creditcontrol-storeconfig
+      path: /api/creditcontrol/storeconfig
+      operations:
+      - name: retrievestoreconfiguration
+        method: GET
+        description: VTex Retrieve store configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createorchangestoreconfiguration
+        method: PUT
+        description: VTex Create or change store configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: customer-credit-store-configuration-rest
+    port: 8080
+    description: REST adapter for VTex Customer Credit API — Store Configuration. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/creditcontrol/storeconfig
+      name: api-creditcontrol-storeconfig
+      description: REST surface for api-creditcontrol-storeconfig.
+      operations:
+      - method: GET
+        name: retrievestoreconfiguration
+        description: VTex Retrieve store configuration
+        call: customer-credit-store-configuration.retrievestoreconfiguration
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: createorchangestoreconfiguration
+        description: VTex Create or change store configuration
+        call: customer-credit-store-configuration.createorchangestoreconfiguration
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customer-credit-store-configuration-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Customer Credit API — Store Configuration. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-retrieve-store-configuration
+      description: VTex Retrieve store configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-credit-store-configuration.retrievestoreconfiguration
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-change-store-configuration
+      description: VTex Create or change store configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-store-configuration.createorchangestoreconfiguration
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

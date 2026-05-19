@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Master Data API - v2 — Clusters
+  description: 'VTex Master Data API - v2 — Clusters. 1 operations. Lead operation: VTex Validate document by clusters. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Clusters
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: master-data-clusters
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Master Data API - v2 — Clusters business capability. Self-contained, no shared references.
+    resources:
+    - name: api-dataentities-dataEntityName-documents-id-clusters
+      path: /api/dataentities/{dataEntityName}/documents/{id}/clusters
+      operations:
+      - name: validatedocumentbyclusters
+        method: POST
+        description: VTex Validate document by clusters
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: master-data-clusters-rest
+    port: 8080
+    description: REST adapter for VTex Master Data API - v2 — Clusters. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/dataentities/{dataentityname}/documents/{id}/clusters
+      name: api-dataentities-dataentityname-documents-id-clusters
+      description: REST surface for api-dataentities-dataEntityName-documents-id-clusters.
+      operations:
+      - method: POST
+        name: validatedocumentbyclusters
+        description: VTex Validate document by clusters
+        call: master-data-clusters.validatedocumentbyclusters
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: master-data-clusters-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Master Data API - v2 — Clusters. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-validate-document-clusters
+      description: VTex Validate document by clusters
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: master-data-clusters.validatedocumentbyclusters
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

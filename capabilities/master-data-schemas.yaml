@@ -1,0 +1,164 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Master Data API - v2 — Schemas
+  description: 'VTex Master Data API - v2 — Schemas. 4 operations. Lead operation: VTex Get schemas. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Schemas
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: master-data-schemas
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Master Data API - v2 — Schemas business capability. Self-contained, no shared references.
+    resources:
+    - name: api-dataentities-dataEntityName-schemas
+      path: /api/dataentities/{dataEntityName}/schemas
+      operations:
+      - name: getschemas
+        method: GET
+        description: VTex Get schemas
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-dataentities-dataEntityName-schemas-schemaName
+      path: /api/dataentities/{dataEntityName}/schemas/{schemaName}
+      operations:
+      - name: getschemabyname
+        method: GET
+        description: VTex Get schema by name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: saveschemabyname
+        method: PUT
+        description: VTex Save schema by name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleteschemabyname
+        method: DELETE
+        description: VTex Delete schema by name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: master-data-schemas-rest
+    port: 8080
+    description: REST adapter for VTex Master Data API - v2 — Schemas. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/dataentities/{dataentityname}/schemas
+      name: api-dataentities-dataentityname-schemas
+      description: REST surface for api-dataentities-dataEntityName-schemas.
+      operations:
+      - method: GET
+        name: getschemas
+        description: VTex Get schemas
+        call: master-data-schemas.getschemas
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/dataentities/{dataentityname}/schemas/{schemaname}
+      name: api-dataentities-dataentityname-schemas-schemaname
+      description: REST surface for api-dataentities-dataEntityName-schemas-schemaName.
+      operations:
+      - method: GET
+        name: getschemabyname
+        description: VTex Get schema by name
+        call: master-data-schemas.getschemabyname
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: saveschemabyname
+        description: VTex Save schema by name
+        call: master-data-schemas.saveschemabyname
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteschemabyname
+        description: VTex Delete schema by name
+        call: master-data-schemas.deleteschemabyname
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: master-data-schemas-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Master Data API - v2 — Schemas. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-schemas
+      description: VTex Get schemas
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: master-data-schemas.getschemas
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-schema-name
+      description: VTex Get schema by name
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: master-data-schemas.getschemabyname
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-save-schema-name
+      description: VTex Save schema by name
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: master-data-schemas.saveschemabyname
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-schema-name
+      description: VTex Delete schema by name
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: master-data-schemas.deleteschemabyname
+      outputParameters:
+      - type: object
+        mapping: $.

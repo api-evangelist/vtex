@@ -1,0 +1,201 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — SKU Service Type
+  description: 'VTex Catalog API — SKU Service Type. 4 operations. Lead operation: VTex Create SKU service type. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - SKU Service Type
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-sku-service-type
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — SKU Service Type business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-skuservicetype
+      path: /api/catalog/pvt/skuservicetype
+      operations:
+      - name: post
+        method: POST
+        description: VTex Create SKU service type
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-skuservicetype-skuServiceTypeId
+      path: /api/catalog/pvt/skuservicetype/{skuServiceTypeId}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get SKU service type
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuServiceTypeId
+          in: path
+          type: integer
+          description: SKU service type unique identifier.
+          required: true
+      - name: put
+        method: PUT
+        description: VTex Update SKU service type
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuServiceTypeId
+          in: path
+          type: integer
+          description: SKU service type unique identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: delete
+        method: DELETE
+        description: VTex Delete SKU service type
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuServiceTypeId
+          in: path
+          type: integer
+          description: SKU service type unique identifier.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-sku-service-type-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — SKU Service Type. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/skuservicetype
+      name: api-catalog-pvt-skuservicetype
+      description: REST surface for api-catalog-pvt-skuservicetype.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Create SKU service type
+        call: catalog-sku-service-type.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/skuservicetype/{skuservicetypeid}
+      name: api-catalog-pvt-skuservicetype-skuservicetypeid
+      description: REST surface for api-catalog-pvt-skuservicetype-skuServiceTypeId.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get SKU service type
+        call: catalog-sku-service-type.get
+        with:
+          skuServiceTypeId: rest.skuServiceTypeId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: put
+        description: VTex Update SKU service type
+        call: catalog-sku-service-type.put
+        with:
+          skuServiceTypeId: rest.skuServiceTypeId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete
+        description: VTex Delete SKU service type
+        call: catalog-sku-service-type.delete
+        with:
+          skuServiceTypeId: rest.skuServiceTypeId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-sku-service-type-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — SKU Service Type. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-sku-service-type
+      description: VTex Create SKU service type
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-sku-service-type.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku-service-type
+      description: VTex Get SKU service type
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku-service-type.get
+      with:
+        skuServiceTypeId: tools.skuServiceTypeId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-sku-service-type
+      description: VTex Update SKU service type
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-sku-service-type.put
+      with:
+        skuServiceTypeId: tools.skuServiceTypeId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-sku-service-type
+      description: VTex Delete SKU service type
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: catalog-sku-service-type.delete
+      with:
+        skuServiceTypeId: tools.skuServiceTypeId
+      outputParameters:
+      - type: object
+        mapping: $.

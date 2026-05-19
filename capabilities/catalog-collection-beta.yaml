@@ -1,0 +1,480 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Collection Beta
+  description: 'VTex Catalog API — Collection Beta. 8 operations. Lead operation: VTex Create Collection. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Collection Beta
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-collection-beta
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Collection Beta business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-collection
+      path: /api/catalog/pvt/collection/
+      operations:
+      - name: postcreatecollection
+        method: POST
+        description: VTex Create Collection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-catalog-pvt-collection-inactive
+      path: /api/catalog/pvt/collection/inactive
+      operations:
+      - name: getallinactivecollections
+        method: GET
+        description: VTex Get all inactive collections
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-catalog-pvt-collection-stockkeepingunit-importfileexample
+      path: /api/catalog/pvt/collection/stockkeepingunit/importfileexample
+      operations:
+      - name: getimportfileexample
+        method: GET
+        description: VTex Import collection file example
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-catalog-pvt-collection-collectionId-products
+      path: /api/catalog/pvt/collection/{collectionId}/products
+      operations:
+      - name: getproductsfromacollection
+        method: GET
+        description: VTex Get products from a collection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: collectionId
+          in: path
+          type: integer
+          description: Collection's unique identifier.
+          required: true
+        - name: page
+          in: query
+          type: integer
+          description: Page number.
+        - name: pageSize
+          in: query
+          type: integer
+          description: Number of the items of the page.
+        - name: Filter
+          in: query
+          type: string
+          description: Filter used to refine the collection's products.
+        - name: Active
+          in: query
+          type: boolean
+          description: Defines if the status of the product is active or not.
+        - name: Visible
+          in: query
+          type: boolean
+          description: Defines if the product is visible on the store or not.
+        - name: CategoryId
+          in: query
+          type: integer
+          description: Product's category unique identifier.
+        - name: BrandId
+          in: query
+          type: integer
+          description: Product's brand unique identifier.
+        - name: SupplierId
+          in: query
+          type: integer
+          description: Product's supplier unique identifier.
+        - name: SalesChannelId
+          in: query
+          type: integer
+          description: Product's trade policy unique identifier.
+        - name: ReleaseFrom
+          in: query
+          type: string
+          description: Product past release date.
+        - name: ReleaseTo
+          in: query
+          type: string
+          description: Product future release date.
+        - name: SpecificationProduct
+          in: query
+          type: string
+          description: Product specification field Value. You must also fill in `SpecificationFieldId` to use this parameter.
+        - name: SpecificationFieldId
+          in: query
+          type: integer
+          description: Product specification field unique identifier.
+    - name: api-catalog-pvt-collection-collectionId-stockkeepingunit-importexclude
+      path: /api/catalog/pvt/collection/{collectionId}/stockkeepingunit/importexclude
+      operations:
+      - name: postremoveproductsbyimportfile
+        method: POST
+        description: VTex Remove products from collection by imported file
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: collectionId
+          in: path
+          type: integer
+          description: Collection's unique identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-collection-collectionId-stockkeepingunit-importinsert
+      path: /api/catalog/pvt/collection/{collectionId}/stockkeepingunit/importinsert
+      operations:
+      - name: postaddproductsbyimportfile
+        method: POST
+        description: VTex Add products to collection by imported file
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: collectionId
+          in: path
+          type: integer
+          description: Collection's unique identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog_system-pvt-collection-search
+      path: /api/catalog_system/pvt/collection/search
+      operations:
+      - name: getallcollections
+        method: GET
+        description: VTex Get all collections
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: page
+          in: query
+          type: integer
+          description: Page number.
+          required: true
+        - name: pageSize
+          in: query
+          type: integer
+          description: Number of the items of the page.
+          required: true
+        - name: orderByAsc
+          in: query
+          type: boolean
+          description: Defines if the items of the page are in ascending order.
+          required: true
+    - name: api-catalog_system-pvt-collection-search-searchTerms
+      path: /api/catalog_system/pvt/collection/search/{searchTerms}
+      operations:
+      - name: getcollectionsbyseachterms
+        method: GET
+        description: VTex Get Collections by search terms
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: searchTerms
+          in: path
+          type: string
+          description: String that will search for a collection related to it.
+          required: true
+        - name: page
+          in: query
+          type: integer
+          description: Page number.
+        - name: pageSize
+          in: query
+          type: integer
+          description: Number of the items of the page.
+        - name: orderByAsc
+          in: query
+          type: boolean
+          description: Defines if the items of the page are in ascending order.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-collection-beta-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Collection Beta. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/collection
+      name: api-catalog-pvt-collection
+      description: REST surface for api-catalog-pvt-collection.
+      operations:
+      - method: POST
+        name: postcreatecollection
+        description: VTex Create Collection
+        call: catalog-collection-beta.postcreatecollection
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/collection/inactive
+      name: api-catalog-pvt-collection-inactive
+      description: REST surface for api-catalog-pvt-collection-inactive.
+      operations:
+      - method: GET
+        name: getallinactivecollections
+        description: VTex Get all inactive collections
+        call: catalog-collection-beta.getallinactivecollections
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/collection/stockkeepingunit/importfileexample
+      name: api-catalog-pvt-collection-stockkeepingunit-importfileexample
+      description: REST surface for api-catalog-pvt-collection-stockkeepingunit-importfileexample.
+      operations:
+      - method: GET
+        name: getimportfileexample
+        description: VTex Import collection file example
+        call: catalog-collection-beta.getimportfileexample
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/collection/{collectionid}/products
+      name: api-catalog-pvt-collection-collectionid-products
+      description: REST surface for api-catalog-pvt-collection-collectionId-products.
+      operations:
+      - method: GET
+        name: getproductsfromacollection
+        description: VTex Get products from a collection
+        call: catalog-collection-beta.getproductsfromacollection
+        with:
+          collectionId: rest.collectionId
+          page: rest.page
+          pageSize: rest.pageSize
+          Filter: rest.Filter
+          Active: rest.Active
+          Visible: rest.Visible
+          CategoryId: rest.CategoryId
+          BrandId: rest.BrandId
+          SupplierId: rest.SupplierId
+          SalesChannelId: rest.SalesChannelId
+          ReleaseFrom: rest.ReleaseFrom
+          ReleaseTo: rest.ReleaseTo
+          SpecificationProduct: rest.SpecificationProduct
+          SpecificationFieldId: rest.SpecificationFieldId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/collection/{collectionid}/stockkeepingunit/importexclude
+      name: api-catalog-pvt-collection-collectionid-stockkeepingunit-importexclude
+      description: REST surface for api-catalog-pvt-collection-collectionId-stockkeepingunit-importexclude.
+      operations:
+      - method: POST
+        name: postremoveproductsbyimportfile
+        description: VTex Remove products from collection by imported file
+        call: catalog-collection-beta.postremoveproductsbyimportfile
+        with:
+          collectionId: rest.collectionId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/collection/{collectionid}/stockkeepingunit/importinsert
+      name: api-catalog-pvt-collection-collectionid-stockkeepingunit-importinsert
+      description: REST surface for api-catalog-pvt-collection-collectionId-stockkeepingunit-importinsert.
+      operations:
+      - method: POST
+        name: postaddproductsbyimportfile
+        description: VTex Add products to collection by imported file
+        call: catalog-collection-beta.postaddproductsbyimportfile
+        with:
+          collectionId: rest.collectionId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/collection/search
+      name: api-catalog-system-pvt-collection-search
+      description: REST surface for api-catalog_system-pvt-collection-search.
+      operations:
+      - method: GET
+        name: getallcollections
+        description: VTex Get all collections
+        call: catalog-collection-beta.getallcollections
+        with:
+          page: rest.page
+          pageSize: rest.pageSize
+          orderByAsc: rest.orderByAsc
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/collection/search/{searchterms}
+      name: api-catalog-system-pvt-collection-search-searchterms
+      description: REST surface for api-catalog_system-pvt-collection-search-searchTerms.
+      operations:
+      - method: GET
+        name: getcollectionsbyseachterms
+        description: VTex Get Collections by search terms
+        call: catalog-collection-beta.getcollectionsbyseachterms
+        with:
+          searchTerms: rest.searchTerms
+          page: rest.page
+          pageSize: rest.pageSize
+          orderByAsc: rest.orderByAsc
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-collection-beta-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Collection Beta. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-collection
+      description: VTex Create Collection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-collection-beta.postcreatecollection
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-all-inactive-collections
+      description: VTex Get all inactive collections
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-collection-beta.getallinactivecollections
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-import-collection-file-example
+      description: VTex Import collection file example
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-collection-beta.getimportfileexample
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-products-collection
+      description: VTex Get products from a collection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-collection-beta.getproductsfromacollection
+      with:
+        collectionId: tools.collectionId
+        page: tools.page
+        pageSize: tools.pageSize
+        Filter: tools.Filter
+        Active: tools.Active
+        Visible: tools.Visible
+        CategoryId: tools.CategoryId
+        BrandId: tools.BrandId
+        SupplierId: tools.SupplierId
+        SalesChannelId: tools.SalesChannelId
+        ReleaseFrom: tools.ReleaseFrom
+        ReleaseTo: tools.ReleaseTo
+        SpecificationProduct: tools.SpecificationProduct
+        SpecificationFieldId: tools.SpecificationFieldId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-products-collection-imported
+      description: VTex Remove products from collection by imported file
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-collection-beta.postremoveproductsbyimportfile
+      with:
+        collectionId: tools.collectionId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-products-collection-imported
+      description: VTex Add products to collection by imported file
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-collection-beta.postaddproductsbyimportfile
+      with:
+        collectionId: tools.collectionId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-all-collections
+      description: VTex Get all collections
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-collection-beta.getallcollections
+      with:
+        page: tools.page
+        pageSize: tools.pageSize
+        orderByAsc: tools.orderByAsc
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-collections-search-terms
+      description: VTex Get Collections by search terms
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-collection-beta.getcollectionsbyseachterms
+      with:
+        searchTerms: tools.searchTerms
+        page: tools.page
+        pageSize: tools.pageSize
+        orderByAsc: tools.orderByAsc
+      outputParameters:
+      - type: object
+        mapping: $.

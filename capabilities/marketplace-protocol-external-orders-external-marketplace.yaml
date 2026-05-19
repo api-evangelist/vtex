@@ -1,0 +1,448 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Marketplace Protocol — External Marketplace
+  description: 'VTex Marketplace Protocol — External Marketplace. 5 operations. Lead operation: VTex Fulfillment simulation
+    - External Marketplace. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - External Marketplace
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: marketplace-protocol-external-orders-external-marketplace
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Marketplace Protocol — External Marketplace business capability. Self-contained, no shared references.
+    resources:
+    - name: api-checkout-pub-orderForms-simulation
+      path: /api/checkout/pub/orderForms/simulation
+      operations:
+      - name: fulfillmentsimulationexternalmarketplace
+        method: POST
+        description: VTex Fulfillment simulation - External Marketplace
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Name of the VTEX account. Used as part of the URL.
+          required: true
+        - name: environment
+          in: path
+          type: string
+          description: Environment to be used. It is passed as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: affiliateId
+          in: query
+          type: string
+          description: The affiliate ID code created by the seller.
+        - name: sc
+          in: query
+          type: integer
+          description: Trade Policy (Sales Channel) identification.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-fulfillment-pvt-orders
+      path: /api/fulfillment/pvt/orders
+      operations:
+      - name: placefulfillmentorder
+        method: POST
+        description: VTex Place fulfillment order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Name of the VTEX account. Used as part of the URL.
+          required: true
+        - name: environment
+          in: path
+          type: string
+          description: Environment to be used. It is passed as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sc
+          in: query
+          type: string
+          description: Sales channel.
+        - name: affiliateId
+          in: query
+          type: string
+          description: ID identifying the marketplace where the order originates. This ID is configured in the seller's VTEX
+            account, and should be informed to the marketplace.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-fulfillment-pvt-orders-orderId-fulfill
+      path: /api/fulfillment/pvt/orders/{orderId}/fulfill
+      operations:
+      - name: authorizedispatchforfulfillmentorder
+        method: POST
+        description: VTex Authorize dispatch for fulfillment order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Name of the VTEX account. Used as part of the URL.
+          required: true
+        - name: environment
+          in: path
+          type: string
+          description: Environment to be used. It is passed as part of the URL.
+          required: true
+        - name: orderId
+          in: path
+          type: string
+          description: 'ID of the order that is to be authorized. It is composed of the `afilliateId` and the `marketplaceOrderId`
+            joined with a `-`. For instance, an order with an ID '
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sc
+          in: query
+          type: string
+          description: Sales channel.
+        - name: affiliateId
+          in: query
+          type: string
+          description: ID identifying the marketplace where the order originates. This ID is configured in the seller's VTEX
+            account, and should be informed to the marketplace.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-order-integration-orders
+      path: /api/order-integration/orders
+      operations:
+      - name: enqueueneworder
+        method: POST
+        description: VTex New Order Integration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Parameter should indicate the name of the VTEX account where the order is being integrated or updated,
+            meaning the seller responsible for the order.
+        - name: accountName
+          in: path
+          type: string
+          description: Parameter should indicate the name of the VTEX account where the order is being integrated or updated,
+            meaning the seller responsible for the order.
+          required: true
+        - name: affiliateId
+          in: query
+          type: string
+          description: ID identifying the marketplace where the order originates. This ID is configured in the seller's VTEX
+            account, and should be informed to the marketplace.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-order-integration-orders-status
+      path: /api/order-integration/orders/status
+      operations:
+      - name: updateorderstatus
+        method: PUT
+        description: VTex Update Order Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Parameter should indicate the name of the VTEX account where the order is being integrated or updated,
+            meaning the seller responsible for the order.
+        - name: accountName
+          in: path
+          type: string
+          description: Parameter should indicate the name of the VTEX account where the order is being integrated or updated,
+            meaning the seller responsible for the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: marketplace-protocol-external-orders-external-marketplace-rest
+    port: 8080
+    description: REST adapter for VTex Marketplace Protocol — External Marketplace. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/checkout/pub/orderforms/simulation
+      name: api-checkout-pub-orderforms-simulation
+      description: REST surface for api-checkout-pub-orderForms-simulation.
+      operations:
+      - method: POST
+        name: fulfillmentsimulationexternalmarketplace
+        description: VTex Fulfillment simulation - External Marketplace
+        call: marketplace-protocol-external-orders-external-marketplace.fulfillmentsimulationexternalmarketplace
+        with:
+          accountName: rest.accountName
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          affiliateId: rest.affiliateId
+          sc: rest.sc
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/fulfillment/pvt/orders
+      name: api-fulfillment-pvt-orders
+      description: REST surface for api-fulfillment-pvt-orders.
+      operations:
+      - method: POST
+        name: placefulfillmentorder
+        description: VTex Place fulfillment order
+        call: marketplace-protocol-external-orders-external-marketplace.placefulfillmentorder
+        with:
+          accountName: rest.accountName
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sc: rest.sc
+          affiliateId: rest.affiliateId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/fulfillment/pvt/orders/{orderid}/fulfill
+      name: api-fulfillment-pvt-orders-orderid-fulfill
+      description: REST surface for api-fulfillment-pvt-orders-orderId-fulfill.
+      operations:
+      - method: POST
+        name: authorizedispatchforfulfillmentorder
+        description: VTex Authorize dispatch for fulfillment order
+        call: marketplace-protocol-external-orders-external-marketplace.authorizedispatchforfulfillmentorder
+        with:
+          accountName: rest.accountName
+          environment: rest.environment
+          orderId: rest.orderId
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sc: rest.sc
+          affiliateId: rest.affiliateId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/order-integration/orders
+      name: api-order-integration-orders
+      description: REST surface for api-order-integration-orders.
+      operations:
+      - method: POST
+        name: enqueueneworder
+        description: VTex New Order Integration
+        call: marketplace-protocol-external-orders-external-marketplace.enqueueneworder
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          accountName: rest.accountName
+          affiliateId: rest.affiliateId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/order-integration/orders/status
+      name: api-order-integration-orders-status
+      description: REST surface for api-order-integration-orders-status.
+      operations:
+      - method: PUT
+        name: updateorderstatus
+        description: VTex Update Order Status
+        call: marketplace-protocol-external-orders-external-marketplace.updateorderstatus
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          accountName: rest.accountName
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: marketplace-protocol-external-orders-external-marketplace-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Marketplace Protocol — External Marketplace. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: vtex-fulfillment-simulation-external-marketplace
+      description: VTex Fulfillment simulation - External Marketplace
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-orders-external-marketplace.fulfillmentsimulationexternalmarketplace
+      with:
+        accountName: tools.accountName
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        affiliateId: tools.affiliateId
+        sc: tools.sc
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-place-fulfillment-order
+      description: VTex Place fulfillment order
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-orders-external-marketplace.placefulfillmentorder
+      with:
+        accountName: tools.accountName
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sc: tools.sc
+        affiliateId: tools.affiliateId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-authorize-dispatch-fulfillment-order
+      description: VTex Authorize dispatch for fulfillment order
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-orders-external-marketplace.authorizedispatchforfulfillmentorder
+      with:
+        accountName: tools.accountName
+        environment: tools.environment
+        orderId: tools.orderId
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sc: tools.sc
+        affiliateId: tools.affiliateId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-new-order-integration
+      description: VTex New Order Integration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-orders-external-marketplace.enqueueneworder
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        accountName: tools.accountName
+        affiliateId: tools.affiliateId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-order-status
+      description: VTex Update Order Status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: marketplace-protocol-external-orders-external-marketplace.updateorderstatus
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        accountName: tools.accountName
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

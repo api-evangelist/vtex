@@ -1,0 +1,110 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Orders API — Tracking
+  description: 'VTex Orders API — Tracking. 1 operations. Lead operation: VTex Update order tracking status. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Tracking
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: orders-tracking
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Orders API — Tracking business capability. Self-contained, no shared references.
+    resources:
+    - name: api-oms-pvt-orders-orderId-invoice-invoiceNumber-tracking
+      path: /api/oms/pvt/orders/{orderId}/invoice/{invoiceNumber}/tracking
+      operations:
+      - name: updatetrackingstatus
+        method: PUT
+        description: VTex Update order tracking status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: orderId
+          in: path
+          type: string
+          description: Order ID is a unique code that identifies an order.
+          required: true
+        - name: invoiceNumber
+          in: path
+          type: string
+          description: Number that identifies the invoice.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: orders-tracking-rest
+    port: 8080
+    description: REST adapter for VTex Orders API — Tracking. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/oms/pvt/orders/{orderid}/invoice/{invoicenumber}/tracking
+      name: api-oms-pvt-orders-orderid-invoice-invoicenumber-tracking
+      description: REST surface for api-oms-pvt-orders-orderId-invoice-invoiceNumber-tracking.
+      operations:
+      - method: PUT
+        name: updatetrackingstatus
+        description: VTex Update order tracking status
+        call: orders-tracking.updatetrackingstatus
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          orderId: rest.orderId
+          invoiceNumber: rest.invoiceNumber
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: orders-tracking-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Orders API — Tracking. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: vtex-update-order-tracking-status
+      description: VTex Update order tracking status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: orders-tracking.updatetrackingstatus
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        orderId: tools.orderId
+        invoiceNumber: tools.invoiceNumber
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

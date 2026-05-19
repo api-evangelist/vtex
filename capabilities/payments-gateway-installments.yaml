@@ -1,0 +1,107 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Payments Gateway API — Installments
+  description: 'VTex Payments Gateway API — Installments. 1 operations. Lead operation: VTex Get installments options. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Installments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payments-gateway-installments
+    baseUri: https://{accountName}.vtexpayments.com.br
+    description: VTex Payments Gateway API — Installments business capability. Self-contained, no shared references.
+    resources:
+    - name: api-pvt-installments
+      path: /api/pvt/installments
+      operations:
+      - name: installmentsoptions
+        method: GET
+        description: VTex Get installments options
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: request.value
+          in: query
+          type: integer
+          description: Value to be divided into installments.
+          required: true
+        - name: request.salesChannel
+          in: query
+          type: integer
+          description: Sales channel identification. Attribute created by the seller in their VTEX store configuration.
+        - name: request.paymentDetails[0].id
+          in: query
+          type: integer
+          description: Payment system identification.
+        - name: request.paymentDetails[0].value
+          in: query
+          type: integer
+          description: Total value paid in installments. If applied in the search, it must be equal to the `request.value`
+            field.
+        - name: request.paymentDetails[0].bin
+          in: query
+          type: integer
+          description: First six digits of the card number.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: payments-gateway-installments-rest
+    port: 8080
+    description: REST adapter for VTex Payments Gateway API — Installments. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/pvt/installments
+      name: api-pvt-installments
+      description: REST surface for api-pvt-installments.
+      operations:
+      - method: GET
+        name: installmentsoptions
+        description: VTex Get installments options
+        call: payments-gateway-installments.installmentsoptions
+        with:
+          request.value: rest.request.value
+          request.salesChannel: rest.request.salesChannel
+          request.paymentDetails[0].id: rest.request.paymentDetails[0].id
+          request.paymentDetails[0].value: rest.request.paymentDetails[0].value
+          request.paymentDetails[0].bin: rest.request.paymentDetails[0].bin
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payments-gateway-installments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Payments Gateway API — Installments. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-get-installments-options
+      description: VTex Get installments options
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-gateway-installments.installmentsoptions
+      with:
+        request.value: tools.request.value
+        request.salesChannel: tools.request.salesChannel
+        request.paymentDetails[0].id: tools.request.paymentDetails[0].id
+        request.paymentDetails[0].value: tools.request.paymentDetails[0].value
+        request.paymentDetails[0].bin: tools.request.paymentDetails[0].bin
+      outputParameters:
+      - type: object
+        mapping: $.

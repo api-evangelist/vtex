@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Product Indexing
+  description: 'VTex Catalog API — Product Indexing. 1 operations. Lead operation: VTex Get product Indexed Information. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Product Indexing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-product-indexing
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Product Indexing business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog_system-pvt-products-GetIndexedInfo-productId
+      path: /api/catalog_system/pvt/products/GetIndexedInfo/{productId}
+      operations:
+      - name: indexedinfo
+        method: GET
+        description: VTex Get product Indexed Information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: string
+          description: Product's unique numerical identifier.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-product-indexing-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Product Indexing. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog-system/pvt/products/getindexedinfo/{productid}
+      name: api-catalog-system-pvt-products-getindexedinfo-productid
+      description: REST surface for api-catalog_system-pvt-products-GetIndexedInfo-productId.
+      operations:
+      - method: GET
+        name: indexedinfo
+        description: VTex Get product Indexed Information
+        call: catalog-product-indexing.indexedinfo
+        with:
+          productId: rest.productId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-product-indexing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Product Indexing. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-product-indexed-information
+      description: VTex Get product Indexed Information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-product-indexing.indexedinfo
+      with:
+        productId: tools.productId
+      outputParameters:
+      - type: object
+        mapping: $.

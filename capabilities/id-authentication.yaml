@@ -1,0 +1,250 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTEX ID — Authentication
+  description: 'VTEX ID — Authentication. 5 operations. Lead operation: VTex Generate authentication token. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Authentication
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: id-authentication
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTEX ID — Authentication business capability. Self-contained, no shared references.
+    resources:
+    - name: api-vtexid-apptoken-login
+      path: /api/vtexid/apptoken/login
+      operations:
+      - name: post
+        method: POST
+        description: VTex Generate authentication token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-vtexid-audience-webstore-provider-oauth-exchange
+      path: /api/vtexid/audience/webstore/provider/oauth/exchange
+      operations:
+      - name: post
+        method: POST
+        description: Exchange OAuth access token for VTEX credential
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-vtexid-credential-validate
+      path: /api/vtexid/credential/validate
+      operations:
+      - name: post
+        method: POST
+        description: VTex Check authenticated user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-vtexid-password-expire
+      path: /api/vtexid/password/expire
+      operations:
+      - name: post
+        method: POST
+        description: VTex Expire user password
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: email
+          in: query
+          type: string
+          description: User email.
+          required: true
+    - name: api-vtexid-pub-providers-setup-password-webstore-password
+      path: /api/vtexid/pub/providers/setup/password/webstore/password
+      operations:
+      - name: post
+        method: POST
+        description: VTex Enable or disable repeated passwords
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: id-authentication-rest
+    port: 8080
+    description: REST adapter for VTEX ID — Authentication. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/vtexid/apptoken/login
+      name: api-vtexid-apptoken-login
+      description: REST surface for api-vtexid-apptoken-login.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Generate authentication token
+        call: id-authentication.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/vtexid/audience/webstore/provider/oauth/exchange
+      name: api-vtexid-audience-webstore-provider-oauth-exchange
+      description: REST surface for api-vtexid-audience-webstore-provider-oauth-exchange.
+      operations:
+      - method: POST
+        name: post
+        description: Exchange OAuth access token for VTEX credential
+        call: id-authentication.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/vtexid/credential/validate
+      name: api-vtexid-credential-validate
+      description: REST surface for api-vtexid-credential-validate.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Check authenticated user
+        call: id-authentication.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/vtexid/password/expire
+      name: api-vtexid-password-expire
+      description: REST surface for api-vtexid-password-expire.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Expire user password
+        call: id-authentication.post
+        with:
+          email: rest.email
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/vtexid/pub/providers/setup/password/webstore/password
+      name: api-vtexid-pub-providers-setup-password-webstore-password
+      description: REST surface for api-vtexid-pub-providers-setup-password-webstore-password.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Enable or disable repeated passwords
+        call: id-authentication.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: id-authentication-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTEX ID — Authentication. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: vtex-generate-authentication-token
+      description: VTex Generate authentication token
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: id-authentication.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: exchange-oauth-access-token-vtex
+      description: Exchange OAuth access token for VTEX credential
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: id-authentication.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-check-authenticated-user
+      description: VTex Check authenticated user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: id-authentication.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-expire-user-password
+      description: VTex Expire user password
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: id-authentication.post
+      with:
+        email: tools.email
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-enable-disable-repeated-passwords
+      description: VTex Enable or disable repeated passwords
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: id-authentication.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

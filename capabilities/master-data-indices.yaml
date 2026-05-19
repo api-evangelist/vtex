@@ -1,0 +1,164 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Master Data API - v2 — Indices
+  description: 'VTex Master Data API - v2 — Indices. 4 operations. Lead operation: VTex Get indices. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Indices
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: master-data-indices
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Master Data API - v2 — Indices business capability. Self-contained, no shared references.
+    resources:
+    - name: api-dataentities-dataEntityName-indices
+      path: /api/dataentities/{dataEntityName}/indices
+      operations:
+      - name: getindices
+        method: GET
+        description: VTex Get indices
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: putindices
+        method: PUT
+        description: VTex Create index
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-dataentities-dataEntityName-indices-index_name
+      path: /api/dataentities/{dataEntityName}/indices/{index_name}
+      operations:
+      - name: getindexbyname
+        method: GET
+        description: VTex Get index by name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteindexbyname
+        method: DELETE
+        description: VTex Delete index by name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: master-data-indices-rest
+    port: 8080
+    description: REST adapter for VTex Master Data API - v2 — Indices. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/dataentities/{dataentityname}/indices
+      name: api-dataentities-dataentityname-indices
+      description: REST surface for api-dataentities-dataEntityName-indices.
+      operations:
+      - method: GET
+        name: getindices
+        description: VTex Get indices
+        call: master-data-indices.getindices
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: putindices
+        description: VTex Create index
+        call: master-data-indices.putindices
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/dataentities/{dataentityname}/indices/{index-name}
+      name: api-dataentities-dataentityname-indices-index-name
+      description: REST surface for api-dataentities-dataEntityName-indices-index_name.
+      operations:
+      - method: GET
+        name: getindexbyname
+        description: VTex Get index by name
+        call: master-data-indices.getindexbyname
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteindexbyname
+        description: VTex Delete index by name
+        call: master-data-indices.deleteindexbyname
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: master-data-indices-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Master Data API - v2 — Indices. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-indices
+      description: VTex Get indices
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: master-data-indices.getindices
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-index
+      description: VTex Create index
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: master-data-indices.putindices
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-index-name
+      description: VTex Get index by name
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: master-data-indices.getindexbyname
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-index-name
+      description: VTex Delete index by name
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: master-data-indices.deleteindexbyname
+      outputParameters:
+      - type: object
+        mapping: $.

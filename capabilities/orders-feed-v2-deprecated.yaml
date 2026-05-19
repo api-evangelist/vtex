@@ -1,0 +1,96 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Orders API — Feed V2 (Deprecated)
+  description: 'VTex Orders API — Feed V2 (Deprecated). 1 operations. Lead operation: VTex Get feed order status. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Feed V2 (Deprecated)
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: orders-feed-v2-deprecated
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Orders API — Feed V2 (Deprecated) business capability. Self-contained, no shared references.
+    resources:
+    - name: api-oms-pvt-feed-orders-status
+      path: /api/oms/pvt/feed/orders/status
+      operations:
+      - name: getfeedorderstatus
+        method: GET
+        description: VTex Get feed order status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: maxLot
+          in: query
+          type: string
+          description: Maximum lot.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: orders-feed-v2-deprecated-rest
+    port: 8080
+    description: REST adapter for VTex Orders API — Feed V2 (Deprecated). One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/oms/pvt/feed/orders/status
+      name: api-oms-pvt-feed-orders-status
+      description: REST surface for api-oms-pvt-feed-orders-status.
+      operations:
+      - method: GET
+        name: getfeedorderstatus
+        description: VTex Get feed order status
+        call: orders-feed-v2-deprecated.getfeedorderstatus
+        with:
+          maxLot: rest.maxLot
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: orders-feed-v2-deprecated-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Orders API — Feed V2 (Deprecated). One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-feed-order-status
+      description: VTex Get feed order status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: orders-feed-v2-deprecated.getfeedorderstatus
+      with:
+        maxLot: tools.maxLot
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+      outputParameters:
+      - type: object
+        mapping: $.

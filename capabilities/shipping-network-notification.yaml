@@ -1,0 +1,110 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTEX Shipping Network API — Notification
+  description: 'VTEX Shipping Network API — Notification. 1 operations. Lead operation: VTex Notify carrier with app. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Notification
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: shipping-network-notification
+    baseUri: https://app.io.vtex.com
+    description: VTEX Shipping Network API — Notification business capability. Self-contained, no shared references.
+    resources:
+    - name: app_name-v{app_version}-account-workspace-notify
+      path: /{app_name}/v{app_version}/{account}/{workspace}/notify
+      operations:
+      - name: notifycarrierwithapp
+        method: POST
+        description: VTex Notify carrier with app
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: app_name
+          in: path
+          type: string
+          description: Name of the app developed by the carrier's integration.
+          required: true
+        - name: app_version
+          in: path
+          type: string
+          description: Version of the app developed by the carrier's integration.
+          required: true
+        - name: account
+          in: path
+          type: string
+          description: VTEX account dispatching the package.
+          required: true
+        - name: workspace
+          in: path
+          type: string
+          description: Workspace used in VTEX IO.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: shipping-network-notification-rest
+    port: 8080
+    description: REST adapter for VTEX Shipping Network API — Notification. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/{app-name}/v-app-version/{account}/{workspace}/notify
+      name: app-name-v-app-version-account-workspace-notify
+      description: REST surface for app_name-v{app_version}-account-workspace-notify.
+      operations:
+      - method: POST
+        name: notifycarrierwithapp
+        description: VTex Notify carrier with app
+        call: shipping-network-notification.notifycarrierwithapp
+        with:
+          app_name: rest.app_name
+          app_version: rest.app_version
+          account: rest.account
+          workspace: rest.workspace
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: shipping-network-notification-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTEX Shipping Network API — Notification. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-notify-carrier-app
+      description: VTex Notify carrier with app
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: shipping-network-notification.notifycarrierwithapp
+      with:
+        app_name: tools.app_name
+        app_version: tools.app_version
+        account: tools.account
+        workspace: tools.workspace
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

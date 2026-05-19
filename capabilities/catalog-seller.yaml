@@ -1,0 +1,256 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Seller
+  description: 'VTex Catalog API — Seller. 5 operations. Lead operation: VTex Update Seller. Self-contained Naftiko capability
+    covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Seller
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-seller
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Seller business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog_system-pvt-seller
+      path: /api/catalog_system/pvt/seller
+      operations:
+      - name: updateseller
+        method: PUT
+        description: VTex Update Seller
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: createseller
+        method: POST
+        description: VTex Create Seller
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-catalog_system-pvt-seller-list
+      path: /api/catalog_system/pvt/seller/list
+      operations:
+      - name: sellerlist
+        method: GET
+        description: VTex Get Seller list
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sc
+          in: query
+          type: integer
+          description: Trade policy ID.
+        - name: sellerType
+          in: query
+          type: integer
+          description: Seller type.
+        - name: isBetterScope
+          in: query
+          type: boolean
+          description: If the seller is better scope.
+    - name: api-catalog_system-pvt-seller-sellerId
+      path: /api/catalog_system/pvt/seller/{sellerId}
+      operations:
+      - name: getsellerbyid
+        method: GET
+        description: VTex Get Seller by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+    - name: api-catalog_system-pvt-sellers-sellerId
+      path: /api/catalog_system/pvt/sellers/{sellerId}
+      operations:
+      - name: getsellersbyid
+        method: GET
+        description: VTex Get Seller by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-seller-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Seller. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/catalog-system/pvt/seller
+      name: api-catalog-system-pvt-seller
+      description: REST surface for api-catalog_system-pvt-seller.
+      operations:
+      - method: PUT
+        name: updateseller
+        description: VTex Update Seller
+        call: catalog-seller.updateseller
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createseller
+        description: VTex Create Seller
+        call: catalog-seller.createseller
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/seller/list
+      name: api-catalog-system-pvt-seller-list
+      description: REST surface for api-catalog_system-pvt-seller-list.
+      operations:
+      - method: GET
+        name: sellerlist
+        description: VTex Get Seller list
+        call: catalog-seller.sellerlist
+        with:
+          sc: rest.sc
+          sellerType: rest.sellerType
+          isBetterScope: rest.isBetterScope
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/seller/{sellerid}
+      name: api-catalog-system-pvt-seller-sellerid
+      description: REST surface for api-catalog_system-pvt-seller-sellerId.
+      operations:
+      - method: GET
+        name: getsellerbyid
+        description: VTex Get Seller by ID
+        call: catalog-seller.getsellerbyid
+        with:
+          sellerId: rest.sellerId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/sellers/{sellerid}
+      name: api-catalog-system-pvt-sellers-sellerid
+      description: REST surface for api-catalog_system-pvt-sellers-sellerId.
+      operations:
+      - method: GET
+        name: getsellersbyid
+        description: VTex Get Seller by ID
+        call: catalog-seller.getsellersbyid
+        with:
+          sellerId: rest.sellerId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-seller-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Seller. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: vtex-update-seller
+      description: VTex Update Seller
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-seller.updateseller
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-seller
+      description: VTex Create Seller
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-seller.createseller
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-seller-list
+      description: VTex Get Seller list
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-seller.sellerlist
+      with:
+        sc: tools.sc
+        sellerType: tools.sellerType
+        isBetterScope: tools.isBetterScope
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-seller-id
+      description: VTex Get Seller by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-seller.getsellerbyid
+      with:
+        sellerId: tools.sellerId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-seller-id-2
+      description: VTex Get Seller by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-seller.getsellersbyid
+      with:
+        sellerId: tools.sellerId
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,208 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Marketplace Protocol — External Seller
+  description: 'VTex Marketplace Protocol — External Seller. 4 operations. Lead operation: VTex Cancel order in marketplace.
+    Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - External Seller
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: marketplace-protocol-external-seller-marketplace-external-seller
+    baseUri: https://{marketplaceServicesEndpoint}
+    description: VTex Marketplace Protocol — External Seller business capability. Self-contained, no shared references.
+    resources:
+    - name: pvt-orders-marketplaceOrderId-cancel
+      path: /pvt/orders/{marketplaceOrderId}/cancel
+      operations:
+      - name: cancelorderinmarketplace
+        method: POST
+        description: VTex Cancel order in marketplace
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: pvt-orders-marketplaceOrderId-invoice
+      path: /pvt/orders/{marketplaceOrderId}/invoice
+      operations:
+      - name: sendinvoice
+        method: POST
+        description: VTex Send invoice
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: pvt-orders-marketplaceOrderId-invoice-invoiceNumber
+      path: /pvt/orders/{marketplaceOrderId}/invoice/{invoiceNumber}
+      operations:
+      - name: sendtrackinginformation
+        method: POST
+        description: VTex Send tracking information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: pvt-orders-marketplaceOrderId-invoice-invoiceNumber-tracking
+      path: /pvt/orders/{marketplaceOrderId}/invoice/{invoiceNumber}/tracking
+      operations:
+      - name: updatetrackingstatus
+        method: POST
+        description: VTex Update tracking status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: marketplace-protocol-external-seller-marketplace-external-seller-rest
+    port: 8080
+    description: REST adapter for VTex Marketplace Protocol — External Seller. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/pvt/orders/{marketplaceorderid}/cancel
+      name: pvt-orders-marketplaceorderid-cancel
+      description: REST surface for pvt-orders-marketplaceOrderId-cancel.
+      operations:
+      - method: POST
+        name: cancelorderinmarketplace
+        description: VTex Cancel order in marketplace
+        call: marketplace-protocol-external-seller-marketplace-external-seller.cancelorderinmarketplace
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pvt/orders/{marketplaceorderid}/invoice
+      name: pvt-orders-marketplaceorderid-invoice
+      description: REST surface for pvt-orders-marketplaceOrderId-invoice.
+      operations:
+      - method: POST
+        name: sendinvoice
+        description: VTex Send invoice
+        call: marketplace-protocol-external-seller-marketplace-external-seller.sendinvoice
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pvt/orders/{marketplaceorderid}/invoice/{invoicenumber}
+      name: pvt-orders-marketplaceorderid-invoice-invoicenumber
+      description: REST surface for pvt-orders-marketplaceOrderId-invoice-invoiceNumber.
+      operations:
+      - method: POST
+        name: sendtrackinginformation
+        description: VTex Send tracking information
+        call: marketplace-protocol-external-seller-marketplace-external-seller.sendtrackinginformation
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pvt/orders/{marketplaceorderid}/invoice/{invoicenumber}/tracking
+      name: pvt-orders-marketplaceorderid-invoice-invoicenumber-tracking
+      description: REST surface for pvt-orders-marketplaceOrderId-invoice-invoiceNumber-tracking.
+      operations:
+      - method: POST
+        name: updatetrackingstatus
+        description: VTex Update tracking status
+        call: marketplace-protocol-external-seller-marketplace-external-seller.updatetrackingstatus
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: marketplace-protocol-external-seller-marketplace-external-seller-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Marketplace Protocol — External Seller. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-cancel-order-marketplace
+      description: VTex Cancel order in marketplace
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-seller-marketplace-external-seller.cancelorderinmarketplace
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-send-invoice
+      description: VTex Send invoice
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-seller-marketplace-external-seller.sendinvoice
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-send-tracking-information
+      description: VTex Send tracking information
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-seller-marketplace-external-seller.sendtrackinginformation
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-tracking-status
+      description: VTex Update tracking status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-protocol-external-seller-marketplace-external-seller.updatetrackingstatus
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

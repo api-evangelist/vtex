@@ -1,0 +1,78 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Pick and Pack Last Mile Protocol API — Authentication
+  description: 'VTex Pick and Pack Last Mile Protocol API — Authentication. 1 operations. Lead operation: VTex Create JWT
+    token. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Authentication
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: pick-pack-last-mile-protocol-authentication
+    baseUri: https://auth.pickingnpacking.com/{environment}
+    description: VTex Pick and Pack Last Mile Protocol API — Authentication business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: token
+      path: /token
+      operations:
+      - name: createtoken
+        method: POST
+        description: VTex Create JWT token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: rest
+    namespace: pick-pack-last-mile-protocol-authentication-rest
+    port: 8080
+    description: REST adapter for VTex Pick and Pack Last Mile Protocol API — Authentication. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/token
+      name: token
+      description: REST surface for token.
+      operations:
+      - method: POST
+        name: createtoken
+        description: VTex Create JWT token
+        call: pick-pack-last-mile-protocol-authentication.createtoken
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: pick-pack-last-mile-protocol-authentication-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Pick and Pack Last Mile Protocol API — Authentication. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: vtex-create-jwt-token
+      description: VTex Create JWT token
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: pick-pack-last-mile-protocol-authentication.createtoken
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

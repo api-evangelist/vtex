@@ -1,0 +1,680 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Customer Credit API — Account
+  description: 'VTex Customer Credit API — Account. 16 operations. Lead operation: VTex Search all accounts. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Account
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customer-credit-account
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Customer Credit API — Account business capability. Self-contained, no shared references.
+    resources:
+    - name: api-creditcontrol-accounts
+      path: /api/creditcontrol/accounts
+      operations:
+      - name: searchallaccounts
+        method: GET
+        description: VTex Search all accounts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: from
+          in: query
+          type: string
+          description: Indicates the starting position of the credit customer account to be searched in the account list.
+            Example, value `1` indicates that the first account in the li
+        - name: to
+          in: query
+          type: string
+          description: Indicates the final position of the credit customer account to be searched in the account list. Example,
+            if the value of `from` is equal to `1` and `to` is `40`
+        - name: status
+          in: query
+          type: string
+          description: Indicates the status of the accounts to be searched for.
+        - name: email
+          in: query
+          type: string
+          description: Indicates the email registered to the account to be searched.
+      - name: openanaccount
+        method: POST
+        description: VTex Open an account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId
+      path: /api/creditcontrol/accounts/{creditAccountId}
+      operations:
+      - name: retrieveaaccountbyid
+        method: GET
+        description: VTex Retrieve an account by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: closeanaccount
+        method: DELETE
+        description: VTex Close an account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: updateemailanddescriptionofaaccount
+        method: PUT
+        description: VTex Update account information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-creditlimit
+      path: /api/creditcontrol/accounts/{creditAccountId}/creditlimit
+      operations:
+      - name: changecreditlimitofanaccount
+        method: PUT
+        description: VTex Change credit limit of an account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-holders
+      path: /api/creditcontrol/accounts/{creditAccountId}/holders
+      operations:
+      - name: addanaccountholder
+        method: POST
+        description: VTex Add an account holder
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-holders-holderId
+      path: /api/creditcontrol/accounts/{creditAccountId}/holders/{holderId}
+      operations:
+      - name: deleteanaccountholder
+        method: DELETE
+        description: VTex Delete an account holder
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: holderId
+          in: path
+          type: string
+          description: Holder identification.
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-statements
+      path: /api/creditcontrol/accounts/{creditAccountId}/statements
+      operations:
+      - name: accountstatements
+        method: GET
+        description: VTex Get account statements
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-creditcontrol-accounts-creditAccountId-statements-statementId
+      path: /api/creditcontrol/accounts/{creditAccountId}/statements/{statementId}
+      operations:
+      - name: decreasebalanceofanaccount
+        method: PUT
+        description: VTex Decrease balance of an account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: statementId
+          in: path
+          type: string
+          description: Statement identification. This is the same `transactionId` value obtained from the [Account statements](https://developers.vtex.com/docs/api-reference/customer-
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-tolerance
+      path: /api/creditcontrol/accounts/{creditAccountId}/tolerance
+      operations:
+      - name: changetoleranceofanaccount
+        method: PUT
+        description: VTex Change tolerance of an account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-transactions
+      path: /api/creditcontrol/accounts/{creditAccountId}/transactions
+      operations:
+      - name: createapreauthorization
+        method: POST
+        description: VTex Create a pre-authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-transactions-transactionId
+      path: /api/creditcontrol/accounts/{creditAccountId}/transactions/{transactionId}
+      operations:
+      - name: createapreauthorizationusingid
+        method: PUT
+        description: VTex Update a pre-authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: cancelapreauthorization
+        method: DELETE
+        description: VTex Cancel a pre-authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-creditcontrol-accounts-creditAccountId-transactions-transactionId-refunds
+      path: /api/creditcontrol/accounts/{creditAccountId}/transactions/{transactionId}/refunds
+      operations:
+      - name: partialortotalrefundasettlement
+        method: POST
+        description: VTex Partially or totally refund a settlement
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-accounts-creditAccountId-transactions-transactionId-settlement
+      path: /api/creditcontrol/accounts/{creditAccountId}/transactions/{transactionId}/settlement
+      operations:
+      - name: createorupdatesettlement
+        method: PUT
+        description: VTex Create or update settlement
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: customer-credit-account-rest
+    port: 8080
+    description: REST adapter for VTex Customer Credit API — Account. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/creditcontrol/accounts
+      name: api-creditcontrol-accounts
+      description: REST surface for api-creditcontrol-accounts.
+      operations:
+      - method: GET
+        name: searchallaccounts
+        description: VTex Search all accounts
+        call: customer-credit-account.searchallaccounts
+        with:
+          from: rest.from
+          to: rest.to
+          status: rest.status
+          email: rest.email
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: openanaccount
+        description: VTex Open an account
+        call: customer-credit-account.openanaccount
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}
+      name: api-creditcontrol-accounts-creditaccountid
+      description: REST surface for api-creditcontrol-accounts-creditAccountId.
+      operations:
+      - method: GET
+        name: retrieveaaccountbyid
+        description: VTex Retrieve an account by ID
+        call: customer-credit-account.retrieveaaccountbyid
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: closeanaccount
+        description: VTex Close an account
+        call: customer-credit-account.closeanaccount
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateemailanddescriptionofaaccount
+        description: VTex Update account information
+        call: customer-credit-account.updateemailanddescriptionofaaccount
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/creditlimit
+      name: api-creditcontrol-accounts-creditaccountid-creditlimit
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-creditlimit.
+      operations:
+      - method: PUT
+        name: changecreditlimitofanaccount
+        description: VTex Change credit limit of an account
+        call: customer-credit-account.changecreditlimitofanaccount
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/holders
+      name: api-creditcontrol-accounts-creditaccountid-holders
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-holders.
+      operations:
+      - method: POST
+        name: addanaccountholder
+        description: VTex Add an account holder
+        call: customer-credit-account.addanaccountholder
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/holders/{holderid}
+      name: api-creditcontrol-accounts-creditaccountid-holders-holderid
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-holders-holderId.
+      operations:
+      - method: DELETE
+        name: deleteanaccountholder
+        description: VTex Delete an account holder
+        call: customer-credit-account.deleteanaccountholder
+        with:
+          holderId: rest.holderId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/statements
+      name: api-creditcontrol-accounts-creditaccountid-statements
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-statements.
+      operations:
+      - method: GET
+        name: accountstatements
+        description: VTex Get account statements
+        call: customer-credit-account.accountstatements
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/statements/{statementid}
+      name: api-creditcontrol-accounts-creditaccountid-statements-statementid
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-statements-statementId.
+      operations:
+      - method: PUT
+        name: decreasebalanceofanaccount
+        description: VTex Decrease balance of an account
+        call: customer-credit-account.decreasebalanceofanaccount
+        with:
+          statementId: rest.statementId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/tolerance
+      name: api-creditcontrol-accounts-creditaccountid-tolerance
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-tolerance.
+      operations:
+      - method: PUT
+        name: changetoleranceofanaccount
+        description: VTex Change tolerance of an account
+        call: customer-credit-account.changetoleranceofanaccount
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/transactions
+      name: api-creditcontrol-accounts-creditaccountid-transactions
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-transactions.
+      operations:
+      - method: POST
+        name: createapreauthorization
+        description: VTex Create a pre-authorization
+        call: customer-credit-account.createapreauthorization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/transactions/{transactionid}
+      name: api-creditcontrol-accounts-creditaccountid-transactions-transactionid
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-transactions-transactionId.
+      operations:
+      - method: PUT
+        name: createapreauthorizationusingid
+        description: VTex Update a pre-authorization
+        call: customer-credit-account.createapreauthorizationusingid
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: cancelapreauthorization
+        description: VTex Cancel a pre-authorization
+        call: customer-credit-account.cancelapreauthorization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/transactions/{transactionid}/refunds
+      name: api-creditcontrol-accounts-creditaccountid-transactions-transactionid-refunds
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-transactions-transactionId-refunds.
+      operations:
+      - method: POST
+        name: partialortotalrefundasettlement
+        description: VTex Partially or totally refund a settlement
+        call: customer-credit-account.partialortotalrefundasettlement
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/transactions/{transactionid}/settlement
+      name: api-creditcontrol-accounts-creditaccountid-transactions-transactionid-settlement
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-transactions-transactionId-settlement.
+      operations:
+      - method: PUT
+        name: createorupdatesettlement
+        description: VTex Create or update settlement
+        call: customer-credit-account.createorupdatesettlement
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customer-credit-account-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Customer Credit API — Account. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-search-all-accounts
+      description: VTex Search all accounts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.searchallaccounts
+      with:
+        from: tools.from
+        to: tools.to
+        status: tools.status
+        email: tools.email
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-open-account
+      description: VTex Open an account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customer-credit-account.openanaccount
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-retrieve-account-id
+      description: VTex Retrieve an account by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.retrieveaaccountbyid
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-close-account
+      description: VTex Close an account
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customer-credit-account.closeanaccount
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-account-information
+      description: VTex Update account information
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.updateemailanddescriptionofaaccount
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-change-credit-limit-account
+      description: VTex Change credit limit of an account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.changecreditlimitofanaccount
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-account-holder
+      description: VTex Add an account holder
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customer-credit-account.addanaccountholder
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-account-holder
+      description: VTex Delete an account holder
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customer-credit-account.deleteanaccountholder
+      with:
+        holderId: tools.holderId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-account-statements
+      description: VTex Get account statements
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.accountstatements
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-decrease-balance-account
+      description: VTex Decrease balance of an account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.decreasebalanceofanaccount
+      with:
+        statementId: tools.statementId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-change-tolerance-account
+      description: VTex Change tolerance of an account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.changetoleranceofanaccount
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-pre-authorization
+      description: VTex Create a pre-authorization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customer-credit-account.createapreauthorization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-pre-authorization
+      description: VTex Update a pre-authorization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.createapreauthorizationusingid
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-cancel-pre-authorization
+      description: VTex Cancel a pre-authorization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customer-credit-account.cancelapreauthorization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-partially-totally-refund-settlement
+      description: VTex Partially or totally refund a settlement
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customer-credit-account.partialortotalrefundasettlement
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-update-settlement
+      description: VTex Create or update settlement
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-account.createorupdatesettlement
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

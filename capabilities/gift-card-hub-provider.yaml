@@ -1,0 +1,256 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex GiftCard Hub API — Provider
+  description: 'VTex GiftCard Hub API — Provider. 4 operations. Lead operation: VTex List All GiftCard Providers. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Provider
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: gift-card-hub-provider
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex GiftCard Hub API — Provider business capability. Self-contained, no shared references.
+    resources:
+    - name: api-giftcardproviders
+      path: /api/giftcardproviders
+      operations:
+      - name: listallgiftcardproviders
+        method: GET
+        description: VTex List All GiftCard Providers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: REST-Range
+          in: header
+          type: string
+          description: Pagination control. This query variable must follow the format `_resources={from}-{to}_`.
+    - name: api-giftcardproviders-giftCardProviderId
+      path: /api/giftcardproviders/{giftCardProviderId}
+      operations:
+      - name: getgiftcardproviderbyid
+        method: GET
+        description: VTex Get GiftCard Provider by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: giftCardProviderId
+          in: path
+          type: string
+          description: Gift card provider identification.
+          required: true
+      - name: createupdategiftcardproviderbyid
+        method: PUT
+        description: VTex Create/Update GiftCard Provider by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: giftCardProviderId
+          in: path
+          type: string
+          description: Gift card provider identification.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletegiftcardproviderbyid
+        method: DELETE
+        description: VTex Delete GiftCard Provider by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: giftCardProviderId
+          in: path
+          type: string
+          description: Gift card provider identification.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: gift-card-hub-provider-rest
+    port: 8080
+    description: REST adapter for VTex GiftCard Hub API — Provider. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/giftcardproviders
+      name: api-giftcardproviders
+      description: REST surface for api-giftcardproviders.
+      operations:
+      - method: GET
+        name: listallgiftcardproviders
+        description: VTex List All GiftCard Providers
+        call: gift-card-hub-provider.listallgiftcardproviders
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          REST-Range: rest.REST-Range
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/giftcardproviders/{giftcardproviderid}
+      name: api-giftcardproviders-giftcardproviderid
+      description: REST surface for api-giftcardproviders-giftCardProviderId.
+      operations:
+      - method: GET
+        name: getgiftcardproviderbyid
+        description: VTex Get GiftCard Provider by ID
+        call: gift-card-hub-provider.getgiftcardproviderbyid
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          giftCardProviderId: rest.giftCardProviderId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: createupdategiftcardproviderbyid
+        description: VTex Create/Update GiftCard Provider by ID
+        call: gift-card-hub-provider.createupdategiftcardproviderbyid
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          giftCardProviderId: rest.giftCardProviderId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletegiftcardproviderbyid
+        description: VTex Delete GiftCard Provider by ID
+        call: gift-card-hub-provider.deletegiftcardproviderbyid
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          giftCardProviderId: rest.giftCardProviderId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: gift-card-hub-provider-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex GiftCard Hub API — Provider. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-list-all-giftcard-providers
+      description: VTex List All GiftCard Providers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gift-card-hub-provider.listallgiftcardproviders
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        REST-Range: tools.REST-Range
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-giftcard-provider-id
+      description: VTex Get GiftCard Provider by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gift-card-hub-provider.getgiftcardproviderbyid
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        giftCardProviderId: tools.giftCardProviderId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-update-giftcard-provider
+      description: VTex Create/Update GiftCard Provider by ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: gift-card-hub-provider.createupdategiftcardproviderbyid
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        giftCardProviderId: tools.giftCardProviderId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-giftcard-provider-id
+      description: VTex Delete GiftCard Provider by ID
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: gift-card-hub-provider.deletegiftcardproviderbyid
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        giftCardProviderId: tools.giftCardProviderId
+      outputParameters:
+      - type: object
+        mapping: $.

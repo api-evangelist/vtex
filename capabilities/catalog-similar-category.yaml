@@ -1,0 +1,173 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Similar Category
+  description: 'VTex Catalog API — Similar Category. 3 operations. Lead operation: VTex Get similar categories. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Similar Category
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-similar-category
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Similar Category business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-product-productId-similarcategory
+      path: /api/catalog/pvt/product/{productId}/similarcategory/
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get similar categories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+    - name: api-catalog-pvt-product-productId-similarcategory-categoryId
+      path: /api/catalog/pvt/product/{productId}/similarcategory/{categoryId}
+      operations:
+      - name: post
+        method: POST
+        description: VTex Add similar category
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+        - name: categoryId
+          in: path
+          type: integer
+          description: Similar category's unique numerical identifier.
+          required: true
+      - name: delete
+        method: DELETE
+        description: VTex Delete similar category
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+        - name: categoryId
+          in: path
+          type: integer
+          description: Similar category's unique numerical identifier.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-similar-category-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Similar Category. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/product/{productid}/similarcategory
+      name: api-catalog-pvt-product-productid-similarcategory
+      description: REST surface for api-catalog-pvt-product-productId-similarcategory.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get similar categories
+        call: catalog-similar-category.get
+        with:
+          productId: rest.productId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/product/{productid}/similarcategory/{categoryid}
+      name: api-catalog-pvt-product-productid-similarcategory-categoryid
+      description: REST surface for api-catalog-pvt-product-productId-similarcategory-categoryId.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Add similar category
+        call: catalog-similar-category.post
+        with:
+          productId: rest.productId
+          categoryId: rest.categoryId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete
+        description: VTex Delete similar category
+        call: catalog-similar-category.delete
+        with:
+          productId: rest.productId
+          categoryId: rest.categoryId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-similar-category-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Similar Category. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-similar-categories
+      description: VTex Get similar categories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-similar-category.get
+      with:
+        productId: tools.productId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-similar-category
+      description: VTex Add similar category
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-similar-category.post
+      with:
+        productId: tools.productId
+        categoryId: tools.categoryId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-similar-category
+      description: VTex Delete similar category
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: catalog-similar-category.delete
+      with:
+        productId: tools.productId
+        categoryId: tools.categoryId
+      outputParameters:
+      - type: object
+        mapping: $.

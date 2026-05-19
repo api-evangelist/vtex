@@ -1,0 +1,661 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Subscriptions API (v3) — Subscriptions
+  description: 'VTex Subscriptions API (v3) — Subscriptions. 10 operations. Lead operation: VTex List subscriptions. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Subscriptions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: subscriptions-subscriptions
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Subscriptions API (v3) — Subscriptions business capability. Self-contained, no shared references.
+    resources:
+    - name: api-rns-pub-subscriptions
+      path: /api/rns/pub/subscriptions
+      operations:
+      - name: get
+        method: GET
+        description: VTex List subscriptions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customerEmail
+          in: query
+          type: string
+          description: Customer that owns the subscription. Defaults to the current logged user.
+        - name: status
+          in: query
+          type: string
+          description: Current subscription status
+        - name: addressId
+          in: query
+          type: string
+          description: Id from the address used as shipping address
+        - name: paymentId
+          in: query
+          type: string
+          description: Id from the payment used as payment method
+        - name: planId
+          in: query
+          type: string
+          description: Id from the plan that the subscription belongs to
+        - name: nextPurchaseDate
+          in: query
+          type: string
+          description: Date for the next cycle
+        - name: originalOrderId
+          in: query
+          type: string
+          description: Id from the order that generated the subscription
+        - name: page
+          in: query
+          type: integer
+          description: Page used for pagination
+        - name: size
+          in: query
+          type: integer
+          description: Page size used for pagination
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: post
+        method: POST
+        description: VTex Create subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-rns-pub-subscriptions-simulate
+      path: /api/rns/pub/subscriptions/simulate
+      operations:
+      - name: post
+        method: POST
+        description: VTex Calculate the current prices for the provided subscription template
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-rns-pub-subscriptions-id
+      path: /api/rns/pub/subscriptions/{id}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get subscription details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID from the target subscription.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: patch
+        method: PATCH
+        description: VTex Update subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID from the given subscription.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-rns-pub-subscriptions-id-items
+      path: /api/rns/pub/subscriptions/{id}/items
+      operations:
+      - name: post
+        method: POST
+        description: VTex Add item to subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID from the target subscription
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-rns-pub-subscriptions-id-items-itemId
+      path: /api/rns/pub/subscriptions/{id}/items/{itemId}
+      operations:
+      - name: delete
+        method: DELETE
+        description: VTex Remove items from a subscription.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Id from the target subscription
+          required: true
+        - name: itemId
+          in: path
+          type: string
+          description: Id from the subscription item that will be removed
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: patch
+        method: PATCH
+        description: VTex Edit items on a subscription.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Id from the target subscription
+          required: true
+        - name: itemId
+          in: path
+          type: string
+          description: Id from the target item
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-rns-pub-subscriptions-id-simulate
+      path: /api/rns/pub/subscriptions/{id}/simulate
+      operations:
+      - name: post
+        method: POST
+        description: VTex Calculate the current prices for a specific subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Id from the target subscription
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+    - name: api-rns-pub-subscriptions-subscriptionId-conversation-message
+      path: /api/rns/pub/subscriptions/{subscriptionId}/conversation-message
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get conversation messages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscriptionId
+          in: path
+          type: string
+          description: ID of the subscription.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: subscriptions-subscriptions-rest
+    port: 8080
+    description: REST adapter for VTex Subscriptions API (v3) — Subscriptions. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/rns/pub/subscriptions
+      name: api-rns-pub-subscriptions
+      description: REST surface for api-rns-pub-subscriptions.
+      operations:
+      - method: GET
+        name: get
+        description: VTex List subscriptions
+        call: subscriptions-subscriptions.get
+        with:
+          customerEmail: rest.customerEmail
+          status: rest.status
+          addressId: rest.addressId
+          paymentId: rest.paymentId
+          planId: rest.planId
+          nextPurchaseDate: rest.nextPurchaseDate
+          originalOrderId: rest.originalOrderId
+          page: rest.page
+          size: rest.size
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: post
+        description: VTex Create subscription
+        call: subscriptions-subscriptions.post
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/rns/pub/subscriptions/simulate
+      name: api-rns-pub-subscriptions-simulate
+      description: REST surface for api-rns-pub-subscriptions-simulate.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Calculate the current prices for the provided subscription template
+        call: subscriptions-subscriptions.post
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/rns/pub/subscriptions/{id}
+      name: api-rns-pub-subscriptions-id
+      description: REST surface for api-rns-pub-subscriptions-id.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get subscription details
+        call: subscriptions-subscriptions.get
+        with:
+          id: rest.id
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: patch
+        description: VTex Update subscription
+        call: subscriptions-subscriptions.patch
+        with:
+          id: rest.id
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/rns/pub/subscriptions/{id}/items
+      name: api-rns-pub-subscriptions-id-items
+      description: REST surface for api-rns-pub-subscriptions-id-items.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Add item to subscription
+        call: subscriptions-subscriptions.post
+        with:
+          id: rest.id
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/rns/pub/subscriptions/{id}/items/{itemid}
+      name: api-rns-pub-subscriptions-id-items-itemid
+      description: REST surface for api-rns-pub-subscriptions-id-items-itemId.
+      operations:
+      - method: DELETE
+        name: delete
+        description: VTex Remove items from a subscription.
+        call: subscriptions-subscriptions.delete
+        with:
+          id: rest.id
+          itemId: rest.itemId
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: patch
+        description: VTex Edit items on a subscription.
+        call: subscriptions-subscriptions.patch
+        with:
+          id: rest.id
+          itemId: rest.itemId
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/rns/pub/subscriptions/{id}/simulate
+      name: api-rns-pub-subscriptions-id-simulate
+      description: REST surface for api-rns-pub-subscriptions-id-simulate.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Calculate the current prices for a specific subscription
+        call: subscriptions-subscriptions.post
+        with:
+          id: rest.id
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/rns/pub/subscriptions/{subscriptionid}/conversation-message
+      name: api-rns-pub-subscriptions-subscriptionid-conversation-message
+      description: REST surface for api-rns-pub-subscriptions-subscriptionId-conversation-message.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get conversation messages
+        call: subscriptions-subscriptions.get
+        with:
+          subscriptionId: rest.subscriptionId
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: subscriptions-subscriptions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Subscriptions API (v3) — Subscriptions. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-list-subscriptions
+      description: VTex List subscriptions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscriptions-subscriptions.get
+      with:
+        customerEmail: tools.customerEmail
+        status: tools.status
+        addressId: tools.addressId
+        paymentId: tools.paymentId
+        planId: tools.planId
+        nextPurchaseDate: tools.nextPurchaseDate
+        originalOrderId: tools.originalOrderId
+        page: tools.page
+        size: tools.size
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-subscription
+      description: VTex Create subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscriptions-subscriptions.post
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-calculate-current-prices-provided
+      description: VTex Calculate the current prices for the provided subscription template
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscriptions-subscriptions.post
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-subscription-details
+      description: VTex Get subscription details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscriptions-subscriptions.get
+      with:
+        id: tools.id
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-subscription
+      description: VTex Update subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: subscriptions-subscriptions.patch
+      with:
+        id: tools.id
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-item-subscription
+      description: VTex Add item to subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscriptions-subscriptions.post
+      with:
+        id: tools.id
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-items-subscription
+      description: VTex Remove items from a subscription.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: subscriptions-subscriptions.delete
+      with:
+        id: tools.id
+        itemId: tools.itemId
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-edit-items-subscription
+      description: VTex Edit items on a subscription.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: subscriptions-subscriptions.patch
+      with:
+        id: tools.id
+        itemId: tools.itemId
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-calculate-current-prices-specific
+      description: VTex Calculate the current prices for a specific subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscriptions-subscriptions.post
+      with:
+        id: tools.id
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-conversation-messages
+      description: VTex Get conversation messages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscriptions-subscriptions.get
+      with:
+        subscriptionId: tools.subscriptionId
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

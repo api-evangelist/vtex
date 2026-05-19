@@ -1,0 +1,96 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Orders API — Conversation
+  description: 'VTex Orders API — Conversation. 1 operations. Lead operation: VTex Retrieve order conversation. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Conversation
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: orders-conversation
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Orders API — Conversation business capability. Self-contained, no shared references.
+    resources:
+    - name: api-oms-pvt-orders-orderId-conversation-message
+      path: /api/oms/pvt/orders/{orderId}/conversation-message
+      operations:
+      - name: getconversation
+        method: GET
+        description: VTex Retrieve order conversation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: orderId
+          in: path
+          type: string
+          description: Order ID is a unique code that identifies an order.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: orders-conversation-rest
+    port: 8080
+    description: REST adapter for VTex Orders API — Conversation. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/oms/pvt/orders/{orderid}/conversation-message
+      name: api-oms-pvt-orders-orderid-conversation-message
+      description: REST surface for api-oms-pvt-orders-orderId-conversation-message.
+      operations:
+      - method: GET
+        name: getconversation
+        description: VTex Retrieve order conversation
+        call: orders-conversation.getconversation
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          orderId: rest.orderId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: orders-conversation-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Orders API — Conversation. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-retrieve-order-conversation
+      description: VTex Retrieve order conversation
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: orders-conversation.getconversation
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        orderId: tools.orderId
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,340 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Customer Credit API — Invoices
+  description: 'VTex Customer Credit API — Invoices. 7 operations. Lead operation: VTex Retrieve invoices by creditaccountid.
+    Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Invoices
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customer-credit-invoices
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Customer Credit API — Invoices business capability. Self-contained, no shared references.
+    resources:
+    - name: api-creditcontrol-accounts-creditAccountId-invoices
+      path: /api/creditcontrol/accounts/{creditAccountId}/invoices
+      operations:
+      - name: searchallinvoicesofaaccount
+        method: GET
+        description: VTex Retrieve invoices by creditaccountid
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-creditcontrol-accounts-creditAccountId-invoices-invoiceId
+      path: /api/creditcontrol/accounts/{creditAccountId}/invoices/{invoiceId}
+      operations:
+      - name: retrieveinvoicebyid
+        method: GET
+        description: VTex Retrieve invoice by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: changeinvoice
+        method: PUT
+        description: VTex Change invoice
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: cancelinvoice
+        method: DELETE
+        description: VTex Cancel invoice
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-creditcontrol-accounts-creditAccountId-invoices-invoiceId-payments
+      path: /api/creditcontrol/accounts/{creditAccountId}/invoices/{invoiceId}/payments
+      operations:
+      - name: markaninvoiceaspaid
+        method: POST
+        description: VTex Mark an invoice as paid
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-creditcontrol-accounts-creditAccountId-invoices-invoiceId-postponement
+      path: /api/creditcontrol/accounts/{creditAccountId}/invoices/{invoiceId}/postponement
+      operations:
+      - name: postponeaninvoice
+        method: PUT
+        description: VTex Postpone an invoice
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-creditcontrol-invoices
+      path: /api/creditcontrol/invoices
+      operations:
+      - name: searchallinvoices
+        method: GET
+        description: VTex Search all invoices
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: from
+          in: query
+          type: string
+          description: 'Indicates the starting position of the invoice to be searched in the invoice list. For example, the
+            value `1` indicates that the first invoice in the list will '
+        - name: to
+          in: query
+          type: string
+          description: Indicates the final position of the invoice to be searched in the invoice list. For example, if the
+            value of `from` is equal to `1` and `to` is `300`, informati
+        - name: createdDateFrom
+          in: query
+          type: string
+          description: Indicates the initial creation date of invoices that should be searched in the invoice list based on
+            their creation date. The dates should be in ISO8601 format.
+        - name: createdDateTo
+          in: query
+          type: string
+          description: Indicates the final creation date of invoices that should be searched in the invoice list based on
+            their creation date. The dates should be in ISO8601 format.
+        - name: dueDateFrom
+          in: query
+          type: string
+          description: Indicates the initial due date of invoices that should be searched in the invoice list based on their
+            creation date. The dates should be in ISO8601 format.
+        - name: dueDateTo
+          in: query
+          type: string
+          description: Indicates the final due date of invoices that should be searched in the invoice list based on their
+            creation date. The dates should be in ISO8601 format.
+        - name: value
+          in: query
+          type: number
+          description: Indicates the value of the invoices to be searched for. It must be completed with a decimal value.
+        - name: status
+          in: query
+          type: string
+          description: Indicates the status of the invoices to be searched for.
+        - name: observation
+          in: query
+          type: string
+          description: Observation notes about the invoice.
+        - name: creditAccountId
+          in: query
+          type: string
+          description: Credit account identification.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: customer-credit-invoices-rest
+    port: 8080
+    description: REST adapter for VTex Customer Credit API — Invoices. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/invoices
+      name: api-creditcontrol-accounts-creditaccountid-invoices
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-invoices.
+      operations:
+      - method: GET
+        name: searchallinvoicesofaaccount
+        description: VTex Retrieve invoices by creditaccountid
+        call: customer-credit-invoices.searchallinvoicesofaaccount
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/invoices/{invoiceid}
+      name: api-creditcontrol-accounts-creditaccountid-invoices-invoiceid
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-invoices-invoiceId.
+      operations:
+      - method: GET
+        name: retrieveinvoicebyid
+        description: VTex Retrieve invoice by ID
+        call: customer-credit-invoices.retrieveinvoicebyid
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: changeinvoice
+        description: VTex Change invoice
+        call: customer-credit-invoices.changeinvoice
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: cancelinvoice
+        description: VTex Cancel invoice
+        call: customer-credit-invoices.cancelinvoice
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/invoices/{invoiceid}/payments
+      name: api-creditcontrol-accounts-creditaccountid-invoices-invoiceid-payments
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-invoices-invoiceId-payments.
+      operations:
+      - method: POST
+        name: markaninvoiceaspaid
+        description: VTex Mark an invoice as paid
+        call: customer-credit-invoices.markaninvoiceaspaid
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/accounts/{creditaccountid}/invoices/{invoiceid}/postponement
+      name: api-creditcontrol-accounts-creditaccountid-invoices-invoiceid-postponement
+      description: REST surface for api-creditcontrol-accounts-creditAccountId-invoices-invoiceId-postponement.
+      operations:
+      - method: PUT
+        name: postponeaninvoice
+        description: VTex Postpone an invoice
+        call: customer-credit-invoices.postponeaninvoice
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/creditcontrol/invoices
+      name: api-creditcontrol-invoices
+      description: REST surface for api-creditcontrol-invoices.
+      operations:
+      - method: GET
+        name: searchallinvoices
+        description: VTex Search all invoices
+        call: customer-credit-invoices.searchallinvoices
+        with:
+          from: rest.from
+          to: rest.to
+          createdDateFrom: rest.createdDateFrom
+          createdDateTo: rest.createdDateTo
+          dueDateFrom: rest.dueDateFrom
+          dueDateTo: rest.dueDateTo
+          value: rest.value
+          status: rest.status
+          observation: rest.observation
+          creditAccountId: rest.creditAccountId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customer-credit-invoices-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Customer Credit API — Invoices. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-retrieve-invoices-creditaccountid
+      description: VTex Retrieve invoices by creditaccountid
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-credit-invoices.searchallinvoicesofaaccount
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-retrieve-invoice-id
+      description: VTex Retrieve invoice by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-credit-invoices.retrieveinvoicebyid
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-change-invoice
+      description: VTex Change invoice
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-invoices.changeinvoice
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-cancel-invoice
+      description: VTex Cancel invoice
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customer-credit-invoices.cancelinvoice
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-mark-invoice-paid
+      description: VTex Mark an invoice as paid
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customer-credit-invoices.markaninvoiceaspaid
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-postpone-invoice
+      description: VTex Postpone an invoice
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: customer-credit-invoices.postponeaninvoice
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-search-all-invoices
+      description: VTex Search all invoices
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-credit-invoices.searchallinvoices
+      with:
+        from: tools.from
+        to: tools.to
+        createdDateFrom: tools.createdDateFrom
+        createdDateTo: tools.createdDateTo
+        dueDateFrom: tools.dueDateFrom
+        dueDateTo: tools.dueDateTo
+        value: tools.value
+        status: tools.status
+        observation: tools.observation
+        creditAccountId: tools.creditAccountId
+      outputParameters:
+      - type: object
+        mapping: $.

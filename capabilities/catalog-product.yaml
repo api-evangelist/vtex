@@ -1,0 +1,387 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Product
+  description: 'VTex Catalog API — Product. 8 operations. Lead operation: VTex Get product review rate by product ID. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Product
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-product
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Product business capability. Self-contained, no shared references.
+    resources:
+    - name: api-addon-pvt-review-GetProductRate-productId
+      path: /api/addon/pvt/review/GetProductRate/{productId}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get product review rate by product ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+    - name: api-catalog-pvt-product
+      path: /api/catalog/pvt/product
+      operations:
+      - name: post
+        method: POST
+        description: VTex Create product with category and brand
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-product-productId
+      path: /api/catalog/pvt/product/{productId}
+      operations:
+      - name: getproductbyid
+        method: GET
+        description: VTex Get product by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: string
+          description: Product's unique numerical identifier.
+          required: true
+      - name: put
+        method: PUT
+        description: VTex Update product
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog_system-pub-products-variations-productId
+      path: /api/catalog_system/pub/products/variations/{productId}
+      operations:
+      - name: productvariations
+        method: GET
+        description: VTex Get product's SKUs by product ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+    - name: api-catalog_system-pvt-products-GetProductAndSkuIds
+      path: /api/catalog_system/pvt/products/GetProductAndSkuIds
+      operations:
+      - name: productandskuids
+        method: GET
+        description: VTex Get product and SKU IDs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: categoryId
+          in: query
+          type: integer
+          description: ID of the category from which you need to retrieve products and SKUs.
+        - name: _from
+          in: query
+          type: integer
+          description: Insert the ID that will start the request result.
+        - name: _to
+          in: query
+          type: integer
+          description: Insert the ID that will end the request result.
+    - name: api-catalog_system-pvt-products-productget-productId
+      path: /api/catalog_system/pvt/products/productget/{productId}
+      operations:
+      - name: productandtradepolicy
+        method: GET
+        description: VTex Get product and its general context
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: productId
+          in: path
+          type: integer
+          description: Product's unique numerical identifier.
+          required: true
+    - name: api-catalog_system-pvt-products-productgetbyrefid-refId
+      path: /api/catalog_system/pvt/products/productgetbyrefid/{refId}
+      operations:
+      - name: productbyrefid
+        method: GET
+        description: VTex Get product by reference ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: refId
+          in: path
+          type: string
+          description: Product reference code.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-product-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Product. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/addon/pvt/review/getproductrate/{productid}
+      name: api-addon-pvt-review-getproductrate-productid
+      description: REST surface for api-addon-pvt-review-GetProductRate-productId.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get product review rate by product ID
+        call: catalog-product.get
+        with:
+          productId: rest.productId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/product
+      name: api-catalog-pvt-product
+      description: REST surface for api-catalog-pvt-product.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Create product with category and brand
+        call: catalog-product.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/product/{productid}
+      name: api-catalog-pvt-product-productid
+      description: REST surface for api-catalog-pvt-product-productId.
+      operations:
+      - method: GET
+        name: getproductbyid
+        description: VTex Get product by ID
+        call: catalog-product.getproductbyid
+        with:
+          productId: rest.productId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: put
+        description: VTex Update product
+        call: catalog-product.put
+        with:
+          productId: rest.productId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pub/products/variations/{productid}
+      name: api-catalog-system-pub-products-variations-productid
+      description: REST surface for api-catalog_system-pub-products-variations-productId.
+      operations:
+      - method: GET
+        name: productvariations
+        description: VTex Get product's SKUs by product ID
+        call: catalog-product.productvariations
+        with:
+          productId: rest.productId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/products/getproductandskuids
+      name: api-catalog-system-pvt-products-getproductandskuids
+      description: REST surface for api-catalog_system-pvt-products-GetProductAndSkuIds.
+      operations:
+      - method: GET
+        name: productandskuids
+        description: VTex Get product and SKU IDs
+        call: catalog-product.productandskuids
+        with:
+          categoryId: rest.categoryId
+          _from: rest._from
+          _to: rest._to
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/products/productget/{productid}
+      name: api-catalog-system-pvt-products-productget-productid
+      description: REST surface for api-catalog_system-pvt-products-productget-productId.
+      operations:
+      - method: GET
+        name: productandtradepolicy
+        description: VTex Get product and its general context
+        call: catalog-product.productandtradepolicy
+        with:
+          productId: rest.productId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pvt/products/productgetbyrefid/{refid}
+      name: api-catalog-system-pvt-products-productgetbyrefid-refid
+      description: REST surface for api-catalog_system-pvt-products-productgetbyrefid-refId.
+      operations:
+      - method: GET
+        name: productbyrefid
+        description: VTex Get product by reference ID
+        call: catalog-product.productbyrefid
+        with:
+          refId: rest.refId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-product-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Product. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: vtex-get-product-review-rate
+      description: VTex Get product review rate by product ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-product.get
+      with:
+        productId: tools.productId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-product-category-and
+      description: VTex Create product with category and brand
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-product.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-product-id
+      description: VTex Get product by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-product.getproductbyid
+      with:
+        productId: tools.productId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-product
+      description: VTex Update product
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-product.put
+      with:
+        productId: tools.productId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-product-s-skus-product
+      description: VTex Get product's SKUs by product ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-product.productvariations
+      with:
+        productId: tools.productId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-product-and-sku
+      description: VTex Get product and SKU IDs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-product.productandskuids
+      with:
+        categoryId: tools.categoryId
+        _from: tools._from
+        _to: tools._to
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-product-and-its
+      description: VTex Get product and its general context
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-product.productandtradepolicy
+      with:
+        productId: tools.productId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-product-reference-id
+      description: VTex Get product by reference ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-product.productbyrefid
+      with:
+        refId: tools.refId
+      outputParameters:
+      - type: object
+        mapping: $.

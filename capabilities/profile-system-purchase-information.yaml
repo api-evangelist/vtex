@@ -1,0 +1,200 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Profile System - PII data architecture — Purchase Information
+  description: 'VTex Profile System - PII data architecture — Purchase Information. 5 operations. Lead operation: VTex Create
+    purchase information. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Purchase Information
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: profile-system-purchase-information
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Profile System - PII data architecture — Purchase Information business capability. Self-contained, no
+      shared references.
+    resources:
+    - name: api-storage-profile-system-profiles-profileId-purchase-info
+      path: /api/storage/profile-system/profiles/{profileId}/purchase-info
+      operations:
+      - name: createpurchaseinformation
+        method: POST
+        description: VTex Create purchase information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getpurchaseinformation
+        method: GET
+        description: VTex Get purchase information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatepurchaseinformation
+        method: PATCH
+        description: VTex Update purchase information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deletepurchaseinformation
+        method: DELETE
+        description: VTex Delete purchase information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-purchase-info-unmask
+      path: /api/storage/profile-system/profiles/{profileId}/purchase-info/unmask
+      operations:
+      - name: getunmaskedpurchaseinformation
+        method: GET
+        description: VTex Get unmasked purchase information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: profile-system-purchase-information-rest
+    port: 8080
+    description: REST adapter for VTex Profile System - PII data architecture — Purchase Information. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/purchase-info
+      name: api-storage-profile-system-profiles-profileid-purchase-info
+      description: REST surface for api-storage-profile-system-profiles-profileId-purchase-info.
+      operations:
+      - method: POST
+        name: createpurchaseinformation
+        description: VTex Create purchase information
+        call: profile-system-purchase-information.createpurchaseinformation
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getpurchaseinformation
+        description: VTex Get purchase information
+        call: profile-system-purchase-information.getpurchaseinformation
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatepurchaseinformation
+        description: VTex Update purchase information
+        call: profile-system-purchase-information.updatepurchaseinformation
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepurchaseinformation
+        description: VTex Delete purchase information
+        call: profile-system-purchase-information.deletepurchaseinformation
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/purchase-info/unmask
+      name: api-storage-profile-system-profiles-profileid-purchase-info-unmask
+      description: REST surface for api-storage-profile-system-profiles-profileId-purchase-info-unmask.
+      operations:
+      - method: GET
+        name: getunmaskedpurchaseinformation
+        description: VTex Get unmasked purchase information
+        call: profile-system-purchase-information.getunmaskedpurchaseinformation
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: profile-system-purchase-information-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Profile System - PII data architecture — Purchase Information. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: vtex-create-purchase-information
+      description: VTex Create purchase information
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: profile-system-purchase-information.createpurchaseinformation
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-purchase-information
+      description: VTex Get purchase information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-purchase-information.getpurchaseinformation
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-purchase-information
+      description: VTex Update purchase information
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: profile-system-purchase-information.updatepurchaseinformation
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-purchase-information
+      description: VTex Delete purchase information
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: profile-system-purchase-information.deletepurchaseinformation
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-purchase-information
+      description: VTex Get unmasked purchase information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-purchase-information.getunmaskedpurchaseinformation
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,633 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Checkout API — Shopping Cart
+  description: 'VTex Checkout API — Shopping Cart. 12 operations. Lead operation: VTex Get current or create a new cart. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Shopping Cart
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: checkout-shopping-cart
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Checkout API — Shopping Cart business capability. Self-contained, no shared references.
+    resources:
+    - name: api-checkout-pub-orderForm
+      path: /api/checkout/pub/orderForm
+      operations:
+      - name: createanewcart
+        method: GET
+        description: VTex Get current or create a new cart
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: forceNewCart
+          in: query
+          type: boolean
+          description: Use this query parameter to create a new empty shopping cart.
+    - name: api-checkout-pub-orderForm-orderFormId
+      path: /api/checkout/pub/orderForm/{orderFormId}
+      operations:
+      - name: getcartinformationbyid
+        method: GET
+        description: VTex Get cart information by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart whose information you want to retrieve.
+          required: true
+        - name: refreshOutdatedData
+          in: query
+          type: boolean
+          description: It is possible to use the [Update cart items request](https://developers.vtex.com/vtex-rest-api/reference/cart-update#itemsupdate)
+            so as to allow outdated infor
+    - name: api-checkout-pub-orderForm-orderFormId-coupons
+      path: /api/checkout/pub/orderForm/{orderFormId}/coupons
+      operations:
+      - name: addcoupons
+        method: POST
+        description: VTex Add coupons to the cart
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm that will receive coupon information.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-checkout-pub-orderForm-orderFormId-installments
+      path: /api/checkout/pub/orderForm/{orderFormId}/installments
+      operations:
+      - name: getcartinstallments
+        method: GET
+        description: VTex Cart installments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the `orderForm` to be consulted for installments.
+          required: true
+        - name: paymentSystem
+          in: query
+          type: integer
+          description: ID of the payment method to be consulted for installments.
+          required: true
+    - name: api-checkout-pub-orderForm-orderFormId-items
+      path: /api/checkout/pub/orderForm/{orderFormId}/items
+      operations:
+      - name: items
+        method: POST
+        description: VTex Add cart items
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart in which the new item will be added.
+          required: true
+        - name: allowedOutdatedData
+          in: query
+          type: array
+          description: In order to optimize performance, this parameter allows some information to not be updated when there
+            are changes in the minicart. For instance, if a shopper ad
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: itemshandle
+        method: PATCH
+        description: VTex Handle cart items
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart in which items will be handled.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-checkout-pub-orderForm-orderFormId-items-removeAll
+      path: /api/checkout/pub/orderForm/{orderFormId}/items/removeAll
+      operations:
+      - name: removeallitems
+        method: POST
+        description: VTex Remove all items from shopping cart
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart whose items you want to remove.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-checkout-pub-orderForm-orderFormId-items-update
+      path: /api/checkout/pub/orderForm/{orderFormId}/items/update
+      operations:
+      - name: itemsupdate
+        method: POST
+        description: VTex Update cart items
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the `orderForm` corresponding to the cart whose items you want to update.
+          required: true
+        - name: allowedOutdatedData
+          in: query
+          type: array
+          description: In order to optimize performance, this parameter allows some information to not be updated when there
+            are changes in the minicart. For instance, if a shopper ad
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-checkout-pub-orderForm-orderFormId-items-itemIndex-price
+      path: /api/checkout/pub/orderForm/{orderFormId}/items/{itemIndex}/price
+      operations:
+      - name: pricechange
+        method: PUT
+        description: VTex Change price of an SKU in a cart
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart whose items will have the price changed.
+          required: true
+        - name: itemIndex
+          in: path
+          type: string
+          description: The index of the item in the cart. Each cart item is identified by an index, starting in 0.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-checkout-pub-orderForm-orderFormId-profile
+      path: /api/checkout/pub/orderForm/{orderFormId}/profile
+      operations:
+      - name: ignoreprofiledata
+        method: PATCH
+        description: VTex Ignore profile data on checkout
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart whose items will have the price changed.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-checkout-pub-orderForms-simulation
+      path: /api/checkout/pub/orderForms/simulation
+      operations:
+      - name: cartsimulation
+        method: POST
+        description: VTex Cart simulation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: RnbBehavior
+          in: query
+          type: integer
+          description: This parameter defines which promotions apply to the simulation. Use `0` for simulations at cart stage,
+            which means all promotions apply. In case of window simu
+        - name: sc
+          in: query
+          type: integer
+          description: Trade Policy (Sales Channel) identification.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: checkout-changeToAnonymousUser-orderFormId
+      path: /checkout/changeToAnonymousUser/{orderFormId}
+      operations:
+      - name: removeallpersonaldata
+        method: GET
+        description: VTex Remove all personal data from shopping cart
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart whose user's personal data you want to remove.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: checkout-shopping-cart-rest
+    port: 8080
+    description: REST adapter for VTex Checkout API — Shopping Cart. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/checkout/pub/orderform
+      name: api-checkout-pub-orderform
+      description: REST surface for api-checkout-pub-orderForm.
+      operations:
+      - method: GET
+        name: createanewcart
+        description: VTex Get current or create a new cart
+        call: checkout-shopping-cart.createanewcart
+        with:
+          forceNewCart: rest.forceNewCart
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}
+      name: api-checkout-pub-orderform-orderformid
+      description: REST surface for api-checkout-pub-orderForm-orderFormId.
+      operations:
+      - method: GET
+        name: getcartinformationbyid
+        description: VTex Get cart information by ID
+        call: checkout-shopping-cart.getcartinformationbyid
+        with:
+          orderFormId: rest.orderFormId
+          refreshOutdatedData: rest.refreshOutdatedData
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/coupons
+      name: api-checkout-pub-orderform-orderformid-coupons
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-coupons.
+      operations:
+      - method: POST
+        name: addcoupons
+        description: VTex Add coupons to the cart
+        call: checkout-shopping-cart.addcoupons
+        with:
+          orderFormId: rest.orderFormId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/installments
+      name: api-checkout-pub-orderform-orderformid-installments
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-installments.
+      operations:
+      - method: GET
+        name: getcartinstallments
+        description: VTex Cart installments
+        call: checkout-shopping-cart.getcartinstallments
+        with:
+          orderFormId: rest.orderFormId
+          paymentSystem: rest.paymentSystem
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/items
+      name: api-checkout-pub-orderform-orderformid-items
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-items.
+      operations:
+      - method: POST
+        name: items
+        description: VTex Add cart items
+        call: checkout-shopping-cart.items
+        with:
+          orderFormId: rest.orderFormId
+          allowedOutdatedData: rest.allowedOutdatedData
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: itemshandle
+        description: VTex Handle cart items
+        call: checkout-shopping-cart.itemshandle
+        with:
+          orderFormId: rest.orderFormId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/items/removeall
+      name: api-checkout-pub-orderform-orderformid-items-removeall
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-items-removeAll.
+      operations:
+      - method: POST
+        name: removeallitems
+        description: VTex Remove all items from shopping cart
+        call: checkout-shopping-cart.removeallitems
+        with:
+          orderFormId: rest.orderFormId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/items/update
+      name: api-checkout-pub-orderform-orderformid-items-update
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-items-update.
+      operations:
+      - method: POST
+        name: itemsupdate
+        description: VTex Update cart items
+        call: checkout-shopping-cart.itemsupdate
+        with:
+          orderFormId: rest.orderFormId
+          allowedOutdatedData: rest.allowedOutdatedData
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/items/{itemindex}/price
+      name: api-checkout-pub-orderform-orderformid-items-itemindex-price
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-items-itemIndex-price.
+      operations:
+      - method: PUT
+        name: pricechange
+        description: VTex Change price of an SKU in a cart
+        call: checkout-shopping-cart.pricechange
+        with:
+          orderFormId: rest.orderFormId
+          itemIndex: rest.itemIndex
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/profile
+      name: api-checkout-pub-orderform-orderformid-profile
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-profile.
+      operations:
+      - method: PATCH
+        name: ignoreprofiledata
+        description: VTex Ignore profile data on checkout
+        call: checkout-shopping-cart.ignoreprofiledata
+        with:
+          orderFormId: rest.orderFormId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pub/orderforms/simulation
+      name: api-checkout-pub-orderforms-simulation
+      description: REST surface for api-checkout-pub-orderForms-simulation.
+      operations:
+      - method: POST
+        name: cartsimulation
+        description: VTex Cart simulation
+        call: checkout-shopping-cart.cartsimulation
+        with:
+          RnbBehavior: rest.RnbBehavior
+          sc: rest.sc
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/checkout/changetoanonymoususer/{orderformid}
+      name: checkout-changetoanonymoususer-orderformid
+      description: REST surface for checkout-changeToAnonymousUser-orderFormId.
+      operations:
+      - method: GET
+        name: removeallpersonaldata
+        description: VTex Remove all personal data from shopping cart
+        call: checkout-shopping-cart.removeallpersonaldata
+        with:
+          orderFormId: rest.orderFormId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: checkout-shopping-cart-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Checkout API — Shopping Cart. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-current-create-new
+      description: VTex Get current or create a new cart
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: checkout-shopping-cart.createanewcart
+      with:
+        forceNewCart: tools.forceNewCart
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-cart-information-id
+      description: VTex Get cart information by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: checkout-shopping-cart.getcartinformationbyid
+      with:
+        orderFormId: tools.orderFormId
+        refreshOutdatedData: tools.refreshOutdatedData
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-coupons-cart
+      description: VTex Add coupons to the cart
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-shopping-cart.addcoupons
+      with:
+        orderFormId: tools.orderFormId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-cart-installments
+      description: VTex Cart installments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: checkout-shopping-cart.getcartinstallments
+      with:
+        orderFormId: tools.orderFormId
+        paymentSystem: tools.paymentSystem
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-cart-items
+      description: VTex Add cart items
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-shopping-cart.items
+      with:
+        orderFormId: tools.orderFormId
+        allowedOutdatedData: tools.allowedOutdatedData
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-handle-cart-items
+      description: VTex Handle cart items
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: checkout-shopping-cart.itemshandle
+      with:
+        orderFormId: tools.orderFormId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-all-items-shopping
+      description: VTex Remove all items from shopping cart
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-shopping-cart.removeallitems
+      with:
+        orderFormId: tools.orderFormId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-cart-items
+      description: VTex Update cart items
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-shopping-cart.itemsupdate
+      with:
+        orderFormId: tools.orderFormId
+        allowedOutdatedData: tools.allowedOutdatedData
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-change-price-sku-cart
+      description: VTex Change price of an SKU in a cart
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: checkout-shopping-cart.pricechange
+      with:
+        orderFormId: tools.orderFormId
+        itemIndex: tools.itemIndex
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-ignore-profile-data-checkout
+      description: VTex Ignore profile data on checkout
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: checkout-shopping-cart.ignoreprofiledata
+      with:
+        orderFormId: tools.orderFormId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-cart-simulation
+      description: VTex Cart simulation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-shopping-cart.cartsimulation
+      with:
+        RnbBehavior: tools.RnbBehavior
+        sc: tools.sc
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-all-personal-data
+      description: VTex Remove all personal data from shopping cart
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: checkout-shopping-cart.removeallpersonaldata
+      with:
+        orderFormId: tools.orderFormId
+      outputParameters:
+      - type: object
+        mapping: $.

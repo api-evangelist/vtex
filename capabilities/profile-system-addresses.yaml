@@ -1,0 +1,327 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Profile System - PII data architecture — Addresses
+  description: 'VTex Profile System - PII data architecture — Addresses. 9 operations. Lead operation: VTex Create client
+    address. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Addresses
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: profile-system-addresses
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Profile System - PII data architecture — Addresses business capability. Self-contained, no shared references.
+    resources:
+    - name: api-storage-profile-system-profiles-profileId-addresses
+      path: /api/storage/profile-system/profiles/{profileId}/addresses
+      operations:
+      - name: createclientaddress
+        method: POST
+        description: VTex Create client address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getclientaddresses
+        method: GET
+        description: VTex Get client addresses
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-addresses-unmask
+      path: /api/storage/profile-system/profiles/{profileId}/addresses/unmask
+      operations:
+      - name: getunmaskedclientaddresses
+        method: GET
+        description: VTex Get unmasked client addresses
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-addresses-addressId
+      path: /api/storage/profile-system/profiles/{profileId}/addresses/{addressId}
+      operations:
+      - name: getaddress
+        method: GET
+        description: VTex Get address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateclientaddress
+        method: PATCH
+        description: VTex Update client address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleteaddress
+        method: DELETE
+        description: VTex Delete address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-addresses-addressId-unmask
+      path: /api/storage/profile-system/profiles/{profileId}/addresses/{addressId}/unmask
+      operations:
+      - name: getunmaskedaddress
+        method: GET
+        description: VTex Get unmasked address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-addresses-addressId-versions-addre
+      path: /api/storage/profile-system/profiles/{profileId}/addresses/{addressId}/versions/{addressVersionId}
+      operations:
+      - name: getaddressbyversion
+        method: GET
+        description: VTex Get address by version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-profiles-profileId-addresses-addressId-versions-addre
+      path: /api/storage/profile-system/profiles/{profileId}/addresses/{addressId}/versions/{addressVersionId}/unmask
+      operations:
+      - name: getunmaskedaddressbyversion
+        method: GET
+        description: VTex Get unmasked address by version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: profile-system-addresses-rest
+    port: 8080
+    description: REST adapter for VTex Profile System - PII data architecture — Addresses. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/addresses
+      name: api-storage-profile-system-profiles-profileid-addresses
+      description: REST surface for api-storage-profile-system-profiles-profileId-addresses.
+      operations:
+      - method: POST
+        name: createclientaddress
+        description: VTex Create client address
+        call: profile-system-addresses.createclientaddress
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getclientaddresses
+        description: VTex Get client addresses
+        call: profile-system-addresses.getclientaddresses
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/addresses/unmask
+      name: api-storage-profile-system-profiles-profileid-addresses-unmask
+      description: REST surface for api-storage-profile-system-profiles-profileId-addresses-unmask.
+      operations:
+      - method: GET
+        name: getunmaskedclientaddresses
+        description: VTex Get unmasked client addresses
+        call: profile-system-addresses.getunmaskedclientaddresses
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/addresses/{addressid}
+      name: api-storage-profile-system-profiles-profileid-addresses-addressid
+      description: REST surface for api-storage-profile-system-profiles-profileId-addresses-addressId.
+      operations:
+      - method: GET
+        name: getaddress
+        description: VTex Get address
+        call: profile-system-addresses.getaddress
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateclientaddress
+        description: VTex Update client address
+        call: profile-system-addresses.updateclientaddress
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteaddress
+        description: VTex Delete address
+        call: profile-system-addresses.deleteaddress
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/addresses/{addressid}/unmask
+      name: api-storage-profile-system-profiles-profileid-addresses-addressid-unmask
+      description: REST surface for api-storage-profile-system-profiles-profileId-addresses-addressId-unmask.
+      operations:
+      - method: GET
+        name: getunmaskedaddress
+        description: VTex Get unmasked address
+        call: profile-system-addresses.getunmaskedaddress
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/addresses/{addressid}/versions/{addressversionid}
+      name: api-storage-profile-system-profiles-profileid-addresses-addressid-versions-addre
+      description: REST surface for api-storage-profile-system-profiles-profileId-addresses-addressId-versions-addre.
+      operations:
+      - method: GET
+        name: getaddressbyversion
+        description: VTex Get address by version
+        call: profile-system-addresses.getaddressbyversion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/profiles/{profileid}/addresses/{addressid}/versions/{addressversionid}/unmask
+      name: api-storage-profile-system-profiles-profileid-addresses-addressid-versions-addre
+      description: REST surface for api-storage-profile-system-profiles-profileId-addresses-addressId-versions-addre.
+      operations:
+      - method: GET
+        name: getunmaskedaddressbyversion
+        description: VTex Get unmasked address by version
+        call: profile-system-addresses.getunmaskedaddressbyversion
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: profile-system-addresses-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Profile System - PII data architecture — Addresses. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: vtex-create-client-address
+      description: VTex Create client address
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: profile-system-addresses.createclientaddress
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-client-addresses
+      description: VTex Get client addresses
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-addresses.getclientaddresses
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-client-addresses
+      description: VTex Get unmasked client addresses
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-addresses.getunmaskedclientaddresses
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-address
+      description: VTex Get address
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-addresses.getaddress
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-client-address
+      description: VTex Update client address
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: profile-system-addresses.updateclientaddress
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-address
+      description: VTex Delete address
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: profile-system-addresses.deleteaddress
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-address
+      description: VTex Get unmasked address
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-addresses.getunmaskedaddress
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-address-version
+      description: VTex Get address by version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-addresses.getaddressbyversion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-address-version
+      description: VTex Get unmasked address by version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-addresses.getunmaskedaddressbyversion
+      outputParameters:
+      - type: object
+        mapping: $.

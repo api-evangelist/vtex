@@ -1,0 +1,801 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex SKU Bindings API — SKU Bindings
+  description: 'VTex SKU Bindings API — SKU Bindings. 12 operations. Lead operation: VTex Get SKU Bindings by SKU ID. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - SKU Bindings
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sku-bindings-sku-bindings
+    baseUri: https://{accountName}.{environment}.com.br/api
+    description: VTex SKU Bindings API — SKU Bindings business capability. Self-contained, no shared references.
+    resources:
+    - name: catalog-pvt-skusellers-skuId
+      path: /catalog/pvt/skusellers/{skuId}
+      operations:
+      - name: getbyskuid
+        method: GET
+        description: VTex Get SKU Bindings by SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: skuId
+          in: path
+          type: string
+          description: SKU's unique identifier in the marketplace.
+          required: true
+    - name: sku-binding-pvt-skuseller-activate-sellerId-skuSellerId
+      path: /sku-binding/pvt/skuseller/activate/{sellerId}/{skuSellerId}
+      operations:
+      - name: activateskubinding
+        method: POST
+        description: VTex Activate SKU Binding
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: skuSellerId
+          in: path
+          type: string
+          description: SKU ID in the seller's store.
+          required: true
+    - name: sku-binding-pvt-skuseller-admin
+      path: /sku-binding/pvt/skuseller/admin
+      operations:
+      - name: getpagedadmin
+        method: GET
+        description: VTex Get SKU Bindings information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sellerId
+          in: query
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+        - name: skuId
+          in: query
+          type: string
+          description: SKU's unique identifier in the marketplace.
+        - name: sellerSkuId
+          in: query
+          type: string
+          description: SKU ID in the seller's store.
+        - name: isActive
+          in: query
+          type: boolean
+          description: Defines if the SKU binding is active.
+        - name: size
+          in: query
+          type: string
+          description: Amount of results.
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+    - name: sku-binding-pvt-skuseller-changenotification-sellerId-sellerSkuId
+      path: /sku-binding/pvt/skuseller/changenotification/{sellerId}/{sellerSkuId}
+      operations:
+      - name: post
+        method: POST
+        description: VTex Change Notification with Seller ID and Seller SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: ID of the binding of the seller with the SKU.
+          required: true
+    - name: sku-binding-pvt-skuseller-changenotification-skuId
+      path: /sku-binding/pvt/skuseller/changenotification/{skuId}
+      operations:
+      - name: changenotification
+        method: POST
+        description: VTex Change Notification with SKU ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: skuId
+          in: path
+          type: string
+          description: A string that identifies the SKU in the marketplace. This is the ID that the marketplace will use to
+            look for the SKU whose change the seller wants to inform. I
+          required: true
+    - name: sku-binding-pvt-skuseller-inactivate-sellerId-skuSellerId
+      path: /sku-binding/pvt/skuseller/inactivate/{sellerId}/{skuSellerId}
+      operations:
+      - name: deactivateskubinding
+        method: POST
+        description: VTex Deactivate SKU Binding
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: skuSellerId
+          in: path
+          type: string
+          description: SKU ID in the seller's store.
+          required: true
+    - name: sku-binding-pvt-skuseller-insertion
+      path: /sku-binding/pvt/skuseller/insertion
+      operations:
+      - name: insertskubinding
+        method: POST
+        description: VTex Insert SKU Binding
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: sku-binding-pvt-skuseller-list-bysellerId-sellerId
+      path: /sku-binding/pvt/skuseller/list/bysellerId/{sellerId}
+      operations:
+      - name: getallbysellerid
+        method: GET
+        description: VTex Get all SKU Bindings by Seller ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+    - name: sku-binding-pvt-skuseller-paged-sellerid-sellerId
+      path: /sku-binding/pvt/skuseller/paged/sellerid/{sellerId}
+      operations:
+      - name: getpagedbysellerid
+        method: GET
+        description: VTex Get paged SKU Bindings by Seller ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: page
+          in: query
+          type: string
+          description: Page number.
+          required: true
+        - name: size
+          in: query
+          type: string
+          description: Amount of results per page.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+    - name: sku-binding-pvt-skuseller-remove-sellerId-sellerSkuId
+      path: /sku-binding/pvt/skuseller/remove/{sellerId}/{sellerSkuId}
+      operations:
+      - name: deleteskusellerassociation
+        method: POST
+        description: VTex Remove a seller's SKU Binding
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: SKU ID in the seller's store.
+          required: true
+    - name: sku-binding-pvt-skuseller-sellerId-sellerSkuId
+      path: /sku-binding/pvt/skuseller/{sellerId}/{sellerSkuId}
+      operations:
+      - name: getskuseller
+        method: GET
+        description: VTex Get details of a seller's SKU
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: SKU ID in the seller's store.
+          required: true
+      - name: bindtoanothersku
+        method: PUT
+        description: VTex Bind a seller's SKU to another SKU
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: sellerId
+          in: path
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique
+            number. Check the **Sellers management** section in the Admi
+          required: true
+        - name: sellerSkuId
+          in: path
+          type: string
+          description: SKU ID in the seller's store.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: sku-bindings-sku-bindings-rest
+    port: 8080
+    description: REST adapter for VTex SKU Bindings API — SKU Bindings. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/catalog/pvt/skusellers/{skuid}
+      name: catalog-pvt-skusellers-skuid
+      description: REST surface for catalog-pvt-skusellers-skuId.
+      operations:
+      - method: GET
+        name: getbyskuid
+        description: VTex Get SKU Bindings by SKU ID
+        call: sku-bindings-sku-bindings.getbyskuid
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          skuId: rest.skuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/activate/{sellerid}/{skusellerid}
+      name: sku-binding-pvt-skuseller-activate-sellerid-skusellerid
+      description: REST surface for sku-binding-pvt-skuseller-activate-sellerId-skuSellerId.
+      operations:
+      - method: POST
+        name: activateskubinding
+        description: VTex Activate SKU Binding
+        call: sku-bindings-sku-bindings.activateskubinding
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+          skuSellerId: rest.skuSellerId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/admin
+      name: sku-binding-pvt-skuseller-admin
+      description: REST surface for sku-binding-pvt-skuseller-admin.
+      operations:
+      - method: GET
+        name: getpagedadmin
+        description: VTex Get SKU Bindings information
+        call: sku-bindings-sku-bindings.getpagedadmin
+        with:
+          sellerId: rest.sellerId
+          skuId: rest.skuId
+          sellerSkuId: rest.sellerSkuId
+          isActive: rest.isActive
+          size: rest.size
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/changenotification/{sellerid}/{sellerskuid}
+      name: sku-binding-pvt-skuseller-changenotification-sellerid-sellerskuid
+      description: REST surface for sku-binding-pvt-skuseller-changenotification-sellerId-sellerSkuId.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Change Notification with Seller ID and Seller SKU ID
+        call: sku-bindings-sku-bindings.post
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/changenotification/{skuid}
+      name: sku-binding-pvt-skuseller-changenotification-skuid
+      description: REST surface for sku-binding-pvt-skuseller-changenotification-skuId.
+      operations:
+      - method: POST
+        name: changenotification
+        description: VTex Change Notification with SKU ID
+        call: sku-bindings-sku-bindings.changenotification
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          skuId: rest.skuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/inactivate/{sellerid}/{skusellerid}
+      name: sku-binding-pvt-skuseller-inactivate-sellerid-skusellerid
+      description: REST surface for sku-binding-pvt-skuseller-inactivate-sellerId-skuSellerId.
+      operations:
+      - method: POST
+        name: deactivateskubinding
+        description: VTex Deactivate SKU Binding
+        call: sku-bindings-sku-bindings.deactivateskubinding
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+          skuSellerId: rest.skuSellerId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/insertion
+      name: sku-binding-pvt-skuseller-insertion
+      description: REST surface for sku-binding-pvt-skuseller-insertion.
+      operations:
+      - method: POST
+        name: insertskubinding
+        description: VTex Insert SKU Binding
+        call: sku-bindings-sku-bindings.insertskubinding
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/list/bysellerid/{sellerid}
+      name: sku-binding-pvt-skuseller-list-bysellerid-sellerid
+      description: REST surface for sku-binding-pvt-skuseller-list-bysellerId-sellerId.
+      operations:
+      - method: GET
+        name: getallbysellerid
+        description: VTex Get all SKU Bindings by Seller ID
+        call: sku-bindings-sku-bindings.getallbysellerid
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/paged/sellerid/{sellerid}
+      name: sku-binding-pvt-skuseller-paged-sellerid-sellerid
+      description: REST surface for sku-binding-pvt-skuseller-paged-sellerid-sellerId.
+      operations:
+      - method: GET
+        name: getpagedbysellerid
+        description: VTex Get paged SKU Bindings by Seller ID
+        call: sku-bindings-sku-bindings.getpagedbysellerid
+        with:
+          page: rest.page
+          size: rest.size
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/remove/{sellerid}/{sellerskuid}
+      name: sku-binding-pvt-skuseller-remove-sellerid-sellerskuid
+      description: REST surface for sku-binding-pvt-skuseller-remove-sellerId-sellerSkuId.
+      operations:
+      - method: POST
+        name: deleteskusellerassociation
+        description: VTex Remove a seller's SKU Binding
+        call: sku-bindings-sku-bindings.deleteskusellerassociation
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sku-binding/pvt/skuseller/{sellerid}/{sellerskuid}
+      name: sku-binding-pvt-skuseller-sellerid-sellerskuid
+      description: REST surface for sku-binding-pvt-skuseller-sellerId-sellerSkuId.
+      operations:
+      - method: GET
+        name: getskuseller
+        description: VTex Get details of a seller's SKU
+        call: sku-bindings-sku-bindings.getskuseller
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: bindtoanothersku
+        description: VTex Bind a seller's SKU to another SKU
+        call: sku-bindings-sku-bindings.bindtoanothersku
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          sellerId: rest.sellerId
+          sellerSkuId: rest.sellerSkuId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sku-bindings-sku-bindings-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex SKU Bindings API — SKU Bindings. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-get-sku-bindings-sku
+      description: VTex Get SKU Bindings by SKU ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sku-bindings-sku-bindings.getbyskuid
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        skuId: tools.skuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-activate-sku-binding
+      description: VTex Activate SKU Binding
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sku-bindings-sku-bindings.activateskubinding
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+        skuSellerId: tools.skuSellerId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku-bindings-information
+      description: VTex Get SKU Bindings information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sku-bindings-sku-bindings.getpagedadmin
+      with:
+        sellerId: tools.sellerId
+        skuId: tools.skuId
+        sellerSkuId: tools.sellerSkuId
+        isActive: tools.isActive
+        size: tools.size
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-change-notification-seller-id
+      description: VTex Change Notification with Seller ID and Seller SKU ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sku-bindings-sku-bindings.post
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-change-notification-sku-id
+      description: VTex Change Notification with SKU ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sku-bindings-sku-bindings.changenotification
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        skuId: tools.skuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-deactivate-sku-binding
+      description: VTex Deactivate SKU Binding
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sku-bindings-sku-bindings.deactivateskubinding
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+        skuSellerId: tools.skuSellerId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-insert-sku-binding
+      description: VTex Insert SKU Binding
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sku-bindings-sku-bindings.insertskubinding
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-all-sku-bindings
+      description: VTex Get all SKU Bindings by Seller ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sku-bindings-sku-bindings.getallbysellerid
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-paged-sku-bindings
+      description: VTex Get paged SKU Bindings by Seller ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sku-bindings-sku-bindings.getpagedbysellerid
+      with:
+        page: tools.page
+        size: tools.size
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-remove-seller-s-sku-binding
+      description: VTex Remove a seller's SKU Binding
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sku-bindings-sku-bindings.deleteskusellerassociation
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-details-seller-s-sku
+      description: VTex Get details of a seller's SKU
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sku-bindings-sku-bindings.getskuseller
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-bind-seller-s-sku-another
+      description: VTex Bind a seller's SKU to another SKU
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: sku-bindings-sku-bindings.bindtoanothersku
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        sellerId: tools.sellerId
+        sellerSkuId: tools.sellerSkuId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,235 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Legacy Search API — Search
+  description: 'VTex Legacy Search API — Search. 3 operations. Lead operation: VTex Search for Products with Filter, Order
+    and Pagination. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Search
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: legacy-search-search
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Legacy Search API — Search business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog_system-pub-products-search
+      path: /api/catalog_system/pub/products/search
+      operations:
+      - name: productsearchfilteredandordered
+        method: GET
+        description: VTex Search for Products with Filter, Order and Pagination
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: _from
+          in: query
+          type: string
+          description: 'Starting page of the pagination range. This number must be below or equal to 2500 for the query to
+            work. Note that the difference between the initial and final '
+        - name: _to
+          in: query
+          type: string
+          description: Final page of the pagination range. Note that the difference between the initial and final pages cannot
+            exceed 50 pages. Therefore, each page will display a max
+        - name: ft
+          in: query
+          type: string
+          description: Filter by full text. The form is`ft={searchWord}`.
+        - name: fq
+          in: query
+          type: string
+          description: General filter. It can be by category (`fq=C:/{a}/{b}`), by specification (`fq=specificationFilter_{a}:{b}`),  by
+            price range (`fq=P:[{a} TO {b}]`), by collecti
+        - name: O
+          in: query
+          type: string
+          description: Sorting method. It can be by Price (`O=OrderByPriceDESC` or `O=OrderByPriceASC`), by Top Selling Products
+            (`O=OrderByTopSaleDESC`), by Best Reviews (`O=OrderByR
+    - name: api-catalog_system-pub-products-search-product-text-link-p
+      path: /api/catalog_system/pub/products/search/{product-text-link}/p
+      operations:
+      - name: searchbyproducturl
+        method: GET
+        description: VTex Search Product by Product URL
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: product-text-link
+          in: path
+          type: string
+          description: Product URL
+          required: true
+    - name: api-catalog_system-pub-products-search-search
+      path: /api/catalog_system/pub/products/search/{search}
+      operations:
+      - name: productsearch
+        method: GET
+        description: VTex Search for Products
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: search
+          in: path
+          type: string
+          description: Term used to search products
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: legacy-search-search-rest
+    port: 8080
+    description: REST adapter for VTex Legacy Search API — Search. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog-system/pub/products/search
+      name: api-catalog-system-pub-products-search
+      description: REST surface for api-catalog_system-pub-products-search.
+      operations:
+      - method: GET
+        name: productsearchfilteredandordered
+        description: VTex Search for Products with Filter, Order and Pagination
+        call: legacy-search-search.productsearchfilteredandordered
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          _from: rest._from
+          _to: rest._to
+          ft: rest.ft
+          fq: rest.fq
+          O: rest.O
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pub/products/search/{product-text-link}/p
+      name: api-catalog-system-pub-products-search-product-text-link-p
+      description: REST surface for api-catalog_system-pub-products-search-product-text-link-p.
+      operations:
+      - method: GET
+        name: searchbyproducturl
+        description: VTex Search Product by Product URL
+        call: legacy-search-search.searchbyproducturl
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          product-text-link: rest.product-text-link
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pub/products/search/{search}
+      name: api-catalog-system-pub-products-search-search
+      description: REST surface for api-catalog_system-pub-products-search-search.
+      operations:
+      - method: GET
+        name: productsearch
+        description: VTex Search for Products
+        call: legacy-search-search.productsearch
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          search: rest.search
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: legacy-search-search-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Legacy Search API — Search. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-search-products-filter-order
+      description: VTex Search for Products with Filter, Order and Pagination
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: legacy-search-search.productsearchfilteredandordered
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        _from: tools._from
+        _to: tools._to
+        ft: tools.ft
+        fq: tools.fq
+        O: tools.O
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-search-product-product-url
+      description: VTex Search Product by Product URL
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: legacy-search-search.searchbyproducturl
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        product-text-link: tools.product-text-link
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-search-products
+      description: VTex Search for Products
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: legacy-search-search.productsearch
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        search: tools.search
+      outputParameters:
+      - type: object
+        mapping: $.

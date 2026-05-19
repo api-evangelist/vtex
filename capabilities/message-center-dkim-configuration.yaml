@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Message Center API — DKIM Configuration
+  description: 'VTex Message Center API — DKIM Configuration. 1 operations. Lead operation: VTex Generate DKIM keys. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - DKIM Configuration
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: message-center-dkim-configuration
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Message Center API — DKIM Configuration business capability. Self-contained, no shared references.
+    resources:
+    - name: api-mail-service-pvt-providers-EmailProvider-dkim
+      path: /api/mail-service/pvt/providers/{EmailProvider}/dkim
+      operations:
+      - name: createdkim
+        method: POST
+        description: VTex Generate DKIM keys
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: EmailProvider
+          in: path
+          type: string
+          description: E-mail address for sender that was setup in VTEX mail servers
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: message-center-dkim-configuration-rest
+    port: 8080
+    description: REST adapter for VTex Message Center API — DKIM Configuration. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/mail-service/pvt/providers/{emailprovider}/dkim
+      name: api-mail-service-pvt-providers-emailprovider-dkim
+      description: REST surface for api-mail-service-pvt-providers-EmailProvider-dkim.
+      operations:
+      - method: POST
+        name: createdkim
+        description: VTex Generate DKIM keys
+        call: message-center-dkim-configuration.createdkim
+        with:
+          EmailProvider: rest.EmailProvider
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: message-center-dkim-configuration-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Message Center API — DKIM Configuration. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: vtex-generate-dkim-keys
+      description: VTex Generate DKIM keys
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: message-center-dkim-configuration.createdkim
+      with:
+        EmailProvider: tools.EmailProvider
+      outputParameters:
+      - type: object
+        mapping: $.

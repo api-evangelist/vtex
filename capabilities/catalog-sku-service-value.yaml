@@ -1,0 +1,201 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — SKU Service Value
+  description: 'VTex Catalog API — SKU Service Value. 4 operations. Lead operation: VTex Create SKU service value. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - SKU Service Value
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-sku-service-value
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — SKU Service Value business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-skuservicevalue
+      path: /api/catalog/pvt/skuservicevalue
+      operations:
+      - name: post
+        method: POST
+        description: VTex Create SKU service value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-skuservicevalue-skuServiceValueId
+      path: /api/catalog/pvt/skuservicevalue/{skuServiceValueId}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get SKU service value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuServiceValueId
+          in: path
+          type: integer
+          description: SKU service value unique identifier.
+          required: true
+      - name: put
+        method: PUT
+        description: VTex Update SKU service value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuServiceValueId
+          in: path
+          type: integer
+          description: SKU service value unique identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: delete
+        method: DELETE
+        description: VTex Delete SKU service value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: skuServiceValueId
+          in: path
+          type: integer
+          description: SKU service value unique identifier.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-sku-service-value-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — SKU Service Value. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/skuservicevalue
+      name: api-catalog-pvt-skuservicevalue
+      description: REST surface for api-catalog-pvt-skuservicevalue.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Create SKU service value
+        call: catalog-sku-service-value.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/skuservicevalue/{skuservicevalueid}
+      name: api-catalog-pvt-skuservicevalue-skuservicevalueid
+      description: REST surface for api-catalog-pvt-skuservicevalue-skuServiceValueId.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get SKU service value
+        call: catalog-sku-service-value.get
+        with:
+          skuServiceValueId: rest.skuServiceValueId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: put
+        description: VTex Update SKU service value
+        call: catalog-sku-service-value.put
+        with:
+          skuServiceValueId: rest.skuServiceValueId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete
+        description: VTex Delete SKU service value
+        call: catalog-sku-service-value.delete
+        with:
+          skuServiceValueId: rest.skuServiceValueId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-sku-service-value-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — SKU Service Value. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-sku-service-value
+      description: VTex Create SKU service value
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-sku-service-value.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-sku-service-value
+      description: VTex Get SKU service value
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-sku-service-value.get
+      with:
+        skuServiceValueId: tools.skuServiceValueId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-sku-service-value
+      description: VTex Update SKU service value
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-sku-service-value.put
+      with:
+        skuServiceValueId: tools.skuServiceValueId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-sku-service-value
+      description: VTex Delete SKU service value
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: catalog-sku-service-value.delete
+      with:
+        skuServiceValueId: tools.skuServiceValueId
+      outputParameters:
+      - type: object
+        mapping: $.

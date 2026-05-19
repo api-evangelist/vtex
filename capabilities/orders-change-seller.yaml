@@ -1,0 +1,138 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Orders API — Change Seller
+  description: 'VTex Orders API — Change Seller. 2 operations. Lead operation: VTex Get window to change seller. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Change Seller
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: orders-change-seller
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Orders API — Change Seller business capability. Self-contained, no shared references.
+    resources:
+    - name: api-checkout-pvt-configuration-window-to-change-seller
+      path: /api/checkout/pvt/configuration/window-to-change-seller
+      operations:
+      - name: getwindowtochangeseller
+        method: GET
+        description: VTex Get window to change seller
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: updatewindowtochangeseller
+        method: POST
+        description: VTex Update window to change seller
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: orders-change-seller-rest
+    port: 8080
+    description: REST adapter for VTex Orders API — Change Seller. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/checkout/pvt/configuration/window-to-change-seller
+      name: api-checkout-pvt-configuration-window-to-change-seller
+      description: REST surface for api-checkout-pvt-configuration-window-to-change-seller.
+      operations:
+      - method: GET
+        name: getwindowtochangeseller
+        description: VTex Get window to change seller
+        call: orders-change-seller.getwindowtochangeseller
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: updatewindowtochangeseller
+        description: VTex Update window to change seller
+        call: orders-change-seller.updatewindowtochangeseller
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: orders-change-seller-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Orders API — Change Seller. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-get-window-change-seller
+      description: VTex Get window to change seller
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: orders-change-seller.getwindowtochangeseller
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-window-change-seller
+      description: VTex Update window to change seller
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: orders-change-seller.updatewindowtochangeseller
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

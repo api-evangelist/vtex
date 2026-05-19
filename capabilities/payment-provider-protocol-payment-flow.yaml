@@ -1,0 +1,290 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Payment Provider Protocol API — Payment Flow
+  description: 'VTex Payment Provider Protocol API — Payment Flow. 6 operations. Lead operation: VTex List Payment Provider
+    Manifest. Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Payment Flow
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-provider-protocol-payment-flow
+    baseUri: https://{providerApiEndpoint}
+    description: VTex Payment Provider Protocol API — Payment Flow business capability. Self-contained, no shared references.
+    resources:
+    - name: manifest
+      path: /manifest
+      operations:
+      - name: manifest
+        method: GET
+        description: VTex List Payment Provider Manifest
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: payments
+      path: /payments
+      operations:
+      - name: createpayment
+        method: POST
+        description: VTex Create payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-paymentId-cancellations
+      path: /payments/{paymentId}/cancellations
+      operations:
+      - name: cancelpayment
+        method: POST
+        description: VTex Cancel payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-paymentId-inbound-action
+      path: /payments/{paymentId}/inbound/{action}
+      operations:
+      - name: inboundrequestbeta
+        method: POST
+        description: VTex Inbound request (BETA)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: action
+          in: path
+          type: string
+          description: Describes the type of action that will be performed on the route (e.g. hook, enrollment, among others).
+            It is the same `:action` information used in the `inboun
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-paymentId-refunds
+      path: /payments/{paymentId}/refunds
+      operations:
+      - name: refundpayment
+        method: POST
+        description: VTex Refund payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-paymentId-settlements
+      path: /payments/{paymentId}/settlements
+      operations:
+      - name: settlepayment
+        method: POST
+        description: VTex Settle payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: payment-provider-protocol-payment-flow-rest
+    port: 8080
+    description: REST adapter for VTex Payment Provider Protocol API — Payment Flow. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/manifest
+      name: manifest
+      description: REST surface for manifest.
+      operations:
+      - method: GET
+        name: manifest
+        description: VTex List Payment Provider Manifest
+        call: payment-provider-protocol-payment-flow.manifest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments
+      name: payments
+      description: REST surface for payments.
+      operations:
+      - method: POST
+        name: createpayment
+        description: VTex Create payment
+        call: payment-provider-protocol-payment-flow.createpayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}/cancellations
+      name: payments-paymentid-cancellations
+      description: REST surface for payments-paymentId-cancellations.
+      operations:
+      - method: POST
+        name: cancelpayment
+        description: VTex Cancel payment
+        call: payment-provider-protocol-payment-flow.cancelpayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}/inbound/{action}
+      name: payments-paymentid-inbound-action
+      description: REST surface for payments-paymentId-inbound-action.
+      operations:
+      - method: POST
+        name: inboundrequestbeta
+        description: VTex Inbound request (BETA)
+        call: payment-provider-protocol-payment-flow.inboundrequestbeta
+        with:
+          action: rest.action
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}/refunds
+      name: payments-paymentid-refunds
+      description: REST surface for payments-paymentId-refunds.
+      operations:
+      - method: POST
+        name: refundpayment
+        description: VTex Refund payment
+        call: payment-provider-protocol-payment-flow.refundpayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}/settlements
+      name: payments-paymentid-settlements
+      description: REST surface for payments-paymentId-settlements.
+      operations:
+      - method: POST
+        name: settlepayment
+        description: VTex Settle payment
+        call: payment-provider-protocol-payment-flow.settlepayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-provider-protocol-payment-flow-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Payment Provider Protocol API — Payment Flow. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: vtex-list-payment-provider-manifest
+      description: VTex List Payment Provider Manifest
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payment-provider-protocol-payment-flow.manifest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-payment
+      description: VTex Create payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-provider-protocol-payment-flow.createpayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-cancel-payment
+      description: VTex Cancel payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-provider-protocol-payment-flow.cancelpayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-inbound-request-beta
+      description: VTex Inbound request (BETA)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-provider-protocol-payment-flow.inboundrequestbeta
+      with:
+        action: tools.action
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-refund-payment
+      description: VTex Refund payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-provider-protocol-payment-flow.refundpayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-settle-payment
+      description: VTex Settle payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-provider-protocol-payment-flow.settlepayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,341 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Orders API — Feed V3
+  description: 'VTex Orders API — Feed V3. 6 operations. Lead operation: VTex Test JSONata expression. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Feed V3
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: orders-feed-v3
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Orders API — Feed V3 business capability. Self-contained, no shared references.
+    resources:
+    - name: api-orders-expressions-jsonata
+      path: /api/orders/expressions/jsonata
+      operations:
+      - name: testjsonataexpression
+        method: POST
+        description: VTex Test JSONata expression
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-orders-feed
+      path: /api/orders/feed
+      operations:
+      - name: getfeedorderstatus1
+        method: GET
+        description: VTex Retrieve feed items
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: maxlot
+          in: query
+          type: string
+          description: Lot quantity to retrieve. Maximum accepted value is 10.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent
+          required: true
+      - name: commititemfeedorderstatus
+        method: POST
+        description: VTex Commit feed items
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-orders-feed-config
+      path: /api/orders/feed/config
+      operations:
+      - name: getfeedconfiguration
+        method: GET
+        description: VTex Get feed configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+          required: true
+      - name: feedconfiguration
+        method: POST
+        description: VTex Create or update feed configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: feedconfigurationdelete
+        method: DELETE
+        description: VTex Delete feed configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: orders-feed-v3-rest
+    port: 8080
+    description: REST adapter for VTex Orders API — Feed V3. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/orders/expressions/jsonata
+      name: api-orders-expressions-jsonata
+      description: REST surface for api-orders-expressions-jsonata.
+      operations:
+      - method: POST
+        name: testjsonataexpression
+        description: VTex Test JSONata expression
+        call: orders-feed-v3.testjsonataexpression
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/orders/feed
+      name: api-orders-feed
+      description: REST surface for api-orders-feed.
+      operations:
+      - method: GET
+        name: getfeedorderstatus1
+        description: VTex Retrieve feed items
+        call: orders-feed-v3.getfeedorderstatus1
+        with:
+          maxlot: rest.maxlot
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: commititemfeedorderstatus
+        description: VTex Commit feed items
+        call: orders-feed-v3.commititemfeedorderstatus
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/orders/feed/config
+      name: api-orders-feed-config
+      description: REST surface for api-orders-feed-config.
+      operations:
+      - method: GET
+        name: getfeedconfiguration
+        description: VTex Get feed configuration
+        call: orders-feed-v3.getfeedconfiguration
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: feedconfiguration
+        description: VTex Create or update feed configuration
+        call: orders-feed-v3.feedconfiguration
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: feedconfigurationdelete
+        description: VTex Delete feed configuration
+        call: orders-feed-v3.feedconfigurationdelete
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: orders-feed-v3-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Orders API — Feed V3. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: vtex-test-jsonata-expression
+      description: VTex Test JSONata expression
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: orders-feed-v3.testjsonataexpression
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-retrieve-feed-items
+      description: VTex Retrieve feed items
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: orders-feed-v3.getfeedorderstatus1
+      with:
+        maxlot: tools.maxlot
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-commit-feed-items
+      description: VTex Commit feed items
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: orders-feed-v3.commititemfeedorderstatus
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-feed-configuration
+      description: VTex Get feed configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: orders-feed-v3.getfeedconfiguration
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-update-feed-configuration
+      description: VTex Create or update feed configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: orders-feed-v3.feedconfiguration
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-feed-configuration
+      description: VTex Delete feed configuration
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: orders-feed-v3.feedconfigurationdelete
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+      outputParameters:
+      - type: object
+        mapping: $.

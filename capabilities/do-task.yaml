@@ -1,0 +1,349 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTEX Do API — Task
+  description: 'VTEX Do API — Task. 5 operations. Lead operation: VTex Create Task. Self-contained Naftiko capability covering
+    one Vtex business surface.'
+  tags:
+  - Vtex
+  - Task
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: do-task
+    baseUri: https://{accountName}.{environment}.com.br/api/do
+    description: VTEX Do API — Task business capability. Self-contained, no shared references.
+    resources:
+    - name: tasks
+      path: /tasks
+      operations:
+      - name: newtask
+        method: POST
+        description: VTex Create Task
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: listtasksbyassignee
+        method: GET
+        description: VTex List tasks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: assignee.email
+          in: query
+          type: string
+          description: If you wish to list tasks by assignee, insert the desired assignee's email and status.
+        - name: target.id
+          in: query
+          type: string
+          description: If you wish to list tasks by target, insert the desired `targetId` and `status`.
+        - name: context
+          in: query
+          type: string
+          description: If you wish to list tasks by context, insert the desired context, `page`, `perPage` and `status`.
+        - name: page
+          in: query
+          type: string
+          description: If you wish to list tasks by context, also insert the desired `page`.
+        - name: perPage
+          in: query
+          type: string
+          description: If you wish to list tasks by context, also insert the desired `perPage` value.
+        - name: status
+          in: query
+          type: string
+          description: If you wish to list tasks by context, also insert the desired `status`.
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+    - name: tasks-taskId
+      path: /tasks/{taskId}
+      operations:
+      - name: gettask
+        method: GET
+        description: VTex Retrieve Task
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: taskId
+          in: path
+          type: string
+          description: Task ID.
+          required: true
+      - name: edittask
+        method: PUT
+        description: VTex Update Task
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: taskId
+          in: path
+          type: string
+          description: Task ID.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: tasks-taskId-comments
+      path: /tasks/{taskId}/comments
+      operations:
+      - name: addcomment
+        method: POST
+        description: VTex Add Comment on a Task
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Type of the content being sent.
+          required: true
+        - name: taskId
+          in: path
+          type: string
+          description: Task ID.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: do-task-rest
+    port: 8080
+    description: REST adapter for VTEX Do API — Task. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/tasks
+      name: tasks
+      description: REST surface for tasks.
+      operations:
+      - method: POST
+        name: newtask
+        description: VTex Create Task
+        call: do-task.newtask
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: listtasksbyassignee
+        description: VTex List tasks
+        call: do-task.listtasksbyassignee
+        with:
+          assignee.email: rest.assignee.email
+          target.id: rest.target.id
+          context: rest.context
+          page: rest.page
+          perPage: rest.perPage
+          status: rest.status
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/tasks/{taskid}
+      name: tasks-taskid
+      description: REST surface for tasks-taskId.
+      operations:
+      - method: GET
+        name: gettask
+        description: VTex Retrieve Task
+        call: do-task.gettask
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          taskId: rest.taskId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: edittask
+        description: VTex Update Task
+        call: do-task.edittask
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          taskId: rest.taskId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/tasks/{taskid}/comments
+      name: tasks-taskid-comments
+      description: REST surface for tasks-taskId-comments.
+      operations:
+      - method: POST
+        name: addcomment
+        description: VTex Add Comment on a Task
+        call: do-task.addcomment
+        with:
+          Accept: rest.Accept
+          Content-Type: rest.Content-Type
+          taskId: rest.taskId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: do-task-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTEX Do API — Task. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: vtex-create-task
+      description: VTex Create Task
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: do-task.newtask
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-list-tasks
+      description: VTex List tasks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: do-task.listtasksbyassignee
+      with:
+        assignee.email: tools.assignee.email
+        target.id: tools.target.id
+        context: tools.context
+        page: tools.page
+        perPage: tools.perPage
+        status: tools.status
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-retrieve-task
+      description: VTex Retrieve Task
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: do-task.gettask
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        taskId: tools.taskId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-task
+      description: VTex Update Task
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: do-task.edittask
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        taskId: tools.taskId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-add-comment-task
+      description: VTex Add Comment on a Task
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: do-task.addcomment
+      with:
+        Accept: tools.Accept
+        Content-Type: tools.Content-Type
+        taskId: tools.taskId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

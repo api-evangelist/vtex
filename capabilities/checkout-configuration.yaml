@@ -1,0 +1,223 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Checkout API — Configuration
+  description: 'VTex Checkout API — Configuration. 5 operations. Lead operation: VTex Clear orderForm messages. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Configuration
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: checkout-configuration
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Checkout API — Configuration business capability. Self-contained, no shared references.
+    resources:
+    - name: api-checkout-pub-orderForm-orderFormId-messages-clear
+      path: /api/checkout/pub/orderForm/{orderFormId}/messages/clear
+      operations:
+      - name: clearorderformmessages
+        method: POST
+        description: VTex Clear orderForm messages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: orderFormId
+          in: path
+          type: string
+          description: ID of the orderForm corresponding to the cart whose messages you want to remove.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-checkout-pvt-configuration-orderForm
+      path: /api/checkout/pvt/configuration/orderForm
+      operations:
+      - name: getorderformconfiguration
+        method: GET
+        description: VTex Get orderForm configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateorderformconfiguration
+        method: POST
+        description: VTex Update orderForm configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-checkout-pvt-configuration-window-to-change-seller
+      path: /api/checkout/pvt/configuration/window-to-change-seller
+      operations:
+      - name: getwindowtochangeseller
+        method: GET
+        description: VTex Get window to change seller
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatewindowtochangeseller
+        method: POST
+        description: VTex Update window to change seller
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: checkout-configuration-rest
+    port: 8080
+    description: REST adapter for VTex Checkout API — Configuration. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/checkout/pub/orderform/{orderformid}/messages/clear
+      name: api-checkout-pub-orderform-orderformid-messages-clear
+      description: REST surface for api-checkout-pub-orderForm-orderFormId-messages-clear.
+      operations:
+      - method: POST
+        name: clearorderformmessages
+        description: VTex Clear orderForm messages
+        call: checkout-configuration.clearorderformmessages
+        with:
+          orderFormId: rest.orderFormId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pvt/configuration/orderform
+      name: api-checkout-pvt-configuration-orderform
+      description: REST surface for api-checkout-pvt-configuration-orderForm.
+      operations:
+      - method: GET
+        name: getorderformconfiguration
+        description: VTex Get orderForm configuration
+        call: checkout-configuration.getorderformconfiguration
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: updateorderformconfiguration
+        description: VTex Update orderForm configuration
+        call: checkout-configuration.updateorderformconfiguration
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/checkout/pvt/configuration/window-to-change-seller
+      name: api-checkout-pvt-configuration-window-to-change-seller
+      description: REST surface for api-checkout-pvt-configuration-window-to-change-seller.
+      operations:
+      - method: GET
+        name: getwindowtochangeseller
+        description: VTex Get window to change seller
+        call: checkout-configuration.getwindowtochangeseller
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: updatewindowtochangeseller
+        description: VTex Update window to change seller
+        call: checkout-configuration.updatewindowtochangeseller
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: checkout-configuration-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Checkout API — Configuration. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-clear-orderform-messages
+      description: VTex Clear orderForm messages
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-configuration.clearorderformmessages
+      with:
+        orderFormId: tools.orderFormId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-orderform-configuration
+      description: VTex Get orderForm configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: checkout-configuration.getorderformconfiguration
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-orderform-configuration
+      description: VTex Update orderForm configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-configuration.updateorderformconfiguration
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-window-change-seller
+      description: VTex Get window to change seller
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: checkout-configuration.getwindowtochangeseller
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-window-change-seller
+      description: VTex Update window to change seller
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-configuration.updatewindowtochangeseller
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

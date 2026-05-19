@@ -1,0 +1,275 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Policies System API — Policy
+  description: 'VTex Policies System API — Policy. 6 operations. Lead operation: VTex Evaluate policies. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Policy
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: policies-system-policy
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Policies System API — Policy business capability. Self-contained, no shared references.
+    resources:
+    - name: api-policy-engine-evaluate
+      path: /api/policy-engine/evaluate
+      operations:
+      - name: policyevaluate
+        method: POST
+        description: VTex Evaluate policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-policy-engine-policies
+      path: /api/policy-engine/policies
+      operations:
+      - name: policylist
+        method: GET
+        description: VTex Get policy list
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-policy-engine-policies-id
+      path: /api/policy-engine/policies/{id}
+      operations:
+      - name: policyget
+        method: GET
+        description: VTex Get policy by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Policy ID.
+          required: true
+      - name: policycreateorupdate
+        method: POST
+        description: VTex Create policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Policy ID.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: put
+        method: PUT
+        description: VTex Update policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Policy ID.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: policydelete
+        method: DELETE
+        description: VTex Delete policy by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Policy ID.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: policies-system-policy-rest
+    port: 8080
+    description: REST adapter for VTex Policies System API — Policy. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/policy-engine/evaluate
+      name: api-policy-engine-evaluate
+      description: REST surface for api-policy-engine-evaluate.
+      operations:
+      - method: POST
+        name: policyevaluate
+        description: VTex Evaluate policies
+        call: policies-system-policy.policyevaluate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/policy-engine/policies
+      name: api-policy-engine-policies
+      description: REST surface for api-policy-engine-policies.
+      operations:
+      - method: GET
+        name: policylist
+        description: VTex Get policy list
+        call: policies-system-policy.policylist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/policy-engine/policies/{id}
+      name: api-policy-engine-policies-id
+      description: REST surface for api-policy-engine-policies-id.
+      operations:
+      - method: GET
+        name: policyget
+        description: VTex Get policy by ID
+        call: policies-system-policy.policyget
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: policycreateorupdate
+        description: VTex Create policy
+        call: policies-system-policy.policycreateorupdate
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: put
+        description: VTex Update policy
+        call: policies-system-policy.put
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: policydelete
+        description: VTex Delete policy by ID
+        call: policies-system-policy.policydelete
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: policies-system-policy-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Policies System API — Policy. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-evaluate-policies
+      description: VTex Evaluate policies
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: policies-system-policy.policyevaluate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-policy-list
+      description: VTex Get policy list
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: policies-system-policy.policylist
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-policy-id
+      description: VTex Get policy by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: policies-system-policy.policyget
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-policy
+      description: VTex Create policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: policies-system-policy.policycreateorupdate
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-policy
+      description: VTex Update policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: policies-system-policy.put
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-policy-id
+      description: VTex Delete policy by ID
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: policies-system-policy.policydelete
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.

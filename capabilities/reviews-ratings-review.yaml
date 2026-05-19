@@ -1,0 +1,446 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Reviews and Ratings API — Review
+  description: 'VTex Reviews and Ratings API — Review. 7 operations. Lead operation: VTex Create a review. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Review
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: reviews-ratings-review
+    baseUri: https://{accountName}.myvtex.com
+    description: VTex Reviews and Ratings API — Review business capability. Self-contained, no shared references.
+    resources:
+    - name: reviews-and-ratings-api-review
+      path: /reviews-and-ratings/api/review
+      operations:
+      - name: savereview
+        method: POST
+        description: VTex Create a review
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: reviews-and-ratings-api-review-reviewId
+      path: /reviews-and-ratings/api/review/{reviewId}
+      operations:
+      - name: getreviewbyreviewid
+        method: GET
+        description: VTex Get product review by review ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reviewId
+          in: path
+          type: string
+          description: Review ID.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: deletereview
+        method: DELETE
+        description: VTex Delete review
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reviewId
+          in: path
+          type: string
+          description: Review ID.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: editreview
+        method: PATCH
+        description: VTex Update a review
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reviewId
+          in: path
+          type: string
+          description: Review ID.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: reviews-and-ratings-api-reviews
+      path: /reviews-and-ratings/api/reviews
+      operations:
+      - name: getalistofreviews
+        method: GET
+        description: VTex Get list of reviews
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: search_term
+          in: query
+          type: string
+          description: Returns Reviews that contain the search term in `productId`, `sku`, `shopperId`, or `reviewerName`.
+          required: true
+        - name: from
+          in: query
+          type: string
+          description: Zero base starting record number, `0` is the default value.
+          required: true
+        - name: to
+          in: query
+          type: string
+          description: Zero base ending record number, `3` is the default value.
+          required: true
+        - name: order_by
+          in: query
+          type: string
+          description: Case-sensitive fieldName to order records (optionally add `:asc` or `:desc`).
+          required: true
+        - name: status
+          in: query
+          type: boolean
+          description: Status of the review, approved (`true`) or not (`false`).
+          required: true
+        - name: product_id
+          in: query
+          type: string
+          description: Filter the reviews by product ID.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+      - name: savemultiplereviews
+        method: POST
+        description: VTex Create multiple reviews
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletemultiplereviews
+        method: DELETE
+        description: VTex Delete multiple reviews
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: reviews-ratings-review-rest
+    port: 8080
+    description: REST adapter for VTex Reviews and Ratings API — Review. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/reviews-and-ratings/api/review
+      name: reviews-and-ratings-api-review
+      description: REST surface for reviews-and-ratings-api-review.
+      operations:
+      - method: POST
+        name: savereview
+        description: VTex Create a review
+        call: reviews-ratings-review.savereview
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reviews-and-ratings/api/review/{reviewid}
+      name: reviews-and-ratings-api-review-reviewid
+      description: REST surface for reviews-and-ratings-api-review-reviewId.
+      operations:
+      - method: GET
+        name: getreviewbyreviewid
+        description: VTex Get product review by review ID
+        call: reviews-ratings-review.getreviewbyreviewid
+        with:
+          reviewId: rest.reviewId
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletereview
+        description: VTex Delete review
+        call: reviews-ratings-review.deletereview
+        with:
+          reviewId: rest.reviewId
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: editreview
+        description: VTex Update a review
+        call: reviews-ratings-review.editreview
+        with:
+          reviewId: rest.reviewId
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reviews-and-ratings/api/reviews
+      name: reviews-and-ratings-api-reviews
+      description: REST surface for reviews-and-ratings-api-reviews.
+      operations:
+      - method: GET
+        name: getalistofreviews
+        description: VTex Get list of reviews
+        call: reviews-ratings-review.getalistofreviews
+        with:
+          search_term: rest.search_term
+          from: rest.from
+          to: rest.to
+          order_by: rest.order_by
+          status: rest.status
+          product_id: rest.product_id
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: savemultiplereviews
+        description: VTex Create multiple reviews
+        call: reviews-ratings-review.savemultiplereviews
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletemultiplereviews
+        description: VTex Delete multiple reviews
+        call: reviews-ratings-review.deletemultiplereviews
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: reviews-ratings-review-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Reviews and Ratings API — Review. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-review
+      description: VTex Create a review
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: reviews-ratings-review.savereview
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-product-review-review
+      description: VTex Get product review by review ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: reviews-ratings-review.getreviewbyreviewid
+      with:
+        reviewId: tools.reviewId
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-review
+      description: VTex Delete review
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: reviews-ratings-review.deletereview
+      with:
+        reviewId: tools.reviewId
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-review
+      description: VTex Update a review
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: reviews-ratings-review.editreview
+      with:
+        reviewId: tools.reviewId
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-list-reviews
+      description: VTex Get list of reviews
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: reviews-ratings-review.getalistofreviews
+      with:
+        search_term: tools.search_term
+        from: tools.from
+        to: tools.to
+        order_by: tools.order_by
+        status: tools.status
+        product_id: tools.product_id
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-multiple-reviews
+      description: VTex Create multiple reviews
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: reviews-ratings-review.savemultiplereviews
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-multiple-reviews
+      description: VTex Delete multiple reviews
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: reviews-ratings-review.deletemultiplereviews
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

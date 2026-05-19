@@ -1,0 +1,263 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Profile System - PII data architecture — Prospects
+  description: 'VTex Profile System - PII data architecture — Prospects. 7 operations. Lead operation: VTex Create prospect.
+    Self-contained Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Prospects
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: profile-system-prospects
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Profile System - PII data architecture — Prospects business capability. Self-contained, no shared references.
+    resources:
+    - name: api-storage-profile-system-prospects
+      path: /api/storage/profile-system/prospects
+      operations:
+      - name: createprospect
+        method: POST
+        description: VTex Create prospect
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getprospects
+        method: GET
+        description: VTex Get prospects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-prospects-unmask
+      path: /api/storage/profile-system/prospects/unmask
+      operations:
+      - name: getunmaskedprospects
+        method: GET
+        description: VTex Get unmasked prospects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-prospects-prospectId
+      path: /api/storage/profile-system/prospects/{prospectId}
+      operations:
+      - name: getprospect
+        method: GET
+        description: VTex Get prospect
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateprospect
+        method: PATCH
+        description: VTex Update prospect
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleteprospect
+        method: DELETE
+        description: VTex Delete prospect
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: api-storage-profile-system-prospects-prospectId-unmask
+      path: /api/storage/profile-system/prospects/{prospectId}/unmask
+      operations:
+      - name: getunmaskedprospect
+        method: GET
+        description: VTex Get unmasked prospect
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: profile-system-prospects-rest
+    port: 8080
+    description: REST adapter for VTex Profile System - PII data architecture — Prospects. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/api/storage/profile-system/prospects
+      name: api-storage-profile-system-prospects
+      description: REST surface for api-storage-profile-system-prospects.
+      operations:
+      - method: POST
+        name: createprospect
+        description: VTex Create prospect
+        call: profile-system-prospects.createprospect
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getprospects
+        description: VTex Get prospects
+        call: profile-system-prospects.getprospects
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/prospects/unmask
+      name: api-storage-profile-system-prospects-unmask
+      description: REST surface for api-storage-profile-system-prospects-unmask.
+      operations:
+      - method: GET
+        name: getunmaskedprospects
+        description: VTex Get unmasked prospects
+        call: profile-system-prospects.getunmaskedprospects
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/prospects/{prospectid}
+      name: api-storage-profile-system-prospects-prospectid
+      description: REST surface for api-storage-profile-system-prospects-prospectId.
+      operations:
+      - method: GET
+        name: getprospect
+        description: VTex Get prospect
+        call: profile-system-prospects.getprospect
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateprospect
+        description: VTex Update prospect
+        call: profile-system-prospects.updateprospect
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteprospect
+        description: VTex Delete prospect
+        call: profile-system-prospects.deleteprospect
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/storage/profile-system/prospects/{prospectid}/unmask
+      name: api-storage-profile-system-prospects-prospectid-unmask
+      description: REST surface for api-storage-profile-system-prospects-prospectId-unmask.
+      operations:
+      - method: GET
+        name: getunmaskedprospect
+        description: VTex Get unmasked prospect
+        call: profile-system-prospects.getunmaskedprospect
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: profile-system-prospects-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Profile System - PII data architecture — Prospects. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: vtex-create-prospect
+      description: VTex Create prospect
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: profile-system-prospects.createprospect
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-prospects
+      description: VTex Get prospects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-prospects.getprospects
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-prospects
+      description: VTex Get unmasked prospects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-prospects.getunmaskedprospects
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-prospect
+      description: VTex Get prospect
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-prospects.getprospect
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-prospect
+      description: VTex Update prospect
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: profile-system-prospects.updateprospect
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-prospect
+      description: VTex Delete prospect
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: profile-system-prospects.deleteprospect
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-unmasked-prospect
+      description: VTex Get unmasked prospect
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: profile-system-prospects.getunmaskedprospect
+      outputParameters:
+      - type: object
+        mapping: $.

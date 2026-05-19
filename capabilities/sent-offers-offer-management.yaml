@@ -1,0 +1,1185 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Sent Offers — Offer Management
+  description: 'VTex Sent Offers — Offer Management. 14 operations. Lead operation: VTex Create Channel. Self-contained Naftiko
+    capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Offer Management
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sent-offers-offer-management
+    baseUri: https://portal.{environment}.com.br
+    description: VTex Sent Offers — Offer Management business capability. Self-contained, no shared references.
+    resources:
+    - name: api-sent-offers-channels
+      path: /api/sent-offers/channels
+      operations:
+      - name: createchannel
+        method: POST
+        description: VTex Create Channel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the seller's VTEX account. Used as query param.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-sent-offers-error-codes-errorCodeId
+      path: /api/sent-offers/error-codes/{errorCodeId}
+      operations:
+      - name: retrieveerrorcode
+        method: GET
+        description: VTex Get Error Code data by errorCodeId
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: errorCodeId
+          in: path
+          type: string
+          description: Id for the error code chosen.
+          required: true
+    - name: api-sent-offers-feeds
+      path: /api/sent-offers/feeds
+      operations:
+      - name: createfeed
+        method: POST
+        description: VTex Activate Feed
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: listfeeds
+        method: GET
+        description: VTex List Feeds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the Seller's VTEX account. Used as query param.
+          required: true
+    - name: api-sent-offers-feeds-feedId
+      path: /api/sent-offers/feeds/{feedId}
+      operations:
+      - name: updatefeed
+        method: PUT
+        description: VTex Update Feed
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: retrievefeed
+        method: GET
+        description: VTex Get Feed by feedId
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+      - name: deletefeed
+        method: DELETE
+        description: VTex Deactivate Feed
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+    - name: api-sent-offers-feeds-feedId-skus-skuId-interactions
+      path: /api/sent-offers/feeds/{feedId}/skus/{skuId}/interactions
+      operations:
+      - name: createinteraction
+        method: POST
+        description: VTex Open Interaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+        - name: skuId
+          in: path
+          type: string
+          description: This attribute is the SKU ID in the seller's perspective, registered in their VTEX Catalog.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId
+      path: /api/sent-offers/feeds/{feedId}/skus/{skuId}/interactions/{interactionId}
+      operations:
+      - name: retrieveinteraction
+        method: GET
+        description: VTex Get Interaction Data by interactionId
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+        - name: skuId
+          in: path
+          type: string
+          description: This attribute is the SKU ID in the seller's perspective, registered in their VTEX Catalog.
+          required: true
+        - name: interactionId
+          in: path
+          type: string
+          description: This attribute is the code used to identify an existing interaction.
+          required: true
+    - name: api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId-close
+      path: /api/sent-offers/feeds/{feedId}/skus/{skuId}/interactions/{interactionId}/close
+      operations:
+      - name: closeinteraction
+        method: POST
+        description: VTex Close Interaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+        - name: skuId
+          in: path
+          type: string
+          description: This attribute is the SKU ID in the seller's perspective, registered in their VTEX Catalog.
+          required: true
+        - name: interactionId
+          in: path
+          type: string
+          description: This attribute is the code used to identify an existing interaction.
+          required: true
+    - name: api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId-logs
+      path: /api/sent-offers/feeds/{feedId}/skus/{skuId}/interactions/{interactionId}/logs
+      operations:
+      - name: createlog
+        method: POST
+        description: VTex Create Log
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+        - name: skuId
+          in: path
+          type: string
+          description: This attribute is the SKU ID in the seller's perspective, registered in their VTEX Catalog.
+          required: true
+        - name: interactionId
+          in: path
+          type: string
+          description: This attribute is the code used to identify an existing interaction.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId-logs-logId
+      path: /api/sent-offers/feeds/{feedId}/skus/{skuId}/interactions/{interactionId}/logs/{logId}
+      operations:
+      - name: retrievelog
+        method: GET
+        description: VTex Get Log Data by logId
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: feedId
+          in: path
+          type: string
+          description: The `feedId` attribute that identifies a feed between a seller and a channel, follows a standardized
+            pattern that will be used by connectors when establishing t
+          required: true
+        - name: skuId
+          in: path
+          type: string
+          description: This attribute is the SKU ID in the seller's perspective, registered in their VTEX Catalog.
+          required: true
+        - name: interactionId
+          in: path
+          type: string
+          description: This attribute is the code used to identify an existing interaction.
+          required: true
+        - name: logId
+          in: path
+          type: string
+          description: A log's identifying code. This attribute is obtained from the Open Log API, or from the response of
+            a Search Interactions API.
+          required: true
+    - name: api-sent-offers-search-errors
+      path: /api/sent-offers/search/errors
+      operations:
+      - name: searcherrors
+        method: GET
+        description: VTex Search Errors
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: Describes the type of the content being sent.
+          required: true
+        - name: Accept
+          in: header
+          type: string
+          description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as query param.
+          required: true
+        - name: q
+          in: query
+          type: string
+          description: Customizable field for searching error codes.
+          required: true
+        - name: channels
+          in: query
+          type: string
+          description: Search errors filtering by channels.
+          required: true
+        - name: brand
+          in: query
+          type: string
+          description: Search errors filtering by brand.
+          required: true
+        - name: category
+          in: query
+          type: string
+          description: Search errors filtering by category.
+          required: true
+        - name: errorCategory
+          in: query
+          type: string
+          description: Search errors filtering by error category.
+          required: true
+        - name: sort
+          in: query
+          type: string
+          description: Pagination that returns a range of ordered error codes.
+          required: true
+        - name: from
+          in: query
+          type: string
+          description: Pagination that returns error codes from a given point.
+          required: true
+        - name: to
+          in: query
+          type: string
+          description: Pagination that returns error codes until a given point.
+          required: true
+    - name: api-sent-offers-search-interactions
+      path: /api/sent-offers/search/interactions
+      operations:
+      - name: searchinteractions
+        method: GET
+        description: VTex Search Interactions and their Logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: environment
+          in: path
+          type: string
+          description: Environment to use. Used as part of the URL.
+          required: true
+        - name: an
+          in: query
+          type: string
+          description: Name of the VTEX account. Used as a query param.
+          required: true
+        - name: q
+          in: query
+          type: string
+          description: Customizable field for searching interactions.
+          required: true
+        - name: channels
+          in: query
+          type: string
+          description: Search interactions, filtering by channel.
+        - name: brand
+          in: query
+          type: string
+          description: Search interactions, filtering by brand.
+        - name: category
+          in: query
+          type: string
+          description: Search interactions, filtering by category.
+        - name: scope
+          in: query
+          type: string
+          description: Search interactions, filtering by scope.
+        - name: result
+          in: query
+          type: string
+          description: 'Search interactions, filtering by result. Results can have the following values: '
+        - name: sort
+          in: query
+          type: string
+          description: Search interactions filtering by sort.
+          required: true
+        - name: from
+          in: query
+          type: string
+          description: Search interactions from a given point.
+          required: true
+        - name: to
+          in: query
+          type: string
+          description: Search interactions until a given point.
+          required: true
+        - name: fromDate
+          in: query
+          type: string
+          description: Search interactions from a specific date.
+          required: true
+        - name: toDate
+          in: query
+          type: string
+          description: Search interactions until a given date.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: sent-offers-offer-management-rest
+    port: 8080
+    description: REST adapter for VTex Sent Offers — Offer Management. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/sent-offers/channels
+      name: api-sent-offers-channels
+      description: REST surface for api-sent-offers-channels.
+      operations:
+      - method: POST
+        name: createchannel
+        description: VTex Create Channel
+        call: sent-offers-offer-management.createchannel
+        with:
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          environment: rest.environment
+          an: rest.an
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/error-codes/{errorcodeid}
+      name: api-sent-offers-error-codes-errorcodeid
+      description: REST surface for api-sent-offers-error-codes-errorCodeId.
+      operations:
+      - method: GET
+        name: retrieveerrorcode
+        description: VTex Get Error Code data by errorCodeId
+        call: sent-offers-offer-management.retrieveerrorcode
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          errorCodeId: rest.errorCodeId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/feeds
+      name: api-sent-offers-feeds
+      description: REST surface for api-sent-offers-feeds.
+      operations:
+      - method: POST
+        name: createfeed
+        description: VTex Activate Feed
+        call: sent-offers-offer-management.createfeed
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: listfeeds
+        description: VTex List Feeds
+        call: sent-offers-offer-management.listfeeds
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/feeds/{feedid}
+      name: api-sent-offers-feeds-feedid
+      description: REST surface for api-sent-offers-feeds-feedId.
+      operations:
+      - method: PUT
+        name: updatefeed
+        description: VTex Update Feed
+        call: sent-offers-offer-management.updatefeed
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: retrievefeed
+        description: VTex Get Feed by feedId
+        call: sent-offers-offer-management.retrievefeed
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletefeed
+        description: VTex Deactivate Feed
+        call: sent-offers-offer-management.deletefeed
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/feeds/{feedid}/skus/{skuid}/interactions
+      name: api-sent-offers-feeds-feedid-skus-skuid-interactions
+      description: REST surface for api-sent-offers-feeds-feedId-skus-skuId-interactions.
+      operations:
+      - method: POST
+        name: createinteraction
+        description: VTex Open Interaction
+        call: sent-offers-offer-management.createinteraction
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+          skuId: rest.skuId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/feeds/{feedid}/skus/{skuid}/interactions/{interactionid}
+      name: api-sent-offers-feeds-feedid-skus-skuid-interactions-interactionid
+      description: REST surface for api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId.
+      operations:
+      - method: GET
+        name: retrieveinteraction
+        description: VTex Get Interaction Data by interactionId
+        call: sent-offers-offer-management.retrieveinteraction
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+          skuId: rest.skuId
+          interactionId: rest.interactionId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/feeds/{feedid}/skus/{skuid}/interactions/{interactionid}/close
+      name: api-sent-offers-feeds-feedid-skus-skuid-interactions-interactionid-close
+      description: REST surface for api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId-close.
+      operations:
+      - method: POST
+        name: closeinteraction
+        description: VTex Close Interaction
+        call: sent-offers-offer-management.closeinteraction
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+          skuId: rest.skuId
+          interactionId: rest.interactionId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/feeds/{feedid}/skus/{skuid}/interactions/{interactionid}/logs
+      name: api-sent-offers-feeds-feedid-skus-skuid-interactions-interactionid-logs
+      description: REST surface for api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId-logs.
+      operations:
+      - method: POST
+        name: createlog
+        description: VTex Create Log
+        call: sent-offers-offer-management.createlog
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+          skuId: rest.skuId
+          interactionId: rest.interactionId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/feeds/{feedid}/skus/{skuid}/interactions/{interactionid}/logs/{logid}
+      name: api-sent-offers-feeds-feedid-skus-skuid-interactions-interactionid-logs-logid
+      description: REST surface for api-sent-offers-feeds-feedId-skus-skuId-interactions-interactionId-logs-logId.
+      operations:
+      - method: GET
+        name: retrievelog
+        description: VTex Get Log Data by logId
+        call: sent-offers-offer-management.retrievelog
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          feedId: rest.feedId
+          skuId: rest.skuId
+          interactionId: rest.interactionId
+          logId: rest.logId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/search/errors
+      name: api-sent-offers-search-errors
+      description: REST surface for api-sent-offers-search-errors.
+      operations:
+      - method: GET
+        name: searcherrors
+        description: VTex Search Errors
+        call: sent-offers-offer-management.searcherrors
+        with:
+          environment: rest.environment
+          Content-Type: rest.Content-Type
+          Accept: rest.Accept
+          an: rest.an
+          q: rest.q
+          channels: rest.channels
+          brand: rest.brand
+          category: rest.category
+          errorCategory: rest.errorCategory
+          sort: rest.sort
+          from: rest.from
+          to: rest.to
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/sent-offers/search/interactions
+      name: api-sent-offers-search-interactions
+      description: REST surface for api-sent-offers-search-interactions.
+      operations:
+      - method: GET
+        name: searchinteractions
+        description: VTex Search Interactions and their Logs
+        call: sent-offers-offer-management.searchinteractions
+        with:
+          environment: rest.environment
+          an: rest.an
+          q: rest.q
+          channels: rest.channels
+          brand: rest.brand
+          category: rest.category
+          scope: rest.scope
+          result: rest.result
+          sort: rest.sort
+          from: rest.from
+          to: rest.to
+          fromDate: rest.fromDate
+          toDate: rest.toDate
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sent-offers-offer-management-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Sent Offers — Offer Management. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: vtex-create-channel
+      description: VTex Create Channel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sent-offers-offer-management.createchannel
+      with:
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        environment: tools.environment
+        an: tools.an
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-error-code-data
+      description: VTex Get Error Code data by errorCodeId
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.retrieveerrorcode
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        errorCodeId: tools.errorCodeId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-activate-feed
+      description: VTex Activate Feed
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sent-offers-offer-management.createfeed
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-list-feeds
+      description: VTex List Feeds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.listfeeds
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-feed
+      description: VTex Update Feed
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.updatefeed
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-feed-feedid
+      description: VTex Get Feed by feedId
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.retrievefeed
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-deactivate-feed
+      description: VTex Deactivate Feed
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: sent-offers-offer-management.deletefeed
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-open-interaction
+      description: VTex Open Interaction
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sent-offers-offer-management.createinteraction
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+        skuId: tools.skuId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-interaction-data-interactionid
+      description: VTex Get Interaction Data by interactionId
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.retrieveinteraction
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+        skuId: tools.skuId
+        interactionId: tools.interactionId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-close-interaction
+      description: VTex Close Interaction
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sent-offers-offer-management.closeinteraction
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+        skuId: tools.skuId
+        interactionId: tools.interactionId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-create-log
+      description: VTex Create Log
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sent-offers-offer-management.createlog
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+        skuId: tools.skuId
+        interactionId: tools.interactionId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-log-data-logid
+      description: VTex Get Log Data by logId
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.retrievelog
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        feedId: tools.feedId
+        skuId: tools.skuId
+        interactionId: tools.interactionId
+        logId: tools.logId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-search-errors
+      description: VTex Search Errors
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.searcherrors
+      with:
+        environment: tools.environment
+        Content-Type: tools.Content-Type
+        Accept: tools.Accept
+        an: tools.an
+        q: tools.q
+        channels: tools.channels
+        brand: tools.brand
+        category: tools.category
+        errorCategory: tools.errorCategory
+        sort: tools.sort
+        from: tools.from
+        to: tools.to
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-search-interactions-and-their
+      description: VTex Search Interactions and their Logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sent-offers-offer-management.searchinteractions
+      with:
+        environment: tools.environment
+        an: tools.an
+        q: tools.q
+        channels: tools.channels
+        brand: tools.brand
+        category: tools.category
+        scope: tools.scope
+        result: tools.result
+        sort: tools.sort
+        from: tools.from
+        to: tools.to
+        fromDate: tools.fromDate
+        toDate: tools.toDate
+      outputParameters:
+      - type: object
+        mapping: $.

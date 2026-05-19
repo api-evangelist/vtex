@@ -1,0 +1,208 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Category
+  description: 'VTex Catalog API — Category. 4 operations. Lead operation: VTex Create category. Self-contained Naftiko capability
+    covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Category
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-category
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Category business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-category
+      path: /api/catalog/pvt/category
+      operations:
+      - name: post
+        method: POST
+        description: VTex Create category
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-category-categoryId
+      path: /api/catalog/pvt/category/{categoryId}
+      operations:
+      - name: get
+        method: GET
+        description: VTex Get category by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: categoryId
+          in: path
+          type: integer
+          description: Category's unique numerical identifier.
+          required: true
+      - name: put
+        method: PUT
+        description: VTex Update category
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: categoryId
+          in: path
+          type: integer
+          description: Category's unique numerical identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog_system-pub-category-tree-categoryLevels
+      path: /api/catalog_system/pub/category/tree/{categoryLevels}
+      operations:
+      - name: categorytree
+        method: GET
+        description: VTex Get category tree
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: categoryLevels
+          in: path
+          type: string
+          description: Value of the category level you need to retrieve.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-category-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Category. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/category
+      name: api-catalog-pvt-category
+      description: REST surface for api-catalog-pvt-category.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Create category
+        call: catalog-category.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/category/{categoryid}
+      name: api-catalog-pvt-category-categoryid
+      description: REST surface for api-catalog-pvt-category-categoryId.
+      operations:
+      - method: GET
+        name: get
+        description: VTex Get category by ID
+        call: catalog-category.get
+        with:
+          categoryId: rest.categoryId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: put
+        description: VTex Update category
+        call: catalog-category.put
+        with:
+          categoryId: rest.categoryId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog-system/pub/category/tree/{categorylevels}
+      name: api-catalog-system-pub-category-tree-categorylevels
+      description: REST surface for api-catalog_system-pub-category-tree-categoryLevels.
+      operations:
+      - method: GET
+        name: categorytree
+        description: VTex Get category tree
+        call: catalog-category.categorytree
+        with:
+          categoryLevels: rest.categoryLevels
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-category-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Category. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-create-category
+      description: VTex Create category
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-category.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-category-id
+      description: VTex Get category by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-category.get
+      with:
+        categoryId: tools.categoryId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-category
+      description: VTex Update category
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-category.put
+      with:
+        categoryId: tools.categoryId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-category-tree
+      description: VTex Get category tree
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: catalog-category.categorytree
+      with:
+        categoryLevels: tools.categoryLevels
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,166 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Catalog API — Supplier
+  description: 'VTex Catalog API — Supplier. 3 operations. Lead operation: VTex Create Supplier. Self-contained Naftiko capability
+    covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Supplier
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: catalog-supplier
+    baseUri: https://{accountName}.{environment}.com.br
+    description: VTex Catalog API — Supplier business capability. Self-contained, no shared references.
+    resources:
+    - name: api-catalog-pvt-supplier
+      path: /api/catalog/pvt/supplier
+      operations:
+      - name: post
+        method: POST
+        description: VTex Create Supplier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: api-catalog-pvt-supplier-supplierId
+      path: /api/catalog/pvt/supplier/{supplierId}
+      operations:
+      - name: put
+        method: PUT
+        description: VTex Update Supplier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: supplierId
+          in: path
+          type: integer
+          description: Supplier's unique numerical identifier.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: delete
+        method: DELETE
+        description: VTex Delete Supplier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: supplierId
+          in: path
+          type: integer
+          description: Supplier's unique numerical identifier.
+          required: true
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: catalog-supplier-rest
+    port: 8080
+    description: REST adapter for VTex Catalog API — Supplier. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/api/catalog/pvt/supplier
+      name: api-catalog-pvt-supplier
+      description: REST surface for api-catalog-pvt-supplier.
+      operations:
+      - method: POST
+        name: post
+        description: VTex Create Supplier
+        call: catalog-supplier.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/api/catalog/pvt/supplier/{supplierid}
+      name: api-catalog-pvt-supplier-supplierid
+      description: REST surface for api-catalog-pvt-supplier-supplierId.
+      operations:
+      - method: PUT
+        name: put
+        description: VTex Update Supplier
+        call: catalog-supplier.put
+        with:
+          supplierId: rest.supplierId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete
+        description: VTex Delete Supplier
+        call: catalog-supplier.delete
+        with:
+          supplierId: rest.supplierId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: catalog-supplier-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Catalog API — Supplier. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-create-supplier
+      description: VTex Create Supplier
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: catalog-supplier.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-supplier
+      description: VTex Update Supplier
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: catalog-supplier.put
+      with:
+        supplierId: tools.supplierId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-delete-supplier
+      description: VTex Delete Supplier
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: catalog-supplier.delete
+      with:
+        supplierId: tools.supplierId
+      outputParameters:
+      - type: object
+        mapping: $.

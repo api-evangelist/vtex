@@ -1,0 +1,174 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: VTex Marketplace API — Sellers
+  description: 'VTex Marketplace API — Sellers. 4 operations. Lead operation: VTex Configure Seller Account. Self-contained
+    Naftiko capability covering one Vtex business surface.'
+  tags:
+  - Vtex
+  - Sellers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VTEX_API_KEY: VTEX_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: marketplace-sellers
+    baseUri: https://{accountName}.{environment}.com.br/api
+    description: VTex Marketplace API — Sellers business capability. Self-contained, no shared references.
+    resources:
+    - name: seller-register-pvt-sellers
+      path: /seller-register/pvt/sellers
+      operations:
+      - name: upsertsellerrequest
+        method: POST
+        description: VTex Configure Seller Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: getlistsellers
+        method: GET
+        description: VTex List Sellers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: seller-register-pvt-sellers-sellerId
+      path: /seller-register/pvt/sellers/{sellerId}
+      operations:
+      - name: updateseller
+        method: PATCH
+        description: VTex Update Seller by Seller ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getretrieveseller
+        method: GET
+        description: VTex Get Seller data by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-VTEX-API-AppKey
+      value: '{{env.VTEX_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: marketplace-sellers-rest
+    port: 8080
+    description: REST adapter for VTex Marketplace API — Sellers. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/seller-register/pvt/sellers
+      name: seller-register-pvt-sellers
+      description: REST surface for seller-register-pvt-sellers.
+      operations:
+      - method: POST
+        name: upsertsellerrequest
+        description: VTex Configure Seller Account
+        call: marketplace-sellers.upsertsellerrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getlistsellers
+        description: VTex List Sellers
+        call: marketplace-sellers.getlistsellers
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/seller-register/pvt/sellers/{sellerid}
+      name: seller-register-pvt-sellers-sellerid
+      description: REST surface for seller-register-pvt-sellers-sellerId.
+      operations:
+      - method: PATCH
+        name: updateseller
+        description: VTex Update Seller by Seller ID
+        call: marketplace-sellers.updateseller
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getretrieveseller
+        description: VTex Get Seller data by ID
+        call: marketplace-sellers.getretrieveseller
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: marketplace-sellers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for VTex Marketplace API — Sellers. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: vtex-configure-seller-account
+      description: VTex Configure Seller Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: marketplace-sellers.upsertsellerrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-list-sellers
+      description: VTex List Sellers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-sellers.getlistsellers
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-update-seller-seller-id
+      description: VTex Update Seller by Seller ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: marketplace-sellers.updateseller
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: vtex-get-seller-data-id
+      description: VTex Get Seller data by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: marketplace-sellers.getretrieveseller
+      outputParameters:
+      - type: object
+        mapping: $.
