@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/SettlePayment",
+  "title": "SettlePayment",
+  "required": [
+    "transactionId",
+    "requestId",
+    "paymentId",
+    "value",
+    "authorizationId"
+  ],
+  "type": "object",
+  "description": "Settle payment request body information.",
+  "properties": {
+    "transactionId": {
+      "type": "string",
+      "description": "VTEX identifier for the transaction related to this payment."
+    },
+    "requestId": {
+      "type": "string",
+      "description": "The unique identifier for this request to ensure its idempotency."
+    },
+    "paymentId": {
+      "type": "string",
+      "description": "VTEX identifier for this payment."
+    },
+    "value": {
+      "type": "number",
+      "description": "The amount to be settled."
+    },
+    "authorizationId": {
+      "type": "string",
+      "description": "The authorization identifier for this payment."
+    },
+    "tid": {
+      "type": "string",
+      "description": "Provider's unique identifier for the transaction."
+    },
+    "nsu": {
+      "type": "string",
+      "description": "Provider's unique sequential number for the transaction."
+    },
+    "recipients": {
+      "type": "array",
+      "description": "Array containing the information for the recipients of this payment in case the Payment Provider is configured to allow the split of payments.",
+      "items": {
+        "type": "object",
+        "description": "Recipients information.",
+        "required": [
+          "id",
+          "name",
+          "documentType",
+          "document",
+          "role",
+          "amount"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Recipient identifier."
+          },
+          "name": {
+            "type": "string",
+            "description": "Recipient name."
+          },
+          "documentType": {
+            "type": "string",
+            "description": "Recipient document type."
+          },
+          "document": {
+            "type": "string",
+            "description": "Recipient document number."
+          },
+          "role": {
+            "type": "string",
+            "description": "Indicates if the recipient is the seller or the marketplace."
+          },
+          "chargeProcessingFee": {
+            "type": "boolean",
+            "description": "Indicates whether or not this recipient is charged for processing fees."
+          },
+          "chargebackLiable": {
+            "type": "boolean",
+            "description": "Indicates whether or not this recipient is liable to chargebacks."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount due to this recipient."
+          },
+          "commissionAmount": {
+            "type": "number",
+            "description": "Amount of commission due to the marketplace."
+          }
+        }
+      }
+    },
+    "sandboxMode": {
+      "type": "boolean",
+      "description": "Indicates whether or not this request is being sent from a sandbox environment."
+    },
+    "merchantSettings": {
+      "type": "array",
+      "description": "Custom fields (for the given provider) which the merchant must fill. Each element of this array is a key-value pair.",
+      "items": {
+        "type": "object",
+        "description": "Merchant settings information.",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The custom field name."
+          },
+          "value": {
+            "type": "string",
+            "description": "The custom field value."
+          }
+        }
+      }
+    },
+    "connectorMetadata": {
+      "type": "array",
+      "description": "Array containing metadata fields sent from the provider to the payment gateway.",
+      "items": {
+        "type": "object",
+        "description": "Metadata fields information.",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the metadata to be stored in the gateway (limited to 20 characters)."
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the metadata stored (limited to 200 characters)."
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "transactionId": "D3AA1FC8372E430E8236649DB5EBD08E",
+    "requestId": "2019-02-04T22:53:42-40000",
+    "paymentId": "F5C1A4E20D3B4E07B7E871F5B5BC9F91",
+    "value": 45,
+    "authorizationId": "5784589",
+    "tid": "5784589",
+    "nsu": "NSU987432",
+    "recipients": [
+      {
+        "id": "mystore",
+        "name": "Company XPTO",
+        "documentType": "CNPJ",
+        "document": "05314972000174",
+        "role": "marketplace",
+        "chargeProcessingFee": true,
+        "chargebackLiable": true,
+        "amount": 7.2
+      },
+      {
+        "id": "sellerA",
+        "name": "Company ABC",
+        "documentType": "CNPJ",
+        "document": "24830098000172",
+        "role": "seller",
+        "chargeProcessingFee": false,
+        "chargebackLiable": false,
+        "amount": 37.8,
+        "commissionAmount": 7.2
+      }
+    ],
+    "sandboxMode": false,
+    "merchantSettings": [
+      {
+        "name": "Public Merchant ID Test.",
+        "value": "1"
+      }
+    ],
+    "connectorMetadata": [
+      {
+        "name": "MetadataName",
+        "value": "MetadataValue"
+      }
+    ]
+  }
+}

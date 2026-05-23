@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/validationResult",
+  "title": "validationResult",
+  "type": "object",
+  "description": "Object containing information about bulk import state.",
+  "required": [
+    "accountName",
+    "importId",
+    "importState",
+    "percentage",
+    "lastUpdateDate",
+    "fileName",
+    "validationResult"
+  ],
+  "properties": {
+    "accountName": {
+      "type": "string",
+      "description": "Name of your VTEX account."
+    },
+    "importId": {
+      "type": "string",
+      "description": "Unique identifier of the import."
+    },
+    "importState": {
+      "type": "string",
+      "description": "Current state of the import. The possible values are:\n- `Uploaded`: The file was successfully uploaded.\n- `InValidation`: File validation is in progress.\n- `ReadyToImport`: File validation completed, ready for import.\n- `Completed`: File successfully imported.\n- `ValidationFailed`: File validation failed.\n- `CompletedWithError`: File import failed."
+    },
+    "percentage": {
+      "type": "string",
+      "description": "Completion percentage of the import."
+    },
+    "lastUpdateDate": {
+      "type": "string",
+      "description": "Date and time of the last update of the import, in `yyyy-mm-ddTHH:MM:SS+00:00` format."
+    },
+    "fileName": {
+      "type": "string",
+      "description": "Name of the file being imported."
+    },
+    "validationResult": {
+      "type": "object",
+      "description": "Information about the result of bulk imported data validation.",
+      "properties": {
+        "isValid": {
+          "type": "boolean",
+          "description": "Indicates whether the bulk import operation was successful."
+        },
+        "validationResult": {
+          "type": "array",
+          "description": "Detailed information about the validation results.",
+          "items": {
+            "type": "object",
+            "description": "Object with detailed information.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Unique identifier associated with the imported item."
+              },
+              "validRows": {
+                "type": "integer",
+                "description": "Total number of lines successfully validated."
+              },
+              "invalidRows": {
+                "type": "integer",
+                "description": "Number of imported lines that failed validation."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

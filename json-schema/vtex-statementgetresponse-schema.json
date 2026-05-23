@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/StatementGetResponse",
+  "title": "StatementGetResponse",
+  "type": "object",
+  "description": "Object with policy conditions.",
+  "required": [
+    "effect"
+  ],
+  "properties": {
+    "effect": {
+      "type": "string",
+      "title": "effect",
+      "description": "This field is not functional at the moment. To create a correct request, fill the field with `Allow`.",
+      "example": "Allow",
+      "deprecated": true
+    },
+    "actions": {
+      "type": "array",
+      "title": "actions",
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "id",
+            "description": "Action ID.",
+            "example": "SendSlackMessage",
+            "enum": [
+              "SendSlackMessage",
+              "SendEmail",
+              "DeactivatePromotions"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "title": "metadata",
+            "description": "Data inside of the actions.",
+            "additionalProperties": true
+          }
+        },
+        "type": "object",
+        "description": "Array with actions information."
+      },
+      "description": "Actions that the policy will execute."
+    },
+    "resource": {
+      "type": "string",
+      "description": "Scope on which this policy must be evaluated.",
+      "title": "resource",
+      "example": "vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert"
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "type": "array",
+          "description": "List of conditions that will activate the policy.",
+          "items": {
+            "description": "List of conditions that will activate the policy.",
+            "properties": {
+              "conditions": {
+                "title": "conditions",
+                "type": "array",
+                "description": "List of conditions the actions can have. It can be an empty array `[]`.",
+                "enum": [
+                  [],
+                  [
+                    "stringEquals"
+                  ],
+                  [
+                    "numericGreaterThan"
+                  ]
+                ],
+                "items": {
+                  "type": "string",
+                  "description": "Condition value."
+                }
+              },
+              "operation": {
+                "type": "string",
+                "title": "operation",
+                "description": "The action of the condition.",
+                "example": "None",
+                "enum": [
+                  "None",
+                  "stringEquals",
+                  "stringEqualsIgnoreCase",
+                  "numericEquals",
+                  "numericLessThan",
+                  "numericLessThanEquals",
+                  "numericGreaterThan",
+                  "numericGreaterThanEquals",
+                  "bool",
+                  "not",
+                  "or",
+                  "and",
+                  "dateTimeUtcGreaterThan",
+                  "dateTimeUtcLessThan",
+                  "between"
+                ]
+              },
+              "key": {
+                "type": "string",
+                "title": "key",
+                "description": "The element that will define what the policy will influence.",
+                "example": "skuId",
+                "enum": [
+                  "skuId",
+                  "brandId",
+                  "discountPercentage"
+                ]
+              },
+              "values": {
+                "type": "array",
+                "title": "values",
+                "items": {
+                  "type": "string",
+                  "description": "Key value.",
+                  "example": "40.00"
+                },
+                "description": "Array with values of the key."
+              }
+            }
+          }
+        }
+      },
+      "description": "Condition to activate this policy. This object can have a maximum of ten recursive conditions.",
+      "title": "condition"
+    },
+    "operation": {
+      "type": "string",
+      "title": "operation",
+      "description": "This operation will determine if all the conditions need to be valid or at least one of them, if the conditions array is not empty.",
+      "example": "None",
+      "enum": [
+        "None",
+        "stringEquals",
+        "stringEqualsIgnoreCase",
+        "numericEquals",
+        "numericLessThan",
+        "numericLessThanEquals",
+        "numericGreaterThan",
+        "numericGreaterThanEquals",
+        "bool",
+        "not",
+        "or",
+        "and",
+        "dateTimeUtcGreaterThan",
+        "dateTimeUtcLessThan",
+        "between"
+      ]
+    }
+  }
+}

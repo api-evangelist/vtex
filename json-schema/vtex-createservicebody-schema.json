@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/CreateServiceBody",
+  "title": "CreateServiceBody",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "description": "Order ID."
+    },
+    "carrierId": {
+      "type": "string",
+      "description": "Carrier ID."
+    },
+    "seller": {
+      "type": "string",
+      "description": "Identifier representing the seller associated with the order."
+    },
+    "sender": {
+      "description": "Sender personal information.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Sender name.",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Sender phone number.",
+          "type": "string"
+        },
+        "email": {
+          "description": "Sender email.",
+          "type": "string"
+        },
+        "city": {
+          "description": "Sender city of residence.",
+          "type": "string"
+        },
+        "state": {
+          "description": "Sender state of residence.",
+          "type": "string"
+        },
+        "country": {
+          "description": "Sender country of residence.",
+          "type": "string"
+        },
+        "address": {
+          "description": "Sender address.",
+          "type": "string"
+        },
+        "addressComplement": {
+          "description": "Sender address complement, as apartment number.",
+          "type": "string"
+        },
+        "number": {
+          "description": "Sender residence number.",
+          "type": "string"
+        },
+        "reference": {
+          "description": "Reference to the sender's address to facilitate localization.",
+          "type": "string"
+        },
+        "location": {
+          "description": "Object containing specific latitude and longitude of the sender's address.",
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "description": "Sender address' latitude.",
+              "type": "number"
+            },
+            "longitude": {
+              "description": "Sender address' longitude.",
+              "type": "number"
+            }
+          }
+        },
+        "pickupDate": {
+          "description": "Package pickup date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.",
+          "type": "string"
+        }
+      }
+    },
+    "receiver": {
+      "description": "Receiver personal information.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Receiver name.",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Receiver phone number.",
+          "type": "string"
+        },
+        "email": {
+          "description": "Receiver email.",
+          "type": "string"
+        },
+        "city": {
+          "description": "Receiver city of residence.",
+          "type": "string"
+        },
+        "state": {
+          "description": "Receiver state of residence.",
+          "type": "string"
+        },
+        "country": {
+          "description": "Receiver country of residence.",
+          "type": "string"
+        },
+        "address": {
+          "description": "Receiver address.",
+          "type": "string"
+        },
+        "addressComplement": {
+          "description": "Receiver address complement, as apartment number.",
+          "type": "string"
+        },
+        "number": {
+          "description": "Receiver residence number.",
+          "type": "string"
+        },
+        "reference": {
+          "description": "Reference to the receiver's address to facilitate localization.",
+          "type": "string"
+        },
+        "location": {
+          "description": "Object containing specific latitude and longitude of the receiver's address.",
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "description": "Receiver address' latitude.",
+              "type": "number"
+            },
+            "longitude": {
+              "description": "Receiver address' longitude.",
+              "type": "number"
+            }
+          }
+        },
+        "identification": {
+          "description": "Receiver identification code.",
+          "type": "string"
+        },
+        "deliveryDate": {
+          "description": "Delivery estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.",
+          "type": "string"
+        },
+        "contactName": {
+          "description": "Receiver contact name.",
+          "type": "string"
+        },
+        "deliveryWindow": {
+          "description": "Object containing information about package delivery window.",
+          "type": "object",
+          "properties": {
+            "name": {
+              "description": "Carrier name.",
+              "type": "string"
+            },
+            "initialDate": {
+              "description": "Delivery initial date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.",
+              "type": "string"
+            },
+            "finalDate": {
+              "description": "Delivery final date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Package"
+      },
+      "description": "Array containing information about all order's packages."
+    },
+    "carrierServiceType": {
+      "type": "string",
+      "description": "Carrier service type. The `carrierServiceType` value is not limited to these specific values. It will be defined by the carrier integrating with the Pick and Pack Last Mile Protocol API.",
+      "enum": [
+        "BROKER",
+        "PICKUP_IN_STORE",
+        "NATIONAL",
+        "INTERNATIONAL",
+        "EXPRESS",
+        "SPECIALIZED",
+        "OTHERS"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "Order's type of delivery, `Delivery` or [`Pickup`](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R)."
+    },
+    "paymentMethod": {
+      "type": "string",
+      "description": "Payment method."
+    },
+    "comments": {
+      "type": "string",
+      "description": "Comments."
+    },
+    "orderValue": {
+      "type": "integer",
+      "description": "Total value of the order."
+    },
+    "settings": {
+      "description": "Array of objects with additional custom fields defined by the carrier.",
+      "type": "array",
+      "items": {
+        "description": "Object containing information about a custom field.",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "Custom field description.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Custom field value.",
+            "type": "string"
+          },
+          "key": {
+            "description": "Custom field key.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "timezone": {
+      "$ref": "#/components/schemas/Timezone"
+    }
+  }
+}

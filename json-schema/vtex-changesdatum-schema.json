@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ChangesDatum",
+  "title": "ChangesDatum",
+  "required": [
+    "reason",
+    "discountValue",
+    "incrementValue",
+    "itemsAdded",
+    "itemsRemoved",
+    "receipt"
+  ],
+  "type": "object",
+  "properties": {
+    "reason": {
+      "type": "string",
+      "description": "Text explaining why there was a change in the order. This information may be shown to the customer in the UI or transactional emails."
+    },
+    "discountValue": {
+      "type": "integer",
+      "description": "Order change discount value."
+    },
+    "incrementValue": {
+      "type": "integer",
+      "description": "Order change increment value."
+    },
+    "itemsAdded": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of items added to the order."
+    },
+    "itemsRemoved": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ItemsRemoved"
+      },
+      "description": "List of items removed from the order."
+    },
+    "receipt": {
+      "$ref": "#/components/schemas/Receipt"
+    }
+  },
+  "example": {
+    "reason": "Blah",
+    "discountValue": 3290,
+    "incrementValue": 0,
+    "itemsAdded": [],
+    "itemsRemoved": [
+      {
+        "id": "1234568358",
+        "name": "Bay Max L",
+        "quantity": 1,
+        "price": 3290,
+        "unitMultiplier": null
+      }
+    ],
+    "receipt": {
+      "date": "2019-02-06T20:46:04.4003606+00:00",
+      "orderId": "v5195004lux-01",
+      "receipt": "029f9ab8-751a-4b1e-bf81-7dd25d14b49b"
+    }
+  }
+}

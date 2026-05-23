@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Success-Approved",
+  "title": "Success-Approved",
+  "required": [
+    "paymentId",
+    "status",
+    "authorizationId",
+    "tid",
+    "nsu",
+    "acquirer",
+    "delayToAutoSettle",
+    "delayToAutoSettleAfterAntifraud",
+    "delayToCancel"
+  ],
+  "type": "object",
+  "description": "Create payment response body information.",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "description": "VTEX identifier for this payment. The same sent in the request."
+    },
+    "status": {
+      "type": "string",
+      "description": "The Provider's status for this payment. Must be one of three values:\r\n\r\n- `approved`\r\n- `denied`\r\n- `undefined`."
+    },
+    "authorizationId": {
+      "type": "string",
+      "description": "Provider's unique identifier for the authorization. Should be sent when the payment is authorized. In other statuses, it should be absent or `null`."
+    },
+    "bankIssueInvoiceId": {
+      "type": "string",
+      "description": "This field is deprecated, please use `paymentUrl` instead. The bank invoice URL to be presented to the end user."
+    },
+    "paymentUrl": {
+      "type": "string",
+      "description": "When the payment is via bank invoice, this should be the invoice URL to be presented to the user. If the payment requires the redirection of the user, this should be the URL to redirect the user. If neither is the case, then this should be absent.",
+      "nullable": true
+    },
+    "paymentAppData": {
+      "type": "object",
+      "description": "Object which indicates that a [Payment App](https://developers.vtex.com/docs/guides/payments-integration-payment-app) is needed to finish the payment. This object contains the data to be used by the Payment App.",
+      "required": [
+        "appName",
+        "payload"
+      ],
+      "properties": {
+        "appName": {
+          "type": "string",
+          "description": "Indicates which VTEX IO app that will handle the payment flow at Checkout."
+        },
+        "payload": {
+          "type": "string",
+          "description": "The payload that will be sent to your app, like a serialized JSON, for example."
+        }
+      }
+    },
+    "identificationNumber": {
+      "type": "string",
+      "description": "The bank invoice unformatted identification number. Should only be present when the payment is made via bank invoice."
+    },
+    "identificationNumberFormatted": {
+      "type": "string",
+      "description": "The bank invoice formatted identification number that will be presented to the end user."
+    },
+    "barCodeImageType": {
+      "type": "string",
+      "description": "The bank invoice barcode image type. For instance, \"i25\" for Brazilian *Boleto Banc\u00e1rio*. Should only be present when the payment is made via bank invoice."
+    },
+    "barCodeImageNumber": {
+      "type": "string",
+      "description": "The bank invoice number to generate a barcode (must follow any regulations/specifications for targeted countries). Should only be present when the payment is made via bank invoice."
+    },
+    "tid": {
+      "type": "string",
+      "description": "Provider's unique identifier for the transaction."
+    },
+    "nsu": {
+      "type": "string",
+      "description": "Provider's unique sequential number for the transaction.",
+      "nullable": true
+    },
+    "acquirer": {
+      "type": "string",
+      "description": "Acquirer name (mostly used for card payments).",
+      "nullable": true
+    },
+    "redirectUrl": {
+      "type": "string",
+      "description": "This field is deprecated, please use `paymentUrl` instead. The URL the end user needs to be redirected to (external authentication, 3DS, etc)."
+    },
+    "code": {
+      "type": "string",
+      "description": "Provider's operation/error code to be logged.",
+      "nullable": true
+    },
+    "message": {
+      "type": "string",
+      "description": "Provider's operation/error message to be logged.",
+      "nullable": true
+    },
+    "delayToAutoSettle": {
+      "type": "integer",
+      "description": "Total time (in seconds) before we make an automatic call to `/settlements`, regardless of whether the payment was approved by the merchant's anti-fraud provider or not. The maximum time allowed to wait for an auto capture is 604800 seconds (7 days)."
+    },
+    "delayToAutoSettleAfterAntifraud": {
+      "type": "integer",
+      "description": "Total time (in seconds) before we make an automatic call to `/settlements` after merchant's antifraud approval."
+    },
+    "delayToCancel": {
+      "type": "integer",
+      "description": "Total time (in seconds) to wait for an authorization and make an automatic call to `/cancellations` to cancel the payment. The minimum value is 10 minutes (600 seconds). **NOTE 1**: If you set this field to a time period less than 24 hours (86399 seconds or less), the gateway will retry processing the payment every 1 hour. If you use a value of 24 hours (86400 seconds) or more in this field, the gateway will retry processing the payment every 4 hours. **NOTE 2**:  For `delayToCancel` values between 5 minutes and 1 hour (300 and 3600 seconds), or when payment is made by [PIX](https://developers.vtex.com/docs/guides/payments-integration-pix-instant-payments-in-brazil) (Brazilian instant payment method), retry calls will occur every 5 minutes."
+    },
+    "maxValue": {
+      "type": "integer",
+      "description": "The maximum value for this payment. This field allows changes to be made to transactions to settle larger amounts as a result of order changes."
+    },
+    "connectorMetadata": {
+      "type": "array",
+      "description": "Array containing metadata fields sent from the provider to the payment gateway.",
+      "items": {
+        "type": "object",
+        "description": "Metadata fields information.",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the metadata to be stored in the gateway (limited to 20 characters)."
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the metadata stored (limited to 200 characters)."
+          }
+        }
+      }
+    }
+  }
+}

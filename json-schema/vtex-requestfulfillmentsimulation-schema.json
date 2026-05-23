@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/requestFulfillmentSimulation",
+  "title": "requestFulfillmentSimulation",
+  "description": "This request body represents a fulfillmentsimulation, which may involve delivering items to a specified address. It is used to test the process of fulfilling orders without actually placing them.",
+  "required": [
+    "postalCode"
+  ],
+  "type": "object",
+  "properties": {
+    "postalCode": {
+      "type": "string",
+      "description": "Delivery address postal code. This field is mandatory for shopping carts simulations, where both Country and Postal Code are required. This field should be sent as `null` for storefront simulations, where the information is not necessary.",
+      "example": "12345678"
+    },
+    "geoCoordinates": {
+      "type": "array",
+      "description": "Geographic coordinates of the delivery address. This may be used instead of the postalCode, in case the marketplace is configured to accept geolocation. Example of value: `[-22.9443504,-43.1825635]`.",
+      "items": {
+        "description": "Coordinate value.",
+        "type": "string",
+        "example": "00.00000000"
+      }
+    },
+    "country": {
+      "type": "string",
+      "description": "ISO 3-digit code of the country where the delivery address is located.  This field is mandatory, for shopping carts simulations, where both Country and Postal Code are required. This field should be sent as `null` for storefront simulations, where the information is not necessary.",
+      "example": "USA"
+    },
+    "items": {
+      "type": "array",
+      "description": "Array containing the cart items.",
+      "items": {
+        "$ref": "#/components/schemas/fulfillmentItem"
+      }
+    },
+    "sc": {
+      "type": "string",
+      "description": "Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) associated to the seller account created.",
+      "example": "1"
+    }
+  }
+}

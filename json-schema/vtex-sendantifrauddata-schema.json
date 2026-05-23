@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/SendAntifraudData",
+  "title": "SendAntifraudData",
+  "required": [
+    "id",
+    "tid",
+    "code",
+    "message",
+    "status",
+    "score",
+    "analysisType",
+    "responses"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "VTEX transaction ID. The ID of this transaction must be in the response.",
+      "example": "D3AA1F"
+    },
+    "tid": {
+      "type": "string",
+      "description": "Provider transaction ID. The ID of this transaction must be in the response. The anti-fraud provider must generate a unique transaction ID.",
+      "example": "4692c1"
+    },
+    "code": {
+      "type": "string",
+      "description": "Error code returned from provider. It will be logged in transaction interactions log.",
+      "example": "customCode"
+    },
+    "message": {
+      "type": "string",
+      "description": "Error message returned from provider. It will be logged in transaction interactions log.",
+      "example": "customMessage"
+    },
+    "status": {
+      "description": "Pre-analysis status from provider. Must be `approved` or `denied`.",
+      "example": "approved",
+      "enum": [
+        "approved",
+        "denied"
+      ]
+    },
+    "score": {
+      "type": "number",
+      "description": "Value of the risk score. The maximum value is `100.00`, which means total fraud.",
+      "example": 5.01
+    },
+    "analysisType": {
+      "type": "string",
+      "description": "Pre-analysis type. Must be `automatic`.",
+      "example": "automatic"
+    },
+    "responses": {
+      "$ref": "#/components/schemas/Responses"
+    }
+  }
+}

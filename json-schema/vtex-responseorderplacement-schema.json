@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/responseOrderPlacement",
+  "title": "responseOrderPlacement",
+  "description": "Expected response from the Order Placement endpoint.",
+  "type": "object",
+  "properties": {
+    "marketplaceOrderId": {
+      "description": "Number of the order in the marketplace.",
+      "type": "string"
+    },
+    "orderId": {
+      "description": "Order number.",
+      "type": "string"
+    },
+    "followUpEmail": {
+      "description": "Email for contact with the store (seller).",
+      "type": "string"
+    },
+    "items": {
+      "description": "List of order items.",
+      "type": "array",
+      "items": {
+        "description": "Details of an order item.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "SKU ID."
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantity of the item."
+          },
+          "seller": {
+            "type": "string",
+            "description": "ID of the seller registered in VTEX."
+          },
+          "commission": {
+            "type": "integer",
+            "description": "Comission."
+          },
+          "freightCommission": {
+            "type": "integer",
+            "description": "Freight comission."
+          },
+          "price": {
+            "type": "number",
+            "description": "SKU price. The last two digits are the cents. For example, $24.99 is represented 2499.",
+            "example": 2499
+          },
+          "bundleItems": {
+            "type": "array",
+            "description": "Information on services sold along with the SKU. Example: a gift package.",
+            "items": {
+              "$ref": "#/components/schemas/bundleItemsItem"
+            }
+          },
+          "itemsAttachment": {
+            "type": "array",
+            "description": "Attachments sold with the SKU.",
+            "items": {
+              "$ref": "#/components/schemas/itemAttachment"
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Array containing information on attachments.",
+            "items": {
+              "type": "object",
+              "description": "Attachment information.",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier of the attachment."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the attachment."
+                },
+                "url": {
+                  "type": "string",
+                  "description": "URL of the attachment."
+                }
+              }
+            }
+          },
+          "priceTags": {
+            "type": "array",
+            "description": "Array of price tags. Each one modifies the price in some way, like discounts or rates that apply to the item in the context of the order.",
+            "items": {
+              "description": "Details of a price tag affecting the item's price.",
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "description": "Price tag identifier."
+                },
+                "isPercentual": {
+                  "type": "boolean",
+                  "description": "`true` if price tag value is applied through a percentage."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Price tag name."
+                },
+                "rawValue": {
+                  "type": "integer",
+                  "description": "Price tag value."
+                },
+                "value": {
+                  "type": "integer",
+                  "description": "Price tag raw value."
+                }
+              }
+            }
+          },
+          "measurementUnit": {
+            "type": "string",
+            "description": "SKU measurement unit."
+          },
+          "unitMultiplier": {
+            "type": "integer",
+            "description": "SKU unit multiplier."
+          },
+          "isGift": {
+            "type": "boolean",
+            "description": "`true` if the item is a gift."
+          }
+        }
+      }
+    },
+    "clientProfileData": {
+      "description": "Customer's data.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Customer's email address."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "Customer's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Customer's last name."
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Type of the document informed by the customer."
+        },
+        "document": {
+          "type": "string",
+          "description": "Document number informed by the customer."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Customer's phone number."
+        },
+        "corporateName": {
+          "type": "string",
+          "description": "Company name, if the customer is a legal entity.",
+          "nullable": true
+        },
+        "tradeName": {
+          "type": "string",
+          "description": "Trade name, if the customer is a legal entity.",
+          "nullable": true
+        },
+        "corporateDocument": {
+          "type": "string",
+          "description": "Corporate document, if the customer is a legal entity.",
+          "nullable": true
+        },
+        "stateInscription": {
+          "type": "string",
+          "description": "State inscription, if the customer is a legal entity.",
+          "nullable": true
+        },
+        "corporatePhone": {
+          "type": "string",
+          "description": "Corporate phone number, if the customer is a legal entity.",
+          "nullable": true
+        },
+        "isCorporate": {
+          "type": "boolean",
+          "description": "`true` if the customer is a legal entity.",
+          "default": false,
+          "nullable": true
+        }
+      }
+    },
+    "shippingData": {
+      "description": "Shipping information.",
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "object",
+          "description": "Shipping address.",
+          "required": [
+            "addressType",
+            "receiverName",
+            "postalCode",
+            "city",
+            "state",
+            "country",
+            "street",
+            "neighborhood",
+            "number"
+          ],
+          "properties": {
+            "addressType": {
+              "type": "string",
+              "description": "Type of address. For example, `Residential` or `Pickup`, among others."
+            },
+            "receiverName": {
+              "type": "string",
+              "description": "Name of the person who is going to receive the order."
+            },
+            "addressId": {
+              "type": "string",
+              "description": "Address ID."
+            },
+            "postalCode": {
+              "type": "string",
+              "description": "Postal Code."
+            },
+            "city": {
+              "type": "string",
+              "description": "City of the shipping address."
+            },
+            "state": {
+              "type": "string",
+              "description": "State of the shipping address."
+            },
+            "country": {
+              "type": "string",
+              "description": "Three letter ISO code of the country of the shipping address."
+            },
+            "street": {
+              "type": "string",
+              "description": "Street of the shipping address."
+            },
+            "number": {
+              "type": "string",
+              "description": "Number of the building, house or apartment in the shipping address."
+            },
+            "neighborhood": {
+              "type": "string",
+              "description": "Neighborhood of the shipping address."
+            },
+            "complement": {
+              "type": "string",
+              "description": "Complement to the shipping address in case it applies."
+            },
+            "reference": {
+              "type": "string",
+              "description": "Complement that might help locate the shipping address more precisely in case of delivery."
+            },
+            "geoCoordinates": {
+              "type": "array",
+              "description": "Geographic coordinates of the delivery address. This may be used instead of the postalCode, in case the marketplace is configured to accept geolocation. Example of value: `[-22.9443504,-43.1825635]`.",
+              "items": {
+                "description": "Coordinate value.",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "logisticsInfo": {
+          "type": "array",
+          "description": "Array of objects containing logistics information of each item.",
+          "items": {
+            "description": "Logistics information for a specific item.",
+            "type": "object",
+            "required": [
+              "itemIndex",
+              "selectedSla",
+              "price"
+            ],
+            "properties": {
+              "itemIndex": {
+                "type": "integer",
+                "description": "Index of the item in the `items` array, starting from 0."
+              },
+              "selectedSla": {
+                "type": "string",
+                "description": "Selected shipping option."
+              },
+              "lockTTL": {
+                "type": "string",
+                "description": "Logistics reservation waiting time."
+              },
+              "shippingEstimate": {
+                "type": "string",
+                "description": "Estimated time until delivery for the item."
+              },
+              "price": {
+                "type": "integer",
+                "description": "Shipping price for the item. Does not account for the whole order's shipping price."
+              },
+              "deliveryWindow": {
+                "type": "object",
+                "description": "Scheduled delivery window information, in case it applies to the item.",
+                "properties": {
+                  "startDateUtc": {
+                    "type": "string",
+                    "description": "Scheduled delivery window start date in UTC."
+                  },
+                  "endDateUtc": {
+                    "type": "string",
+                    "description": "Scheduled delivery window end date in UTC."
+                  },
+                  "listPrice": {
+                    "type": "number",
+                    "description": "Scheduled delivery window list price.",
+                    "example": 10
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "paymentData": {
+      "type": "object",
+      "description": "In other contexts, this field tipically holds an object with payment information. However, since the payment is processed by the marketplace, it will be sent to the seller as `null` in this context.",
+      "nullable": true
+    },
+    "customData": {
+      "description": "Custom data for the order.",
+      "type": "object"
+    },
+    "allowMultipleDeliveries": {
+      "description": "Flag for permission of multiple deliveries.",
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/VtexMapperRegistration",
+  "title": "VtexMapperRegistration",
+  "required": [
+    "displayName",
+    "categoryTreeEndPoint",
+    "mappingEndPoint",
+    "properties"
+  ],
+  "type": "object",
+  "properties": {
+    "displayName": {
+      "type": "string",
+      "description": "Marketplace Name, that will be displayed in VTEX Mapper.",
+      "example": "Marketplace A"
+    },
+    "categoryTreeEndPoint": {
+      "type": "string",
+      "description": "Endpoint that returns categories and attributes according to VTEX  Mapper specifications.",
+      "example": "http://api.vtexinternal.com.br/api/{{marketplaceName}}/mapper/categories"
+    },
+    "mappingEndPoint": {
+      "type": "string",
+      "description": "Secure endpoint that will receive the category mapping sent by VTEX Mapper.",
+      "example": "http://api.vtexinternal.com.br/api/{{marketplaceName}}/mapper/mapping"
+    },
+    "properties": {
+      "required": [
+        "allowsRemap"
+      ],
+      "type": "object",
+      "description": "Refers to the `allowsRemap` property.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "allowsRemap": {
+            "type": "boolean",
+            "description": "Allows rempaping categories in case the marketplace or seller tree is altered. If marked as `true`, all trees will be remapped.",
+            "example": false
+          }
+        }
+      }
+    },
+    "CategoryTreeProcessingNotificationEndpoint": {
+      "description": "The `CategoryTreeProcessingNotificationEndpoint` is optional, and should be an endpoint from the external marketplace, that will be notified after the marketplace's category tree is successfully processed or not.",
+      "type": "string",
+      "example": "https://CategoryTreeProcessingNotificationEndpoint.com/api"
+    }
+  }
+}

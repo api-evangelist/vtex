@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/MatchRequest",
+  "title": "",
+  "required": [
+    "matcherId",
+    "score",
+    "matchType"
+  ],
+  "type": "object",
+  "properties": {
+    "matcherId": {
+      "type": "string",
+      "description": "Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.",
+      "default": "vtex-matcher"
+    },
+    "matchType": {
+      "title": "Match Type",
+      "type": "string",
+      "description": "Define the action you want to apply to each SKU. Values include: \n\n1. `newproduct`: match the SKU as a new product. \n\n2. `itemMatch`: associate the received SKU to an existing SKU. \n\n3. `productMatch`: associate the received SKU to an existing product. \n\n4. `deny`: deny the received SKU. \n\n5. `pending`: the received SKU requires attention. \n\n6. `incomplete`: the received SKU is lacking information to be matched. \n\n7. `insufficientScore`: the score given by the Matcher to this received SKU doesn't qualify it to be matched. \n\nNote that  if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score.",
+      "default": "itemMatch"
+    },
+    "score": {
+      "type": "string",
+      "description": "Matcher rates received SKUs by correlating the data sent by sellers, to existing fields in the marketplace. The calculation of these scores determines whether the product has been: \n\n`Approved`: score equal to or greater than 80 points. \n\n`Pending`: from 31 to 79 points.\n\n`Denied`: from 0 to 30 points. \n\nNote that  if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score.",
+      "default": "80"
+    },
+    "skuRef": {
+      "type": "string",
+      "nullable": true,
+      "description": "In `itemMatch` actions, fill in this field on your request to match the item to an existing SKU in the marketplace.",
+      "default": ""
+    },
+    "productRef": {
+      "type": "string",
+      "description": "In `productMatch` actions, fill in this field on your request to match the item to an existing product in the marketplace.",
+      "default": "",
+      "nullable": true
+    },
+    "product": {
+      "$ref": "#/components/schemas/Product"
+    },
+    "sku": {
+      "$ref": "#/components/schemas/Sku"
+    }
+  },
+  "example": {
+    "matcherId": "{{matcherid}}",
+    "score": "{{score}} (must be decimal)",
+    "matchType": "itemMatch",
+    "skuRef": "{{skuid}}(should be specifed when match is a sku match)",
+    "productRef": "{{productRef}}(should be specified when match is a product match)",
+    "product": {
+      "name": "Produto exemplo",
+      "description": "Descricao exemplo",
+      "categoryId": 12,
+      "brandId": 1234567,
+      "specifications": null
+    },
+    "sku": {
+      "name": "Sku exemplo",
+      "eans": [
+        "12345678901213"
+      ],
+      "refId": null,
+      "height": 1,
+      "width": 1,
+      "length": 1,
+      "weight": 1,
+      "images": [
+        {
+          "imagem1.jpg": "imageurl.example"
+        }
+      ],
+      "unitMultiplier": 1,
+      "measurementUnit": "un",
+      "specifications": {
+        "Embalagem": "3 kg"
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/ResponseService",
+  "title": "ResponseService",
+  "type": "object",
+  "required": [
+    "status",
+    "serviceId",
+    "shippingPrice",
+    "metaData",
+    "shippingEstimatedDate",
+    "labels"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "example": "PENDING",
+      "description": "Status of the service.",
+      "enum": [
+        "PENDING",
+        "ASSIGNED",
+        "PICKED",
+        "ON_ROUTE",
+        "INCIDENT",
+        "RETURNED",
+        "DELIVERED",
+        "CANCELED",
+        "ON_HOLD"
+      ]
+    },
+    "serviceId": {
+      "type": "string",
+      "example": "ASDF23324KDSF2",
+      "description": "Service ID."
+    },
+    "shippingPrice": {
+      "type": "number",
+      "example": 20000.09,
+      "description": "Service shipping price."
+    },
+    "metaData": {
+      "type": "object",
+      "properties": {
+        "{keyValue}": {
+          "description": "Carrier additional information.",
+          "type": "string"
+        }
+      },
+      "example": {
+        "anyKey": "anyValue"
+      }
+    },
+    "shippingEstimatedDate": {
+      "type": "string",
+      "example": "2024-05-29T22:36:37.589Z",
+      "description": "Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`."
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Label"
+      },
+      "description": "Shipping labels, there may be more than one per order due to breakage in packages."
+    }
+  }
+}

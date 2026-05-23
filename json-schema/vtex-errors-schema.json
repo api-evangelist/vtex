@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Errors",
+  "title": "Errors",
+  "description": "When Sent Offers, or the connectors, find an error that prevents sending or updating an offer to a channel, they should open a `failure` log, and fill in its details through this `errors` attribute. From the information sent through this attribute, sellers can identify and fix errors on their offers. Connectors must identify all errors, and send them all in a single request. This means that connectors should go through every possible validation, and only after all errors are identified, create the failure log.",
+  "required": [
+    "code",
+    "externalCode",
+    "title",
+    "description",
+    "closableOrigins"
+  ],
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "The Search Errors endpoint returns the updated list of error codes. It is the only source of truth about the codes and where they will be always updated. Fill in this field with the code corresponding to the error identified.",
+      "default": "CTLG-001"
+    },
+    "externalCode": {
+      "type": "string",
+      "description": "Connectors must extend the Sent Offers' codes by adding their own code IDs for mapping specific scenarios that apply to their own system. They can send those codes through a suffix ID added in an existing code. This way the Sent Offers knows which errors must be archived and which errors must be kept, being able to classify that given error and improve its solving action. These suffix IDs are totally managed by the connectors, which will require them a way to map each error inside their own code.",
+      "default": "284692"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short text summarizing the error identified. It will be the title that appears in the Sent Offers' UI.",
+      "default": "Description includes HTML"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short text giving more context about the error identified. It will be the description of the error mentioned in the title, also appearing in the Sent Offers' UI.",
+      "default": "Netshoes does not allow HTML tags in an offer's description. Access the product in your Catalog to remove the HTML tag."
+    },
+    "closableOrigins": {
+      "type": "array",
+      "description": "Values allowed in this field are `catalog`, `price` and `inventory`.",
+      "default": [
+        "catalog",
+        "price"
+      ]
+    }
+  }
+}

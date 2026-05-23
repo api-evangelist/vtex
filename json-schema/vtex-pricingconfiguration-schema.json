@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PricingConfiguration",
+  "title": "PricingConfiguration",
+  "required": [
+    "hasMigrated",
+    "defaultMarkup",
+    "minimumMarkups"
+  ],
+  "type": "object",
+  "description": "Pricing configuration request body information.",
+  "properties": {
+    "hasMigrated": {
+      "type": "boolean",
+      "description": "Defines if the account has migrated to Pricing V2."
+    },
+    "migrationStatus": {
+      "type": "string",
+      "description": "Pricing V2 migration status."
+    },
+    "defaultMarkup": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Account default markup."
+    },
+    "priceVariation": {
+      "type": "object",
+      "description": "Price Variation object.",
+      "properties": {
+        "upperLimit": {
+          "type": "integer",
+          "description": "Upper variation limit.",
+          "nullable": true
+        },
+        "lowerLimit": {
+          "type": "integer",
+          "description": "Lower variation limit.",
+          "nullable": true
+        }
+      }
+    },
+    "minimumMarkups": {
+      "type": "object",
+      "description": "Account minimum markup.",
+      "additionalProperties": {
+        "description": "Additional property.",
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "tradePolicyConfigs": {
+      "type": "array",
+      "description": "Trade Policy Configurations array.",
+      "items": {
+        "type": "object",
+        "description": "Information trade polity configuration.",
+        "properties": {
+          "tradePolicyId": {
+            "type": "string",
+            "description": "Trade Policy ID."
+          },
+          "minimumMarkup": {
+            "type": "integer",
+            "description": "Trade Policy Minimum Markup."
+          },
+          "rulesShouldAffectListPrice": {
+            "type": "boolean",
+            "description": "Defines if the Price Rule should affect the list price too."
+          }
+        }
+      }
+    },
+    "sellersToOverride": {
+      "type": "array",
+      "description": "Overrides prices from sellers.",
+      "nullable": true,
+      "items": {
+        "type": "string",
+        "description": "Seller ID."
+      }
+    },
+    "hasPriceInheritance": {
+      "type": "boolean",
+      "description": "Deprecated. Use the `priceInheritance` field instead.",
+      "deprecated": true
+    },
+    "priceInheritance": {
+      "type": "string",
+      "description": "Condition of price inheritance from its parent account. This field can have three possible values: `never` if the store should never inherit prices, `nonexistent` if the store should only inherit prices in case of nonexistent prices for a given product, or `always` if the store should always inherit prices, regardless of its own prices."
+    },
+    "hasOptionalBasePrice": {
+      "type": "boolean",
+      "description": "Defines if optional base price is allowed."
+    },
+    "blockAccount": {
+      "type": "boolean",
+      "description": "Defines if access to the Pricing APIs is blocked for external requests."
+    },
+    "blockedRoutes": {
+      "type": "array",
+      "description": "Array with all blocked routes.",
+      "nullable": true,
+      "items": {
+        "type": "string",
+        "description": "Blocked route."
+      }
+    },
+    "priceTableSelectionStrategy": {
+      "type": "string",
+      "description": "The strategy used to get prices when there is more than one option. Possible values: `first`, `highest`, `lowest`. Default: `first`.",
+      "default": "first"
+    },
+    "priceTableLimit": {
+      "type": "integer",
+      "description": "Price Table Limit.",
+      "nullable": true
+    }
+  }
+}

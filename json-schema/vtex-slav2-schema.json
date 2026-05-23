@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/SlaV2",
+  "title": "SlaV2",
+  "required": [
+    "id",
+    "deliveryChannel",
+    "name",
+    "deliveryIds",
+    "shippingEstimate",
+    "shippingEstimateDate",
+    "lockTTL",
+    "availableDeliveryWindows",
+    "deliveryWindow",
+    "price",
+    "listPrice",
+    "tax",
+    "pickupStoreInfo",
+    "pickupPointId",
+    "pickupDistance",
+    "polygonName",
+    "transitTime"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Shipping method of the [shipping policy](https://help.vtex.com/en/tutorial/shipping-policy--tutorials_140) used in the order delivery or pickup.",
+      "example": "Normal"
+    },
+    "deliveryChannel": {
+      "type": "string",
+      "description": "Order shipping type, which can be `pickup-in-point` for [pickup point](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R), and `delivery` for delivery.",
+      "example": "delivery"
+    },
+    "name": {
+      "type": "string",
+      "description": "Shipping method of the [shipping policy](https://help.vtex.com/en/tutorial/shipping-policy--tutorials_140) used in the order delivery or pickup. It corresponds to the `id` value.",
+      "example": "Normal"
+    },
+    "deliveryIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/DeliveryIdV2"
+      },
+      "description": "Information about delivery IDs."
+    },
+    "shippingEstimate": {
+      "type": "string",
+      "nullable": true,
+      "description": "Total shipping duration estimated in days. For instance, three business days is represented as `3bd`.",
+      "example": "3bd"
+    },
+    "shippingEstimateDate": {
+      "type": "string",
+      "nullable": true,
+      "description": "Shipping estimate date. The value is in UTC ISO 8601 format `yyyy-mm-ddThh:mm:ss.sssZ`.",
+      "example": "2023-07-27T17:52:18.6483116Z"
+    },
+    "lockTTL": {
+      "type": "string",
+      "nullable": true,
+      "description": "Logistics [reservation](https://help.vtex.com/en/tutorial/how-does-reservation-work--tutorials_92) waiting time of the SLA. For instance, one business day is represented as `1bd`.",
+      "example": "1bd"
+    },
+    "availableDeliveryWindows": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Available [scheduled delivery](https://help.vtex.com/en/tutorial/scheduled-delivery--22g3HAVCGLFiU7xugShOBi) information, for when the shipping policy has shipping windows configurations."
+    },
+    "deliveryWindow": {
+      "type": "object",
+      "nullable": true,
+      "description": "[Scheduled delivery](https://help.vtex.com/en/tutorial/scheduled-delivery--22g3HAVCGLFiU7xugShOBi) information, when applicable.",
+      "example": null
+    },
+    "price": {
+      "type": "integer",
+      "description": "Shipping price for the item in cents. Does not account for the whole order's shipping price.",
+      "example": 600
+    },
+    "listPrice": {
+      "type": "integer",
+      "description": "Item's price list for a specific trade policy.",
+      "example": 600
+    },
+    "tax": {
+      "type": "integer",
+      "description": "Tax in cents, when applicable.",
+      "example": 0
+    },
+    "pickupStoreInfo": {
+      "$ref": "#/components/schemas/PickupStoreInfoV2"
+    },
+    "pickupPointId": {
+      "type": "string",
+      "nullable": true,
+      "description": "Pickup point ID is the unique identifier of the [pickup point](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R) related to the SLA.",
+      "example": "pup215rkw"
+    },
+    "pickupDistance": {
+      "type": "number",
+      "nullable": true,
+      "description": "Distance in kilometers between the pickup point and the customer's address. The distance is measured as a straight line.",
+      "example": 1
+    },
+    "polygonName": {
+      "type": "string",
+      "nullable": true,
+      "description": "Name of the [polygon](https://help.vtex.com/en/tutorial/registering-geolocation/) associated with the shipping policy.",
+      "example": "114 - Polanco _ H-05"
+    },
+    "transitTime": {
+      "type": "string",
+      "nullable": true,
+      "description": "Duration in business days of the time the [carrier](https://help.vtex.com/en/tutorial/carriers-on-vtex--7u9duMD5UQa2QQwukAWMcE) takes in transit to fulfill the order. For example, three business days is represented as `3bd`.",
+      "example": "3bd"
+    }
+  },
+  "example": {
+    "id": "Lenta",
+    "deliveryChannel": "delivery",
+    "name": "Lenta",
+    "deliveryIds": [],
+    "shippingEstimate": null,
+    "shippingEstimateDate": null,
+    "lockTTL": null,
+    "availableDeliveryWindows": [],
+    "deliveryWindow": null,
+    "price": 600,
+    "listPrice": 600,
+    "tax": 0,
+    "pickupStoreInfo": {
+      "isPickupStore": false,
+      "friendlyName": null,
+      "address": null,
+      "additionalInfo": null,
+      "dockId": null
+    },
+    "pickupPointId": null,
+    "pickupDistance": null,
+    "polygonName": null,
+    "transitTime": null
+  }
+}

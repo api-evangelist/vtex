@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/UpdateOrderStatusRequest",
+  "title": "UpdateOrderStatusRequest",
+  "required": [
+    "marketplaceOrderId",
+    "marketplaceOrderStatus",
+    "connectorName",
+    "connectorEndpoint"
+  ],
+  "type": "object",
+  "properties": {
+    "marketplaceOrderId": {
+      "type": "string",
+      "description": "String that indicates the order's ID in the marketplace.",
+      "example": "7e62fcd3-827b-400d-be8a-f050a79c4976"
+    },
+    "marketplaceOrderStatus": {
+      "type": "string",
+      "title": "marketplaceOrderStatus",
+      "description": "Required field including a string with the order\u2019s status in the marketplace. If you send an order with the status APPROVED to integrate, our service will automatically try to advance its status in VTEX after integrating it. This field accepts the following values:  \n\n- `new`  \n\n- `approved`.",
+      "example": "new"
+    },
+    "connectorName": {
+      "type": "string",
+      "title": "connectorName",
+      "description": "String with the identifier code of the connector responsible for the order.  \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template.",
+      "example": "connectorName"
+    },
+    "connectorEndpoint": {
+      "type": "string",
+      "title": "connectorEndpoint",
+      "description": "String with the connector's base endpoint that will receive notifications about the orders processing results, as well as status updates from VTEX OMS. This field does not accept query strings. You can use the models below:  \n\n- `https://{{externalconnector}}.com`  \n\n- `https://{{externalconnector.com}}/api/vtex` if you additionaly want to send a relative URL with the endpoint. \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template.",
+      "example": "https://{{externalconnector.com}}/api/vtex"
+    }
+  },
+  "example": {
+    "marketplaceOrderId": "{{$guid}}",
+    "marketplaceOrderStatus": "APPROVED",
+    "connectorName": "Skyhub",
+    "connectorEndpoint": "https://connector-endpoint.com/api/vtex"
+  }
+}

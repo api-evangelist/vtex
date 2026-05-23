@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Success-Manifest",
+  "title": "Success-Manifest",
+  "required": [
+    "paymentMethods"
+  ],
+  "type": "object",
+  "description": "Payment provider manifest response body information.",
+  "properties": {
+    "paymentMethods": {
+      "type": "array",
+      "description": "Describes each payment method supported by payment provider and exposed its respective metadata.",
+      "items": {
+        "type": "object",
+        "description": "Payment methods information.",
+        "required": [
+          "name",
+          "allowsSplit"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Payment method name."
+          },
+          "allowsSplit": {
+            "type": "string",
+            "description": "Describes which transaction flow stage the connector should receive payment split data. Check more details on the [Split Payouts on the Payment Provider Protocol](https://developers.vtex.com/vtex-rest-api/docs/split-payouts-on-payment-provider-protocol) article.",
+            "enum": [
+              "onAuthorize",
+              "onCapture",
+              "disabled"
+            ]
+          }
+        }
+      }
+    },
+    "customFields": {
+      "type": "array",
+      "description": "Describes the customized fields supported by the connector. Except for `appKey` or `appToken` values, which must be defined in homonymous fields, any other security data should be sent or stored as `password` type fields.",
+      "items": {
+        "type": "object",
+        "description": "Custom fields information.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Custom field name."
+          },
+          "type": {
+            "type": "string",
+            "description": "Custom field type.",
+            "enum": [
+              "text",
+              "password",
+              "select"
+            ]
+          },
+          "options": {
+            "type": "array",
+            "description": "In case of `select` type, the possible params are `text` and `value`.",
+            "items": {
+              "type": "object",
+              "description": "Custom field information.",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Custom field description."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Custom field value."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "autoSettleDelay": {
+      "type": "object",
+      "description": "Describes the allowed delay value for the auto settle capture. Accepted values: `minimum` and `maximum` in whole hours (decimals are not allowed). Check more details on the [Custom Auto Capture Feature](https://developers.vtex.com/vtex-rest-api/docs/custom-auto-capture-feature) article.",
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "properties": {
+        "minimum": {
+          "type": "string",
+          "description": "Minimum amount of time to auto settle in hours."
+        },
+        "maximum": {
+          "type": "string",
+          "description": "Maximum amount of time to auto settle in hours."
+        }
+      }
+    },
+    "metadataFields": {
+      "type": "array",
+      "description": "Array containing the names of the metadata fields sent from the provider to the payment gateway. Limitations: the array must contain a maximum of 3 strings, and each of them, a maximum of 20 characters.",
+      "items": {
+        "type": "string",
+        "description": "Metadata fields information."
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/RefundthetransactionRequest",
+  "title": "RefundthetransactionRequest",
+  "required": [
+    "value"
+  ],
+  "type": "object",
+  "description": "Refund transaction request body information.",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "Purchase value. The value must be described without using separation for decimals, e.g. to capture a value of 320.50, send 32050."
+    },
+    "freight": {
+      "type": "number",
+      "description": "Freigth value, if applicable."
+    },
+    "tax": {
+      "type": "number",
+      "description": "Tax value, if applicable."
+    },
+    "minicart": {
+      "type": "object",
+      "description": "This field is filled with the content of the cart of the transaction, which can be obtained using [Get Orders](https://developers.vtex.com/docs/api-reference/orders-api?endpoint=get-/api/oms/pvt/orders/-orderId-) or [Transaction Details](https://developers.vtex.com/docs/api-reference/payments-gateway-api?endpoint=get-/api/pvt/transactions/-transactionId-) endpoints. It should only be included for transactions with split payment.",
+      "items": {
+        "type": "array",
+        "description": "Array containing cart items.",
+        "items": {
+          "type": "object",
+          "description": "Cart items information.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Item identifier.",
+              "example": "122323"
+            },
+            "name": {
+              "type": "string",
+              "description": "Item name.",
+              "example": "Tenis Preto I"
+            },
+            "value": {
+              "type": "number",
+              "description": "Item value.",
+              "example": 1000
+            },
+            "shippingDiscount": {
+              "type": "integer",
+              "description": "Discount to be applied for the shipping value.",
+              "example": 0
+            },
+            "discount": {
+              "type": "integer",
+              "description": "Discount applied on item.",
+              "example": 50
+            }
+          }
+        }
+      }
+    }
+  }
+}

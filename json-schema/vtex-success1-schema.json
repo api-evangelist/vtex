@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Success1",
+  "title": "Success1",
+  "required": [
+    "paymentId",
+    "cancellationId",
+    "code",
+    "message",
+    "requestId"
+  ],
+  "type": "object",
+  "description": "Cancel payment response body information.",
+  "properties": {
+    "paymentId": {
+      "type": "string",
+      "description": "The same `paymentId` sent in the request."
+    },
+    "cancellationId": {
+      "type": "string",
+      "description": "Provider's cancellation identifier. If the operation has failed you **MUST** return `null`."
+    },
+    "code": {
+      "type": "string",
+      "nullable": true,
+      "description": "Provider's operation/error code to be logged. Return `cancel-manually` if you do not support this operation, so we can send a notification to the merchant."
+    },
+    "message": {
+      "type": "string",
+      "description": "Provider's operation/error message to be logged."
+    },
+    "requestId": {
+      "type": "string",
+      "description": "The same `requestId` sent in the request."
+    },
+    "connectorMetadata": {
+      "type": "array",
+      "description": "Array containing metadata fields sent from the provider to the payment gateway.",
+      "items": {
+        "type": "object",
+        "description": "Metadata fields information.",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the metadata to be stored in the gateway (limited to 20 characters)."
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the metadata stored (limited to 200 characters)."
+          }
+        }
+      }
+    }
+  }
+}

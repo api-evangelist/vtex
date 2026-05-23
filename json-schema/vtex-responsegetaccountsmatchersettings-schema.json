@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/responseGetAccountsMatcherSettings",
+  "title": "GetAccountsMatcherSettings",
+  "description": "Response from Get Account's Matcher Settings endpoint with information about current matcher score setting, rules, spec mapping, and matchFlux.",
+  "type": "object",
+  "properties": {
+    "score": {
+      "description": "[Matcher](https://help.vtex.com/pt/tutorial/entendendo-a-pontuacao-do-vtex-matcher--tutorials_424) rates received SKUs by comparing the data sent by sellers to existing fields in the marketplace. The calculation of these scores determines whether the product has been: `Approved`, `Pending` or `Denied`.",
+      "type": "object",
+      "properties": {
+        "approve": {
+          "type": "integer",
+          "description": "Minimum approval score set by the marketplace.",
+          "default": "80"
+        },
+        "pending": {
+          "type": "integer",
+          "description": "Minimum value for the ad to be pending.",
+          "default": "31"
+        },
+        "reject": {
+          "type": "integer",
+          "description": "Bounce score set by marketplace.",
+          "default": "30"
+        }
+      }
+    },
+    "matchers": {
+      "description": "Array of objects that presents a list of matchers configured in the marketplace. If the marketplace has more than one matcher configured in the account, an array will be displayed for each matcher.\n\n By default, the VTEX Matcher is set up automatically in VTEX account.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "matcherId": {
+            "type": "string",
+            "description": "The Matcher Id."
+          },
+          "hook-base-address": {
+            "type": "string",
+            "description": "The base address of the Matcher hook."
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Indicates if Matcher is active or not. `TRUE` = Matcher is active or `FALSE` = Matcher is inactive.",
+            "default": true
+          }
+        }
+      }
+    },
+    "rules": {
+      "description": "Arrays object that contains the rules defined for product approval.",
+      "type": "object",
+      "properties": {
+        "item": {
+          "type": "array",
+          "description": "A list of rules for items."
+        },
+        "product": {
+          "type": "array",
+          "description": "A list of rules for products."
+        }
+      }
+    },
+    "specificationsMapping": {
+      "type": "array",
+      "description": "This field will show a list of which product specs and SKU are configured to be mapped."
+    },
+    "matchFlux": {
+      "type": "string",
+      "description": "This field shows what type of approval setting is being applied to SKUs received from a seller. \n\nPossible values include: \n\n-`default`: where Matcher reviews the SKU and approves it based on its score. \n\n-`manual`: for manual approvals via incoming SKU UI or mailing API. \n\n-`autoApprove`: so that every SKU received from a given seller is automatically approved, regardless of its Matcher Score."
+    }
+  }
+}

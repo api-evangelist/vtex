@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PageCart",
+  "title": "PageCart",
+  "description": "Sends an event every time the shopper enters the cart page. Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card.",
+  "type": "object",
+  "required": [
+    "session",
+    "anonymous",
+    "type",
+    "products"
+  ],
+  "properties": {
+    "session": {
+      "$ref": "#/components/schemas/UserIdentification/properties/session"
+    },
+    "anonymous": {
+      "$ref": "#/components/schemas/UserIdentification/properties/anonymous"
+    },
+    "products": {
+      "type": "array",
+      "title": "products",
+      "description": "Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.",
+      "items": {
+        "$ref": "#/components/schemas/CartProduct"
+      }
+    },
+    "type": {
+      "type": "string",
+      "title": "type",
+      "description": "Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.",
+      "example": "page.cart"
+    }
+  }
+}

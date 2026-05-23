@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/InboundRequest_BETA_Request",
+  "title": "InboundRequest_BETA_Request",
+  "required": [
+    "requestId",
+    "transactionId",
+    "paymentId",
+    "authorizationId",
+    "tid",
+    "nsu",
+    "requestData"
+  ],
+  "type": "object",
+  "description": "Inbound request information.",
+  "properties": {
+    "requestId": {
+      "type": "string",
+      "description": "The unique identifier for this request to ensure its idempotency.",
+      "example": "LA4E20D3B4E07B7E871F5B5BC9F91"
+    },
+    "transactionId": {
+      "type": "string",
+      "description": "VTEX transaction ID related to this payment.",
+      "example": "D3AA1FC8372E430E8236649DB5EBD08E"
+    },
+    "paymentId": {
+      "type": "string",
+      "description": "VTEX payment ID from this payment.",
+      "example": "F5C1A4E20D3B4E07B7E871F5B5BC9F91"
+    },
+    "authorizationId": {
+      "type": "string",
+      "description": "Provider's unique identifier for the authorization.",
+      "example": "AUT123567"
+    },
+    "nsu": {
+      "type": "string",
+      "description": "Provider's unique sequential number for the transaction.",
+      "example": "NSU987432"
+    },
+    "tid": {
+      "type": "string",
+      "description": "Provider's unique identifier for the transaction.",
+      "example": "10022005181543584603"
+    },
+    "requestData": {
+      "$ref": "#/components/schemas/RequestData"
+    },
+    "merchantSettings": {
+      "type": "array",
+      "description": "Custom fields (for the given provider) which the merchant must fill. Each element of this array is a key-value pair.",
+      "items": {
+        "type": "object",
+        "description": "Merchant settings information.",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The custom field name.",
+            "example": "Public Merchant ID Test."
+          },
+          "value": {
+            "type": "string",
+            "description": "The custom field value.",
+            "example": "1"
+          }
+        }
+      }
+    },
+    "connectorMetadata": {
+      "type": "array",
+      "description": "Array containing metadata fields sent from the provider to the payment gateway.",
+      "items": {
+        "type": "object",
+        "description": "Metadata fields information.",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the metadata to be stored in the gateway (limited to 20 characters).",
+            "example": "MetadataName"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the metadata stored (limited to 200 characters).",
+            "example": "MetadataValue"
+          }
+        }
+      }
+    }
+  }
+}

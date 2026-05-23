@@ -1,0 +1,260 @@
+{
+  "operationId": "GetAllContentTypes",
+  "method": "GET",
+  "path": "/_v/cms/api/{projectId}",
+  "summary": "VTex Get all content types",
+  "requestExamples": [],
+  "responseExamples": [
+    {
+      "status": "200",
+      "contentType": "application/json",
+      "example": {
+        "contentTypes": [
+          {
+            "id": "home",
+            "name": "Home Page",
+            "configurationSchemaSets": []
+          },
+          {
+            "id": "plp",
+            "name": "PLP",
+            "configurationSchemaSets": [
+              {
+                "name": "Parameters",
+                "configurations": [
+                  {
+                    "name": "Collection",
+                    "schema": {
+                      "title": "Collection",
+                      "description": "Definition of a Collection for the CMS.",
+                      "oneOf": [
+                        {
+                          "title": "Category",
+                          "description": "Configure a Category.",
+                          "type": "object",
+                          "required": [
+                            "categoryId",
+                            "sort"
+                          ],
+                          "properties": {
+                            "categoryId": {
+                              "title": "Category ID",
+                              "description": "Category identifier to organize the store's products.",
+                              "type": "string"
+                            },
+                            "sort": {
+                              "title": "Default ordering",
+                              "description": "Organizes and displays a set of products based on filters.",
+                              "type": "string",
+                              "default": "\"\"",
+                              "enum": [
+                                "\"\"",
+                                "discount:desc",
+                                "release:desc",
+                                "name:asc",
+                                "name:desc",
+                                "orders:desc",
+                                "price:asc",
+                                "price:desc"
+                              ],
+                              "enumNames": [
+                                "Relevance",
+                                "Discount",
+                                "Release date",
+                                "Name, ascending",
+                                "Name, descending",
+                                "Sales",
+                                "Price: Low to High",
+                                "Price: High to Low"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "title": "Brand",
+                          "description": "Configure a brand page.",
+                          "type": "object",
+                          "required": [
+                            "brandId",
+                            "sort"
+                          ],
+                          "properties": {
+                            "brandId": {
+                              "title": "Brand ID",
+                              "description": "Brand identifier to categorize a group of products.",
+                              "type": "string"
+                            },
+                            "sort": {
+                              "title": "Default ordering",
+                              "description": "Organizes and displays a set of products based on filters.",
+                              "type": "string",
+                              "enum": [
+                                "\"\"",
+                                "discount:desc",
+                                "release:desc",
+                                "name:asc",
+                                "name:desc",
+                                "orders:desc",
+                                "price:asc",
+                                "price:desc"
+                              ],
+                              "enumNames": [
+                                "Relevance",
+                                "Discount",
+                                "Release date",
+                                "Name, ascending",
+                                "Name, descending",
+                                "Sales",
+                                "Price: Low to High",
+                                "Price: High to Low"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "title": "Collection",
+                          "description": "Configure a collection page.",
+                          "type": "object",
+                          "required": [
+                            "clusterId",
+                            "sort",
+                            "seo"
+                          ],
+                          "properties": {
+                            "clusterId": {
+                              "title": "Collection ID",
+                              "description": "Collection identifier to categorize a group of products.",
+                              "type": "string"
+                            },
+                            "sort": {
+                              "title": "Default ordering",
+                              "description": "Organizes and displays a set of products based on filters.",
+                              "type": "string",
+                              "default": "\"\"",
+                              "enum": [
+                                "\"\"",
+                                "discount:desc",
+                                "release:desc",
+                                "name:asc",
+                                "name:desc",
+                                "orders:desc",
+                                "price:asc",
+                                "price:desc"
+                              ],
+                              "enumNames": [
+                                "Relevance",
+                                "Discount",
+                                "Release date",
+                                "Name, ascending",
+                                "Name, descending",
+                                "Sales",
+                                "Price: Low to High",
+                                "Price: High to Low"
+                              ]
+                            },
+                            "seo": {
+                              "type": "object",
+                              "title": "Seo",
+                              "description": "Search Engine Optimization options.",
+                              "widget": {
+                                "ui:ObjectFieldTemplate": "GoogleSeoPreview"
+                              },
+                              "required": [
+                                "title",
+                                "description",
+                                "slug"
+                              ],
+                              "properties": {
+                                "title": {
+                                  "type": "string",
+                                  "title": "Title",
+                                  "description": "Title that appears in the browser tab and is suggested for search engines.",
+                                  "default": "Page title"
+                                },
+                                "slug": {
+                                  "type": "string",
+                                  "title": "URL slug",
+                                  "description": "Final part of the page's address. No spaces allowed.",
+                                  "default": "/path/to/page",
+                                  "pattern": "^/([a-zA-Z0-9]|-|/|_)*"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "title": "Description (Meta description)",
+                                  "description": "Suggested meta description for search engines.",
+                                  "default": "Page description"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "institutionalPage",
+            "name": "Institutional page",
+            "configurationSchemaSets": [
+              {
+                "name": "SEO",
+                "configurations": [
+                  {
+                    "name": "siteMetadataWithSlug",
+                    "schema": {
+                      "title": "Site Metadata",
+                      "description": "Configure global site metadata.",
+                      "type": "object",
+                      "widget": {
+                        "ui:ObjectFieldTemplate": "GoogleSeoPreview"
+                      },
+                      "properties": {
+                        "title": {
+                          "title": "Default page title",
+                          "description": "Display this title when no other title is available.",
+                          "type": "string",
+                          "default": "Store Theme | VTEX FastStore"
+                        },
+                        "description": {
+                          "title": "Meta tag description",
+                          "description": "Meta tag description. A HTML tag that provides a concise summary of a web page.",
+                          "type": "string",
+                          "default": "A beautifully designed site for general VTEX stores."
+                        },
+                        "titleTemplate": {
+                          "title": "Title template",
+                          "description": "Title template to be used in category/product pages.",
+                          "type": "string",
+                          "default": "%s | Store Theme"
+                        },
+                        "slug": {
+                          "title": "URL Slug",
+                          "description": "Part of the URL to identify a particular page or product.",
+                          "type": "string",
+                          "default": "/landing-page-url"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "status": "404",
+      "contentType": "application/json",
+      "example": {
+        "code": "NotFound",
+        "message": "storeframework.myvtex.com.br not found",
+        "source": "Vtex.Kube.Router.WebApi",
+        "requestId": "b49522afa7c94b76885450f652be7bfc"
+      }
+    }
+  ]
+}

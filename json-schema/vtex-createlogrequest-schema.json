@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/CreateLogRequest",
+  "title": "CreateLogRequest",
+  "required": [
+    "description",
+    "date",
+    "type",
+    "agent",
+    "evidence",
+    "data",
+    "errors"
+  ],
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "In this field, connectors should describe relevant information about the log, so Sent Offers users can better understand the action taking place.",
+      "default": "Insert your message"
+    },
+    "date": {
+      "type": "string",
+      "description": "Logs follow a chronological timeline, so make sure the date included corresponds to the correct order of logs.",
+      "default": "2020-03-22"
+    },
+    "type": {
+      "type": "string",
+      "description": "Connectors are responsible for attributing the correct type for each log. Therefore, be mindful of their correct usage. \n\n`success`: only logs that conclude an interaction\u2019s goal should be `\u201ctype\u201d=\u201dsuccess\u201d`. \n\n`information`: logs that expose the actions of an update process, to provide visibility and contribute with more technical investigations. Information logs may include internal processes of a system (`agent` attribute), or calls between two systems. \n\n`warning`: logs used in cases where the communication between two systems fails, and there are no actions that the user can take to fix it. They are usually cases where the connector should perform a retry, and provide visibility of what is being attempted again. \n\n`failure`: logs noticed by the connector as errors that prevent an offer from being correctly sent and synced to a channel.",
+      "default": "information"
+    },
+    "agent": {
+      "type": "string",
+      "description": "Entity responsible for creating the entry.",
+      "default": "broadcaster"
+    },
+    "evidence": {
+      "$ref": "#/components/schemas/Evidence"
+    },
+    "data": {
+      "$ref": "#/components/schemas/Data"
+    },
+    "errors": {
+      "$ref": "#/components/schemas/Errors"
+    }
+  }
+}

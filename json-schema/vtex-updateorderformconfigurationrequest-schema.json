@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/UpdateorderFormconfigurationRequest",
+  "title": "UpdateorderFormconfigurationRequest",
+  "required": [
+    "paymentConfiguration",
+    "taxConfiguration",
+    "minimumQuantityAccumulatedForItems",
+    "decimalDigitsPrecision",
+    "minimumValueAccumulated",
+    "apps",
+    "allowMultipleDeliveries",
+    "allowManualPrice"
+  ],
+  "type": "object",
+  "properties": {
+    "paymentConfiguration": {
+      "$ref": "#/components/schemas/PaymentConfiguration"
+    },
+    "taxConfiguration": {
+      "type": "object",
+      "description": "External tax service configuration.",
+      "nullable": true,
+      "properties": {
+        "url": {
+          "type": "string",
+          "nullable": true,
+          "description": "Endpoint URL."
+        },
+        "authorizationHeader": {
+          "type": "string",
+          "description": "Authorization header.",
+          "nullable": true
+        },
+        "appId": {
+          "type": "string",
+          "description": "Custom data ID sent to the tax system.",
+          "example": "12345"
+        },
+        "isMarketplaceResponsibleForTaxes": {
+          "description": "Indicates whether the marketplace is responsible for the products taxes."
+        }
+      }
+    },
+    "minimumQuantityAccumulatedForItems": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Minimum SKU quantity by cart."
+    },
+    "decimalDigitsPrecision": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Number of price digits."
+    },
+    "minimumValueAccumulated": {
+      "type": "integer",
+      "nullable": true,
+      "description": "Minimum cart value."
+    },
+    "apps": {
+      "type": "array",
+      "nullable": true,
+      "description": "Array of objects containing Apps configuration information.",
+      "items": {
+        "type": "object",
+        "description": "App configuration information.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "App ID.",
+            "example": "birthdayApp"
+          },
+          "fields": {
+            "type": "array",
+            "description": "Array of fields available to the app.",
+            "items": {
+              "type": "string",
+              "example": "birthdayField",
+              "description": "Available field."
+            }
+          },
+          "major": {
+            "type": "integer",
+            "description": "App major version.",
+            "example": 1
+          }
+        }
+      }
+    },
+    "allowMultipleDeliveries": {
+      "type": "boolean",
+      "nullable": true,
+      "description": "On the same purchase, allows the selection of items from multiple delivery channels."
+    },
+    "allowManualPrice": {
+      "type": "boolean",
+      "nullable": true,
+      "description": "Allows the editing of SKU prices right in the cart."
+    },
+    "maxNumberOfWhiteLabelSellers": {
+      "type": "integer",
+      "description": "Allows the input of a limit of white label sellers involved on the cart."
+    },
+    "maskFirstPurchaseData": {
+      "type": "boolean",
+      "description": "Allows, on a first purchase, masking client's data. It could be useful when a shared cart is used and the client doesn't want to share its data."
+    },
+    "maskStateOnAddress": {
+      "type": "boolean",
+      "description": "If the response body is masked, on a first purchase, this flag causes the state (UF) to be masked. The default behavior is to be masked.",
+      "default": true
+    },
+    "recaptchaValidation": {
+      "type": "string",
+      "nullable": true,
+      "description": "Configures reCAPTCHA validation for the account, defining in which situations the shopper will be prompted to validate a purchase with reCAPTCHA. Learn more about [reCAPTCHA validation for VTEX stores](https://help.vtex.com/tutorial/recaptcha-no-checkout--18Te3oDd7f4qcjKu9jhNzP)\r\n\r\nPossible values are:\r\n\r\n- `\"never\"`: no purchases are validated with reCAPTCHA.\r\n- `null`: no purchases are validated with reCAPTCHA. The same as `never`.\r\n- `\"always\"`: every purchase is validated with reCAPTCHA.\r\n- `\"vtexCriteria\"`: only some purchases are validated with reCAPTCHA in order to minimize friction and improve shopping experience. VTEX\u2019s algorithm determines which sessions are trustworthy and which should be validated with reCAPTCHA. This is the recommended option.",
+      "example": "vtexCriteria"
+    },
+    "requiresLoginToPlaceOrder": {
+      "type": "boolean",
+      "description": "Indicates whether authentication is required for completing purchases."
+    },
+    "minimumPurchaseDowntimeSeconds": {
+      "type": "integer",
+      "description": "Minimum interval (in seconds) between successive purchases."
+    },
+    "cartAgeToUseNewCardSeconds": {
+      "type": "integer",
+      "description": "Minimum cart existence period (in seconds) before allowing the use of a new credit card."
+    },
+    "paymentSystemToCheckFirstInstallment": {
+      "type": "string",
+      "description": "If you want to apply a first installment discount to a particular payment system, set this field to that payment system's ID. Learn more: [Configuring a discount for orders prepaid in full](https://help.vtex.com/en/tutorial/configurar-desconto-de-preco-a-vista--7Lfcj9Wb5dpYfA2gKkACIt).",
+      "example": "6"
+    }
+  },
+  "example": {
+    "paymentConfiguration": {
+      "requiresAuthenticationForPreAuthorizedPaymentOption": false
+    },
+    "taxConfiguration": null,
+    "minimumQuantityAccumulatedForItems": 1,
+    "decimalDigitsPrecision": 2,
+    "minimumValueAccumulated": null,
+    "apps": null,
+    "allowMultipleDeliveries": null,
+    "allowManualPrice": null
+  }
+}

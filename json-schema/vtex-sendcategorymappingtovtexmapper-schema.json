@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/sendCategoryMappingToVtexMapper",
+  "title": "sendCategoryMappingToVtexMapper",
+  "required": [
+    "categories",
+    "id",
+    "name"
+  ],
+  "type": "object",
+  "properties": {
+    "categories": {
+      "required": [
+        "id",
+        "name",
+        "children"
+      ],
+      "type": "array",
+      "title": "",
+      "description": "Array with Marketplace parent categories and their information.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "title": "",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "id",
+            "description": "ID of the parent category in the marketplace.",
+            "default": "1"
+          },
+          "name": {
+            "type": "string",
+            "title": "name",
+            "description": "Name of the parent category in the marketplace.",
+            "default": "Appliances"
+          },
+          "children": {
+            "type": "array",
+            "title": "chidren",
+            "description": "Array with children categories in the marketplace, and their information.",
+            "default": [],
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "children",
+                "specifications"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": "id",
+                  "description": "ID of the child  category in the marketplace.",
+                  "default": "1a"
+                },
+                "name": {
+                  "type": "string",
+                  "title": "name",
+                  "description": "Name of the child  category in the marketplace.",
+                  "default": "Kitchen"
+                },
+                "children": {
+                  "type": "array",
+                  "title": "children",
+                  "description": "Grandchildren categories in the marketplace. Send as array of `ID`, `name` and `specifications`.",
+                  "default": [],
+                  "items": {},
+                  "nullable": true
+                },
+                "specifications": {
+                  "type": "array",
+                  "title": "specifications",
+                  "description": "Specifications for the Product or SKU",
+                  "default": [
+                    {
+                      "attributeName": "Color",
+                      "required": true,
+                      "attributeValues": [
+                        {
+                          "valueName": "Red"
+                        }
+                      ]
+                    }
+                  ],
+                  "items": {
+                    "type": "object",
+                    "description": "Specifications of children categories.",
+                    "example": {
+                      "attributeName": "Color",
+                      "required": true,
+                      "attributeValues": [
+                        {
+                          "valueName": "Red"
+                        }
+                      ]
+                    },
+                    "required": [
+                      "attributeName",
+                      "required",
+                      "attributeValues"
+                    ],
+                    "properties": {
+                      "attributeName": {
+                        "type": "string",
+                        "title": "attributeName",
+                        "description": "Name of the attribute sent as a specification.",
+                        "default": "Color"
+                      },
+                      "required": {
+                        "type": "boolean",
+                        "title": "required",
+                        "description": "If the specification is required, mark this flag as `true`. If not, mark it as `false`.",
+                        "default": false
+                      },
+                      "attributeValues": {
+                        "type": "array",
+                        "title": "attributeValues",
+                        "description": "Values of the atttribute specified.",
+                        "default": [
+                          {
+                            "valueName": "Red"
+                          }
+                        ],
+                        "items": {
+                          "type": "object",
+                          "title": "valueName",
+                          "description": "Array of the multiple `valueNames` for the attribute specificied.",
+                          "default": {
+                            "valueName": "Red"
+                          },
+                          "required": [
+                            "valueName"
+                          ],
+                          "properties": {
+                            "valueName": {
+                              "type": "string",
+                              "title": "valueName",
+                              "description": "Name of the value",
+                              "default": "Red"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Query",
+  "title": "Search Query",
+  "description": "Sends a query event every time the shopper makes a full-text search.",
+  "type": "object",
+  "required": [
+    "session",
+    "anonymous",
+    "type",
+    "misspelled",
+    "text",
+    "match",
+    "operator"
+  ],
+  "properties": {
+    "session": {
+      "$ref": "#/components/schemas/UserIdentification/properties/session"
+    },
+    "anonymous": {
+      "$ref": "#/components/schemas/UserIdentification/properties/anonymous"
+    },
+    "url": {
+      "type": "string",
+      "title": "url",
+      "description": "URL that identifies from which page the event occurred.",
+      "example": "https://example.com/search/?query=zapatilha"
+    },
+    "agent": {
+      "type": "string",
+      "title": "agent",
+      "description": "Identifies whether the request came from a mobile or desktop application. It's used as a filter in the search report.",
+      "default": "desktop",
+      "example": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0"
+    },
+    "type": {
+      "type": "string",
+      "title": "type",
+      "description": "Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.",
+      "example": "search.query"
+    },
+    "text": {
+      "type": "string",
+      "title": "text",
+      "description": "Query used in the search.",
+      "example": "tv"
+    },
+    "misspelled": {
+      "type": "boolean",
+      "title": "misspelled",
+      "description": "Indicates whether the query has a typo (`true`) or not (`false`).",
+      "example": true
+    },
+    "match": {
+      "type": "number",
+      "title": "match",
+      "description": "Amount of products retrieved by the search.",
+      "example": 396
+    },
+    "operator": {
+      "type": "string",
+      "title": "operator",
+      "description": "Identifies the type of operator used on the search. The possible values are: `and`, `or`. Find more details in [this Elastic Search guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html).",
+      "example": "and"
+    }
+  }
+}

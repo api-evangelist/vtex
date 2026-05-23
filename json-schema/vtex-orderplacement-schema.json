@@ -1,0 +1,439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/orderPlacement",
+  "title": "orderPlacement",
+  "description": "Informations related to the placement of an order.",
+  "type": "object",
+  "properties": {
+    "marketplaceOrderId": {
+      "type": "string",
+      "description": "Identifies the order in the marketplace.",
+      "example": "1138342255777-01"
+    },
+    "marketplaceServicesEndpoint": {
+      "type": "string",
+      "description": "Endpoint sent by VTEX to the seller, that will be used to send the invoice and tracking data to the marketplace. This endpoint will also be used in [change order in Multilevel Omnichannel Inventory](https://developers.vtex.com/docs/guides/change-orders-multilevel-omnichannel-inventory-external-marketplaces#implementators) operations in external marketplaces.",
+      "example": "https://marketplaceservicesendpoint.myvtex.com/"
+    },
+    "marketplacePaymentValue": {
+      "type": "integer",
+      "description": "Amount that the marketplace agrees to pay to the seller. The last two digits are the cents. For example, $24.99 is represented 2499.",
+      "example": 2499
+    },
+    "items": {
+      "type": "array",
+      "description": "Array of objects.",
+      "items": {
+        "description": "Data about each SKU in the cart.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "SKU ID.",
+            "example": "123456789abc"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantity of the item.",
+            "example": 1
+          },
+          "seller": {
+            "type": "string",
+            "description": "ID of the seller registered in VTEX.",
+            "example": "seller-example"
+          },
+          "commission": {
+            "type": "integer",
+            "description": "Comission.",
+            "example": 0
+          },
+          "freightCommission": {
+            "type": "integer",
+            "description": "Freight comission.",
+            "example": 0
+          },
+          "price": {
+            "type": "integer",
+            "description": "SKU price. The last two digits are the cents. For example, $24.99 is represented 2499.",
+            "example": 2499
+          },
+          "bundleItems": {
+            "type": "array",
+            "description": "Information on services sold along with the SKU. Example: a gift package.",
+            "items": {
+              "$ref": "#/components/schemas/bundleItemsItem"
+            }
+          },
+          "itemsAttachment": {
+            "type": "array",
+            "description": "Attachments sold with the SKU.",
+            "items": {
+              "$ref": "#/components/schemas/itemAttachment"
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Array containing information on attachments.",
+            "items": {
+              "type": "object",
+              "description": "Attachment information.",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier of the attachment.",
+                  "example": "attachment-1"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the attachment.",
+                  "example": "Product Image"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "URL of the attachment.",
+                  "example": "https://example.com/image.jpg"
+                }
+              }
+            }
+          },
+          "priceTags": {
+            "type": "array",
+            "description": "Array of price tags, each of which, modifies the price in some way, like discounts or rates that apply to the item in the context of the order.",
+            "items": {
+              "description": "Details of a price tag affecting the item's price.",
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "description": "Price tag identifier.",
+                  "example": "1234abc-5678b-1234c"
+                },
+                "isPercentual": {
+                  "type": "boolean",
+                  "description": "`true` if price tag value is applied through a percentage.",
+                  "example": false
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Price tag name.",
+                  "example": "discount@name-1234abc-5678b-1234c"
+                },
+                "rawValue": {
+                  "type": "integer",
+                  "description": "Price tag value.",
+                  "example": -12
+                },
+                "value": {
+                  "type": "integer",
+                  "description": "Price tag raw value.",
+                  "example": -1200
+                }
+              }
+            }
+          },
+          "measurementUnit": {
+            "type": "string",
+            "description": "SKU measurement unit.",
+            "example": "g"
+          },
+          "unitMultiplier": {
+            "type": "integer",
+            "description": "SKU unit multiplier.",
+            "example": 1
+          },
+          "isGift": {
+            "type": "boolean",
+            "description": "Indicates if the item is a gift (`true`).",
+            "example": true
+          }
+        }
+      }
+    },
+    "paymentData": {
+      "type": "object",
+      "description": "In other contexts, this field tipically holds an object with payment information. However, since the payment is processed by the marketplace, it will be sent to the seller as `null` in this context.",
+      "nullable": true,
+      "example": null
+    },
+    "clientProfileData": {
+      "type": "object",
+      "description": "Customer's profile information.",
+      "required": [
+        "email",
+        "firstName",
+        "lastName",
+        "documentType",
+        "document",
+        "isCorporate"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Customer's email address.",
+          "example": "customer@examplemail.com"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "Customer's first name.",
+          "example": "first-name"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Customer's last name.",
+          "example": "last-name"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Type of the document informed by the customer.",
+          "example": "cpf"
+        },
+        "document": {
+          "type": "string",
+          "description": "Document number informed by the customer.",
+          "example": "123456789"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Customer's phone number.",
+          "example": "+55110988887777"
+        },
+        "corporateName": {
+          "type": "string",
+          "description": "Company name, if the customer is a legal entity.",
+          "example": "company-name",
+          "nullable": true
+        },
+        "tradeName": {
+          "type": "string",
+          "description": "Trade name, if the customer is a legal entity.",
+          "example": "trade-name",
+          "nullable": true
+        },
+        "corporateDocument": {
+          "type": "string",
+          "description": "Corporate document, if the customer is a legal entity.",
+          "example": "12345678000100",
+          "nullable": true
+        },
+        "stateInscription": {
+          "type": "string",
+          "description": "State inscription, if the customer is a legal entity.",
+          "example": "12345678",
+          "nullable": true
+        },
+        "corporatePhone": {
+          "type": "string",
+          "description": "Corporate phone number, if the customer is a legal entity.",
+          "example": "+551100988887777",
+          "nullable": true
+        },
+        "isCorporate": {
+          "type": "boolean",
+          "description": "`true` if the customer is a legal entity.",
+          "default": false,
+          "example": false,
+          "nullable": true
+        }
+      }
+    },
+    "shippingData": {
+      "type": "object",
+      "description": "Shipping information.",
+      "properties": {
+        "address": {
+          "type": "object",
+          "description": "Shipping address.",
+          "required": [
+            "addressType",
+            "receiverName",
+            "postalCode",
+            "city",
+            "state",
+            "country",
+            "street",
+            "neighborhood",
+            "number"
+          ],
+          "properties": {
+            "addressType": {
+              "type": "string",
+              "description": "Type of address. For example, `Residential` or `Pickup`, among others.",
+              "example": "residential"
+            },
+            "receiverName": {
+              "type": "string",
+              "description": "Name of the person who is going to receive the order.",
+              "example": "receiver-name"
+            },
+            "addressId": {
+              "type": "string",
+              "description": "Address ID.",
+              "example": "Home"
+            },
+            "postalCode": {
+              "type": "string",
+              "description": "Postal Code.",
+              "example": "12345-000"
+            },
+            "city": {
+              "type": "string",
+              "description": "City of the shipping address.",
+              "example": "Rio de Janeiro"
+            },
+            "state": {
+              "type": "string",
+              "description": "State of the shipping address.",
+              "example": "Rio de Janeiro"
+            },
+            "country": {
+              "type": "string",
+              "description": "Three letter ISO code of the country of the shipping address.",
+              "example": "BRA"
+            },
+            "street": {
+              "type": "string",
+              "description": "Street of the shipping address.",
+              "example": "Praia de Botafogo"
+            },
+            "number": {
+              "type": "string",
+              "description": "Number of the building, house or apartment in the shipping address.",
+              "example": "300"
+            },
+            "neighborhood": {
+              "type": "string",
+              "description": "Neighborhood of the shipping address.",
+              "example": "Botafogo"
+            },
+            "complement": {
+              "type": "string",
+              "description": "Complement to the shipping address in case it applies.",
+              "example": "3rd floor"
+            },
+            "reference": {
+              "type": "string",
+              "description": "Complement that might help locate the shipping address more precisely in case of delivery.",
+              "example": "Grey building"
+            },
+            "geoCoordinates": {
+              "type": "array",
+              "description": "Geographic coordinates of the delivery address. This may be used instead of the postalCode, in case the marketplace is configured to accept geolocation. Example of value: `[-22.9443504,-43.1825635]`.",
+              "items": {
+                "description": "Coordinate value.",
+                "type": "string",
+                "example": "00.00000000"
+              }
+            }
+          }
+        },
+        "logisticsInfo": {
+          "type": "array",
+          "description": "Array of objects containing logistics information of each item.",
+          "items": {
+            "description": "Logistics information for a specific item.",
+            "type": "object",
+            "required": [
+              "itemIndex",
+              "selectedSla",
+              "price"
+            ],
+            "properties": {
+              "itemIndex": {
+                "type": "integer",
+                "description": "Index of the item in the `items` array, starting from 0.",
+                "example": 0
+              },
+              "selectedSla": {
+                "type": "string",
+                "description": "Selected shipping option.",
+                "example": "Express"
+              },
+              "lockTTL": {
+                "type": "string",
+                "description": "Logistics reservation waiting time.",
+                "example": "8d"
+              },
+              "shippingEstimate": {
+                "type": "string",
+                "description": "Estimated time until delivery for the item.",
+                "example": "7d"
+              },
+              "price": {
+                "type": "integer",
+                "description": "Shipping price for the item. Does not account for the whole order's shipping price.",
+                "example": 1099
+              },
+              "deliveryWindow": {
+                "type": "object",
+                "description": "Scheduled delivery window information, in case it applies to the item.",
+                "properties": {
+                  "startDateUtc": {
+                    "type": "string",
+                    "description": "Scheduled delivery window start date in UTC.",
+                    "example": "2016-04-20T08:00:00+00:00"
+                  },
+                  "endDateUtc": {
+                    "type": "string",
+                    "description": "Scheduled delivery window end date in UTC.",
+                    "example": "2016-04-20T12:00:00+00:00"
+                  },
+                  "listPrice": {
+                    "type": "number",
+                    "description": "Scheduled delivery window list price.",
+                    "example": 10
+                  }
+                }
+              }
+            }
+          }
+        },
+        "updateStatus": {
+          "type": "string",
+          "description": "Indicate whether this object's information is up to date according to the order's items. An order can not be placed if `\"outdated\"`.",
+          "example": "updated"
+        }
+      }
+    },
+    "marketingData": {
+      "type": "object",
+      "description": "Marketing tracking data. If the order has no tracking data, the value will be `null`.",
+      "properties": {
+        "utmSource": {
+          "type": "string",
+          "description": "UTM source.",
+          "example": "Facebook"
+        },
+        "utmMedium": {
+          "type": "string",
+          "description": "UTM medium.",
+          "example": "CPC"
+        },
+        "utmCampaign": {
+          "type": "string",
+          "description": "UTM campaign.",
+          "example": "Black friday"
+        },
+        "utmiPage": {
+          "type": "string",
+          "description": "utmi_page (internal utm).",
+          "example": "utmi_page-example"
+        },
+        "utmiPart": {
+          "type": "string",
+          "description": "utmi_part (internal utm).",
+          "example": "utmi_part-exmaple"
+        },
+        "utmiCampaign": {
+          "type": "string",
+          "description": "utmi_campaign (internal utm).",
+          "example": "utmi_campaign-exmaple"
+        }
+      }
+    },
+    "openTextField": {
+      "type": "string",
+      "description": "Optional field meant to hold additional information about the order. We recommend using this field for text, not data formats such as `json` even if escaped. For that purpose, see [Creating customizable fields](https://developers.vtex.com/vtex-rest-api/docs/creating-customizable-fields-in-the-cart-with-checkout-api-1).",
+      "example": "open-text-example"
+    }
+  }
+}

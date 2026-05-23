@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/EnqueueNewOrderRequest",
+  "title": "EnqueueNewOrderRequest",
+  "required": [
+    "marketplaceOrderId",
+    "marketplaceOrderStatus",
+    "marketplacePaymentValue",
+    "allowFranchises",
+    "items",
+    "clientProfileData",
+    "shippingData",
+    "invoiceData"
+  ],
+  "type": "object",
+  "properties": {
+    "marketplaceOrderId": {
+      "type": "string",
+      "title": "marketplaceOrderId",
+      "description": "String that indicates the order's ID in the marketplace.",
+      "example": "7e62fcd3-827b-400d-be8a-f050a79c4976"
+    },
+    "marketplaceOrderStatus": {
+      "type": "string",
+      "title": "marketplaceOrderStatus",
+      "description": "Required field including a string with the order\u2019s status in the marketplace. If you send an order with the status APPROVED to integrate, our service will automatically try to advance it\u2019s status in VTEX after integrating it. This field accepts the following values:  \n\n- `new`  \n\n- `approved`",
+      "example": "new"
+    },
+    "marketplacePaymentValue": {
+      "type": "integer",
+      "title": "marketplacePaymentValue",
+      "description": "Integer that indicates the order\u2019s total value, which the marketplace will pay to the seller. It\u2019s important to note that this value should include interest, if that\u2019s the case. If the value is `USD110.50`, convert it to the format \u2192 `11050`.",
+      "example": 11050
+    },
+    "connectorName": {
+      "type": "string",
+      "title": "connectorName",
+      "description": "String with the identifier code of the connector responsible for the order.  \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template.",
+      "example": "connectorName"
+    },
+    "connectorEndpoint": {
+      "type": "string",
+      "title": "connectorEndpoint",
+      "description": "String with the connector's base endpoint that will receive notifications about the orders processing results, as well as status updates from VTEX OMS. This field accepts query strings. You can use the models below:  \n\n- `https://{{externalconnector}}.com`  \n\n- `https://{{externalconnector.com}}/api/vtex` if you additionaly want to send a relative URL with the endpoint. \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template.",
+      "example": "https://{{externalconnector.com}}/api/vtex"
+    },
+    "allowFranchises": {
+      "type": "boolean",
+      "title": "allowFranchises",
+      "description": "Boolean indicating whether franchise accounts linked to the main seller should be considered. That is, if the order delivery pickup/SLA can belong to a [franchise account](https://help.vtex.com/en/tutorial/what-is-a-franchise-account--kWQC6RkFSCUFGgY5gSjdl), for example. This field is optional and defaults to `false`.",
+      "example": false
+    },
+    "pickupAccountName": {
+      "type": "string",
+      "title": "pickupAccountName",
+      "description": "String that indicates the name of the account responsible for the order\u2019s pickup point. It is only required for pickup-in-point orders from franchise accounts, when franchise accounts `allowFranchises` is `true` and the order in question has a `pickup-in-point` delivery type. It is optional otherwise.",
+      "example": "accountName"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Item"
+      }
+    },
+    "clientProfileData": {
+      "$ref": "#/components/schemas/ClientProfileData"
+    },
+    "shippingData": {
+      "$ref": "#/components/schemas/ShippingData"
+    },
+    "invoiceData": {
+      "$ref": "#/components/schemas/InvoiceData"
+    },
+    "customData": {
+      "$ref": "#/components/schemas/CustomData"
+    }
+  },
+  "example": {
+    "marketplaceOrderId": "{{$guid}}",
+    "marketplaceOrderStatus": "NEW",
+    "marketplacePaymentValue": 3025,
+    "connectorName": "SkyHub",
+    "connectorEndpoint": "https://connector-endpoint.com/api/vtex",
+    "allowFranchises": false,
+    "pickupAccountName": "",
+    "items": [
+      {
+        "id": "1",
+        "price": 975,
+        "quantity": 1
+      }
+    ],
+    "clientProfileData": {
+      "email": "email@email.com.br",
+      "firstName": "John",
+      "lastName": "Doe",
+      "phone": "99999999999",
+      "document": "99999999999",
+      "corporateDocument": null,
+      "corporatePhone": null,
+      "corporateName": null,
+      "tradeName": null,
+      "stateInscription": null
+    },
+    "shippingData": {
+      "logisticsInfo": [
+        {
+          "price": 2050,
+          "selectedDeliveryChannel": "delivery",
+          "selectedSla": "Express",
+          "lockTTL": "1d",
+          "shippingEstimate": "2d",
+          "deliveryIds": {
+            "warehouseId": "AR1"
+          }
+        }
+      ],
+      "selectedAddresses": [
+        {
+          "addressType": "Residential",
+          "addressId": "1",
+          "receiverName": "John Doe",
+          "postalCode": "81020-235",
+          "city": "Curitiba",
+          "state": "PR",
+          "country": "BRA",
+          "street": "Rua Eduardo Carlos Pereira",
+          "number": "4125",
+          "neighborhood": "Port\u00e3o",
+          "complement": "101",
+          "geoCoordinates": {
+            "latitude": "-29.5",
+            "longitude": "-45.8"
+          }
+        }
+      ],
+      "isFob": true,
+      "isMarketplaceFulfillment": true
+    },
+    "invoiceData": {
+      "userPaymentInfo": {
+        "paymentMethods": [
+          "creditCardPaymentGroup"
+        ]
+      }
+    },
+    "customData": {
+      "customApps": [
+        {
+          "id": "marketplace-integration",
+          "major": 1,
+          "fields": {
+            "marketplacePaymentMethod": "credit card"
+          }
+        }
+      ]
+    }
+  }
+}
