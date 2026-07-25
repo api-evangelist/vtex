@@ -1,0 +1,428 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Feed V3 API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Feed V3
+paths:
+  /api/orders/feed/config:
+    get:
+      tags:
+      - Feed V3
+      summary: VTex Get feed configuration
+      description: "The Orders Feed v3 is the best way to create order integrations. Below you can find details on the configuration API specification, and to know more see our [Feed v3 guide](https://developers.vtex.com/vtex-rest-api/docs/orders-feed) and our [order integration guide](https://developers.vtex.com/vtex-rest-api/docs/erp-integration-set-up-order-integration).\n\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Orders onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/orders-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Orders and is organized by focusing on the developer's journey.\r\n\r\n"
+      operationId: GetFeedConfiguration
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filter:
+                    type: object
+                    description: Information on how orders are filtered to show on the feed.
+                    properties:
+                      type:
+                        type: string
+                        description: Determines what orders appear in the feed and how they are filtered. If a feed has the `FromWorkflow` type configuration, it will receive order updates only when order’s statuses change and orders can be filtered by status, using the `status` field. A feed with the `FromOrders` type configuration gets updates whenever any change is made to an order. in this case, orders can be filtered by any property, according to JSONata expressions set in the `expression` field.
+                      status:
+                        type: array
+                        description: List of order statuses that should be included in the feed. This should only be used in case `type` is `FromWorkflow`.
+                        items:
+                          type: string
+                          description: Order status to be filtered in the feed.
+                      expression:
+                        type: string
+                        description: JSONata query expression that defines what conditions must be met for an order to be included in the feed. This should only be used in case `type` is `FromOrders`.
+                      disableSingleFire:
+                        type: boolean
+                        description: Sets a limit to how many times a specific order shows on the feed, after it first meets filtering conditions. Using the `FromOrders` type configuration with JSONata filtering expressions might cause orders to appear more than once on a feed, whenever changes are made to that order. If this field is `false` orders will appear in the feed only once.
+                  queue:
+                    type: object
+                    description: Information that define the functioning of the queue.
+                    properties:
+                      visibilityTimeoutInSeconds:
+                        type: integer
+                        description: Period of time for which an item is not visible in the feed after it has been retrieved with the Get feed items request. Measured in seconds.
+                      MessageRetentionPeriodInSeconds:
+                        type: integer
+                        description: Maximum life span of an order update after it gets to the feed. When a feed item is on the feed for this period of time, it is removed from the feed. Measured in seconds.
+                  quantity:
+                    type: integer
+                    description: Current number of messages in the feed, including messages that may not be visible due to time out after retrieval.
+                  approximateAgeOfOldestMessageInSeconds:
+                    type: number
+                    description: Aproximate age of the oldest message in the feed, measured in seconds.
+                example:
+                  filter:
+                    type: FromOrders
+                    expression: status = "payment-pending"
+                    disableSingleFire: false
+                  queue:
+                    visibilityTimeoutInSeconds: 240
+                    messageRetentionPeriodInSeconds: 345600
+      deprecated: false
+    post:
+      tags:
+      - Feed V3
+      summary: VTex Create or update feed configuration
+      description: "The Orders Feed v3 is the best way to create order integrations. Below you can find details on the configuration API specification, and to know more see our [Feed v3 guide](https://developers.vtex.com/vtex-rest-api/docs/orders-feed) and our [order integration guide](https://developers.vtex.com/vtex-rest-api/docs/erp-integration-set-up-order-integration)\n\r\n\rThere are two types of filtering that can be used. The `FromWorkflow` type filters orders by status, whereas the `FromOrders` type uses JSONata expressions to filter orders according to any property in the orders JSON document. This enables stores to filter delivered orders and orders in which products have been added or removed, for example. To learn more, access the [JSONata documentation](https://docs.jsonata.org/overview.html) and test filtering JSONata expressions with our [Test JSONata expression](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/orders/expressions/jsonata) endpoint."
+      operationId: FeedConfiguration
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedConfigurationRequest'
+            example:
+              filter:
+                type: FromOrders
+                expression: value > 100
+                disableSingleFire: false
+              queue:
+                visibilityTimeoutInSeconds: 250
+                MessageRetentionPeriodInSeconds: 345600
+        required: true
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: The credentials are not enabled to access the service
+        '404':
+          description: Value not found
+        '429':
+          description: Too many requests
+      deprecated: false
+    delete:
+      tags:
+      - Feed V3
+      summary: VTex Delete feed configuration
+      description: Deletes the configuration set up in [Feed v3](https://developers.vtex.com/docs/guides/orders-feed).
+      operationId: FeedConfigurationDelete
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request - Unable to check address / Only https scheme is accepted
+        '403':
+          description: The credentials are not enabled to access the service
+        '404':
+          description: Value not found
+        '429':
+          description: Too many requests
+      deprecated: false
+  /api/orders/feed:
+    get:
+      tags:
+      - Feed V3
+      summary: VTex Retrieve feed items
+      description: "Retrieve items from [feed](https://developers.vtex.com/docs/guides/orders-feed) queue. \n\r\nThe event will be removed if the message `send retry` is equal to, or greater than the maximum retention period.\r\n\r\n> This API will return `404 Not Found` if there is no [Feed Configuration](https://developers.vtex.com/docs/guides/orders-feed) available for the given X-VTEX-API-AppKey."
+      operationId: Getfeedorderstatus1
+      parameters:
+      - name: maxlot
+        in: query
+        description: Lot quantity to retrieve. Maximum accepted value is 10.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{maxLot}}'
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Getfeedorderstatus'
+              example:
+              - eventId: ED423DDED4C1AE580CADAC1A4D02DA3F
+                handle: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidnRleGFwcGtleS1wYXJ0bmVyc2xhdGFtLVJNQkpNUyIsIkFwcEtleSI6InZ0ZXhhcHBrZXktcGFydG5lcnNsYXRhbS1STUJKTVMiLCJBY2NvdW50IjoicGFydG5lcnNsYXRhbSIsIkhhbmRsZSI6IkFRRUIzbmtWR0piOXhhNGRjYlpkOTFVVWMyL2JObHc0Qnp3ZlNLV201Rjg2QXgrSGlRM053bEJkb2NwM2wvVytLdjFNQTZ4d3ZLcFYwYjlSeUttNVRpb3hrSVFMSG1Uck9xenB2aFlwU29uMzRrVmlNaWZHY2lnZFFqalBJdk00eWU4amVuaS9QKytaTmVxOFZWeFNGay81Yzg3YS84MTRjTFg2WGZPR2x2WitlTnVjTzA3S3UxK0xXaU5vQmJEY0cycGxKekxkRks3Qld3b1NTV3BmSWhrOGhmSFNkSzlzZVpJeG01QXFLbHFrUHNDNGk5emVaYVpBUVVrSi9aZWo3UjRrRDVRaXFjNmpjcnFheEdHc1lsNHMzUWM0ZmtWdmhYblJVQ2l2ZGdpMEtUYS8zcXlWWU9QTktIV2huTlZxMEZHNDNjME4vaWh6dDc0d1laNVl6aDFJRitHU2t1YTkrN1pCdnQ2VGs1cFRhZmVVclk0ckNPL2Fobnl1eXFLOG53ZkorVWxUTmt2ZVNFS29FdTNiUWQzSmc5R1lYWHlXOVVxRGo5dHJIZ1N5M3ZZa0dBWjd0MDZNZWUwQnBsdFBxWExaIiwiT3JkZXJJZCI6Ijk1MzcxMjAwNDEyNi0wMSIsIk1lc3NhZ2VJZCI6ImI5YjI4NDkwLTNjNzAtNDdjNi1hMTE3LWNhN2FjMTk2MDY1OSIsIkRvbWFpbiI6IkZ1bGZpbGxtZW50IiwiU3RhdGUiOiJyZWFkeS1mb3ItaGFuZGxpbmciLCJMYXN0U3RhdGUiOiJ3aW5kb3ctdG8tY2FuY2VsIiwiTGFzdENoYW5nZSI6IjA4LzEyLzIwMTkgMjA6NTQ6MDEiLCJDdXJyZW50Q2hhbmdlIjoiMDgvMTIvMjAxOSAyMDo1NDoyMyIsIkNyZWF0ZWRBdCI6IjA4LzEyLzIwMTkgMjE6MDE6MzAiLCJpc3MiOiJicm9hZGNhc3QtYXBpLnZ0ZXhjb21tZXJjZS5jb20uYnIiLCJhdWQiOiJwYXJ0bmVyc2xhdGFtX3Z0ZXhhcHBrZXktcGFydG5lcnNsYXRhbS1STUJKTVMifQ.7RQBZQb6pHhFhA_jMKTiSoJbDck7awgD3Xx7sdJcW6w
+                domain: Fulfillment
+                state: ready-for-handling
+                lastState: window-to-cancel
+                orderId: 953712004126-01
+                lastChange: '2019-08-12T20:54:01.134057Z'
+                currentChange: '2019-08-12T20:54:23.7153839Z'
+      deprecated: false
+    post:
+      tags:
+      - Feed V3
+      summary: VTex Commit feed items
+      description: Commit items in the [feed](https://developers.vtex.com/docs/guides/orders-feed) queue.
+      operationId: Commititemfeedorderstatus
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommititemfeedorderstatusRequest'
+            example:
+              handles:
+              - AQEBSM/bSqonHYtx+UrHdbuJ0i7M9yMbI2jtYwMIPdEc4BenuneaCTC9VEJ3dgAy1XtfQvHBvgwZTO8LvGObIKNqiKXDZiMKY25vK+pblZEqf1pWdLMugu5XoHA5ZAd4IcBcXrBcrlr1GU8uvPEBoVLOsVBP9IAxIZkkeEedIDg3K6GPyEXVuPlTEYb/0OCunEGxWF+AZ1frFdXh7ulORTcuqO5oDlBGbpD+QYzCmF4mUZtQ0VVWh9icM1QBVh6PlJ0D/lfwnJKWpBn3jf8c+DTm7sD7wb1Lcz9uWMLhDtPwvH9vue4MvKU9sCahEQe7K5jWuwwb54szGbFKdfcACsTSQ9WlyBfMdbV83c27k68G3cnaBFExkC1MLHHE9UzpQ6l4s43BT4k95ocgMXffnj/HMUYXn+OCvlvjytY59x1OCRE=
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: object
+      deprecated: false
+  /api/orders/expressions/jsonata:
+    post:
+      tags:
+      - Feed V3
+      summary: VTex Test JSONata expression
+      description: "This endpoint allows you to test a JSON document with a JSONata expression, returning `true` if the document meets the criteria posed in the expression, or `false` if it does not.\n\r\n\rSince JSONata expressions can be used to filter order updates in the [Orders API feed and hook](https://developers.vtex.com/docs/guides/orders-feed), this endpoint can be used to test an expression's results before configuring the [feed or hook](https://developers.vtex.com/docs/guides/orders-feed).\n\r\n\rLearn more about how to use JSONata expressions, in the [JSONata documentation](https://docs.jsonata.org/overview.html)."
+      operationId: TestJSONataExpression
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestJSONataExpression'
+            example:
+              Expression: status = \"canceled\"
+              Document: '{\"status\":\"canceled\"}'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              examples:
+                response:
+                  value: 'True'
+      deprecated: false
+components:
+  schemas:
+    Queue:
+      title: Queue
+      description: Object with information about timeout and message retention.
+      required:
+      - visibilityTimeoutInSeconds
+      - MessageRetentionPeriodInSeconds
+      type: object
+      properties:
+        visibilityTimeoutInSeconds:
+          type: integer
+          description: Period of time for which an item becomes invisible after it has been [retrieved](https://developers.vtex.com/vtex-rest-api/reference/feed-v3#getfeedorderstatus1). Measured in seconds.
+          example: 250
+        MessageRetentionPeriodInSeconds:
+          type: integer
+          description: Maximum life span of an order update in the feed. When a feed item is on the feed for this period of time, it is removed from the feed. Measured in seconds.
+          example: 3456000
+    Getfeedorderstatus:
+      title: Getfeedorderstatus
+      required:
+      - eventId
+      - handle
+      - domain
+      - state
+      - lastState
+      - orderId
+      - lastChange
+      - currentChange
+      type: object
+      properties:
+        eventId:
+          type: string
+        handle:
+          type: string
+        domain:
+          type: string
+        state:
+          type: string
+        lastState:
+          type: string
+        orderId:
+          type: string
+        lastChange:
+          type: string
+        currentChange:
+          type: string
+      example:
+        eventId: ED423DDED4C1AE580CADAC1A4D02DA3F
+        handle: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidnRleGFwcGtleS1wYXJ0bmVyc2xhdGFtLVJNQkpNUyIsIkFwcEtleSI6InZ0ZXhhcHBrZXktcGFydG5lcnNsYXRhbS1STUJKTVMiLCJBY2NvdW50IjoicGFydG5lcnNsYXRhbSIsIkhhbmRsZSI6IkFRRUIzbmtWR0piOXhhNGRjYlpkOTFVVWMyL2JObHc0Qnp3ZlNLV201Rjg2QXgrSGlRM053bEJkb2NwM2wvVytLdjFNQTZ4d3ZLcFYwYjlSeUttNVRpb3hrSVFMSG1Uck9xenB2aFlwU29uMzRrVmlNaWZHY2lnZFFqalBJdk00eWU4amVuaS9QKytaTmVxOFZWeFNGay81Yzg3YS84MTRjTFg2WGZPR2x2WitlTnVjTzA3S3UxK0xXaU5vQmJEY0cycGxKekxkRks3Qld3b1NTV3BmSWhrOGhmSFNkSzlzZVpJeG01QXFLbHFrUHNDNGk5emVaYVpBUVVrSi9aZWo3UjRrRDVRaXFjNmpjcnFheEdHc1lsNHMzUWM0ZmtWdmhYblJVQ2l2ZGdpMEtUYS8zcXlWWU9QTktIV2huTlZxMEZHNDNjME4vaWh6dDc0d1laNVl6aDFJRitHU2t1YTkrN1pCdnQ2VGs1cFRhZmVVclk0ckNPL2Fobnl1eXFLOG53ZkorVWxUTmt2ZVNFS29FdTNiUWQzSmc5R1lYWHlXOVVxRGo5dHJIZ1N5M3ZZa0dBWjd0MDZNZWUwQnBsdFBxWExaIiwiT3JkZXJJZCI6Ijk1MzcxMjAwNDEyNi0wMSIsIk1lc3NhZ2VJZCI6ImI5YjI4NDkwLTNjNzAtNDdjNi1hMTE3LWNhN2FjMTk2MDY1OSIsIkRvbWFpbiI6IkZ1bGZpbGxtZW50IiwiU3RhdGUiOiJyZWFkeS1mb3ItaGFuZGxpbmciLCJMYXN0U3RhdGUiOiJ3aW5kb3ctdG8tY2FuY2VsIiwiTGFzdENoYW5nZSI6IjA4LzEyLzIwMTkgMjA6NTQ6MDEiLCJDdXJyZW50Q2hhbmdlIjoiMDgvMTIvMjAxOSAyMDo1NDoyMyIsIkNyZWF0ZWRBdCI6IjA4LzEyLzIwMTkgMjE6MDE6MzAiLCJpc3MiOiJicm9hZGNhc3QtYXBpLnZ0ZXhjb21tZXJjZS5jb20uYnIiLCJhdWQiOiJwYXJ0bmVyc2xhdGFtX3Z0ZXhhcHBrZXktcGFydG5lcnNsYXRhbS1STUJKTVMifQ.7RQBZQb6pHhFhA_jMKTiSoJbDck7awgD3Xx7sdJcW6w
+        domain: Fulfillment
+        state: ready-for-handling
+        lastState: window-to-cancel
+        orderId: 953712004126-01
+        lastChange: '2019-08-12T20:54:01.134057Z'
+        currentChange: '2019-08-12T20:54:23.7153839Z'
+    FeedConfigurationRequest:
+      title: FeedConfigurationRequest
+      required:
+      - filter
+      - queue
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/FeedFilter'
+        queue:
+          $ref: '#/components/schemas/Queue'
+    TestJSONataExpression:
+      type: object
+      required:
+      - Expression
+      - Document
+      properties:
+        Expression:
+          type: string
+          description: JSONata expression to be tested.
+        Document:
+          type: string
+          description: JSON document to be evaluated by the expression.
+    CommititemfeedorderstatusRequest:
+      title: CommititemfeedorderstatusRequest
+      required:
+      - handles
+      type: object
+      properties:
+        handles:
+          type: array
+          items:
+            type: string
+          description: List of item handles to commit.
+      example:
+        handles:
+        - AQEBSM/bSqonHYtx+UrHdbuJ0i7M9yMbI2jtYwMIPdEc4BenuneaCTC9VEJ3dgAy1XtfQvHBvgwZTO8LvGObIKNqiKXDZiMKY25vK+pblZEqf1pWdLMugu5XoHA5ZAd4IcBcXrBcrlr1GU8uvPEBoVLOsVBP9IAxIZkkeEedIDg3K6GPyEXVuPlTEYb/0OCunEGxWF+AZ1frFdXh7ulORTcuqO5oDlBGbpD+QYzCmF4mUZtQ0VVWh9icM1QBVh6PlJ0D/lfwnJKWpBn3jf8c+DTm7sD7wb1Lcz9uWMLhDtPwvH9vue4MvKU9sCahEQe7K5jWuwwb54szGbFKdfcACsTSQ9WlyBfMdbV83c27k68G3cnaBFExkC1MLHHE9UzpQ6l4s43BT4k95ocgMXffnj/HMUYXn+OCvlvjytY59x1OCRE=
+    FeedFilter:
+      title: Filter
+      description: Object with type and status that will filter feed orders.
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: "Determines what orders appear in the feed and how they are filtered. There are two possible values:\n\r\n\r-`FromWorkflow`: the feed will receive order updates only when order’s statuses change and orders can be filtered by status, using the `status` field described below.\n\r\n\r-`FromOrders`: the feed gets updates whenever any change is made to an order. in this case, orders can be filtered by any property, according to JSONata expressions passed in the `expression` field described below."
+          example: FromWorkflow
+        status:
+          type: array
+          items:
+            type: string
+          description: "List of order statuses that should be included in the feed. This should only be used in case `type` is set to `FromWorkflow`. The status event will be removed, if it can't deliver a message more than 100 times, 4 days progressively. \r\n\r\n**Status available to filter** \r\n\r\n- order-created \n\r\n- on-order-completed \n\r\n- on-order-completed-ffm \n\r\n- payment-pending \n\r\n- waiting-for-order-authorization \n\r\n- approve-payment \n\r\n- payment-approved \n\r\n- request-cancel \n\r\n- waiting-for-seller-decision \n\r\n- waiting-ffmt-authorization \n\r\n- waiting-for-authorization \n\r\n- waiting-for-manual-authorization \n\r\n- authorize-fulfillment \n\r\n- order-create-error \n\r\n- order-creation-error \n\r\n- window-to-cancel \n\r\n- window-to-change-seller \n\r\n- waiting-for-mkt-authorization \n\r\n- waiting-seller-handling \n\r\n- ready-for-handling \n\r\n- start-handling \n\r\n- handling \n\r\n- invoice-after-cancellation-deny \n\r\n- order-accepted \n\r\n- invoice \n\r\n- invoiced \n\r\n- replaced \n\r\n- cancellation-requested \n\r\n- cancel \n\r\n- canceled."
+        expression:
+          type: string
+          description: JSONata query expression that defines what conditions must be met for an order to be included in the feed. This should only be used in case `type` is set to `FromOrders`.
+        disableSingleFire:
+          type: boolean
+          description: Sets a limit to how many times a specific order shows on the feed, after it first meets filtering conditions. Using the `FromOrders` type configuration with JSONata filtering expressions might cause orders to appear more than once on a feed, whenever changes are made to that order. If this field is `false` orders will appear in the feed only once.
+          example: false
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

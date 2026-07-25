@@ -1,0 +1,389 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Roles API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Roles
+paths:
+  /api/license-manager/users/{userId}/roles:
+    put:
+      tags:
+      - Roles
+      summary: VTex Add roles to user or appKey
+      description: "Allows you to add License Manager [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) to a particular user or application key by specifying the list of role IDs on the request body. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      operationId: PutRolesinUser
+      parameters:
+      - name: userId
+        in: path
+        description: ID of the user.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: a404870467d24533a085a6b3c6a5a320
+      requestBody:
+        description: List of role IDs to add to the user or application key.
+        content:
+          application/json:
+            schema:
+              type: array
+              description: Array containing role IDs.
+              items:
+                type: integer
+                format: int32
+                description: Role ID, which can be obtained from the [Get List of Roles](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/site/pvt/roles/list/paged) endpoint.
+                example: 9000
+            example:
+            - 9000
+            - 9111
+            - 9333
+            - 9444
+        required: true
+      responses:
+        '204':
+          description: Success - A no-content response, but the roles were added successfully.
+        '400':
+          description: Bad Request - A userId or role list with invalid format. The message on the body of the response will contain further information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    description: Error message.
+                    type: string
+              example:
+                Message: Roles list contains roles that do not exist in this account
+        '500':
+          description: Unexpected error - One possible reason is that the userId is not present on the database.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    description: Error message.
+              example:
+                Message: Unexpected error
+      deprecated: false
+    get:
+      tags:
+      - Roles
+      summary: VTex Get roles by user or appKey
+      description: "Retrieves License Manager [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) of a particular user or application key. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      operationId: GetRolesbyUser
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: userId
+        in: path
+        description: ID of the user.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: e845b52a40e24654a2c70766adb5762b
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array of role objects.
+                items:
+                  type: object
+                  description: Object with information about each role.
+                  properties:
+                    id:
+                      description: ID of role.
+                      type: integer
+                      format: int32
+                    name:
+                      description: Name of the role.
+                      type: string
+              example:
+              - id: 957
+                name: Call center operator
+              - id: 1
+                name: Owner (Admin Super)
+      deprecated: false
+  /api/license-manager/users/{userId}/roles/{roleId}:
+    delete:
+      tags:
+      - Roles
+      summary: VTex Remove role from user or appKey
+      description: "Allows you to remove a License Manager [role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) from a specific user or application key. This method only allows the removal of one role per request. The role's ID must be specified on the request path, not on the request body.\n\r\n\r> Note that a successful response returns a `204` response with an empty body. A deletion on a role or user that does not exist will also return a `204`. Thus, this method should not be used to verify the existence of a specific user or role. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      operationId: RemoveRolefromUser
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: userId
+        in: path
+        description: ID of the user.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: e845b52a40e24654a2c70766adb5762b
+      - name: roleId
+        in: path
+        description: ID of the role which will be removed from the user.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1'
+      responses:
+        '204':
+          description: Success - A no-content response, but the role deletion was performed successfully.
+        '400':
+          description: Bad Request - A userId or role list with invalid format. The message on the body of the response will contain further information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    description: Error message.
+              example:
+                Message: Invalid UserId
+        '405':
+          description: Method Not Allowed
+      deprecated: false
+  /api/license-manager/site/pvt/roles/list/paged:
+    get:
+      tags:
+      - Roles
+      summary: VTex Get list of roles
+      description: "Returns a list of License Manager [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc). The response is divided in pages. The query parameter `numItems` defines the number of items in each page, and consequently the amount of pages for the whole list. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Get paged roles** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetListRoles
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: numItems
+        in: query
+        description: Number of items in the returned page.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 10
+      - name: pageNumber
+        in: query
+        description: Which page from the whole list will be returned.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 1
+      - name: sort
+        in: query
+        description: Chooses the field that the list will be sorted by.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: id
+      - name: sortType
+        in: query
+        description: Defines the sorting order. `ASC` is used for ascendant order. `DSC` is used for descendant order.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: ASC
+      responses:
+        '200':
+          description: Success
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRolesResponse'
+              example:
+                items:
+                - id: 957
+                  isAdmin: false
+                  roleType: 0
+                  products:
+                  - id: null
+                    categoryId: null
+                    categoryName: null
+                    description: null
+                    consoleUrlMask: null
+                    urlConfiguration: null
+                    webApiUrlMask: null
+                    url: null
+                    productResources: null
+                    name: Catalog
+                  - id: null
+                    categoryId: null
+                    categoryName: null
+                    description: null
+                    consoleUrlMask: null
+                    urlConfiguration: null
+                    webApiUrlMask: null
+                    url: null
+                    productResources: null
+                    name: OMS
+                  resources: null
+                  logins: null
+                  name: Call center operator
+                paging:
+                  page: 1
+                  perPage: 1
+                  total: 1
+                  pages: 1
+components:
+  schemas:
+    ProductItems:
+      description: Object representing License Manager products.
+      type: object
+      properties:
+        id:
+          deprecated: true
+          description: License Manager product ID.
+          type: string
+          nullable: true
+        categoryId:
+          deprecated: true
+          description: Category ID.
+          type: string
+          nullable: true
+        categoryName:
+          deprecated: true
+          type: string
+          description: Category name.
+          nullable: true
+        description:
+          deprecated: true
+          type: string
+          description: Description.
+          nullable: true
+        consoleUrlMask:
+          deprecated: true
+          type: string
+          description: Console URL mask.
+          nullable: true
+        urlConfiguration:
+          deprecated: true
+          type: string
+          description: URL configuration.
+          nullable: true
+        webApiUrlMask:
+          deprecated: true
+          type: string
+          description: Web API mask.
+          nullable: true
+        url:
+          deprecated: true
+          type: string
+          description: URL.
+          nullable: true
+        productResources:
+          deprecated: true
+          type: string
+          description: Product resources.
+          nullable: true
+        name:
+          description: Name of the License Manager product.
+          type: string
+    ListRolesResponse:
+      description: Response body for listing all roles.
+      type: object
+      properties:
+        items:
+          description: Array of role objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleItems'
+        paging:
+          $ref: '#/components/schemas/Paging'
+    Paging:
+      description: Paging object.
+      required:
+      - page
+      - perPage
+      - total
+      - pages
+      type: object
+      properties:
+        page:
+          description: Current page number.
+          type: integer
+        perPage:
+          description: Items per page.
+          type: integer
+        total:
+          description: Total of items.
+          type: integer
+        pages:
+          description: Total of pages.
+          type: integer
+    RoleItems:
+      description: Object with information about a role.
+      type: object
+      properties:
+        id:
+          description: ID of the role.
+          type: integer
+        isAdmin:
+          description: Defines if the role has administrative access (`true`) or not (`false`).
+          type: boolean
+        roleType:
+          description: Returns `1` for custom roles, and `0` for predefined roles.
+          type: integer
+        products:
+          type: array
+          description: Array of License Manager product objects.
+          items:
+            $ref: '#/components/schemas/ProductItems'
+        resources:
+          type: string
+          description: Resources.
+          nullable: true
+          deprecated: true
+        logins:
+          type: string
+          description: Logins.
+          nullable: true
+          deprecated: true
+        name:
+          description: Name of the role.
+          type: string
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

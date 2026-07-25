@@ -1,0 +1,1212 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Pickup Points API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Pickup Points
+paths:
+  /api/logistics/pvt/configuration/pickuppoints:
+    get:
+      tags:
+      - Pickup Points
+      summary: VTex List all pickup points
+      description: Lists all of your store's pickup points.
+      operationId: ListAllPickupPpoints
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Pickup point ID.
+                    name:
+                      type: string
+                      description: Pickup point name.
+                    description:
+                      type: string
+                      description: Pickup point description.
+                    instructions:
+                      type: string
+                      description: Instructions.
+                    formatted_address:
+                      type: string
+                      description: Formated address.
+                    address:
+                      type: object
+                      properties:
+                        postalCode:
+                          type: string
+                          description: Postal code.
+                        country:
+                          type: object
+                          properties:
+                            acronym:
+                              type: string
+                              description: Three letter ISO code.
+                            name:
+                              type: string
+                              description: Country name.
+                          example:
+                            acronym: BRA
+                            name: Brazil
+                        city:
+                          type: string
+                          description: City.
+                        state:
+                          type: string
+                          description: State.
+                        neighborhood:
+                          type: string
+                          description: Neighborhood.
+                        street:
+                          type: string
+                          description: Street name.
+                        number:
+                          type: string
+                          description: Pickup point address number.
+                        complement:
+                          type: string
+                          description: Address complement.
+                        location:
+                          type: object
+                          description: Geolocation properties.
+                          properties:
+                            latitude:
+                              type: number
+                              description: Latitude.
+                            longitude:
+                              type: number
+                              description: Longitude.
+                          example:
+                            latitude: -22.974477767944336
+                            longitude: -43.18672561645508
+                    isActive:
+                      type: boolean
+                      description: Indicates whether pickup point is active.
+                    distance:
+                      type: number
+                      description: Distance.
+                    seller:
+                      type: string
+                      description: Seller corresponding to pickup point.
+                    businessHours:
+                      type: array
+                      description: Business hours information for each day of the week.
+                      items:
+                        type: object
+                        properties:
+                          dayOfWeek:
+                            type: integer
+                            description: Day of the week, from `0` (sunday) to `6` (saturday).
+                          openingTime:
+                            type: string
+                            description: Opening time in `hh:mm:ss`.
+                          closingTime:
+                            type: string
+                            description: Closing time in `hh:mm:ss`.
+                        example:
+                          dayOfWeek: 1
+                          openingTime: 08:00:00
+                          closingTime: '20:00:00'
+                    tagsLabel:
+                      type: array
+                      description: List of tags.
+                      items:
+                        type: string
+                        description: Tag
+                    pickupHolidays:
+                      type: array
+                      description: Holidays which apply for pickup point.
+                      items:
+                        type: string
+                        description: Holliday date.
+                    isThirdPartyPickup:
+                      type: boolean
+                      description: Indicates whether pickup point is third party.
+                    accountOwnerName:
+                      type: string
+                      description: Account owner name.
+                    accountOwnerId:
+                      type: string
+                      description: Account owner ID.
+                    accountGroupId:
+                      type: string
+                      description: Account group ID.
+                    parentAccountName:
+                      type: string
+                      description: Parent account name.
+                    originalId:
+                      type: string
+                      description: Original ID.
+                  example:
+                    id: '777'
+                    name: RetireAqui
+                    description: Pup1 description
+                    instructions: ''
+                    formatted_address: undefined
+                    address:
+                      postalCode: 21515-001
+                      country:
+                        acronym: BRA
+                        name: Brasil
+                      city: Rio de Janeiro
+                      state: RJ
+                      neighborhood: Barros Filho
+                      street: Avenida Brasil
+                      number: '21000'
+                      complement: ''
+                      reference: ''
+                      location:
+                        latitude: -22.83468
+                        longitude: -43.36043
+                    isActive: true
+                    distance: 1624907186176
+                    seller: coinshop
+                    _sort:
+                    - 1624907190000
+                    businessHours:
+                    - dayOfWeek: 1
+                      openingTime: 00:00:00
+                      closingTime: '23:59:00'
+                    - dayOfWeek: 2
+                      openingTime: 00:00:00
+                      closingTime: '23:59:00'
+                    - dayOfWeek: 3
+                      openingTime: 00:00:00
+                      closingTime: '23:59:00'
+                    - dayOfWeek: 4
+                      openingTime: 00:00:00
+                      closingTime: '23:59:00'
+                    - dayOfWeek: 5
+                      openingTime: 00:00:00
+                      closingTime: '23:59:00'
+                    tagsLabel: []
+                    pickupHolidays: []
+                    isThirdPartyPickup: false
+                    accountOwnerName: coinshop
+                    accountOwnerId: c97ef6c8-491a-439f-927c-f9918644329f
+                    accountGroupId: 814a304c-6fe9-4160-b81e-4c7799170993
+                    parentAccountName: parent account name
+                    originalId: Id
+                example:
+                - id: '12345'
+                  name: Loja Barra da Tijuca
+                  description: Loja Barra da Tijuca
+                  instructions: Loja Barra da Tijuca
+                  formatted_address: undefined
+                  address:
+                    postalCode: '22220070'
+                    country:
+                      acronym: BRA
+                      name: Brazil
+                    city: Rio de Janeiro
+                    state: RJ
+                    neighborhood: Catete
+                    street: Rua Artur Bernardes
+                    number: ''
+                    complement: ''
+                    location:
+                      latitude: -22.92860984802246
+                      longitude: -22.92860984802246
+                  isActive: true
+                  warehouseId: null
+                  businessHours:
+                  - dayOfWeek: 0
+                    openingTime: '11:00:00'
+                    closingTime: '21:00:00'
+      deprecated: false
+  /api/logistics/pvt/configuration/pickuppoints/{pickupPointId}:
+    put:
+      tags:
+      - Pickup Points
+      summary: VTex Create/update pickup point
+      description: Creates or updates [pickup points](https://help.vtex.com/en/subcategory/pickup-points--1c5Btie9ou2Gg2iUo0ggqM#) in your store by Pickup Point ID.
+      operationId: CreateUpdatePickupPoint
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: pickupPointId
+        in: path
+        description: Pickup Point ID. Cannot contain spaces.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '123456789'
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              required:
+              - id
+              - name
+              - description
+              - instructions
+              - formatted_address
+              - address
+              - isActive
+              - businessHours
+              - tagsLabel
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Pickup Point ID. Cannot contain spaces.
+                  example: '123456789'
+                name:
+                  type: string
+                  description: Pickup point name.
+                  example: Pickup store.
+                description:
+                  type: string
+                  description: Pickup point description.
+                  example: Pickup your items in our store.
+                instructions:
+                  type: string
+                  description: Pickup point instructions.
+                  example: Bring your ID in order to pickup your order.
+                formatted_address:
+                  type: string
+                  description: Formated address.
+                address:
+                  required:
+                  - postalCode
+                  - country
+                  - city
+                  - state
+                  - neighborhood
+                  - street
+                  - number
+                  - complement
+                  - reference
+                  - location
+                  type: object
+                  properties:
+                    postalCode:
+                      type: string
+                      description: Postal code.
+                    country:
+                      required:
+                      - acronym
+                      - name
+                      type: object
+                      properties:
+                        acronym:
+                          type: string
+                          description: Three letter ISO code of the address country.
+                          example: BRA
+                        name:
+                          type: string
+                          description: Address country name.
+                          example: Brasil
+                    city:
+                      type: string
+                      description: Address city.
+                      example: Rio de Janeiro
+                    state:
+                      type: string
+                      description: Address state.
+                      example: RJ
+                    neighborhood:
+                      type: string
+                      description: Address neighborhood.
+                      example: Botafogo
+                    street:
+                      type: string
+                      description: Address street name.
+                      example: Praia de botafogo.
+                    number:
+                      type: string
+                      description: Address street number.
+                      example: '200'
+                    complement:
+                      type: string
+                      description: Address complement.
+                      example: 3rd floor
+                    reference:
+                      type: string
+                      description: Complement that might help locate the shipping address more precisely in case of delivery.
+                      example: Grey building
+                    location:
+                      required:
+                      - latitude
+                      - longitude
+                      type: object
+                      properties:
+                        latitude:
+                          type: number
+                          description: latitude
+                          example: -22.974477767944336
+                        longitude:
+                          type: number
+                          description: longitude
+                          example: -43.18672561645508
+                  example:
+                    postalCode: '22070002'
+                    country:
+                      acronym: BRA
+                      name: Brazil
+                    city: Rio de Janeiro
+                    state: RJ
+                    neighborhood: Copacabana
+                    street: Avenida Atl├óntica
+                    number: ''
+                    complement: ''
+                    reference: Grey building
+                    location:
+                      latitude: -22.974477767944336
+                      longitude: -43.18672561645508
+                isActive:
+                  type: boolean
+                businessHours:
+                  type: array
+                  items:
+                    title: BusinessHour
+                    required:
+                    - dayOfWeek
+                    - openingTime
+                    - closingTime
+                    type: object
+                    properties:
+                      dayOfWeek:
+                        type: integer
+                        format: int32
+                      openingTime:
+                        type: string
+                      closingTime:
+                        type: string
+                    example:
+                      dayOfWeek: 1
+                      openingTime: 08:00:00
+                      closingTime: '20:00:00'
+                  description: ''
+                tagsLabel:
+                  type: array
+                  items:
+                    type: string
+                  description: ''
+                isThirdPartyPickup:
+                  type: boolean
+              example:
+                id: 1a227d3
+                name: Loja Copacabana
+                description: ''
+                instructions: Obrigat├│rio apresentar documento de identifica├º├úo
+                formatted_address: undefined
+                address:
+                  postalCode: '22070002'
+                  country:
+                    acronym: BRA
+                    name: Brazil
+                  city: Rio de Janeiro
+                  state: RJ
+                  neighborhood: Copacabana
+                  street: Avenida Atl├óntica
+                  number: ''
+                  complement: ''
+                  reference: Grey building
+                  location:
+                    latitude: -22.974477767944336
+                    longitude: -43.18672561645508
+                isActive: true
+                businessHours:
+                - dayOfWeek: 1
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 2
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 3
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 4
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 5
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                tagsLabel:
+                - zonasul
+                - rio de janeiro
+            example:
+              id: 1a227d3
+              name: Loja Copacabana
+              description: ''
+              instructions: Obrigat├│rio apresentar documento de identifica├º├úo
+              formatted_address: undefined
+              address:
+                postalCode: '22070002'
+                country:
+                  acronym: BRA
+                  name: Brazil
+                city: Rio de Janeiro
+                state: RJ
+                neighborhood: Copacabana
+                street: Avenida Atl├óntica
+                number: ''
+                complement: ''
+                reference: Grey building
+                location:
+                  latitude: -22.974477767944336
+                  longitude: -43.18672561645508
+              isActive: true
+              businessHours:
+              - dayOfWeek: 1
+                openingTime: 08:00:00
+                closingTime: '20:00:00'
+              - dayOfWeek: 2
+                openingTime: 08:00:00
+                closingTime: '20:00:00'
+              - dayOfWeek: 3
+                openingTime: 08:00:00
+                closingTime: '20:00:00'
+              - dayOfWeek: 4
+                openingTime: 08:00:00
+                closingTime: '20:00:00'
+              - dayOfWeek: 5
+                openingTime: 08:00:00
+                closingTime: '20:00:00'
+              tagsLabel:
+              - zonasul
+              - rio de janeiro
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers:
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 14 Dec 2018 17:39:52 GMT
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '922'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.4.58+1915
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: c0c59544-e9bb-476c-81c8-ebf4d5f027f2
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Powered by VTEX
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.44.60
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+          content:
+            application/json; charset=utf-8:
+              schema:
+                title: Create/Update
+                required:
+                - id
+                - name
+                - description
+                - instructions
+                - formatted_address
+                - address
+                - isActive
+                - businessHours
+                - tagsLabel
+                - pickupHolidays
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  instructions:
+                    type: string
+                  formatted_address:
+                    type: string
+                  address:
+                    title: Address2
+                    required:
+                    - postalCode
+                    - country
+                    - city
+                    - state
+                    - neighborhood
+                    - street
+                    - number
+                    - complement
+                    - reference
+                    - location
+                    type: object
+                    properties:
+                      postalCode:
+                        type: string
+                      country:
+                        title: Country
+                        required:
+                        - acronym
+                        - name
+                        type: object
+                        properties:
+                          acronym:
+                            type: string
+                          name:
+                            type: string
+                        example:
+                          acronym: BRA
+                          name: Brazil
+                      city:
+                        type: string
+                      state:
+                        type: string
+                      neighborhood:
+                        type: string
+                      street:
+                        type: string
+                      number:
+                        type: string
+                      complement:
+                        type: string
+                      reference:
+                        type: string
+                        nullable: true
+                      location:
+                        title: Location5
+                        required:
+                        - latitude
+                        - longitude
+                        type: object
+                        properties:
+                          latitude:
+                            type: number
+                          longitude:
+                            type: number
+                        example:
+                          latitude: -22.974477767944336
+                          longitude: -43.18672561645508
+                    example:
+                      postalCode: '22070002'
+                      country:
+                        acronym: BRA
+                        name: Brazil
+                      city: Rio de Janeiro
+                      state: RJ
+                      neighborhood: Copacabana
+                      street: Avenida Atl├óntica
+                      number: ''
+                      complement: ''
+                      reference: null
+                      location:
+                        latitude: -22.974477767944336
+                        longitude: -43.18672561645508
+                  isActive:
+                    type: boolean
+                  businessHours:
+                    type: array
+                    items:
+                      title: BusinessHour
+                      required:
+                      - dayOfWeek
+                      - openingTime
+                      - closingTime
+                      type: object
+                      properties:
+                        dayOfWeek:
+                          type: integer
+                          format: int32
+                        openingTime:
+                          type: string
+                        closingTime:
+                          type: string
+                      example:
+                        dayOfWeek: 1
+                        openingTime: 08:00:00
+                        closingTime: '20:00:00'
+                    description: ''
+                  tagsLabel:
+                    type: array
+                    items:
+                      type: string
+                    description: ''
+                  pickupHolidays:
+                    type: array
+                    items:
+                      type: string
+                    description: ''
+                example:
+                  id: rteste
+                  name: Loja Copacabana
+                  description: ''
+                  instructions: Obrigat├│rio apresentar documento de identifica├º├úo
+                  formatted_address: undefined
+                  address:
+                    postalCode: '22070002'
+                    country:
+                      acronym: BRA
+                      name: Brazil
+                    city: Rio de Janeiro
+                    state: RJ
+                    neighborhood: Copacabana
+                    street: Avenida Atl├óntica
+                    number: ''
+                    complement: ''
+                    reference: null
+                    location:
+                      latitude: -22.974477767944336
+                      longitude: -43.18672561645508
+                  isActive: true
+                  businessHours:
+                  - dayOfWeek: 1
+                    openingTime: 08:00:00
+                    closingTime: '20:00:00'
+                  - dayOfWeek: 2
+                    openingTime: 08:00:00
+                    closingTime: '20:00:00'
+                  - dayOfWeek: 3
+                    openingTime: 08:00:00
+                    closingTime: '20:00:00'
+                  - dayOfWeek: 4
+                    openingTime: 08:00:00
+                    closingTime: '20:00:00'
+                  - dayOfWeek: 5
+                    openingTime: 08:00:00
+                    closingTime: '20:00:00'
+                  tagsLabel:
+                  - zonasul
+                  - rio de janeiro
+                  pickupHolidays: []
+              example:
+                id: rteste
+                name: Loja Copacabana
+                description: ''
+                instructions: Obrigat├│rio apresentar documento de identifica├º├úo
+                formatted_address: undefined
+                address:
+                  postalCode: '22070002'
+                  country:
+                    acronym: BRA
+                    name: Brazil
+                  city: Rio de Janeiro
+                  state: RJ
+                  neighborhood: Copacabana
+                  street: Avenida Atl├óntica
+                  number: ''
+                  complement: ''
+                  reference: null
+                  location:
+                    latitude: -22.974477767944336
+                    longitude: -43.18672561645508
+                isActive: true
+                businessHours:
+                - dayOfWeek: 1
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 2
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 3
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 4
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                - dayOfWeek: 5
+                  openingTime: 08:00:00
+                  closingTime: '20:00:00'
+                tagsLabel:
+                - zonasul
+                - rio de janeiro
+                pickupHolidays: []
+      deprecated: false
+    get:
+      tags:
+      - Pickup Points
+      summary: VTex List pickup point by ID
+      description: Lists your store's pickup points while searching by ID.
+      operationId: GetById
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: pickupPointId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '546'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Wed, 25 Oct 2017 20:24:00 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx-21
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.19
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.44.1-beta
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: beta
+            X-VTEX-Cache-Status-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: MISS
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.3.54-beta.2+1365
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: d9cb24ab-d650-4728-8a79-a981fbbdc9a2
+          content:
+            application/json; charset=utf-8:
+              schema:
+                title: GetById
+                required:
+                - id
+                - name
+                - description
+                - instructions
+                - formatted_address
+                - address
+                - isActive
+                - warehouseId
+                - businessHours
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  instructions:
+                    type: string
+                  formatted_address:
+                    type: string
+                  address:
+                    title: Address4
+                    required:
+                    - postalCode
+                    - country
+                    - city
+                    - state
+                    - neighborhood
+                    - street
+                    - number
+                    - complement
+                    - location
+                    type: object
+                    properties:
+                      postalCode:
+                        type: string
+                      country:
+                        title: Country
+                        required:
+                        - acronym
+                        - name
+                        type: object
+                        properties:
+                          acronym:
+                            type: string
+                          name:
+                            type: string
+                        example:
+                          acronym: BRA
+                          name: Brazil
+                      city:
+                        type: string
+                      state:
+                        type: string
+                      neighborhood:
+                        type: string
+                      street:
+                        type: string
+                      number:
+                        type: string
+                      complement:
+                        type: string
+                      location:
+                        title: Location5
+                        required:
+                        - latitude
+                        - longitude
+                        type: object
+                        properties:
+                          latitude:
+                            type: number
+                          longitude:
+                            type: number
+                        example:
+                          latitude: -22.974477767944336
+                          longitude: -43.18672561645508
+                    example:
+                      postalCode: '22220070'
+                      country:
+                        acronym: BRA
+                        name: Brazil
+                      city: Rio de Janeiro
+                      state: RJ
+                      neighborhood: Catete
+                      street: Rua Artur Bernardes
+                      number: ''
+                      complement: ''
+                      location:
+                        latitude: -22.92860984802246
+                        longitude: -22.92860984802246
+                  isActive:
+                    type: boolean
+                  warehouseId:
+                    type: string
+                    nullable: true
+                  businessHours:
+                    type: array
+                    items:
+                      title: BusinessHour
+                      required:
+                      - dayOfWeek
+                      - openingTime
+                      - closingTime
+                      type: object
+                      properties:
+                        dayOfWeek:
+                          type: integer
+                          format: int32
+                        openingTime:
+                          type: string
+                        closingTime:
+                          type: string
+                      example:
+                        dayOfWeek: 1
+                        openingTime: 08:00:00
+                        closingTime: '20:00:00'
+                    description: ''
+                example:
+                  id: '12345'
+                  name: Loja Barra da Tijuca
+                  description: Loja Barra da Tijuca
+                  instructions: Loja Barra da Tijuca
+                  formatted_address: undefined
+                  address:
+                    postalCode: '22220070'
+                    country:
+                      acronym: BRA
+                      name: Brazil
+                    city: Rio de Janeiro
+                    state: RJ
+                    neighborhood: Catete
+                    street: Rua Artur Bernardes
+                    number: ''
+                    complement: ''
+                    location:
+                      latitude: -22.92860984802246
+                      longitude: -22.92860984802246
+                  isActive: true
+                  warehouseId: null
+                  businessHours:
+                  - dayOfWeek: 0
+                    openingTime: '11:00:00'
+                    closingTime: '21:00:00'
+              example:
+                id: '12345'
+                name: Loja Barra da Tijuca
+                description: Loja Barra da Tijuca
+                instructions: Loja Barra da Tijuca
+                formatted_address: undefined
+                address:
+                  postalCode: '22220070'
+                  country:
+                    acronym: BRA
+                    name: Brazil
+                  city: Rio de Janeiro
+                  state: RJ
+                  neighborhood: Catete
+                  street: Rua Artur Bernardes
+                  number: ''
+                  complement: ''
+                  location:
+                    latitude: -22.92860984802246
+                    longitude: -22.92860984802246
+                isActive: true
+                warehouseId: null
+                businessHours:
+                - dayOfWeek: 0
+                  openingTime: '11:00:00'
+                  closingTime: '21:00:00'
+      deprecated: false
+    delete:
+      tags:
+      - Pickup Points
+      summary: VTex Delete pickup point
+      description: Deletes a given pickup point for your store, by pickup point ID.
+      operationId: Delete
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: pickupPointId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/configuration/pickuppoints/_search:
+    get:
+      tags:
+      - Pickup Points
+      summary: VTex List paged pickup points
+      description: Lists paged pickup points in your store.
+      operationId: Getpaged
+      parameters:
+      - name: page
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{pageNumber}}'
+      - name: pageSize
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{pageSize}}'
+      - name: keyword
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: ''
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

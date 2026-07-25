@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Settings API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Settings
+paths:
+  /api/rns/settings:
+    get:
+      tags:
+      - Settings
+      summary: VTex Get Subscription Settings
+      description: List the details of the settings of a given subscription.
+      operationId: GetSettings
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/settings'
+      deprecated: false
+    post:
+      tags:
+      - Settings
+      summary: VTex Edit Subscriptions settings
+      description: Edits Subscriptions settings in your store.
+      operationId: EditSettings
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/settings'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/settings'
+      deprecated: false
+components:
+  schemas:
+    settings:
+      title: ''
+      description: Subscriptions settings
+      type: object
+      required:
+      - slaOption
+      - defaultSla
+      - isUsingV3
+      - onMigrationProcess
+      - executionHourInUtc
+      - workflowVersion
+      - deliveryChannels
+      - randomIdGeneration
+      - isMultipleInstallmentsEnabledOnCreation
+      - isMultipleInstallmentsEnabledOnUpdate
+      - orderCustomDataAppId
+      - postponeExpiration
+      - manualPriceAllowed
+      - useItemPriceFromOriginalOrder
+      properties:
+        slaOption:
+          title: slaOption
+          description: Delivery method.
+          type: string
+          default: ''
+          example: NONE
+        defaultSla:
+          title: defaultSla
+          description: Default delivery method.
+          type: string
+          default: null
+          nullable: true
+          example: null
+        isUsingV3:
+          title: isUsingV3
+          description: Indicates whether or not Subscriptions V3 is enabled.
+          type: boolean
+          default: false
+          example: true
+        onMigrationProcess:
+          title: onMigrationProcess
+          description: Indicates whether or not the account is in the migration process to Subscriptions V3.
+          type: boolean
+          default: false
+          example: false
+        executionHourInUtc:
+          title: executionHourInUtc
+          description: Indicates the time future subscription orders will be generated.
+          type: integer
+          default: 0
+          example: 9
+        workflowVersion:
+          title: workflowVersion
+          description: Workflow version.
+          type: string
+          default: ''
+          example: '1.1'
+        deliveryChannels:
+          title: deliveryChannels
+          description: Array containing delivery channels.
+          type: array
+          default: []
+          items:
+            title: ''
+            description: 'Type of delivery channel. The values that are possible are: `pickupInPoint` for pickup point and `delivery` for regular delivery.'
+            type: string
+            example: delivery
+          example: delivery
+        randomIdGeneration:
+          title: randomIdGeneration
+          description: Defines whether or not the subscription order IDs will be randomly generated.
+          type: boolean
+          default: false
+          example: false
+        isMultipleInstallmentsEnabledOnCreation:
+          title: isMultipleInstallmentsEnabledOnCreation
+          description: Defines whether or not multiple installments are enabled when a subscription is created.
+          type: boolean
+          default: false
+          example: false
+        isMultipleInstallmentsEnabledOnUpdate:
+          title: isMultipleInstallmentsEnabledOnUpdate
+          description: Defines whether or not multiple installments are enabled when a subscription is updated.
+          type: boolean
+          default: false
+          example: false
+        orderCustomDataAppId:
+          title: orderCustomDataAppId
+          description: When filled, this field passes along the `customData` infomration in the order to the future recurrent subscription orders.
+          type: string
+          default: null
+          example: null
+        postponeExpiration:
+          title: postponeExpiration
+          description: Defines whether or not the expiration of subscriptions can be postponed.
+          type: boolean
+          default: false
+          example: false
+        manualPriceAllowed:
+          title: manualPriceAllowed
+          description: When set to `true`, this property enables manual price configuration in subscription items. This is valid for all existing subscriptions, provided that there is a manual price configured and that `isUsingV3` is `true`.
+          type: boolean
+          default: false
+          example: false
+        useItemPriceFromOriginalOrder:
+          title: useItemPriceFromOriginalOrder
+          description: When set to `true`, this property enables using the manual price for each item from the original subscription order. This is only valid for new subscriptions, created from the moment this configuration is enabled. For this to work, it is mandatory that the `manualPriceAllowed` property is set to `true` and that `isUsingV3` is `true`.
+          type: boolean
+          default: false
+          example: false
+      example:
+      - slaOption: NONE
+        defaultSla: null
+        isUsingV3: true
+        onMigrationProcess: false
+        executionHourInUtc: 9
+        workflowVersion: '1.1'
+        deliveryChannels:
+        - delivery
+        randomIdGeneration: false
+        isMultipleInstallmentsEnabledOnCreation: false
+        isMultipleInstallmentsEnabledOnUpdate: false
+        orderCustomDataAppId: null
+        postponeExpiration: false
+        manualPriceAllowed: false
+        useItemPriceFromOriginalOrder: false
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

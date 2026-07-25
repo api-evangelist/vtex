@@ -1,0 +1,827 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Facets API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Facets
+paths:
+  /api/catalog_system/pub/facets/category/{categoryId}:
+    get:
+      tags:
+      - Facets
+      summary: VTex Get Category Facets
+      description: "Retrieves the names and IDs of the categories facets. \r\n>⚠️ This endpoint returns a maximum of 50 items per response, so the difference between `_from` and `_to` should not exceed this number. The result order is descending, from the highest product ID to the lowest.\r\n\r\n## Response body example:\r\n\r\n```json\r\n[\r\n\t[\r\n    {\r\n      \"Name\":\"Tamanho Global\",\r\n      \"Id\":45\r\n\t\t},\r\n\t\t{\r\n      \"Name\":\"Percentuals\",\r\n      \"Id\":25\r\n\t\t}\r\n\t]\r\n]\r\n```"
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: categoryId
+        in: path
+        description: Category unique number identifier.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1'
+      - name: _from
+        in: query
+        description: Starter page range. These parameters allow the API to be paginated. Take into account that the initial and final pages cannot have a separation superior to 50 pages. Thus, it will be displayed 50 items per page.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: '1'
+      - name: _to
+        in: query
+        description: Finisher page range. These parameters allow the API to be paginated. Take into account that the initial and final pages cannot have a separation superior to 50 pages. Thus, it will be displayed 50 items per page.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: '50'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - Name: Tamanho Global
+                Id: 45
+              - Name: Percentuals
+                Id: 25
+              schema:
+                type: array
+                items:
+                  type: object
+                  description: Object with name and ID of the category's facet.
+                  example:
+                    Name: Tamanho Global
+                    Id: 45
+                  required:
+                  - Name
+                  - Id
+                  properties:
+                    Name:
+                      type: string
+                      description: Category's facet name.
+                      example: Tamanho Global
+                    Id:
+                      type: integer
+                      description: Category's facet ID.
+                      example: 45
+  /api/catalog_system/pub/facets/search/{term}:
+    get:
+      tags:
+      - Facets
+      summary: VTex Search by Store Facets
+      description: Retrieves products by store facets. The result order is descending, from the highest product ID to the lowest.
+      operationId: Facetscategory
+      parameters:
+      - name: map
+        in: query
+        description: Mapping of the term. It can be `c` for a category, `b` for a brand, or `specificationFilter_{specificationId}` for a specification. You need to include a map for each term you are searching for in the same term's order.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: c
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: term
+        in: path
+        description: 'Term used for the facet''s search. You can search for as much term as you want. The term can be: `categoryId`, `brandId`, `specificationId`.'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - Departments
+                - Brands
+                - SpecificationFilters
+                - CategoriesTrees
+                - PriceRanges
+                - Summary
+                properties:
+                  Departments:
+                    type: array
+                    description: Array of general information about the categories.
+                    example:
+                    - Quantity: 2
+                      Position: null
+                      Name: Beers Beers Mesmo
+                      Link: /Beers-Beers-Mesmo/1?map=c,b
+                      LinkEncoded: /Beers-Beers-Mesmo/1?map=c,b
+                      Map: c
+                      Value: Beers-Beers-Mesmo
+                    - Quantity: 2
+                      Position: null
+                      Name: Merch Integration Category ||
+                      Link: /Merch-Integration-Category-||/1?map=c,b
+                      LinkEncoded: /Merch-Integration-Category-%7C%7C/1?map=c,b
+                      Map: c
+                      Value: Merch-Integration-Category-||
+                    items:
+                      type: object
+                      example:
+                        Quantity: 2
+                        Position: null
+                        Name: Beers Beers Mesmo
+                        Link: /Beers-Beers-Mesmo/1?map=c,b
+                        LinkEncoded: /Beers-Beers-Mesmo/1?map=c,b
+                        Map: c
+                        Value: Beers-Beers-Mesmo
+                      required:
+                      - Quantity
+                      - Position
+                      - Name
+                      - Link
+                      - LinkEncoded
+                      - Map
+                      - Value
+                      properties:
+                        Quantity:
+                          type: integer
+                          description: Quantity of facets.
+                          example: 2
+                        Position:
+                          type: integer
+                          description: Position of the facets.
+                          nullable: true
+                          example: 1
+                        Name:
+                          type: string
+                          description: Category name.
+                          example: Beers Beers Mesmo
+                        Link:
+                          type: string
+                          description: Link of the facet.
+                          example: /Beers-Beers-Mesmo/1?map=c,b
+                        LinkEncoded:
+                          type: string
+                          description: Encoded link of the facet.
+                          example: /Beers-Beers-Mesmo/1?map=c,b
+                        Map:
+                          type: string
+                          description: Mapping of the facet.
+                          example: c
+                        Value:
+                          type: string
+                          description: Value of the facet.
+                          example: Beers-Beers-Mesmo
+                  Brands:
+                    type: array
+                    description: Array of general information about the brands.
+                    example:
+                    - Quantity: 2
+                      Position: null
+                      Name: Merch XP
+                      Link: /1/1234600/1/Merch-XP?map=c,c,b,b
+                      LinkEncoded: /1/1234600/1/Merch-XP?map=c,c,b,b
+                      Map: b
+                      Value: Merch-XP
+                    - Quantity: 2
+                      Position: null
+                      Name: Zé
+                      Link: /1/1234600/1/Ze?map=c,c,b,b
+                      LinkEncoded: /1/1234600/1/Ze?map=c,c,b,b
+                      Map: b
+                      Value: Ze
+                    items:
+                      type: object
+                      example:
+                        Quantity: 2
+                        Position: null
+                        Name: Merch XP
+                        Link: /1/1234600/1/Merch-XP?map=c,c,b,b
+                        LinkEncoded: /1/1234600/1/Merch-XP?map=c,c,b,b
+                        Map: b
+                        Value: Merch-XP
+                      required:
+                      - Quantity
+                      - Position
+                      - Name
+                      - Link
+                      - LinkEncoded
+                      - Map
+                      - Value
+                      properties:
+                        Quantity:
+                          type: integer
+                          description: Quantity of facets.
+                          example: 2
+                        Position:
+                          type: integer
+                          description: Position of the facet.
+                          nullable: true
+                          example: 1
+                        Name:
+                          type: string
+                          description: Brand name.
+                          example: Merch XP
+                        Link:
+                          type: string
+                          description: Link of the facet.
+                          example: /1/1234600/1/Merch-XP?map=c,c,b,b
+                        LinkEncoded:
+                          type: string
+                          description: Enconded link of the facet.
+                          example: /1/1234600/1/Merch-XP?map=c,c,b,b
+                        Map:
+                          type: string
+                          description: Mapping of the facet.
+                          example: b
+                        Value:
+                          type: string
+                          description: Value of the facet.
+                          example: Merch-XP
+                  SpecificationFilters:
+                    type: object
+                    description: Object with general information of specifications.
+                    example: {}
+                  CategoriesTrees:
+                    type: array
+                    description: Array of the category tree.
+                    example:
+                    - Id: 1
+                      Quantity: 4
+                      Position: null
+                      Name: Beers Beers Mesmo
+                      Link: /Beers-Beers-Mesmo/1?map=c,b
+                      LinkEncoded: /Beers-Beers-Mesmo/1?map=c,b
+                      Map: c
+                      Value: Beers-Beers-Mesmo
+                      Children:
+                      - Id: 2
+                        Quantity: 1
+                        Position: null
+                        Name: Lager Beers
+                        Link: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                        LinkEncoded: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                        Map: c
+                        Value: Lager-Beers
+                        Children: []
+                    - Id: 1234571
+                      Quantity: 2
+                      Position: null
+                      Name: Jogos
+                      Link: /Jogos/1?map=c,b
+                      LinkEncoded: /Jogos/1?map=c,b
+                      Map: c
+                      Value: Jogos
+                      Children: []
+                    items:
+                      type: object
+                      example:
+                        Id: 1
+                        Quantity: 4
+                        Position: null
+                        Name: Beers Beers Mesmo
+                        Link: /Beers-Beers-Mesmo/1?map=c,b
+                        LinkEncoded: /Beers-Beers-Mesmo/1?map=c,b
+                        Map: c
+                        Value: Beers-Beers-Mesmo
+                        Children:
+                        - Id: 2
+                          Quantity: 1
+                          Position: null
+                          Name: Lager Beers
+                          Link: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                          LinkEncoded: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                          Map: c
+                          Value: Lager-Beers
+                          Children: []
+                      required:
+                      - Id
+                      - Quantity
+                      - Position
+                      - Name
+                      - Link
+                      - LinkEncoded
+                      - Map
+                      - Value
+                      - Children
+                      properties:
+                        Id:
+                          type: integer
+                          description: Category ID.
+                          example: 1
+                        Quantity:
+                          type: integer
+                          description: Quantity of the facets.
+                          example: 4
+                        Position:
+                          type: integer
+                          description: Position of the facet.
+                          nullable: true
+                          example: 1
+                        Name:
+                          type: string
+                          description: Category name.
+                          example: Beers Beers Mesmo
+                        Link:
+                          type: string
+                          description: Link of the facet.
+                          example: /Beers-Beers-Mesmo/1?map=c,b
+                        LinkEncoded:
+                          type: string
+                          description: Encoded link of the facet.
+                          example: /Beers-Beers-Mesmo/1?map=c,b
+                        Map:
+                          type: string
+                          description: Mapping of the facet.
+                          example: c
+                        Value:
+                          type: string
+                          description: Value of the facet.
+                          example: Beers-Beers-Mesmo
+                        Children:
+                          type: array
+                          description: Category children.
+                          example:
+                          - Id: 2
+                            Quantity: 1
+                            Position: null
+                            Name: Lager Beers
+                            Link: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                            LinkEncoded: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                            Map: c
+                            Value: Lager-Beers
+                            Children: []
+                          items:
+                            type: object
+                            example:
+                              Id: 2
+                              Quantity: 1
+                              Position: null
+                              Name: Lager Beers
+                              Link: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                              LinkEncoded: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                              Map: c
+                              Value: Lager-Beers
+                              Children: []
+                            required:
+                            - Id
+                            - Quantity
+                            - Position
+                            - Name
+                            - Link
+                            - LinkEncoded
+                            - Map
+                            - Value
+                            - Children
+                            properties:
+                              Id:
+                                type: integer
+                                description: Category ID.
+                                example: 1
+                              Quantity:
+                                type: integer
+                                description: Quantity of the facets.
+                                example: 4
+                              Position:
+                                type: integer
+                                description: Position of the facet.
+                                nullable: true
+                                example: 1
+                              Name:
+                                type: string
+                                description: Category name.
+                                example: Beers Beers Mesmo
+                              Link:
+                                type: string
+                                description: Link of the facet.
+                                example: /Beers-Beers-Mesmo/1?map=c,b
+                              LinkEncoded:
+                                type: string
+                                description: Encoded link of the facet.
+                                example: /Beers-Beers-Mesmo/1?map=c,b
+                              Map:
+                                type: string
+                                description: Mapping of the facet.
+                                example: c
+                              Value:
+                                type: string
+                                description: Value of the facet.
+                                example: Beers-Beers-Mesmo
+                              Children:
+                                type: array
+                                description: Category children.
+                                example: []
+                  PriceRanges:
+                    type: array
+                    description: Array with general information of the price ranges.
+                    example: []
+                  Summary:
+                    type: object
+                    description: Summary of the facets.
+                    example:
+                      Departments:
+                        DisplayedItems: 8
+                        TotalItems: 8
+                      CategoriesTrees:
+                        DisplayedItems: 13
+                        TotalItems: 13
+                      Brands:
+                        DisplayedItems: 10
+                        TotalItems: 10
+                      PriceRanges:
+                        DisplayedItems: 0
+                        TotalItems: 0
+                      SpecificationFilters: {}
+                    required:
+                    - Departments
+                    - CategoriesTrees
+                    - Brands
+                    - PriceRanges
+                    - SpecificationFilters
+                    properties:
+                      Departments:
+                        type: object
+                        description: Departments' quantity of displayed and total items.
+                        example:
+                          DisplayedItems: 8
+                          TotalItems: 8
+                        required:
+                        - DisplayedItems
+                        - TotalItems
+                        properties:
+                          DisplayedItems:
+                            type: integer
+                            description: Quantity of displayed items.
+                            example: 8
+                          TotalItems:
+                            type: integer
+                            description: Quantity of total items.
+                            example: 8
+                      CategoriesTrees:
+                        type: object
+                        description: Category tree's quantity of displayed and total items.
+                        example:
+                          DisplayedItems: 13
+                          TotalItems: 13
+                        required:
+                        - DisplayedItems
+                        - TotalItems
+                        properties:
+                          DisplayedItems:
+                            type: integer
+                            description: Quantity of displayed items.
+                            example: 13
+                          TotalItems:
+                            type: integer
+                            description: Quantity of total items.
+                            example: 13
+                      Brands:
+                        type: object
+                        description: Brands' quantity of displayed and total items.
+                        example:
+                          DisplayedItems: 10
+                          TotalItems: 10
+                        required:
+                        - DisplayedItems
+                        - TotalItems
+                        properties:
+                          DisplayedItems:
+                            type: integer
+                            description: Quantity of displayed items.
+                            example: 10
+                          TotalItems:
+                            type: integer
+                            description: Quantity of total items.
+                            example: 10
+                      PriceRanges:
+                        type: object
+                        description: Price ranges' quantity of displayed and total items.
+                        example:
+                          DisplayedItems: 0
+                          TotalItems: 0
+                        required:
+                        - DisplayedItems
+                        - TotalItems
+                        properties:
+                          DisplayedItems:
+                            type: integer
+                            description: Quantity of displayed items.
+                            example: 0
+                          TotalItems:
+                            type: integer
+                            description: Quantity of total items.
+                            example: 0
+                      SpecificationFilters:
+                        type: object
+                        description: Specification filters' quantity of displayed and total items.
+                        example: {}
+              example:
+                Departments:
+                - Quantity: 2
+                  Position: null
+                  Name: Beers Beers Mesmo
+                  Link: /Beers-Beers-Mesmo/1?map=c,b
+                  LinkEncoded: /Beers-Beers-Mesmo/1?map=c,b
+                  Map: c
+                  Value: Beers-Beers-Mesmo
+                - Quantity: 2
+                  Position: null
+                  Name: Merch Integration Category ||
+                  Link: /Merch-Integration-Category-||/1?map=c,b
+                  LinkEncoded: /Merch-Integration-Category-%7C%7C/1?map=c,b
+                  Map: c
+                  Value: Merch-Integration-Category-||
+                - Quantity: 1
+                  Position: null
+                  Name: Jogos
+                  Link: /Jogos/1?map=c,b
+                  LinkEncoded: /Jogos/1?map=c,b
+                  Map: c
+                  Value: Jogos
+                - Quantity: 3
+                  Position: null
+                  Name: '189'
+                  Link: /189/1?map=c,b
+                  LinkEncoded: /189/1?map=c,b
+                  Map: c
+                  Value: '189'
+                - Quantity: 1
+                  Position: null
+                  Name: Tests
+                  Link: /Tests/1?map=c,b
+                  LinkEncoded: /Tests/1?map=c,b
+                  Map: c
+                  Value: Tests
+                - Quantity: 1
+                  Position: null
+                  Name: Accessories
+                  Link: /Accessories/1?map=c,b
+                  LinkEncoded: /Accessories/1?map=c,b
+                  Map: c
+                  Value: Accessories
+                - Quantity: 2
+                  Position: null
+                  Name: Bars
+                  Link: /Bars/1?map=c,b
+                  LinkEncoded: /Bars/1?map=c,b
+                  Map: c
+                  Value: Bars
+                - Quantity: 5
+                  Position: null
+                  Name: Categoria Teste Timeout
+                  Link: /Categoria-Teste-Timeout/1?map=c,b
+                  LinkEncoded: /Categoria-Teste-Timeout/1?map=c,b
+                  Map: c
+                  Value: Categoria-Teste-Timeout
+                Brands:
+                - Quantity: 2
+                  Position: null
+                  Name: Merch XP
+                  Link: /1/1234600/1/Merch-XP?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Merch-XP?map=c,c,b,b
+                  Map: b
+                  Value: Merch-XP
+                - Quantity: 2
+                  Position: null
+                  Name: Zé
+                  Link: /1/1234600/1/Ze?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Ze?map=c,c,b,b
+                  Map: b
+                  Value: Ze
+                - Quantity: 1
+                  Position: null
+                  Name: Odin
+                  Link: /1/1234600/1/Odin?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Odin?map=c,c,b,b
+                  Map: b
+                  Value: Odin
+                - Quantity: 2
+                  Position: null
+                  Name: Hoegaarden
+                  Link: /1/1234600/1/Hoegaarden?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Hoegaarden?map=c,c,b,b
+                  Map: b
+                  Value: Hoegaarden
+                - Quantity: 1
+                  Position: null
+                  Name: Teste marcas
+                  Link: /1/1234600/1/Teste-marcas?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Teste-marcas?map=c,c,b,b
+                  Map: b
+                  Value: Teste-marcas
+                - Quantity: 1
+                  Position: null
+                  Name: Bitmap Bureau
+                  Link: /1/1234600/1/Bitmap-Bureau?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Bitmap-Bureau?map=c,c,b,b
+                  Map: b
+                  Value: Bitmap-Bureau
+                - Quantity: 1
+                  Position: null
+                  Name: Sega
+                  Link: /1/1234600/1/Sega?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Sega?map=c,c,b,b
+                  Map: b
+                  Value: Sega
+                - Quantity: 3
+                  Position: null
+                  Name: Technogym
+                  Link: /1/1234600/1/Technogym?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Technogym?map=c,c,b,b
+                  Map: b
+                  Value: Technogym
+                - Quantity: 3
+                  Position: null
+                  Name: Aptany
+                  Link: /1/1234600/1/Aptany?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Aptany?map=c,c,b,b
+                  Map: b
+                  Value: Aptany
+                - Quantity: 1
+                  Position: null
+                  Name: Tectoy
+                  Link: /1/1234600/1/Tectoy?map=c,c,b,b
+                  LinkEncoded: /1/1234600/1/Tectoy?map=c,c,b,b
+                  Map: b
+                  Value: Tectoy
+                SpecificationFilters: {}
+                CategoriesTrees:
+                - Id: 1
+                  Quantity: 4
+                  Position: null
+                  Name: Beers Beers Mesmo
+                  Link: /Beers-Beers-Mesmo/1?map=c,b
+                  LinkEncoded: /Beers-Beers-Mesmo/1?map=c,b
+                  Map: c
+                  Value: Beers-Beers-Mesmo
+                  Children:
+                  - Id: 2
+                    Quantity: 1
+                    Position: null
+                    Name: Lager Beers
+                    Link: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                    LinkEncoded: /Beers-Beers-Mesmo/Lager-Beers/1?map=c,c,b
+                    Map: c
+                    Value: Lager-Beers
+                    Children: []
+                - Id: 1234571
+                  Quantity: 2
+                  Position: null
+                  Name: Jogos
+                  Link: /Jogos/1?map=c,b
+                  LinkEncoded: /Jogos/1?map=c,b
+                  Map: c
+                  Value: Jogos
+                  Children: []
+                - Id: 1234579
+                  Quantity: 3
+                  Position: null
+                  Name: '189'
+                  Link: /189/1?map=c,b
+                  LinkEncoded: /189/1?map=c,b
+                  Map: c
+                  Value: '189'
+                  Children: []
+                - Id: 1234587
+                  Quantity: 1
+                  Position: null
+                  Name: Tests
+                  Link: /Tests/1?map=c,b
+                  LinkEncoded: /Tests/1?map=c,b
+                  Map: c
+                  Value: Tests
+                  Children: []
+                - Id: 1234595
+                  Quantity: 1
+                  Position: null
+                  Name: Accessories
+                  Link: /Accessories/1?map=c,b
+                  LinkEncoded: /Accessories/1?map=c,b
+                  Map: c
+                  Value: Accessories
+                  Children:
+                  - Id: 1234596
+                    Quantity: 1
+                    Position: null
+                    Name: Foam rollers
+                    Link: /Accessories/Foam-rollers/1?map=c,c,b
+                    LinkEncoded: /Accessories/Foam-rollers/1?map=c,c,b
+                    Map: c
+                    Value: Foam-rollers
+                    Children: []
+                - Id: 1234597
+                  Quantity: 2
+                  Position: null
+                  Name: Bars
+                  Link: /Bars/1?map=c,b
+                  LinkEncoded: /Bars/1?map=c,b
+                  Map: c
+                  Value: Bars
+                  Children:
+                  - Id: 1234598
+                    Quantity: 1
+                    Position: null
+                    Name: Training Bars
+                    Link: /Bars/Training-Bars/1?map=c,c,b
+                    LinkEncoded: /Bars/Training-Bars/1?map=c,c,b
+                    Map: c
+                    Value: Training-Bars
+                    Children: []
+                  - Id: 1234599
+                    Quantity: 1
+                    Position: null
+                    Name: Curl Bars
+                    Link: /Bars/Curl-Bars/1?map=c,c,b
+                    LinkEncoded: /Bars/Curl-Bars/1?map=c,c,b
+                    Map: c
+                    Value: Curl-Bars
+                    Children: []
+                - Id: 15
+                  Quantity: 1
+                  Position: null
+                  Name: Coronas
+                  Link: /Coronas/1?map=c,b
+                  LinkEncoded: /Coronas/1?map=c,b
+                  Map: c
+                  Value: Coronas
+                  Children:
+                  - Id: 13
+                    Quantity: 1
+                    Position: null
+                    Name: não tem limite!
+                    Link: /Coronas/nao-tem-limite-/1?map=c,c,b
+                    LinkEncoded: /Coronas/nao-tem-limite-/1?map=c,c,b
+                    Map: c
+                    Value: nao-tem-limite-
+                    Children: []
+                - Id: 4
+                  Quantity: 4
+                  Position: null
+                  Name: Merch Integration Category ||
+                  Link: /Merch-Integration-Category-||/1?map=c,b
+                  LinkEncoded: /Merch-Integration-Category-%7C%7C/1?map=c,b
+                  Map: c
+                  Value: Merch-Integration-Category-||
+                  Children: []
+                PriceRanges: []
+                Summary:
+                  Departments:
+                    DisplayedItems: 8
+                    TotalItems: 8
+                  CategoriesTrees:
+                    DisplayedItems: 13
+                    TotalItems: 13
+                  Brands:
+                    DisplayedItems: 10
+                    TotalItems: 10
+                  PriceRanges:
+                    DisplayedItems: 0
+                    TotalItems: 0
+                  SpecificationFilters: {}
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

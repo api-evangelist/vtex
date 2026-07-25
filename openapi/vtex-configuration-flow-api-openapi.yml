@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Configuration Flow API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Configuration Flow
+paths:
+  /authorization/token:
+    post:
+      tags:
+      - Configuration Flow
+      summary: VTex Create authorization token
+      description: "Creates the authorization token that will be used for VTEX to redirect the merchant to the provider's authentication application. For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+      operationId: CreateAuthorizationToken
+      parameters:
+      - $ref: '#/components/parameters/X-PROVIDER-API-AppKey'
+      - $ref: '#/components/parameters/X-PROVIDER-API-AppToken'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      security:
+      - appKey: []
+        appToken: []
+      - VtexIdclientAutCookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAuthorizationTokenRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success5'
+              example:
+                applicationId: vtex
+                token: 358a5bea-07d0-4122-888a-54ab70b5f02f
+      deprecated: false
+  /authorization/redirect:
+    get:
+      tags:
+      - Configuration Flow
+      summary: VTex Provider authentication
+      description: "Use the application of provider for merchant's authentication.\r\n\r\nVTEX will redirect the merchant to your application using the `token` we retrieved earlier.\r\n\r\nYou're expected to have a signup/signin process on your side in order to authenticate the merchant, either as a new or as an existent user.\r\n\r\nAt this point, you can present your terms an conditions, a contract, and ask for merchant's final agreement to use your services.\r\n\r\nFinally, you need to generate an `authorizationCode` that you must concatenate to the `returnUrl` we send earlier.\r\n\r\nExample:\r\n\r\n`returnUrl` = `https://admin.mystore.example.com/provider-return?authorizationCode=`\r\n\r\n`authorizationCode` = `7940597D-A63B`\r\n\r\nRedirect the merchant to:\r\n\r\n`https://admin.mystore.example.com/provider-return?authorizationCode=7940597D-A63B` \r\n\r\n For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+      operationId: ProviderAuthentication
+      parameters:
+      - $ref: '#/components/parameters/X-PROVIDER-API-AppKey'
+      - $ref: '#/components/parameters/X-PROVIDER-API-AppToken'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/applicationId'
+      - name: token
+        in: query
+        description: You must generate a token that will be used to identify the same context when we redirect the merchant to your application.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{token}}'
+      security:
+      - appKey: []
+        appToken: []
+      - VtexIdclientAutCookie: []
+      responses:
+        '200':
+          description: OK. This endpoint does not return any data in the response body.
+      deprecated: false
+  /authorization/credentials:
+    get:
+      tags:
+      - Configuration Flow
+      summary: VTex Get credentials
+      description: "Retrieves the merchant credentials (applicationId, appKey and appToken) registered with the payment provider. These credentials will be saved in the VTEX system and activated when the retailer decides to enable the connector.\r\n\r\n For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+      operationId: GetCredentials
+      parameters:
+      - $ref: '#/components/parameters/X-PROVIDER-API-AppKey'
+      - $ref: '#/components/parameters/X-PROVIDER-API-AppToken'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/applicationId'
+      - name: authorizationCode
+        in: query
+        description: Code generate by affiliation that will be used to identify the merchant authorization.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{authorizationCode}}'
+      security:
+      - appKey: []
+        appToken: []
+      - VtexIdclientAutCookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success6'
+              example:
+                applicationId: vtex
+                appKey: c5a5e3f1-4a77-4a00-8b53-0d1adb3e9628
+                appToken: 57ea254d-f3d3-488d-88d7-129766037ed1
+      deprecated: false
+components:
+  parameters:
+    applicationId:
+      name: applicationId
+      in: query
+      description: VTEX application identifier.
+      required: true
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: vtex
+    X-PROVIDER-API-AppToken:
+      name: X-PROVIDER-API-AppToken
+      in: header
+      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppToken}}'
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    X-PROVIDER-API-AppKey:
+      name: X-PROVIDER-API-AppKey
+      in: header
+      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppKey}}'
+  schemas:
+    Success5:
+      required:
+      - applicationId
+      - token
+      type: object
+      description: Create authorization token response body information.
+      properties:
+        applicationId:
+          type: string
+          description: The same `applicationId` sent in the request.
+        token:
+          type: string
+          description: You must generate a token that will be used to identify the same context when we redirect the merchant to your application.
+    Success6:
+      required:
+      - applicationId
+      - appKey
+      - appToken
+      type: object
+      description: Get credentials response body information.
+      properties:
+        applicationId:
+          type: string
+          description: The same `applicationId` sent in the request.
+        appKey:
+          type: string
+          description: The value we will send in the header `X-VTEX-API-AppKey` for the payment flow.
+        appToken:
+          type: string
+          description: The value we will send in the header `X-VTEX-API-AppToken` for the payment flow.
+    CreateAuthorizationTokenRequest:
+      required:
+      - applicationId
+      - returnUrl
+      type: object
+      description: Create authorization token request body information.
+      properties:
+        applicationId:
+          type: string
+          description: VTEX application identifier.
+          example: vtex
+        returnUrl:
+          type: string
+          description: The base URL you need to use to form the final URL when redirecting the merchant back to VTEX.
+          example: https://admin.mystore.example.com/provider-return?authorizationCode=
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

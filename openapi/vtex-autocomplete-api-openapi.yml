@@ -1,0 +1,425 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Autocomplete API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Autocomplete
+paths:
+  /top_searches:
+    get:
+      summary: VTex Get list of the 10 most searched terms
+      description: "Lists the 10 most searched terms in the past 14 days.\r\n\r\nFor more information, check the Intelligent Search [Autocomplete](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4gXFsEWjF7QF7UtI2GAvhL) guide.\r\n\r\nThis endpoint does not require authentication."
+      parameters:
+      - $ref: '#/components/parameters/locale'
+      tags:
+      - Autocomplete
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopSearches'
+              example:
+                searches:
+                - term: home
+                  count: 14
+                - term: shirt
+                  count: 10
+                - term: top
+                  count: 9
+                - term: tops
+                  count: 6
+                - term: camera
+                  count: 5
+                - term: kit
+                  count: 5
+                - term: work shirt
+                  count: 2
+                - term: shirts
+                  count: 2
+                - term: clothing
+                  count: 2
+                - term: classic shoes
+                  count: 1
+        5XX:
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /autocomplete_suggestions:
+    get:
+      summary: VTex Get list of suggested terms and attributes similar to the search term
+      description: "Lists the suggested terms and attributes similar to the search term.\r\n\r\nFor more information, check the Intelligent Search [Autocomplete](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4gXFsEWjF7QF7UtI2GAvhL) guide.\r\n\r\nThis endpoint does not require authentication."
+      tags:
+      - Autocomplete
+      parameters:
+      - $ref: '#/components/parameters/query'
+      - $ref: '#/components/parameters/locale'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutocompleteSearchSuggestions'
+              example:
+                searches:
+                - term: tv
+                  count: 28861
+                  attributes:
+                  - key: departamento
+                    value: tvs-e-video
+                    labelKey: Departamento
+                    labelValue: TVs e Vídeo
+                  - key: categoria
+                    value: tvs
+                    labelKey: Categoria
+                    labelValue: TVs
+                  - key: subcategoria
+                    value: receptor-de-controle-de-acesso
+                    labelKey: Subcategoria
+                    labelValue: Receptor de Controle de Acesso
+                - term: smarth tv
+                  count: 2308
+                - term: painel para tv
+                  count: 975
+                - term: rack tv
+                  count: 589
+        5XX:
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /search_suggestions:
+    get:
+      summary: VTex Get list of suggested terms similar to the search term
+      description: "Lists suggested terms similar to the search term.\r\n\r\nFor more information, check the Intelligent Search [Autocomplete](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4gXFsEWjF7QF7UtI2GAvhL) guide.\r\n\r\nThis endpoint does not require authentication."
+      tags:
+      - Autocomplete
+      parameters:
+      - $ref: '#/components/parameters/query'
+      - $ref: '#/components/parameters/locale'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchSuggestions'
+              example:
+                searches:
+                - term: mountain bike
+                  count: 66
+                - term: bike helmet
+                  count: 121
+                - term: electric bike
+                  count: 78
+                - term: bike rack
+                  count: 161
+                - term: road bike
+                  count: 28
+        5XX:
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /buscaautocomplete:
+    get:
+      tags:
+      - Autocomplete
+      summary: VTex Product Search Autocomplete
+      description: "Retrieves product's information related to the searched string.\r\n`{{searchString}} is the part of string the user is looking for.\r\nE.g.: `ref` | `refrig` | `refrigerator`"
+      operationId: AutoComplete
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept
+        in: header
+        description: 'HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand '
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: productNameContains
+        in: query
+        description: Part of the string that will be searched.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: jeans
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The root schema comprises the entire JSON document.
+                example:
+                  itemsReturned:
+                  - items: []
+                    thumb: ''
+                    thumbUrl: null
+                    name: Cacilds in Coronas
+                    href: https://merch.vtexcommercestable.com.br/coronas/Cacilds
+                    criteria: £Cacilds in Coronas¢/coronas/Cacilds
+                  - items:
+                    - productId: '3'
+                      itemId: '5'
+                      name: Llf
+                      nameComplete: Cacilds Llf
+                      imageUrl: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                    thumb: <img src="https://merch.vteximg.com.br/arquivos/ids/155400-25-25/image-433ec3e72d7e4b94964481e843c9dd88.jpg?v=637172099619830000" width="25" height="25" alt="image-433ec3e72d7e4b94964481e843c9dd88" id="" />
+                    thumbUrl: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                    name: cacilds - llf
+                    href: https://merch.vtexcommercestable.com.br/bay-max-3/p
+                    criteria: null
+                required:
+                - itemsReturned
+                properties:
+                  itemsReturned:
+                    type: array
+                    description: Autocomplete returned items.
+                    example:
+                    - items: []
+                      thumb: ''
+                      thumbUrl: null
+                      name: Cacilds in Coronas
+                      href: https://merch.vtexcommercestable.com.br/coronas/Cacilds
+                      criteria: £Cacilds in Coronas¢/coronas/Cacilds
+                    - items:
+                      - productId: '3'
+                        itemId: '5'
+                        name: Llf
+                        nameComplete: Cacilds Llf
+                        imageUrl: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                      thumb: <img src="https://merch.vteximg.com.br/arquivos/ids/155400-25-25/image-433ec3e72d7e4b94964481e843c9dd88.jpg?v=637172099619830000" width="25" height="25" alt="image-433ec3e72d7e4b94964481e843c9dd88" id="" />
+                      thumbUrl: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                      name: cacilds - llf
+                      href: https://merch.vtexcommercestable.com.br/bay-max-3/p
+                      criteria: null
+                    items:
+                      type: object
+                      example:
+                        items: []
+                        thumb: ''
+                        thumbUrl: null
+                        name: Cacilds in Coronas
+                        href: https://merch.vtexcommercestable.com.br/coronas/Cacilds
+                        criteria: £Cacilds in Coronas¢/coronas/Cacilds
+                      required:
+                      - items
+                      - thumb
+                      - thumbUrl
+                      - name
+                      - href
+                      - criteria
+                      properties:
+                        items:
+                          type: array
+                          description: Array of products.
+                          example:
+                          - productId: '3'
+                            itemId: '5'
+                            name: Llf
+                            nameComplete: Cacilds Llf
+                            imageUrl: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                          properties:
+                            productId:
+                              type: string
+                              description: Product ID.
+                              example: '1'
+                            itemId:
+                              type: string
+                              description: Item ID.
+                              example: '3'
+                            name:
+                              type: string
+                              description: Product name.
+                              example: Llf
+                            nameComplete:
+                              type: string
+                              description: Complete product name.
+                              example: Cacilds Llf
+                            imageUrl:
+                              type: string
+                              description: Product image URL.
+                              example: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                        thumb:
+                          type: string
+                          description: Item thumbnail.
+                          example: <img src="https://merch.vteximg.com.br/arquivos/ids/155400-25-25/image-433ec3e72d7e4b94964481e843c9dd88.jpg?v=637172099619830000" width="25" height="25" alt="image-433ec3e72d7e4b94964481e843c9dd88" id="" />
+                        thumbUrl:
+                          type: string
+                          description: Item thumbnail URL.
+                          nullable: true
+                          example: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                        name:
+                          type: string
+                          description: Item name.
+                          example: cacilds - llf
+                        href:
+                          type: string
+                          description: Item URL.
+                          example: https://merch.vtexcommercestable.com.br/bay-max-3/p
+                        criteria:
+                          type: string
+                          description: Item criteria.
+                          nullable: true
+                          example: £Cacilds in Coronas¢/coronas/Cacilds
+              example:
+                itemsReturned:
+                - items: []
+                  thumb: ''
+                  thumbUrl: null
+                  name: Cacilds in Coronas
+                  href: https://merch.vtexcommercestable.com.br/coronas/Cacilds
+                  criteria: £Cacilds in Coronas¢/coronas/Cacilds
+                - items:
+                  - productId: '3'
+                    itemId: '5'
+                    name: Llf
+                    nameComplete: Cacilds Llf
+                    imageUrl: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                  thumb: <img src="https://merch.vteximg.com.br/arquivos/ids/155400-25-25/image-433ec3e72d7e4b94964481e843c9dd88.jpg?v=637172099619830000" width="25" height="25" alt="image-433ec3e72d7e4b94964481e843c9dd88" id="" />
+                  thumbUrl: https://merch.vteximg.com.br/arquivos/ids/172754-25-25/Diablo.jpg?v=637521970448770000
+                  name: cacilds - llf
+                  href: https://merch.vtexcommercestable.com.br/bay-max-3/p
+                  criteria: null
+      deprecated: false
+      servers:
+      - url: http://example.com/.{environment}.com.br
+        variables:
+          environment:
+            default: DefaultParameterValue
+components:
+  schemas:
+    TopSearches:
+      type: object
+      description: Response body object.
+      properties:
+        searches:
+          type: array
+          description: List of the 10 most searched terms in the past 14 days.
+          minItems: 10
+          maxItems: 10
+          items:
+            type: object
+            description: Term information.
+            properties:
+              term:
+                type: string
+                description: Search term.
+              count:
+                type: number
+                description: Number of times the term was searched.
+    Error:
+      type: object
+      description: Response body object.
+      required:
+      - stack
+      - message
+      properties:
+        message:
+          type: string
+          description: Error message.
+        stack:
+          type: string
+          description: Error stack trace.
+    AutocompleteSearchSuggestions:
+      type: object
+      description: Response body object.
+      properties:
+        searches:
+          type: array
+          description: List of suggested facets and terms.
+          items:
+            type: object
+            description: Suggested facet or term.
+            properties:
+              term:
+                type: string
+                description: Search term.
+              count:
+                type: number
+                description: Number of times the term was searched.
+              attributes:
+                type: array
+                nullable: true
+                description: List of facets in which the term can be searched.
+                items:
+                  type: object
+                  description: Facet information.
+                  properties:
+                    key:
+                      type: string
+                      description: Facet key.
+                    value:
+                      type: string
+                      description: Facet value.
+                    labelKey:
+                      type: string
+                      description: Human-readable format of the facet key.
+                    labelValue:
+                      type: string
+                      description: Human-readable format of the facet value.
+    SearchSuggestions:
+      type: object
+      description: Response body object.
+      properties:
+        searches:
+          type: array
+          description: List of suggested terms.
+          items:
+            type: object
+            description: Suggested term.
+            properties:
+              term:
+                type: string
+                description: Search term.
+              count:
+                type: number
+                description: Number of times the term was searched.
+  parameters:
+    locale:
+      in: query
+      name: locale
+      description: Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language.
+      example: en-US
+      schema:
+        type: string
+        nullable: true
+    query:
+      in: query
+      name: query
+      description: Search term. It can contain any character.
+      schema:
+        type: string
+        example: shirt
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

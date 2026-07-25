@@ -1,0 +1,389 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Freight Values API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Freight Values
+paths:
+  /api/logistics/pvt/configuration/freights/{carrierId}/values/update:
+    post:
+      tags:
+      - Freight Values
+      summary: VTex Create/update freight values
+      description: Creates or updates the freight values of your store's carriers. Learn more in [Shipping rate template](https://help.vtex.com/en/tutorial/planilha-de-frete--tutorials_127#).
+      operationId: Create/UpdateFreightValues
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: carrierId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: carrier123
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              type: array
+              description: Array of objects, each containing information on a specific freight interval.
+              items:
+                title: Create/UpdateFreightValuesRequest
+                required:
+                - absoluteMoneyCost
+                - country
+                - maxVolume
+                - operationType
+                - pricePercent
+                - pricePercentByWeight
+                - timeCost
+                - weightEnd
+                - weightStart
+                - zipCodeEnd
+                - zipCodeStart
+                - polygon
+                type: object
+                properties:
+                  absoluteMoneyCost:
+                    type: string
+                    description: Fixed shipping cost to be charged in a decimal number.
+                    example: '1.00'
+                  country:
+                    type: string
+                    description: Three letter ISO code for the country where the delivery will take place.
+                    example: BRA
+                  maxVolume:
+                    type: integer
+                    format: int32
+                    description: Maximum volume that can be transported by the carrier in cm³.
+                    example: 1000000000
+                  operationType:
+                    type: integer
+                    format: int32
+                    description: Indicates desired action for the object. Possible values are `1` (Insert), `2` (Update) or `3`(Delete).
+                    example: 1
+                  pricePercent:
+                    type: integer
+                    format: int32
+                    description: '[Price-based additional shipping charge](https://help.vtex.com/en/tutorial/additional-shipping-costs--2vqGwMn0LabkOHY6zSHYNV), calculated based on the total price of the order, in decimal number. You must fill in this field with a percentage value. For example, for an additional charge of 10%, fill in the table with 10.'
+                    example: 10
+                  pricePercentByWeight:
+                    type: integer
+                    format: int32
+                    description: '[Weight-based additional shipping charge](https://help.vtex.com/en/tutorial/additional-shipping-costs--2vqGwMn0LabkOHY6zSHYNV), calculated based on the total weight of the order.'
+                    example: 0
+                  timeCost:
+                    type: string
+                    description: Delivery time frame informed by the carrier, in the format DD.HH:MM:SS.
+                    example: 2.00:00:00
+                  weightEnd:
+                    type: integer
+                    format: int32
+                    description: Maximum weight allowed.
+                    example: 1000
+                  weightStart:
+                    type: integer
+                    format: int32
+                    description: Minimum weight allowed.
+                    example: 1
+                  zipCodeEnd:
+                    type: string
+                    description: End of postal code interval.
+                    example: '1234500'
+                  zipCodeStart:
+                    type: string
+                    description: Start of postal code interval.
+                    example: '1000000'
+                  polygon:
+                    type: string
+                    description: Polygon ID, according to the [geolocation](https://help.vtex.com/en/tutorial/registering-geolocation/) feature.
+                    example: polygon2
+        required: true
+      responses:
+        '200':
+          description: OK
+      deprecated: false
+  /api/logistics/pvt/configuration/freights/{carrierId}/{cep}/values:
+    get:
+      tags:
+      - Freight Values
+      summary: VTex List freight values
+      description: Lists freight values apointed to your store's carriers, searching by carrier ID and postal code (`cep`).
+      operationId: FreightValues
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: carrierId
+        in: path
+        description: Carrier ID
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: carrier-123
+      - name: cep
+        in: path
+        description: Postal code.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '12345000'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '919'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 15 Apr 2016 19:49:41 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx1
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.8
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.26.4
+            X-Powered-by-VTEX-Janus-Router:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 2.1.155
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Cache-Status-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: MISS
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.2.96-stable+863
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: f0945154-c722-40a6-8c24-3873f8cd16c7
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  required:
+                  - zipCodeStart
+                  - zipCodeEnd
+                  - weightStart
+                  - weightEnd
+                  - absoluteMoneyCost
+                  - pricePercent
+                  - pricePercentByWeight
+                  - maxVolume
+                  - timeCost
+                  - country
+                  - operationType
+                  - restrictedFreights
+                  - polygon
+                  - minimumValueInsurance
+                  type: object
+                  properties:
+                    zipCodeStart:
+                      type: string
+                    zipCodeEnd:
+                      type: string
+                    weightStart:
+                      type: number
+                    weightEnd:
+                      type: number
+                    absoluteMoneyCost:
+                      type: number
+                    pricePercent:
+                      type: number
+                    pricePercentByWeight:
+                      type: number
+                    maxVolume:
+                      type: number
+                    timeCost:
+                      type: string
+                    country:
+                      type: string
+                    operationType:
+                      type: integer
+                      format: int32
+                    restrictedFreights:
+                      type: array
+                      items:
+                        type: string
+                      description: Restricted freights.
+                    polygon:
+                      type: string
+                    minimumValueInsurance:
+                      type: number
+                  example:
+                    zipCodeStart: '0'
+                    zipCodeEnd: '99999999'
+                    weightStart: 1
+                    weightEnd: 1000
+                    absoluteMoneyCost: 1
+                    pricePercent: 0
+                    pricePercentByWeight: 0
+                    maxVolume: 1000000000
+                    timeCost: 2.00:00:00
+                    country: BRA
+                    operationType: 0
+                    restrictedFreights: []
+                    polygon: ''
+                    minimumValueInsurance: 0
+              example:
+              - zipCodeStart: '0'
+                zipCodeEnd: '99999999'
+                weightStart: 1
+                weightEnd: 1000
+                absoluteMoneyCost: 1
+                pricePercent: 0
+                pricePercentByWeight: 0
+                maxVolume: 1000000000
+                timeCost: 2.00:00:00
+                country: BRA
+                operationType: 0
+                restrictedFreights: []
+                polygon: ''
+                minimumValueInsurance: 0
+              - zipCodeStart: '0'
+                zipCodeEnd: '99999999'
+                weightStart: 1001.001
+                weightEnd: 10000
+                absoluteMoneyCost: 15
+                pricePercent: 0
+                pricePercentByWeight: 0
+                maxVolume: 1000000000
+                timeCost: 2.00:00:00
+                country: BRA
+                operationType: 0
+                restrictedFreights: []
+                polygon: ''
+                minimumValueInsurance: 0
+              - zipCodeStart: '0'
+                zipCodeEnd: '99999999'
+                weightStart: 10001.001
+                weightEnd: 100000
+                absoluteMoneyCost: 20
+                pricePercent: 0
+                pricePercentByWeight: 0
+                maxVolume: 1000000000
+                timeCost: 2.00:00:00
+                country: BRA
+                operationType: 0
+                restrictedFreights: []
+                polygon: ''
+                minimumValueInsurance: 0
+      deprecated: false
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

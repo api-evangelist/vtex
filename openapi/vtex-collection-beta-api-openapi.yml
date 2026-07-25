@@ -1,0 +1,774 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Collection Beta API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Collection Beta
+paths:
+  /api/catalog_system/pvt/collection/search:
+    get:
+      tags:
+      - Collection Beta
+      summary: VTex Get all collections
+      description: "Retrieves a list of all collections matching a filter.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Collection | **Read Collections** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GET-AllCollections
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: page
+        in: query
+        description: Page number.
+        required: true
+        style: form
+        schema:
+          type: integer
+          example: 2
+      - name: pageSize
+        in: query
+        description: Number of the items of the page.
+        required: true
+        style: form
+        schema:
+          type: integer
+          example: 15
+      - name: orderByAsc
+        in: query
+        description: Defines if the items of the page are in ascending order.
+        required: true
+        style: form
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                paging:
+                  page: 1
+                  perPage: 11
+                  total: 11
+                  pages: 1
+                  limit: 3000
+                items:
+                - id: 149
+                  name: Varejão
+                  searchable: true
+                  highlight: true
+                  dateFrom: '2020-02-14T11:26:00'
+                  dateTo: '2070-02-14T11:26:00'
+                  totalSku: 2
+                  totalProducts: 1
+                  type: Hybrid
+                  lastModifiedBy: null
+                - id: 150
+                  name: Varejão
+                  searchable: false
+                  highlight: false
+                  dateFrom: '2017-09-27T10:47:00'
+                  dateTo: '2027-09-27T10:47:00'
+                  totalSku: 0
+                  totalProducts: 0
+                  type: Manual
+                  lastModifiedBy: null
+                - id: 151
+                  name: asdfghj
+                  searchable: true
+                  highlight: true
+                  dateFrom: '2020-05-20T11:50:00'
+                  dateTo: '2070-05-20T11:50:00'
+                  totalSku: 5
+                  totalProducts: 5
+                  type: Hybrid
+                  lastModifiedBy: null
+                - id: 152
+                  name: George
+                  searchable: true
+                  highlight: true
+                  dateFrom: '2020-05-21T16:26:00'
+                  dateTo: '2070-05-31T23:59:00'
+                  totalSku: 2
+                  totalProducts: 1
+                  type: Hybrid
+                  lastModifiedBy: null
+                - id: 153
+                  name: Test
+                  searchable: true
+                  highlight: false
+                  dateFrom: '2017-09-27T10:47:00'
+                  dateTo: '2017-09-27T10:47:00'
+                  totalSku: 0
+                  totalProducts: 0
+                  type: Manual
+                  lastModifiedBy: null
+                - id: 154
+                  name: Júlia
+                  searchable: true
+                  highlight: true
+                  dateFrom: '2021-01-21T19:30:00'
+                  dateTo: '2070-01-21T19:30:00'
+                  totalSku: 2
+                  totalProducts: 2
+                  type: Manual
+                  lastModifiedBy: null
+                - id: 155
+                  name: aaa
+                  searchable: false
+                  highlight: false
+                  dateFrom: '2021-02-08T16:19:00'
+                  dateTo: '2021-02-08T16:19:00'
+                  totalSku: 3
+                  totalProducts: 3
+                  type: Manual
+                  lastModifiedBy: null
+                - id: 156
+                  name: All
+                  searchable: true
+                  highlight: false
+                  dateFrom: '2010-01-01T00:00:00'
+                  dateTo: '2070-01-01T00:00:00'
+                  totalSku: 0
+                  totalProducts: 0
+                  type: Automatic
+                  lastModifiedBy: null
+                - id: 157
+                  name: Inverno
+                  searchable: false
+                  highlight: false
+                  dateFrom: '2021-07-12T16:00:00'
+                  dateTo: '2021-09-23T16:00:00'
+                  totalSku: 2
+                  totalProducts: 2
+                  type: Manual
+                  lastModifiedBy: null
+                - id: 158
+                  name: Coleção halloween
+                  searchable: false
+                  highlight: false
+                  dateFrom: '2021-10-22T17:56:00'
+                  dateTo: '2070-10-22T17:56:00'
+                  totalSku: 2
+                  totalProducts: 2
+                  type: Manual
+                  lastModifiedBy: null
+                - id: 159
+                  name: Winter
+                  searchable: true
+                  highlight: false
+                  dateFrom: '2021-09-27T10:47:00'
+                  dateTo: '2027-09-27T10:47:00'
+                  totalSku: 0
+                  totalProducts: 0
+                  type: Manual
+                  lastModifiedBy: null
+              schema:
+                type: object
+                properties:
+                  paging:
+                    description: Object with information of the pagination.
+                    type: object
+                    properties:
+                      page:
+                        description: Page number.
+                        type: integer
+                      perPage:
+                        description: Items per page.
+                        type: integer
+                      total:
+                        description: Total of items.
+                        type: integer
+                      pages:
+                        description: Total pages.
+                        type: integer
+                      limit:
+                        description: Limit of items displayed on each page.
+                        type: integer
+                  items:
+                    description: Array with information the collections.
+                    type: array
+                    items:
+                      description: Collection information.
+                      type: object
+                      properties:
+                        id:
+                          description: Collection ID.
+                          type: integer
+                        name:
+                          description: Collection name.
+                          type: string
+                        searchable:
+                          description: If the collection is searchable by using the search bar.
+                          type: boolean
+                        highlight:
+                          description: If the collection is highlighted.
+                          type: boolean
+                        dateFrom:
+                          description: Initial date of the collection.
+                          type: string
+                        dateTo:
+                          description: Final date of the collection.
+                          type: string
+                        totalSku:
+                          description: Total of SKUs contained in the collection.
+                          type: integer
+                        totalProducts:
+                          description: Total of products contained in the collection.
+                          type: integer
+                        type:
+                          description: '[Type of the collection](https://help.vtex.com/en/tutorial/collection-types--5tKnhh8tMGIrVL7Fqirq7n), * *Manual**, **Automatic** and **Hybrid**.'
+                          type: string
+                        lastModifiedBy:
+                          description: Last date that the collection was updated.
+                          type: string
+  /api/catalog/pvt/collection/inactive:
+    get:
+      tags:
+      - Collection Beta
+      summary: VTex Get all inactive collections
+      description: "Retrieves a list of Collection IDs of the inactive collections.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Collection | **Read Collections** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GET-AllInactiveCollections
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - 153
+              - 155
+              - 157
+              schema:
+                type: array
+                description: Array with inactive collections ID.
+                items:
+                  type: integer
+                  description: Inactive collection ID.
+  /api/catalog/pvt/collection/:
+    post:
+      tags:
+      - Collection Beta
+      summary: VTex Create Collection
+      description: "Creates a new collection.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Collection | **Write Collections** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: POST-CreateCollection
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - Name
+              - Description
+              - Searchable
+              - Highlight
+              - DateFrom
+              - DateTo
+              - TotalProducts
+              - Type
+              properties:
+                Name:
+                  type: string
+                  description: Collection's name.
+                  example: Halloween costumes
+                Description:
+                  type: string
+                  description: Collection's description for internal use, with the collection's details. It will not be used for search engines.
+                  example: HomeHalloween
+                Searchable:
+                  type: boolean
+                  description: Option making the collection searchable in the store.
+                  example: false
+                Highlight:
+                  type: boolean
+                  description: Option if you want the collection to highlight specific products using a tag.
+                  example: false
+                DateFrom:
+                  type: string
+                  description: Collection start date and time. If a future date and time are set, the collection will have a scheduled status.
+                  example: '2020-11-26T15:23:00'
+                DateTo:
+                  type: string
+                  description: Collection end date and time.
+                  example: '2069-11-26T15:23:00'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 160
+                Name: Halloween costumes
+                Description: HomeHalloween
+                Searchable: true
+                Highlight: false
+                DateFrom: '2020-11-26T15:23:00'
+                DateTo: '2069-11-26T15:23:00'
+                TotalProducts: 0
+                Type: Manual
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Collection's ID.
+                  Name:
+                    type: string
+                    description: Collection's name.
+                  Description:
+                    type: string
+                    description: Collection's description for internal use, with the collection's details. It will not be used for search engines.
+                  Searchable:
+                    type: boolean
+                    description: Option making the collection searchable in the store.
+                  Highlight:
+                    type: boolean
+                    description: Option if you want the collection to highlight specific products using a tag.
+                  DateFrom:
+                    type: string
+                    description: Collection start date and time. If a future date and time are set, the collection will have a scheduled status.
+                  DateTo:
+                    type: string
+                    description: Collection end date and time.
+                  TotalProducts:
+                    type: integer
+                    description: Number of products contained in the collection.
+                  Type:
+                    type: string
+                    description: '[Type of the collection](https://help.vtex.com/en/tutorial/collection-types--5tKnhh8tMGIrVL7Fqirq7n).'
+      deprecated: false
+  /api/catalog_system/pvt/collection/search/{searchTerms}:
+    get:
+      tags:
+      - Collection Beta
+      summary: VTex Get Collections by search terms
+      description: "Retrieves a list of collections matching a filter.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Collection | **Read Collections** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GET-Collectionsbyseachterms
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: searchTerms
+        in: path
+        description: String that will search for a collection related to it.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: costume
+      - name: page
+        in: query
+        description: Page number.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 2
+      - name: pageSize
+        in: query
+        description: Number of the items of the page.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 15
+      - name: orderByAsc
+        in: query
+        description: Defines if the items of the page are in ascending order.
+        required: false
+        style: form
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                paging:
+                  page: 1
+                  perPage: 20
+                  total: 2
+                  pages: 1
+                  limit: 3000
+                items:
+                - id: 158
+                  name: Coleção halloween
+                  searchable: false
+                  highlight: false
+                  dateFrom: '2021-10-22T17:56:00'
+                  dateTo: '2070-10-22T17:56:00'
+                  totalSku: 2
+                  totalProducts: 2
+                  type: Manual
+                  lastModifiedBy: null
+                - id: 160
+                  name: Halloween costumes
+                  searchable: true
+                  highlight: false
+                  dateFrom: '2020-11-26T15:23:00'
+                  dateTo: '2069-11-26T15:23:00'
+                  totalSku: 0
+                  totalProducts: 0
+                  type: Manual
+                  lastModifiedBy: null
+              schema:
+                type: object
+                properties:
+                  paging:
+                    description: Object with information of the pagination.
+                    type: object
+                    properties:
+                      page:
+                        description: Page number.
+                        type: integer
+                      perPage:
+                        description: Items per page.
+                        type: integer
+                      total:
+                        description: Total of items.
+                        type: integer
+                      pages:
+                        description: Total pages.
+                        type: integer
+                      limit:
+                        description: Limit of items displayed on each page.
+                        type: integer
+                  items:
+                    description: Array with information the collections.
+                    type: array
+                    items:
+                      description: Collection information.
+                      type: object
+                      properties:
+                        id:
+                          description: Collection ID.
+                          type: integer
+                        name:
+                          description: Collection name.
+                          type: string
+                        searchable:
+                          description: If the collection is searchable by using the search bar.
+                          type: boolean
+                        highlight:
+                          description: If the collection is highlighted.
+                          type: boolean
+                        dateFrom:
+                          description: Initial date of the collection.
+                          type: string
+                        dateTo:
+                          description: Final date of the collection.
+                          type: string
+                        totalSku:
+                          description: Total of SKUs contained in the collection.
+                          type: integer
+                        totalProducts:
+                          description: Total of products contained in the collection.
+                          type: integer
+                        type:
+                          description: '[Type of the collection](https://help.vtex.com/en/tutorial/collection-types--5tKnhh8tMGIrVL7Fqirq7n), * *Manual**, **Automatic** and **Hybrid**.'
+                          type: string
+                        lastModifiedBy:
+                          description: Last date that the collection was updated.
+                          type: string
+  /api/catalog/pvt/collection/stockkeepingunit/importfileexample:
+    get:
+      tags:
+      - Collection Beta
+      summary: VTex Import collection file example
+      description: "Imports a sample of the imported XLS file. You need to save the response file to your device.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Collection | **Read Collections** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GET-Importfileexample
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                description: XML file.
+  /api/catalog/pvt/collection/{collectionId}/stockkeepingunit/importinsert:
+    post:
+      tags:
+      - Collection Beta
+      summary: VTex Add products to collection by imported file
+      description: "Adds products to a collection from the request body file. The file must be an imported template.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Marketing | **Product Collections XML** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: POST-Addproductsbyimportfile
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: collectionId
+        in: path
+        description: Collection's unique identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  format: binary
+                  description: XML file with information about products to be added to a collection. The file must be an imported template from [Import collection file example](https://developers.vtex.com/vtex-developer-docs/reference/get-importfileexample) endpoint.
+      responses:
+        '200':
+          description: OK
+  /api/catalog/pvt/collection/{collectionId}/stockkeepingunit/importexclude:
+    post:
+      tags:
+      - Collection Beta
+      summary: VTex Remove products from collection by imported file
+      description: "Removes products from a collection from the request body file. The file must be an imported template.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Collection | **Write Collections** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: POST-Removeproductsbyimportfile
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: collectionId
+        in: path
+        description: Collection's unique identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  format: binary
+                  description: XML file with information about products to be added to a collection. The file must be an imported template from [Import collection file example](https://developers.vtex.com/vtex-developer-docs/reference/get-importfileexample) endpoint.
+      responses:
+        '200':
+          description: OK
+  /api/catalog/pvt/collection/{collectionId}/products:
+    get:
+      tags:
+      - Collection Beta
+      summary: VTex Get products from a collection
+      description: "Retrieves information about the products from a collection.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Collection | **Read Collections** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GET-Productsfromacollection
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: collectionId
+        in: path
+        description: Collection's unique identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      - name: page
+        in: query
+        description: Page number.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 2
+      - name: pageSize
+        in: query
+        description: Number of the items of the page.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 15
+      - name: Filter
+        in: query
+        description: Filter used to refine the collection's products.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: Pre launch
+      - name: Active
+        in: query
+        description: Defines if the status of the product is active or not.
+        required: false
+        style: form
+        schema:
+          type: boolean
+          example: true
+      - name: Visible
+        in: query
+        description: Defines if the product is visible on the store or not.
+        required: false
+        style: form
+        schema:
+          type: boolean
+          example: true
+      - name: CategoryId
+        in: query
+        description: Product's category unique identifier.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 12
+      - name: BrandId
+        in: query
+        description: Product's brand unique identifier.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 3
+      - name: SupplierId
+        in: query
+        description: Product's supplier unique identifier.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 1
+      - name: SalesChannelId
+        in: query
+        description: Product's trade policy unique identifier.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 1
+      - name: ReleaseFrom
+        in: query
+        description: Product past release date.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: '2069-11-26T15:23:00'
+      - name: ReleaseTo
+        in: query
+        description: Product future release date.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: '2069-11-26T15:23:00'
+      - name: SpecificationProduct
+        in: query
+        description: Product specification field Value. You must also fill in `SpecificationFieldId` to use this parameter.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: M
+      - name: SpecificationFieldId
+        in: query
+        description: Product specification field unique identifier.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 40
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Page:
+                    description: Page number.
+                    type: integer
+                  Size:
+                    description: Page list size.
+                    type: integer
+                  TotalRows:
+                    description: Total rows.
+                    type: integer
+                  TotalPage:
+                    description: Total pages.
+                    type: integer
+                  Data:
+                    description: Array of object with information about the products of the collection.
+                    type: array
+                    items:
+                      description: Product information.
+                      type: object
+                      properties:
+                        ProductId:
+                          description: Product ID.
+                          type: integer
+                        SkuId:
+                          description: SKU ID.
+                          type: integer
+                        SubCollectionId:
+                          description: Subcollection ID.
+                          type: integer
+                        Position:
+                          description: Position of the product in the collection.
+                          type: integer
+                        ProductName:
+                          description: Product name.
+                          type: string
+                        SkuImageUrl:
+                          description: SKU image URL.
+                          type: string
+              example:
+                Page: 1
+                Size: 2
+                TotalRows: 2
+                TotalPage: 1
+                Data:
+                - ProductId: 1
+                  SkuId: 1
+                  SubCollectionId: 24
+                  Position: 1
+                  ProductName: Ração Royal Canin Feline Urinary
+                  SkuImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155450
+                - ProductId: 2
+                  SkuId: 3
+                  SubCollectionId: 24
+                  Position: 2
+                  ProductName: Caixa de Areia Azul Petmate
+                  SkuImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155451
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

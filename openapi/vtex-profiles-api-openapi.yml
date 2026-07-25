@@ -1,0 +1,442 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Profiles API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Profiles
+paths:
+  /api/storage/profile-system/profiles:
+    post:
+      tags:
+      - Profiles
+      summary: VTex Create client profile
+      description: "Creates new client profile.\n\r\n\rYou can send custom fields in the request body and they will be saved as part of your document. Therefore, the schema and examples presented below may differ from yours. Your integration must be adapted accordingly.\n\r\n\rThe `id` field returned by this request is the `profileId` used to retrieve information on a specific profile later.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: CreateClientProfile
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/ttl'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/ProfileId'
+                  meta:
+                    $ref: '#/components/schemas/ProfileMeta'
+                  document:
+                    $ref: '#/components/schemas/Profile'
+              example:
+                id: c2cbebba-214e-40b2-b68f-98f862e755d5
+                meta:
+                  version: 27112371-a71b-45d6-b3bc-93436a3a0b4f
+                  author: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
+                  creationDate: '2022-01-05T15:41:37.5009471+00:00'
+                  lastUpdateDate: '2022-01-05T15:41:37.5009471+00:00'
+                document:
+                  firstName: John
+                  lastName: Doe
+                  email: john.doe@example.com
+                  birthDate: '1925-11-17'
+                  document: '12345678911'
+                  documentType: CPF
+                  '{customField}': '{value}'
+      deprecated: false
+  /api/storage/profile-system/profiles/{profileId}:
+    get:
+      tags:
+      - Profiles
+      summary: VTex Get profile
+      description: "Retrieves the information of a specific client, by its `profileId`.\n\r\n\r> Since your store's profile schema is customizable, the schema and examples presented below may differ from yours. Your integration must be adapted accordingly.\n\r\n\r> For security and privacy reasons, this request returns masked profile data. For unmasked information, see [Get unmasked profile](https://developers.vtex.com/docs/api-reference/profile-system#get-/api/storage/profile-system/profiles/-profileId-/unmask).\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProfile
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/profileId'
+      - $ref: '#/components/parameters/alternativeKey'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaskedProfileResponse'
+              example:
+              - id: 70caf394-8534-447e-a0ca-1803c669c771
+                meta:
+                  version: abc
+                  author: e40e0b6d-0605-4fa6-8176-1d69fbaf0818
+                  creationDate: 13/12/2021T00:00:00Z
+                  lastUpdate: 13/12/2021T00:00:00Z
+                document:
+                  firstName: J***
+                  lastName: D**
+                  email: j***.d**@e******.c**
+                  birthDate: '1925-11-17'
+                  document: 1**********
+                  documentType: CPF
+                  '{customField}': '{value}'
+      deprecated: false
+    patch:
+      tags:
+      - Profiles
+      summary: VTex Update client profile
+      description: "Updates one or more fields of an existing client profile.\n\r\n\r> Since your store's profile schema is customizable, the schema and examples presented below may differ from yours. Your integration must be adapted accordingly.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: UpdateClientProfile
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/profileId'
+      - $ref: '#/components/parameters/alternativeKey'
+      - $ref: '#/components/parameters/ttl'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnmaskedProfileResponse'
+              example:
+                id: 70caf394-8534-447e-a0ca-1803c669c771
+                document:
+                  firstName: John
+                  lastName: Doe
+                  email: john.doe@example.com
+                  birthDate: '1925-11-17'
+                  document: '12345678911'
+                  documentType: CPF
+                meta:
+                  version: abc
+                  author: e40e0b6d-0605-4fa6-8176-1d69fbaf0818
+                  creationDate: '2022-01-05T15:41:37.5009471+00:00'
+                  lastUpdate: '2022-01-17T15:41:37.5009471+00:00'
+      deprecated: false
+    delete:
+      tags:
+      - Profiles
+      summary: VTex Delete client profile
+      description: "Deletes a client profile by `profileId`.\n\r\n\r>❗ This endpoint is not suitable for granting a shopper's [right to erasure](https://help.vtex.com/en/tutorial/data-subject-rights--6imchxTx09icupKMbzHVIM#erasure). For that purpose, open a [support](https://help.vtex.com/en/support) ticket, according to the instructions in the section [Request erasure via support](https://help.vtex.com/en/tutorial/erasing-customer-data--1R9Fn7A06Ifj4R9YD4JTKU#request-erasure-via-support) of the shopper data erasure guide.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: DeleteClientProfile
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/profileId'
+      responses:
+        '204':
+          description: No content
+      deprecated: false
+  /api/storage/profile-system/profiles/{profileId}/unmask:
+    get:
+      tags:
+      - Profiles
+      summary: VTex Get unmasked profile
+      description: "Retrieves unmasked information of a specific client, by its `profileId`.\n\r\n\r> Since your store's profile schema is customizable, the schema and examples presented below may differ from yours. Your integration must be adapted accordingly.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetUnmaskedProfile
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/profileId'
+      - $ref: '#/components/parameters/reason'
+      - $ref: '#/components/parameters/alternativeKey'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array with unmasked profile information.
+                items:
+                  $ref: '#/components/schemas/UnmaskedProfileResponse'
+              example:
+              - id: 70caf394-8534-447e-a0ca-1803c669c771
+                document:
+                  firstName: John
+                  lastName: Doe
+                  email: john.doe@example.com
+                  birthDate: '1925-11-17'
+                  document: '12345678911'
+                  documentType: CPF
+                meta:
+                  version: abc
+                  author: e40e0b6d-0605-4fa6-8176-1d69fbaf0818
+                  creationDate: '2022-01-05T15:41:37.5009471+00:00'
+                  lastUpdate: '2022-01-17T15:41:37.5009471+00:00'
+      deprecated: false
+  /api/storage/profile-system/profiles/{profileId}/versions/{profileVersionId}:
+    get:
+      tags:
+      - Profiles
+      summary: VTex Get profile by version
+      description: "Retrieves the information of a specific version of a client profile.\n\r\n\r> Since your store's profile schema is customizable, the schema and examples presented below may differ from yours. Your integration must be adapted accordingly.\n\r\n\r> For security and privacy reasons, this request returns masked profile data. For unmasked information, see [Get unmasked profile by version](https://developers.vtex.com/docs/api-reference/profile-system#get-/api/storage/profile-system/profiles/-profileId-/versions/-profileVersionId-/unmask).\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProfileByVersion
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/profileId'
+      - $ref: '#/components/parameters/profileVersionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaskedProfileResponseByVersion'
+              example:
+              - id: 70caf394-8534-447e-a0ca-1803c669c771
+                document:
+                  firstName: J***
+                  lastName: G****
+                  email: j***********
+                  birthDate: '1925-11-17'
+                  document: 1********
+                  documentType: CPF
+                  '{customField}': '{value}'
+                meta:
+                  version: bb996089-b77c-4bf3-be35-b99b6d91f91c
+                  author: e40e0b6d-0605-4fa6-8176-1d69fbaf0818
+                  creationDate: '2022-01-05T15:41:37.5009471+00:00'
+                  lastUpdate: '2022-01-15T15:41:37.5009471+00:00'
+      deprecated: false
+  /api/storage/profile-system/profiles/{profileId}/versions/{profileVersionId}/unmask:
+    get:
+      tags:
+      - Profiles
+      summary: VTex Get unmasked profile by version
+      description: "Retrieves unmasked information of a specific version of a client profile.\n\r\n\r> Since your store's profile schema is customizable, the schema and examples presented below may differ from yours. Your integration must be adapted accordingly.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetUnmaskedProfileByVersion
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/profileId'
+      - $ref: '#/components/parameters/profileVersionId'
+      - $ref: '#/components/parameters/reason'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array with unmasked profile information.
+                items:
+                  $ref: '#/components/schemas/UnmaskedProfileResponse'
+              example:
+              - id: 70caf394-8534-447e-a0ca-1803c669c771
+                document:
+                  firstName: John
+                  lastName: Doe
+                  email: john.doe@example.com
+                  birthDate: '1925-11-17'
+                  document: '12345678911'
+                  documentType: CPF
+                  '{customField}': '{value}'
+                meta:
+                  version: abc
+                  author: e40e0b6d-0605-4fa6-8176-1d69fbaf0818
+                  creationDate: '2022-01-05T15:41:37.5009471+00:00'
+                  lastUpdate: '2022-01-17T15:41:37.5009471+00:00'
+      deprecated: false
+components:
+  schemas:
+    MaskedProfileResponse:
+      title: Masked profile response
+      type: array
+      description: Array containing masked profile information.
+      items:
+        type: object
+        description: Masked profile information.
+        properties:
+          id:
+            $ref: '#/components/schemas/ProfileId'
+          meta:
+            $ref: '#/components/schemas/ProfileMeta'
+          document:
+            $ref: '#/components/schemas/Profile'
+    ProfileId:
+      title: id
+      type: string
+      description: ID of the client's profile.
+      example: c2cbebba-214e-40b2-b68f-98f862e755d5
+    MaskedProfileResponseByVersion:
+      title: Masked profile response
+      type: array
+      description: Array containing masked profile information.
+      items:
+        type: object
+        description: Masked profile information.
+        properties:
+          id:
+            $ref: '#/components/schemas/ProfileId'
+          document:
+            $ref: '#/components/schemas/Profile'
+          meta:
+            $ref: '#/components/schemas/ProfileMeta'
+    ProfileMeta:
+      title: Profile metadata
+      type: object
+      description: Profile metadata.
+      required:
+      - version
+      - author
+      - creationDate
+      - lastUpdate
+      properties:
+        version:
+          type: string
+          description: Unique identifier of the profile version.
+          example: 27112371-a71b-45d6-b3bc-93436a3a0b4f
+        author:
+          type: string
+          description: Unique identifier of the user who created the profile.
+          example: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
+        creationDate:
+          type: string
+          description: Date when the profile was created in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
+        lastUpdate:
+          type: string
+          description: Date when the profile was last updated in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
+    UnmaskedProfileResponse:
+      title: Unmasked profile response
+      type: object
+      description: Unmasked profile response.
+      properties:
+        id:
+          $ref: '#/components/schemas/ProfileId'
+        document:
+          $ref: '#/components/schemas/Profile'
+        meta:
+          $ref: '#/components/schemas/ProfileMeta'
+    Profile:
+      title: Profile
+      type: object
+      description: Profile schema.
+      required:
+      - firstName
+      - lastName
+      - email
+      - document
+      - documentType
+      properties:
+        firstName:
+          type: string
+          description: Client's first name.
+          example: John
+        lastName:
+          type: string
+          description: Client's last name.
+          example: Doe
+        email:
+          type: string
+          description: Client's email address.
+          example: john.doe@example.com
+        birthDate:
+          type: string
+          description: Client's birth date in ISO 8601 format.
+          example: '1925-11-17'
+        document:
+          type: string
+          description: Client's document.
+          example: '12345678900'
+        documentType:
+          type: string
+          description: Type of document informed in `document`.
+          example: CPF
+        '{customField}':
+          type: string
+          description: 'Name of custom field defined in [Create or delete custom fields](https://developers.vtex.com/docs/api-reference/profile-system#put-/api/storage/profile-system/schemas/profileSystem/custom). Can be of any type: string, number, boolean, array or object.'
+          example: '{value}'
+  parameters:
+    profileVersionId:
+      name: profileVersionId
+      in: path
+      description: ID of the version of the client's profile as returned by endpoints that create or update profile information in the `version` field.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf394-8534-447e-a0ca-1803c669c771
+    ttl:
+      name: ttl
+      in: query
+      description: "This parameter sets the the Time To Live (TTL), in days, of the specific document being created or updated with this request. After this period of time from the moment of the request, the document is deleted. By sending this parameter you override the TTL set for the schema.\n\r\n\r> Currently, the available default document schemas have no TTL. This means that documents are stored indefinitely, unless a TTL is sent when creating or updating."
+      required: false
+      style: form
+      schema:
+        type: integer
+        example: 365
+    reason:
+      name: reason
+      in: query
+      description: Reason for requesting unmasked data.
+      required: true
+      style: form
+      schema:
+        type: string
+        example: data-validation
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    profileId:
+      name: profileId
+      in: path
+      description: ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf394-8534-447e-a0ca-1803c669c771
+    alternativeKey:
+      name: alternativeKey
+      in: query
+      description: "The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.\n\r\n\r> Currently, there are two possible values for this parameter: `email` and `document`."
+      required: false
+      style: form
+      schema:
+        type: string
+        example: email
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

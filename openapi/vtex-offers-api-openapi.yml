@@ -1,0 +1,750 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Offers API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Offers
+paths:
+  /api/catalog_system/pub/products/offers/{productId}:
+    get:
+      tags:
+      - Offers
+      summary: VTex Search Product offers
+      description: Retrieves existing offers of a specific product.
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: productId
+        in: path
+        description: Product unique number identifier.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - SkuId: '5'
+                EanId: '272727'
+                RefId: BIGHEROBML
+                Name: Llf
+                NameComplete: Cacilds Llf
+                IsActive: true
+                MainImage:
+                  ImageId: '172754'
+                  ImageLabel: null
+                  ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                  ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                  IsMain: true
+                  IsZoomSize: false
+                  ImageText: null
+                  LastModified: '2021-03-24T15:37:24.877'
+                Offers:
+                - SellerId: '1'
+                  SellerSkuId: '5'
+                  OffersPerSalesChannel:
+                  - AvailableQuantity: 0
+                    SaleChannel: 1
+                    Price: 200
+                    ListPrice: 200
+                    PriceWithoutDiscount: 200
+                    IsAvailable: false
+                  - AvailableQuantity: 0
+                    SaleChannel: 2
+                    Price: 200
+                    ListPrice: 200
+                    PriceWithoutDiscount: 200
+                    IsAvailable: false
+                  AvailableSalesChannels: null
+                LastModified: '2021-07-06T19:13:45.831483'
+                ProductId: '3'
+              schema:
+                type: array
+                example:
+                - SkuId: '5'
+                  EanId: '272727'
+                  RefId: BIGHEROBML
+                  Name: Llf
+                  NameComplete: Cacilds Llf
+                  IsActive: true
+                  MainImage:
+                    ImageId: '172754'
+                    ImageLabel: null
+                    ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                    ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                    IsMain: true
+                    IsZoomSize: false
+                    ImageText: null
+                    LastModified: '2021-03-24T15:37:24.877'
+                  Offers:
+                  - SellerId: '1'
+                    SellerSkuId: '5'
+                    OffersPerSalesChannel:
+                    - AvailableQuantity: 0
+                      SaleChannel: 1
+                      Price: 200
+                      ListPrice: 200
+                      PriceWithoutDiscount: 200
+                      IsAvailable: false
+                    - AvailableQuantity: 0
+                      SaleChannel: 2
+                      Price: 200
+                      ListPrice: 200
+                      PriceWithoutDiscount: 200
+                      IsAvailable: false
+                    AvailableSalesChannels: null
+                  LastModified: '2021-07-06T19:13:45.831483'
+                  ProductId: '3'
+                items:
+                  type: object
+                  example:
+                    SkuId: '5'
+                    EanId: '272727'
+                    RefId: BIGHEROBML
+                    Name: Llf
+                    NameComplete: Cacilds Llf
+                    IsActive: true
+                    MainImage:
+                      ImageId: '172754'
+                      ImageLabel: null
+                      ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                      ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                      IsMain: true
+                      IsZoomSize: false
+                      ImageText: null
+                      LastModified: '2021-03-24T15:37:24.877'
+                    Offers:
+                    - SellerId: '1'
+                      SellerSkuId: '5'
+                      OffersPerSalesChannel:
+                      - AvailableQuantity: 0
+                        SaleChannel: 1
+                        Price: 200
+                        ListPrice: 200
+                        PriceWithoutDiscount: 200
+                        IsAvailable: false
+                      - AvailableQuantity: 0
+                        SaleChannel: 2
+                        Price: 200
+                        ListPrice: 200
+                        PriceWithoutDiscount: 200
+                        IsAvailable: false
+                      AvailableSalesChannels: null
+                    LastModified: '2021-07-06T19:13:45.831483'
+                    ProductId: '3'
+                  required:
+                  - SkuId
+                  - EanId
+                  - RefId
+                  - Name
+                  - NameComplete
+                  - IsActive
+                  - MainImage
+                  - Offers
+                  - LastModified
+                  - ProductId
+                  properties:
+                    SkuId:
+                      type: string
+                      description: SKU ID.
+                      example: '5'
+                    EanId:
+                      type: string
+                      description: SKU unique identification code (barcode), accepts up to 13 numerical characters.
+                      example: '272727'
+                    RefId:
+                      type: string
+                      description: Unique reference code used internally for organizational purposes.
+                      example: BIGHEROBML
+                    Name:
+                      type: string
+                      description: SKU name.
+                      example: Llf
+                    NameComplete:
+                      type: string
+                      description: SKU complete name.
+                      example: Cacilds Llf
+                    IsActive:
+                      type: boolean
+                      description: If the SKU is active or not.
+                      example: true
+                    MainImage:
+                      type: object
+                      description: General information of the main image of the SKU.
+                      example:
+                        ImageId: '172754'
+                        ImageLabel: null
+                        ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                        ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                        IsMain: true
+                        IsZoomSize: false
+                        ImageText: null
+                        LastModified: '2021-03-24T15:37:24.877'
+                      required:
+                      - ImageId
+                      - ImageLabel
+                      - ImageTag
+                      - ImagePath
+                      - IsMain
+                      - IsZoomSize
+                      - ImageText
+                      - LastModified
+                      properties:
+                        ImageId:
+                          type: string
+                          description: Unique identifier of the association of the Image to the SKU.
+                          example: '172754'
+                        ImageLabel:
+                          type: string
+                          description: Image Label.
+                          nullable: true
+                          example: ''
+                        ImageTag:
+                          type: string
+                          description: Image HTML tag.
+                          example: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                        ImagePath:
+                          type: string
+                          description: Image file path.
+                          example: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                        IsMain:
+                          type: boolean
+                          description: If the image is the main image of the SKU or not.
+                          example: true
+                        IsZoomSize:
+                          type: boolean
+                          description: If the image has zoom applied.
+                          example: false
+                        ImageText:
+                          type: string
+                          description: General text of the image.
+                          nullable: true
+                          example: ''
+                        LastModified:
+                          type: string
+                          description: Time that the image was last modified.
+                          example: '2021-03-24T15:37:24.877'
+                    Offers:
+                      type: array
+                      description: AKA Commertial Condition.
+                      example:
+                      - SellerId: '1'
+                        SellerSkuId: '5'
+                        OffersPerSalesChannel:
+                        - AvailableQuantity: 0
+                          SaleChannel: 1
+                          Price: 200
+                          ListPrice: 200
+                          PriceWithoutDiscount: 200
+                          IsAvailable: false
+                        - AvailableQuantity: 0
+                          SaleChannel: 2
+                          Price: 200
+                          ListPrice: 200
+                          PriceWithoutDiscount: 200
+                          IsAvailable: false
+                        AvailableSalesChannels: null
+                      items:
+                        type: object
+                        example:
+                          SellerId: '1'
+                          SellerSkuId: '5'
+                          OffersPerSalesChannel:
+                          - AvailableQuantity: 0
+                            SaleChannel: 1
+                            Price: 200
+                            ListPrice: 200
+                            PriceWithoutDiscount: 200
+                            IsAvailable: false
+                          - AvailableQuantity: 0
+                            SaleChannel: 2
+                            Price: 200
+                            ListPrice: 200
+                            PriceWithoutDiscount: 200
+                            IsAvailable: false
+                          AvailableSalesChannels: null
+                        required:
+                        - SellerId
+                        - SellerSkuId
+                        - OffersPerSalesChannel
+                        - AvailableSalesChannels
+                        properties:
+                          SellerId:
+                            type: string
+                            description: Seller ID.
+                            example: '1'
+                          SellerSkuId:
+                            type: string
+                            description: ID of the association of the SKU with the seller.
+                            example: '5'
+                          OffersPerSalesChannel:
+                            type: array
+                            description: Offers per trade policy.
+                            example:
+                            - AvailableQuantity: 0
+                              SaleChannel: 1
+                              Price: 200
+                              ListPrice: 200
+                              PriceWithoutDiscount: 200
+                              IsAvailable: false
+                            - AvailableQuantity: 0
+                              SaleChannel: 2
+                              Price: 200
+                              ListPrice: 200
+                              PriceWithoutDiscount: 200
+                              IsAvailable: false
+                            items:
+                              type: object
+                              example:
+                                AvailableQuantity: 0
+                                SaleChannel: 1
+                                Price: 200
+                                ListPrice: 200
+                                PriceWithoutDiscount: 200
+                                IsAvailable: false
+                              required:
+                              - AvailableQuantity
+                              - SaleChannel
+                              - Price
+                              - ListPrice
+                              - PriceWithoutDiscount
+                              - IsAvailable
+                              properties:
+                                AvailableQuantity:
+                                  type: integer
+                                  description: SKU available quantity.
+                                  example: 50
+                                SaleChannel:
+                                  type: integer
+                                  description: SKU trade policy.
+                                  example: 1
+                                Price:
+                                  type: number
+                                  description: SKU price.
+                                  example: 200
+                                ListPrice:
+                                  type: number
+                                  description: SKU list price.
+                                  example: 200
+                                PriceWithoutDiscount:
+                                  type: number
+                                  description: SKU precie without discount.
+                                  example: 200
+                                IsAvailable:
+                                  type: boolean
+                                  description: If the SKU is available or not.
+                                  example: true
+                          AvailableSalesChannels:
+                            type: string
+                            nullable: true
+                            description: Trade policy that the SKU in contained.
+                            example: ''
+                    LastModified:
+                      type: string
+                      description: Time that the offer was last modified.
+                      example: '2021-07-06T19:13:45.831483'
+                    ProductId:
+                      type: string
+                      description: Product ID.
+                      example: '3'
+  /api/catalog_system/pub/products/offers/{productId}/sku/{skuId}:
+    get:
+      tags:
+      - Offers
+      summary: VTex Search SKU offers
+      description: Retrieves existing offers of a specific SKU.
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: productId
+        in: path
+        description: Product unique number identifier.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '3'
+      - name: skuId
+        in: path
+        description: Product unique number identifier.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '5'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - SkuId: '5'
+                EanId: '272727'
+                RefId: BIGHEROBML
+                Name: Llf
+                NameComplete: Cacilds Llf
+                IsActive: true
+                MainImage:
+                  ImageId: '172754'
+                  ImageLabel: null
+                  ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                  ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                  IsMain: true
+                  IsZoomSize: false
+                  ImageText: null
+                  LastModified: '2021-03-24T15:37:24.877'
+                Offers:
+                - SellerId: '1'
+                  SellerSkuId: '5'
+                  OffersPerSalesChannel:
+                  - AvailableQuantity: 0
+                    SaleChannel: 1
+                    Price: 200
+                    ListPrice: 200
+                    PriceWithoutDiscount: 200
+                    IsAvailable: false
+                  - AvailableQuantity: 0
+                    SaleChannel: 2
+                    Price: 200
+                    ListPrice: 200
+                    PriceWithoutDiscount: 200
+                    IsAvailable: false
+                  AvailableSalesChannels: null
+                LastModified: '2021-07-06T19:13:45.831483'
+                ProductId: '3'
+              schema:
+                type: array
+                example:
+                - SkuId: '5'
+                  EanId: '272727'
+                  RefId: BIGHEROBML
+                  Name: Llf
+                  NameComplete: Cacilds Llf
+                  IsActive: true
+                  MainImage:
+                    ImageId: '172754'
+                    ImageLabel: null
+                    ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                    ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                    IsMain: true
+                    IsZoomSize: false
+                    ImageText: null
+                    LastModified: '2021-03-24T15:37:24.877'
+                  Offers:
+                  - SellerId: '1'
+                    SellerSkuId: '5'
+                    OffersPerSalesChannel:
+                    - AvailableQuantity: 0
+                      SaleChannel: 1
+                      Price: 200
+                      ListPrice: 200
+                      PriceWithoutDiscount: 200
+                      IsAvailable: false
+                    - AvailableQuantity: 0
+                      SaleChannel: 2
+                      Price: 200
+                      ListPrice: 200
+                      PriceWithoutDiscount: 200
+                      IsAvailable: false
+                    AvailableSalesChannels: null
+                  LastModified: '2021-07-06T19:13:45.831483'
+                  ProductId: '3'
+                items:
+                  type: object
+                  example:
+                    SkuId: '5'
+                    EanId: '272727'
+                    RefId: BIGHEROBML
+                    Name: Llf
+                    NameComplete: Cacilds Llf
+                    IsActive: true
+                    MainImage:
+                      ImageId: '172754'
+                      ImageLabel: null
+                      ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                      ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                      IsMain: true
+                      IsZoomSize: false
+                      ImageText: null
+                      LastModified: '2021-03-24T15:37:24.877'
+                    Offers:
+                    - SellerId: '1'
+                      SellerSkuId: '5'
+                      OffersPerSalesChannel:
+                      - AvailableQuantity: 0
+                        SaleChannel: 1
+                        Price: 200
+                        ListPrice: 200
+                        PriceWithoutDiscount: 200
+                        IsAvailable: false
+                      - AvailableQuantity: 0
+                        SaleChannel: 2
+                        Price: 200
+                        ListPrice: 200
+                        PriceWithoutDiscount: 200
+                        IsAvailable: false
+                      AvailableSalesChannels: null
+                    LastModified: '2021-07-06T19:13:45.831483'
+                    ProductId: '3'
+                  required:
+                  - SkuId
+                  - EanId
+                  - RefId
+                  - Name
+                  - NameComplete
+                  - IsActive
+                  - MainImage
+                  - Offers
+                  - LastModified
+                  - ProductId
+                  properties:
+                    SkuId:
+                      type: string
+                      description: SKU ID.
+                      example: '5'
+                    EanId:
+                      type: string
+                      description: SKU unique identification code (barcode), accepts up to 13 numerical characters.
+                      example: '272727'
+                    RefId:
+                      type: string
+                      description: Unique reference code used internally for organizational purposes.
+                      example: BIGHEROBML
+                    Name:
+                      type: string
+                      description: SKU name.
+                      example: Llf
+                    NameComplete:
+                      type: string
+                      description: SKU complete name.
+                      example: Cacilds Llf
+                    IsActive:
+                      type: boolean
+                      description: If the SKU is active or not.
+                      example: true
+                    MainImage:
+                      type: object
+                      description: General information of the main image of the SKU.
+                      example:
+                        ImageId: '172754'
+                        ImageLabel: null
+                        ImageTag: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                        ImagePath: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                        IsMain: true
+                        IsZoomSize: false
+                        ImageText: null
+                        LastModified: '2021-03-24T15:37:24.877'
+                      required:
+                      - ImageId
+                      - ImageLabel
+                      - ImageTag
+                      - ImagePath
+                      - IsMain
+                      - IsZoomSize
+                      - ImageText
+                      - LastModified
+                      properties:
+                        ImageId:
+                          type: string
+                          description: Unique identifier of the association of the Image to the SKU.
+                          example: '172754'
+                        ImageLabel:
+                          type: string
+                          description: Image Label.
+                          nullable: true
+                          example: ''
+                        ImageTag:
+                          type: string
+                          description: Image HTML tag.
+                          example: <img src="~/arquivos/ids/172754-#width#-#height#/Diablo.jpg" width="#width#" height="#height#" alt="" id="" />
+                        ImagePath:
+                          type: string
+                          description: Image file path.
+                          example: ~/arquivos/ids/172754-#width#-#height#/Diablo.jpg
+                        IsMain:
+                          type: boolean
+                          description: If the image is the main image of the SKU or not.
+                          example: true
+                        IsZoomSize:
+                          type: boolean
+                          description: If the image has zoom applied.
+                          example: false
+                        ImageText:
+                          type: string
+                          description: General text of the image.
+                          nullable: true
+                          example: ''
+                        LastModified:
+                          type: string
+                          description: Time that the image was last modified.
+                          example: '2021-03-24T15:37:24.877'
+                    Offers:
+                      type: array
+                      description: AKA Commertial Condition.
+                      example:
+                      - SellerId: '1'
+                        SellerSkuId: '5'
+                        OffersPerSalesChannel:
+                        - AvailableQuantity: 0
+                          SaleChannel: 1
+                          Price: 200
+                          ListPrice: 200
+                          PriceWithoutDiscount: 200
+                          IsAvailable: false
+                        - AvailableQuantity: 0
+                          SaleChannel: 2
+                          Price: 200
+                          ListPrice: 200
+                          PriceWithoutDiscount: 200
+                          IsAvailable: false
+                        AvailableSalesChannels: null
+                      items:
+                        type: object
+                        example:
+                          SellerId: '1'
+                          SellerSkuId: '5'
+                          OffersPerSalesChannel:
+                          - AvailableQuantity: 0
+                            SaleChannel: 1
+                            Price: 200
+                            ListPrice: 200
+                            PriceWithoutDiscount: 200
+                            IsAvailable: false
+                          - AvailableQuantity: 0
+                            SaleChannel: 2
+                            Price: 200
+                            ListPrice: 200
+                            PriceWithoutDiscount: 200
+                            IsAvailable: false
+                          AvailableSalesChannels: null
+                        required:
+                        - SellerId
+                        - SellerSkuId
+                        - OffersPerSalesChannel
+                        - AvailableSalesChannels
+                        properties:
+                          SellerId:
+                            type: string
+                            description: Seller ID.
+                            example: '1'
+                          SellerSkuId:
+                            type: string
+                            description: ID of the association of the SKU with the seller.
+                            example: '5'
+                          OffersPerSalesChannel:
+                            type: array
+                            description: Offers per trade policy.
+                            example:
+                            - AvailableQuantity: 0
+                              SaleChannel: 1
+                              Price: 200
+                              ListPrice: 200
+                              PriceWithoutDiscount: 200
+                              IsAvailable: false
+                            - AvailableQuantity: 0
+                              SaleChannel: 2
+                              Price: 200
+                              ListPrice: 200
+                              PriceWithoutDiscount: 200
+                              IsAvailable: false
+                            items:
+                              type: object
+                              example:
+                                AvailableQuantity: 0
+                                SaleChannel: 1
+                                Price: 200
+                                ListPrice: 200
+                                PriceWithoutDiscount: 200
+                                IsAvailable: false
+                              required:
+                              - AvailableQuantity
+                              - SaleChannel
+                              - Price
+                              - ListPrice
+                              - PriceWithoutDiscount
+                              - IsAvailable
+                              properties:
+                                AvailableQuantity:
+                                  type: integer
+                                  description: SKU available quantity.
+                                  example: 50
+                                SaleChannel:
+                                  type: integer
+                                  description: SKU trade policy.
+                                  example: 1
+                                Price:
+                                  type: number
+                                  description: SKU price.
+                                  example: 200
+                                ListPrice:
+                                  type: number
+                                  description: SKU list price.
+                                  example: 200
+                                PriceWithoutDiscount:
+                                  type: number
+                                  description: SKU precie without discount.
+                                  example: 200
+                                IsAvailable:
+                                  type: boolean
+                                  description: If the SKU is available or not.
+                                  example: true
+                          AvailableSalesChannels:
+                            type: string
+                            description: Trade policy that the SKU in contained.
+                            nullable: true
+                            example: ''
+                    LastModified:
+                      type: string
+                      description: Time that the offer was last modified.
+                      example: '2021-07-06T19:13:45.831483'
+                    ProductId:
+                      type: string
+                      description: Product ID.
+                      example: '3'
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

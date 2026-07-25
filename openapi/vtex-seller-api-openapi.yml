@@ -1,0 +1,1006 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Seller API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Seller
+paths:
+  /api/catalog_system/pvt/seller/list:
+    get:
+      tags:
+      - Seller
+      summary: VTex Get Seller list
+      description: Retrieves the seller's details by its ID.
+      operationId: SellerList
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: sc
+        in: query
+        description: Trade policy ID.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: sellerType
+        in: query
+        description: Seller type.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: isBetterScope
+        in: query
+        description: If the seller is better scope.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          example: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  SellerId: pedrostore
+                  Name: pedrostore
+                  Email: breno@breno.com
+                  Description: ''
+                  ExchangeReturnPolicy: ''
+                  DeliveryPolicy: ''
+                  UseHybridPaymentOptions: false
+                  UserName: null
+                  Password: null
+                  SecutityPrivacyPolicy: ''
+                  CNPJ: '12035072751'
+                  CSCIdentification: pedrostore
+                  ArchiveId: null
+                  UrlLogo: null
+                  ProductCommissionPercentage: 0.0
+                  FreightCommissionPercentage: 0.0
+                  CategoryCommissionPercentage: '[{"CategoryId":14,"ProductCommission":15.0,"FreightCommission":0.0}]'
+                  FulfillmentEndpoint: http://pedrostore.vtexcommercestable.com.br/api/fulfillment?affiliateid=LDB&sc=1
+                  CatalogSystemEndpoint: http://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+                  IsActive: true
+                  MerchantName: ''
+                  FulfillmentSellerId: null
+                  SellerType: 1
+                  IsBetterScope: false
+                  TrustPolicy: Default
+                type: object
+                properties:
+                  SellerId:
+                    type: string
+                    description: Code used to identify the seller. It is assigned by the marketplace. We recommend filling it in with the seller's account name.
+                  Name:
+                    type: string
+                    description: Name of the account in the seller's environment. You can find it on **Account settings > Account > Account Name**). Applicable only if the seller uses their own payment method.
+                  Email:
+                    type: string
+                    description: Email of the admin responsible for the seller.
+                  Description:
+                    type: string
+                    description: Text describing the seller with a marketing tone. You can display this text in the marketplace window display by [customizing the CMS](https://help.vtex.com/en/tutorial/list-of-controls-for-templates--tutorials_563).
+                  ExchangeReturnPolicy:
+                    type: string
+                    description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+                  DeliveryPolicy:
+                    type: string
+                    description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+                  UseHybridPaymentOptions:
+                    type: boolean
+                    description: Allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller.
+                  UserName:
+                    type: string
+                    description: Seller username.
+                    nullable: true
+                  Password:
+                    type: string
+                    description: Seller password.
+                    nullable: true
+                  SecutityPrivacyPolicy:
+                    type: string
+                    description: Text describing the security policy previously agreed between the marketplace and the seller.
+                  CNPJ:
+                    type: string
+                    description: Company registration number.
+                  CSCIdentification:
+                    type: string
+                    description: CSC identification.
+                  ArchiveId:
+                    type: integer
+                    description: Seller archive ID.
+                    nullable: true
+                  UrlLogo:
+                    type: string
+                    description: Seller URL logo.
+                    nullable: true
+                  ProductCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FreightCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  CategoryCommissionPercentage:
+                    type: string
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FulfillmentEndpoint:
+                    type: string
+                    description: URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. This field applies to all sellers, regardless of their type. However, for `VTEX Stores`, you don't need to fill it in because the system will do that automatically. You can edit this field once the seller has been successfully added.
+                    nullable: true
+                  CatalogSystemEndpoint:
+                    type: string
+                    description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `http://{sellerName}.vtexcommercestable.com.br/api/catalog_system/`.'
+                  IsActive:
+                    type: boolean
+                    description: If the selle is active (`true`) or not (`false`).
+                  MerchantName:
+                    type: string
+                    description: Name of the marketplace, used to guide payments. This field should be nulled if the marketplace is responsible for processing payments. Check out our [Split Payment](https://help.vtex.com/en/tutorial/split-de-pagamento--6k5JidhYRUxileNolY2VLx) article to know more.
+                  FulfillmentSellerId:
+                    type: integer
+                    description: Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be left blank.
+                    nullable: true
+                  SellerType:
+                    type: integer
+                    description: Seller type.
+                  IsBetterScope:
+                    type: boolean
+                    description: Indicates whether it is a [comprehensive seller](https://help.vtex.com/en/tutorial/comprehensive-seller--5Qn4O2GpjUIzWTPpvLUfkI).
+                  TrustPolicy:
+                    type: string
+                    description: Seller trust policy. The default value is `'Default'`, but if your store is a B2B marketplace and you want to share the customers'emails with the sellers you need to set this field as `'AllowEmailSharing'`.
+      deprecated: false
+  /api/catalog_system/pvt/seller/{sellerId}:
+    get:
+      tags:
+      - Seller
+      summary: VTex Get Seller by ID
+      description: Retrieves the seller's details by its ID.
+      operationId: GetSellerbyId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: sellerId
+        in: path
+        description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: pedrostore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  SellerId: pedrostore
+                  Name: pedrostore
+                  Email: breno@breno.com
+                  Description: ''
+                  ExchangeReturnPolicy: ''
+                  DeliveryPolicy: ''
+                  UseHybridPaymentOptions: false
+                  UserName: null
+                  Password: null
+                  SecutityPrivacyPolicy: ''
+                  CNPJ: '12035072751'
+                  CSCIdentification: pedrostore
+                  ArchiveId: null
+                  UrlLogo: ''
+                  ProductCommissionPercentage: 0.0
+                  FreightCommissionPercentage: 0.0
+                  CategoryCommissionPercentage: '[{"CategoryId":14,"ProductCommission":15.0,"FreightCommission":0.0}]'
+                  FulfillmentEndpoint: http://pedrostore.vtexcommercestable.com.br/api/fulfillment?affiliateid=LDB&sc=1
+                  CatalogSystemEndpoint: http://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+                  IsActive: true
+                  MerchantName: ''
+                  FulfillmentSellerId: null
+                  SellerType: 1
+                  IsBetterScope: false
+                  TrustPolicy: Default
+                type: object
+                description: Object with information of all sellers in the store.
+                properties:
+                  SellerId:
+                    type: string
+                    description: Code used to identify the seller. It is assigned by the marketplace. We recommend filling it in with the seller's account name.
+                  Name:
+                    type: string
+                    description: Name of the account in the seller's environment. You can find it on **Account settings > Account > Account Name**). Applicable only if the seller uses their own payment method.
+                  Email:
+                    type: string
+                    description: Email of the admin responsible for the seller.
+                  Description:
+                    type: string
+                    description: Text describing the seller with a marketing tone. You can display this text in the marketplace window display by [customizing the CMS](https://help.vtex.com/en/tutorial/list-of-controls-for-templates--tutorials_563).
+                  ExchangeReturnPolicy:
+                    type: string
+                    description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+                  DeliveryPolicy:
+                    type: string
+                    description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+                  UseHybridPaymentOptions:
+                    type: boolean
+                    description: 'Allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller. '
+                  UserName:
+                    type: string
+                    description: Seller username.
+                    nullable: true
+                  Password:
+                    type: string
+                    description: Seller password.
+                    nullable: true
+                  SecutityPrivacyPolicy:
+                    type: string
+                    description: Text describing the security policy previously agreed between the marketplace and the seller.
+                  CNPJ:
+                    type: string
+                    description: Company registration number.
+                  CSCIdentification:
+                    type: string
+                    description: CSC identification.
+                  ArchiveId:
+                    type: integer
+                    description: Seller archive ID.
+                    nullable: true
+                  UrlLogo:
+                    type: string
+                    description: Seller URL logo.
+                  ProductCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FreightCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  CategoryCommissionPercentage:
+                    type: string
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FulfillmentEndpoint:
+                    type: string
+                    description: URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. This field applies to all sellers, regardless of their type. However, for `VTEX Stores`, you don't need to fill it in because the system will do that automatically. You can edit this field once the seller has been successfully added.
+                    nullable: true
+                  CatalogSystemEndpoint:
+                    type: string
+                    description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `http://{sellerName}.vtexcommercestable.com.br/api/catalog_system/`.'
+                  IsActive:
+                    type: boolean
+                    description: If the selle is active (`true`) or not (`false`).
+                  MerchantName:
+                    type: string
+                    description: Name of the marketplace, used to guide payments. This field should be nulled if the marketplace is responsible for processing payments. Check out our [Split Payment](https://help.vtex.com/en/tutorial/split-de-pagamento--6k5JidhYRUxileNolY2VLx) article to know more.
+                  FulfillmentSellerId:
+                    type: integer
+                    description: Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be left blank.
+                    nullable: true
+                  SellerType:
+                    type: integer
+                    description: Seller type.
+                  IsBetterScope:
+                    type: boolean
+                    description: Indicates whether it is a [comprehensive seller](https://help.vtex.com/en/tutorial/comprehensive-seller--5Qn4O2GpjUIzWTPpvLUfkI).
+                  TrustPolicy:
+                    type: string
+                    description: Seller trust policy. The default value is `'Default'`, but if your store is a B2B marketplace and you want to share the customers'emails with the sellers you need to set this field as `'AllowEmailSharing'`.
+      deprecated: false
+  /api/catalog_system/pvt/seller:
+    put:
+      tags:
+      - Seller
+      summary: VTex Update Seller
+      description: Updates a seller.
+      operationId: UpdateSeller
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSellerRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  SellerId: pedrostore
+                  Name: pedrostore
+                  Email: breno@breno.com
+                  Description: ''
+                  ExchangeReturnPolicy: ''
+                  DeliveryPolicy: ''
+                  UseHybridPaymentOptions: false
+                  UserName: null
+                  Password: null
+                  SecutityPrivacyPolicy: ''
+                  CNPJ: '12035072751'
+                  CSCIdentification: pedrostore
+                  ArchiveId: null
+                  UrlLogo: null
+                  ProductCommissionPercentage: 0.0
+                  FreightCommissionPercentage: 0.0
+                  CategoryCommissionPercentage: '[{"CategoryId":14,"ProductCommission":15.0,"FreightCommission":0.0}]'
+                  FulfillmentEndpoint: http://pedrostore.vtexcommercestable.com.br/api/fulfillment?affiliateid=LDB&sc=1
+                  CatalogSystemEndpoint: http://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+                  IsActive: true
+                  MerchantName: ''
+                  FulfillmentSellerId: null
+                  SellerType: 1
+                  IsBetterScope: false
+                  TrustPolicy: Default
+                type: object
+                properties:
+                  SellerId:
+                    type: string
+                    description: Code used to identify the seller. It is assigned by the marketplace. We recommend filling it in with the seller's account name.
+                  Name:
+                    type: string
+                    description: Name of the account in the seller's environment. You can find it on **Account settings > Account > Account Name**). Applicable only if the seller uses their own payment method.
+                  Email:
+                    type: string
+                    description: Email of the admin responsible for the seller.
+                  Description:
+                    type: string
+                    description: Text describing the seller with a marketing tone. You can display this text in the marketplace window display by [customizing the CMS](https://help.vtex.com/en/tutorial/list-of-controls-for-templates--tutorials_563).
+                  ExchangeReturnPolicy:
+                    type: string
+                    description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+                  DeliveryPolicy:
+                    type: string
+                    description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+                  UseHybridPaymentOptions:
+                    type: boolean
+                    description: Allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller.
+                  UserName:
+                    type: string
+                    description: Seller username.
+                    nullable: true
+                  Password:
+                    type: string
+                    description: Seller password.
+                    nullable: true
+                  SecutityPrivacyPolicy:
+                    type: string
+                    description: Text describing the security policy previously agreed between the marketplace and the seller.
+                  CNPJ:
+                    type: string
+                    description: Company registration number.
+                  CSCIdentification:
+                    type: string
+                    description: CSC identification.
+                  ArchiveId:
+                    type: integer
+                    description: Seller archive ID.
+                    nullable: true
+                  UrlLogo:
+                    type: string
+                    description: Seller URL logo.
+                    nullable: true
+                  ProductCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FreightCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  CategoryCommissionPercentage:
+                    type: string
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FulfillmentEndpoint:
+                    type: string
+                    description: URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. This field applies to all sellers, regardless of their type. However, for `VTEX Stores`, you don't need to fill it in because the system will do that automatically. You can edit this field once the seller has been successfully added.
+                    nullable: true
+                  CatalogSystemEndpoint:
+                    type: string
+                    description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `http://{sellerName}.vtexcommercestable.com.br/api/catalog_system/`.'
+                  IsActive:
+                    type: boolean
+                    description: If the selle is active (`true`) or not (`false`).
+                  MerchantName:
+                    type: string
+                    description: Name of the marketplace, used to guide payments. This field should be nulled if the marketplace is responsible for processing payments. Check out our [Split Payment](https://help.vtex.com/en/tutorial/split-de-pagamento--6k5JidhYRUxileNolY2VLx) article to know more.
+                  FulfillmentSellerId:
+                    type: integer
+                    description: Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be left blank.
+                    nullable: true
+                  SellerType:
+                    type: integer
+                    description: Seller type.
+                  IsBetterScope:
+                    type: boolean
+                    description: Indicates whether it is a [comprehensive seller](https://help.vtex.com/en/tutorial/comprehensive-seller--5Qn4O2GpjUIzWTPpvLUfkI).
+                  TrustPolicy:
+                    type: string
+                    description: Seller trust policy. The default value is `'Default'`, but if your store is a B2B marketplace and you want to share the customers'emails with the sellers you need to set this field as `'AllowEmailSharing'`.
+      deprecated: false
+    post:
+      tags:
+      - Seller
+      summary: VTex Create Seller
+      description: Creates a new seller.
+      operationId: CreateSeller
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSellerRequest'
+            example:
+              SellerId: myseller
+              Name: My Seller
+              Email: myseller@vtex.com
+              Description: ''
+              ExchangeReturnPolicy: ''
+              DeliveryPolicy: ''
+              UseHybridPaymentOptions: false
+              UserName: ''
+              Password: ''
+              SecutityPrivacyPolicy: ''
+              CNPJ: '12345678912345'
+              CSCIdentification: myseller
+              ArchiveId: 1
+              UrlLogo: ''
+              ProductCommissionPercentage: 1.5
+              FreightCommissionPercentage: 0
+              FulfillmentEndpoint: http://fulfillment.vtexcommerce.com.br/api/fulfillment?affiliateid=VTX&sc=1&an=myseller
+              CatalogSystemEndpoint: http://myseller.vtexcommercestable.com.br/api/catalog_system/
+              IsActive: true
+              FulfillmentSellerId: 2
+              SellerType: 1
+              IsBetterScope: false
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  SellerId: pedrostore
+                  Name: pedrostore
+                  Email: breno@breno.com
+                  Description: ''
+                  ExchangeReturnPolicy: ''
+                  DeliveryPolicy: ''
+                  UseHybridPaymentOptions: false
+                  UserName: null
+                  Password: null
+                  SecutityPrivacyPolicy: ''
+                  CNPJ: '12035072751'
+                  CSCIdentification: pedrostore
+                  ArchiveId: null
+                  UrlLogo: null
+                  ProductCommissionPercentage: 0.0
+                  FreightCommissionPercentage: 0.0
+                  CategoryCommissionPercentage: '[{"CategoryId":14,"ProductCommission":15.0,"FreightCommission":0.0}]'
+                  FulfillmentEndpoint: http://pedrostore.vtexcommercestable.com.br/api/fulfillment?affiliateid=LDB&sc=1
+                  CatalogSystemEndpoint: http://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+                  IsActive: true
+                  MerchantName: ''
+                  FulfillmentSellerId: null
+                  SellerType: 1
+                  IsBetterScope: false
+                  TrustPolicy: Default
+                type: object
+                properties:
+                  SellerId:
+                    type: string
+                    description: Code used to identify the seller. It is assigned by the marketplace. We recommend filling it in with the seller's account name.
+                  Name:
+                    type: string
+                    description: Name of the account in the seller's environment. You can find it on **Account settings > Account > Account Name**). Applicable only if the seller uses their own payment method.
+                  Email:
+                    type: string
+                    description: 'Email of the admin responsible for the seller. '
+                  Description:
+                    type: string
+                    description: Text describing the seller with a marketing tone. You can display this text in the marketplace window display by [customizing the CMS](https://help.vtex.com/en/tutorial/list-of-controls-for-templates--tutorials_563).
+                  ExchangeReturnPolicy:
+                    type: string
+                    description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+                  DeliveryPolicy:
+                    type: string
+                    description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+                  UseHybridPaymentOptions:
+                    type: boolean
+                    description: 'Allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller. '
+                  UserName:
+                    type: string
+                    description: Seller username.
+                    nullable: true
+                  Password:
+                    type: string
+                    description: Seller password.
+                    nullable: true
+                  SecutityPrivacyPolicy:
+                    type: string
+                    description: Text describing the security policy previously agreed between the marketplace and the seller.
+                  CNPJ:
+                    type: string
+                    description: Company registration number.
+                  CSCIdentification:
+                    type: string
+                    description: CSC identification.
+                  ArchiveId:
+                    type: integer
+                    description: Seller archive ID.
+                    nullable: true
+                  UrlLogo:
+                    type: string
+                    description: Seller URL logo.
+                    nullable: true
+                  ProductCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FreightCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  CategoryCommissionPercentage:
+                    type: string
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FulfillmentEndpoint:
+                    type: string
+                    description: URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. This field applies to all sellers, regardless of their type. However, for `VTEX Stores`, you don't need to fill it in because the system will do that automatically. You can edit this field once the seller has been successfully added.
+                    nullable: true
+                  CatalogSystemEndpoint:
+                    type: string
+                    description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `http://{sellerName}.vtexcommercestable.com.br/api/catalog_system/`.'
+                  IsActive:
+                    type: boolean
+                    description: If the selle is active (`true`) or not (`false`).
+                  MerchantName:
+                    type: string
+                    description: Name of the marketplace, used to guide payments. This field should be nulled if the marketplace is responsible for processing payments. Check out our [Split Payment](https://help.vtex.com/en/tutorial/split-de-pagamento--6k5JidhYRUxileNolY2VLx) article to know more.
+                  FulfillmentSellerId:
+                    type: integer
+                    description: Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be left blank.
+                    nullable: true
+                  SellerType:
+                    type: integer
+                    description: Seller type.
+                  IsBetterScope:
+                    type: boolean
+                    description: Indicates whether it is a [comprehensive seller](https://help.vtex.com/en/tutorial/comprehensive-seller--5Qn4O2GpjUIzWTPpvLUfkI).
+                  TrustPolicy:
+                    type: string
+                    description: Seller trust policy. The default value is `'Default'`, but if your store is a B2B marketplace and you want to share the customers'emails with the sellers you need to set this field as `'AllowEmailSharing'`.
+  /api/catalog_system/pvt/sellers/{sellerId}:
+    get:
+      tags:
+      - Seller
+      summary: VTex Get Seller by ID
+      description: Retrieves the seller's details by its ID.
+      operationId: GetSellersbyId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: sellerId
+        in: path
+        description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: pedrostore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  SellerId: pedrostore
+                  Name: pedrostore
+                  Email: breno@breno.com
+                  Description: ''
+                  ExchangeReturnPolicy: ''
+                  DeliveryPolicy: ''
+                  UseHybridPaymentOptions: false
+                  UserName: null
+                  Password: null
+                  SecutityPrivacyPolicy: ''
+                  CNPJ: '12035072751'
+                  CSCIdentification: pedrostore
+                  ArchiveId: null
+                  UrlLogo: ''
+                  ProductCommissionPercentage: 0.0
+                  FreightCommissionPercentage: 0.0
+                  CategoryCommissionPercentage: '[{"CategoryId":14,"ProductCommission":15.0,"FreightCommission":0.0}]'
+                  FulfillmentEndpoint: http://pedrostore.vtexcommercestable.com.br/api/fulfillment?affiliateid=LDB&sc=1
+                  CatalogSystemEndpoint: http://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+                  IsActive: true
+                  MerchantName: ''
+                  FulfillmentSellerId: null
+                  SellerType: 1
+                  IsBetterScope: false
+                  TrustPolicy: Default
+                type: object
+                description: Object with information of all sellers in the store.
+                properties:
+                  SellerId:
+                    type: string
+                    description: Code used to identify the seller. It is assigned by the marketplace. We recommend filling it in with the seller's account name.
+                  Name:
+                    type: string
+                    description: Name of the account in the seller's environment. You can find it on **Account settings > Account > Account Name**). Applicable only if the seller uses their own payment method.
+                    nullable: true
+                  Email:
+                    type: string
+                    description: 'Email of the admin responsible for the seller. '
+                    nullable: true
+                  Description:
+                    type: string
+                    description: Text describing the seller with a marketing tone. You can display this text in the marketplace window display by [customizing the CMS](https://help.vtex.com/en/tutorial/list-of-controls-for-templates--tutorials_563).
+                  ExchangeReturnPolicy:
+                    type: string
+                    description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+                  DeliveryPolicy:
+                    type: string
+                    description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+                  UseHybridPaymentOptions:
+                    type: boolean
+                    description: 'Allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller. '
+                  UserName:
+                    type: string
+                    description: Seller username.
+                    nullable: true
+                  Password:
+                    type: string
+                    description: Seller password.
+                    nullable: true
+                  SecutityPrivacyPolicy:
+                    type: string
+                    description: Text describing the security policy previously agreed between the marketplace and the seller.
+                  CNPJ:
+                    type: string
+                    description: Company registration number.
+                  CSCIdentification:
+                    type: string
+                    description: CSC identification.
+                  ArchiveId:
+                    type: integer
+                    description: Seller archive ID.
+                    nullable: true
+                  UrlLogo:
+                    type: string
+                    description: Seller URL logo.
+                  ProductCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FreightCommissionPercentage:
+                    type: number
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  CategoryCommissionPercentage:
+                    type: string
+                    description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+                  FulfillmentEndpoint:
+                    type: string
+                    description: URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. This field applies to all sellers, regardless of their type. However, for `VTEX Stores`, you don't need to fill it in because the system will do that automatically. You can edit this field once the seller has been successfully added.
+                    nullable: true
+                  CatalogSystemEndpoint:
+                    type: string
+                    description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `http://{sellerName}.vtexcommercestable.com.br/api/catalog_system/`.'
+                  IsActive:
+                    type: boolean
+                    description: If the selle is active (`true`) or not (`false`).
+                  MerchantName:
+                    type: string
+                    description: Name of the marketplace, used to guide payments. This field should be nulled if the marketplace is responsible for processing payments. Check out our [Split Payment](https://help.vtex.com/en/tutorial/split-de-pagamento--6k5JidhYRUxileNolY2VLx) article to know more.
+                  FulfillmentSellerId:
+                    type: integer
+                    description: Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be left blank.
+                    nullable: true
+                  SellerType:
+                    type: integer
+                    description: Seller type.
+                  IsBetterScope:
+                    type: boolean
+                    description: Indicates whether it is a [comprehensive seller](https://help.vtex.com/en/tutorial/comprehensive-seller--5Qn4O2GpjUIzWTPpvLUfkI).
+                  TrustPolicy:
+                    type: string
+                    description: Seller trust policy. The default value is `'Default'`, but if your store is a B2B marketplace and you want to share the customers'emails with the sellers you need to set this field as `'AllowEmailSharing'`.
+      deprecated: false
+components:
+  schemas:
+    CreateSellerRequest:
+      type: object
+      required:
+      - SellerId
+      - Name
+      - Email
+      - Description
+      - ExchangeReturnPolicy
+      - DeliveryPolicy
+      - UseHybridPaymentOptions
+      - UserName
+      - Password
+      - SecutityPrivacyPolicy
+      - CNPJ
+      - CSCIdentification
+      - ArchiveId
+      - UrlLogo
+      - ProductCommissionPercentage
+      - FreightCommissionPercentage
+      - FulfillmentEndpoint
+      - CatalogSystemEndpoint
+      - IsActive
+      - FulfillmentSellerId
+      - SellerType
+      - IsBetterScope
+      properties:
+        SellerId:
+          type: string
+          description: Code used to identify the seller. It is assigned by the marketplace. We recommend filling it in with the seller's account name.
+          example: pedrostore
+        Name:
+          type: string
+          description: Name of the account in the seller's environment. You can find it on **Account settings > Account > Account Name**). Applicable only if the seller uses their own payment method.
+          example: My pedrostore
+        Email:
+          type: string
+          description: Email of the admin responsible for the seller.
+          example: breno@breno.com
+        Description:
+          type: string
+          description: Text describing the seller with a marketing tone. You can display this text in the marketplace window display by [customizing the CMS](https://help.vtex.com/en/tutorial/list-of-controls-for-templates--tutorials_563).
+          example: Brief description
+        ExchangeReturnPolicy:
+          type: string
+          description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+          example: Exchange return policy text
+        DeliveryPolicy:
+          type: string
+          description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+          example: Delivery policy text
+        UseHybridPaymentOptions:
+          type: boolean
+          description: Allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller.
+          example: false
+        UserName:
+          type: string
+          description: Seller username.
+          example: myseller
+        Password:
+          type: string
+          description: Seller password.
+          example: passoword
+        SecutityPrivacyPolicy:
+          type: string
+          description: Text describing the security policy previously agreed between the marketplace and the seller.
+          example: Secutity privacy policy text
+        CNPJ:
+          type: string
+          description: Company registration number.
+          example: '12035072751'
+        CSCIdentification:
+          type: string
+          description: CSC identification.
+          example: pedrostore
+        ArchiveId:
+          type: integer
+          description: Seller archive ID.
+          example: 1
+        UrlLogo:
+          type: string
+          description: Seller URL logo.
+          example: /myseller
+        ProductCommissionPercentage:
+          type: number
+          description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+          example: 0.0
+        FreightCommissionPercentage:
+          type: number
+          description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+          example: 0.0
+        CategoryCommissionPercentage:
+          type: string
+          description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+          example: '[{"CategoryId":14,"ProductCommission":15.0,"FreightCommission":0.0}]'
+        FulfillmentEndpoint:
+          type: string
+          description: URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. This field applies to all sellers, regardless of their type. However, for `VTEX Stores`, you don't need to fill it in because the system will do that automatically. You can edit this field once the seller has been successfully added.
+          example: http://pedrostore.vtexcommercestable.com.br/api/fulfillment?affiliateid=LDB&sc=1
+        CatalogSystemEndpoint:
+          type: string
+          description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `http://{sellerName}.vtexcommercestable.com.br/api/catalog_system/`.'
+          example: http://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+        IsActive:
+          type: boolean
+          description: If the selle is active (`true`) or not (`false`).
+          example: true
+        MerchantName:
+          type: string
+          description: Name of the marketplace, used to guide payments. This field should be nulled if the marketplace is responsible for processing payments. Check out our [Split Payment](https://help.vtex.com/en/tutorial/split-payment--6k5JidhYRUxileNolY2VLx) article to know more.
+          example: pedrostore
+        FulfillmentSellerId:
+          type: integer
+          description: Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be left blank.
+          example: 1
+        SellerType:
+          type: integer
+          description: Seller type.
+          example: 1
+        IsBetterScope:
+          type: boolean
+          description: Indicates whether it is a [comprehensive seller](https://help.vtex.com/en/tutorial/comprehensive-seller--5Qn4O2GpjUIzWTPpvLUfkI).
+          example: false
+        TrustPolicy:
+          type: string
+          description: Seller trust policy. The default value is `'Default'`, but if your store is a B2B marketplace and you want to share the customers'emails with the sellers you need to set this field as `'AllowEmailSharing'`.
+          example: Default
+    UpdateSellerRequest:
+      type: object
+      required:
+      - SellerId
+      - Name
+      - Email
+      - Description
+      - ExchangeReturnPolicy
+      - DeliveryPolicy
+      - UseHybridPaymentOptions
+      - UserName
+      - Password
+      - SecutityPrivacyPolicy
+      - CNPJ
+      - CSCIdentification
+      - ArchiveId
+      - UrlLogo
+      - ProductCommissionPercentage
+      - FreightCommissionPercentage
+      - FulfillmentEndpoint
+      - CatalogSystemEndpoint
+      - IsActive
+      - FulfillmentSellerId
+      - SellerType
+      - IsBetterScope
+      properties:
+        SellerId:
+          type: string
+          description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
+          example: pedrostore
+        Name:
+          type: string
+          description: Name of the account in the seller's environment. You can find it on **Account settings > Account > Account Name**). Applicable only if the seller uses their own payment method.
+          example: My pedrostore
+        Email:
+          type: string
+          description: Email of the admin responsible for the seller.
+          example: breno@breno.com
+        Description:
+          type: string
+          description: Text describing the seller with a marketing tone. You can display this text in the marketplace window display by [customizing the CMS](https://help.vtex.com/en/tutorial/list-of-controls-for-templates--tutorials_563).
+          example: Brief description
+        ExchangeReturnPolicy:
+          type: string
+          description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+          example: Exchange return policy text
+        DeliveryPolicy:
+          type: string
+          description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+          example: Delivery policy text
+        UseHybridPaymentOptions:
+          type: boolean
+          description: Allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller.
+          example: false
+        UserName:
+          type: string
+          description: Seller username.
+          example: myseller
+        Password:
+          type: string
+          description: Seller password.
+          example: passoword
+        SecutityPrivacyPolicy:
+          type: string
+          description: Text describing the security policy previously agreed between the marketplace and the seller.
+          example: Secutity privacy policy text
+        CNPJ:
+          type: string
+          description: Company registration number.
+          example: '12035072751'
+        CSCIdentification:
+          type: string
+          description: CSC identification.
+          example: pedrostore
+        ArchiveId:
+          type: integer
+          description: Seller archive ID.
+          example: 1
+        UrlLogo:
+          type: string
+          description: Seller URL logo.
+          example: /myseller
+        ProductCommissionPercentage:
+          type: number
+          description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+          example: 0.0
+        FreightCommissionPercentage:
+          type: number
+          description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+          example: 0.0
+        CategoryCommissionPercentage:
+          type: string
+          description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
+          example: '[{"CategoryId":14,"ProductCommission":15.0,"FreightCommission":0.0}]'
+        FulfillmentEndpoint:
+          type: string
+          description: URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. This field applies to all sellers, regardless of their type. However, for `VTEX Stores`, you don't need to fill it in because the system will do that automatically. You can edit this field once the seller has been successfully added.
+          example: http://pedrostore.vtexcommercestable.com.br/api/fulfillment?affiliateid=LDB&sc=1
+        CatalogSystemEndpoint:
+          type: string
+          description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `http://{sellerName}.vtexcommercestable.com.br/api/catalog_system/`.'
+          example: http://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+        IsActive:
+          type: boolean
+          description: If the selle is active (`true`) or not (`false`).
+          example: true
+        MerchantName:
+          type: string
+          description: Name of the marketplace, used to guide payments. This field should be nulled if the marketplace is responsible for processing payments. Check out our [Split Payment](https://help.vtex.com/en/tutorial/split-payment--6k5JidhYRUxileNolY2VLx) article to know more.
+          example: pedrostore
+        FulfillmentSellerId:
+          type: integer
+          description: Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be left blank.
+          example: 1
+        SellerType:
+          type: integer
+          description: Seller type.
+          example: 1
+        IsBetterScope:
+          type: boolean
+          description: Indicates whether it is a [comprehensive seller](https://help.vtex.com/en/tutorial/comprehensive-seller--5Qn4O2GpjUIzWTPpvLUfkI).
+          example: false
+        TrustPolicy:
+          type: string
+          description: Seller trust policy. The default value is `'Default'`, but if your store is a B2B marketplace and you want to share the customers'emails with the sellers you need to set this field as `'AllowEmailSharing'`.
+          example: Default
+  parameters:
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

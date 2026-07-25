@@ -1,0 +1,462 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Match Received SKUs API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Match Received SKUs
+paths:
+  /suggestions/{sellerId}/{sellerskuid}/versions/{version}/matches/{matchid}:
+    put:
+      tags:
+      - Match Received SKUs
+      summary: VTex Match Received SKUs individually
+      description: "All SKUs sent from a seller to a marketplace must be reviewed and matched. Actions in the matching process are added in the request body through the [matchType] object. Match type actions include: \n\n1. `newproduct`: match the SKU as a new product. \n\n2. `itemMatch`: associate the received SKU to an existing SKU. \n\n3. `productMatch`: associate the received SKU to an existing product. \n\n4. `deny`: deny the received SKU. \n\n5. `pending`: the received SKU requires attention. \n\n6. `incomplete`: the received SKU is lacking information to be matched. \n\n7. `insufficientScore`: the score given by the Matcher to this received SKU doesn't qualify it to be matched. \n\nNote that  if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score."
+      operationId: Match
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account. Used as part of the URL
+        schema:
+          type: string
+          default: apiexamples
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: sellerId
+        in: path
+        description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: seller123
+      - name: sellerskuid
+        in: path
+        description: A string that identifies the SKU in the marketplace. This is the ID that the marketplace will use for future references to this SKU, such as price and inventory notifications.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: '1234'
+      - name: version
+        in: path
+        description: Whenever an SKU Suggestion is updated or changed, a new version of the original one is created. All versions are logged, so you can search for previous our current states of SKU suggestions. This field is the versionId associated to the version you choose to search for. You can get this field's value through the[Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). through the `latestVersionId` field.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: 09072021142808277
+      - name: matchid
+        in: path
+        description: Whenever an SKU suggestion is matched, it is associated to a unique ID. Fill in this field with the matchId you wish to filter by. The `matchId`'s value can be obtained through the *[Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchRequest'
+            example:
+              matcherId: '{{matcherid}}'
+              matchType: itemMatch
+              score: '{{score}} (must be decimal)'
+              skuRef: '{{skuid}}(should be specifed when match is a sku match)'
+              productRef: '{{productRef}}(should be specified when match is a product match)'
+              product:
+                name: Book A
+                description: Book description
+                categoryId: 12
+                brandId: 1234567
+                matchType: itemMatch
+                specifications: null
+              sku:
+                name: Sku exemplo
+                eans:
+                - '12345678901213'
+                refId: null
+                height: 1
+                width: 1
+                length: 1
+                weight: 1
+                images:
+                - imagem1.jpg:
+                    imagem1.jpg: https://imageurl.example
+                unitMultiplier: 1
+                measurementUnit: un
+                specifications:
+                  Embalagem: 3 k   g
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /suggestions/matches/action/{actionName}:
+    put:
+      tags:
+      - Match Received SKUs
+      summary: VTex Match Multiple Received SKUs
+      description: "Allows a marketplace to bulk approve, deny, or associate up to 25 received SKUs from sellers.\n\nThrough the `actionName` attribute, you can select the operation you want to apply to the received SKU. Actions include: \n\n* `newproduct`: match the SKU as a new product. \n\n* `skuassociation`: associate the received SKU to an existing SKU. \n\n* `productassociation`: associate the received SKU to an existing product. \n\n* `deny`: deny the received SKU."
+      operationId: MatchMultiple
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account. Used as part of the URL
+        schema:
+          type: string
+          default: apiexamples
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: actionName
+        in: path
+        description: "Operation to apply to received SKUs. Possible values include: \n\n* `newproduct`: match the SKU as a new product. \n\n* `skuassociation`: associate the received SKU to an existing SKU. \n\n* `productassociation`: associate the received SKU to an existing product. \n\n* `deny`: deny the received SKU."
+        required: true
+        style: simple
+        schema:
+          type: string
+          enum:
+          - newproduct
+          - skuassociation
+          - productassociation
+          - deny
+          example: newproduct
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/MatchMultiple'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseMatchMultiple'
+              deprecated: false
+components:
+  schemas:
+    Specifications:
+      title: Specifications
+      required:
+      - Embalagem
+      type: object
+      properties:
+        Embalagem:
+          type: string
+          description: Packaging specifications. Should include package's weight.
+      example:
+        Embalagem: 3 kg
+    Product:
+      title: Product
+      required:
+      - name
+      - description
+      - categoryId
+      - brandId
+      - specifications
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product that will be matched.
+          default: Book
+        description:
+          type: string
+          description: Product's description.
+          default: Description of the product, how it will appear on the marketplace.
+        categoryId:
+          type: integer
+          format: int32
+          description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
+          default: 12
+        brandId:
+          type: integer
+          format: int32
+          description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The brandId is already mapped through the Get Suggestions API. This field is nulled when the inserted value is 0.
+          default: 1234567
+        specifications:
+          type: string
+          description: This field is optional. Add here any product specifications or details.
+          default: ''
+          nullable: true
+    responseMatchMultiple:
+      title: responseMatchMultiple
+      type: array
+      items:
+        type: object
+        properties:
+          matchId:
+            type: string
+            example: 06272023010821403
+          matcherId:
+            type: string
+            example: vtex-matcher
+          sellerId:
+            type: string
+            example: melissatestbug858
+          itemId:
+            type: string
+            example: '81'
+          isSuccess:
+            type: boolean
+            example: false
+    MatchRequest:
+      title: ''
+      required:
+      - matcherId
+      - score
+      - matchType
+      type: object
+      properties:
+        matcherId:
+          type: string
+          description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+          default: vtex-matcher
+        matchType:
+          title: Match Type
+          type: string
+          description: "Define the action you want to apply to each SKU. Values include: \n\n1. `newproduct`: match the SKU as a new product. \n\n2. `itemMatch`: associate the received SKU to an existing SKU. \n\n3. `productMatch`: associate the received SKU to an existing product. \n\n4. `deny`: deny the received SKU. \n\n5. `pending`: the received SKU requires attention. \n\n6. `incomplete`: the received SKU is lacking information to be matched. \n\n7. `insufficientScore`: the score given by the Matcher to this received SKU doesn't qualify it to be matched. \n\nNote that  if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score."
+          default: itemMatch
+        score:
+          type: string
+          description: "Matcher rates received SKUs by correlating the data sent by sellers, to existing fields in the marketplace. The calculation of these scores determines whether the product has been: \n\n`Approved`: score equal to or greater than 80 points. \n\n`Pending`: from 31 to 79 points.\n\n`Denied`: from 0 to 30 points. \n\nNote that  if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score."
+          default: '80'
+        skuRef:
+          type: string
+          nullable: true
+          description: In `itemMatch` actions, fill in this field on your request to match the item to an existing SKU in the marketplace.
+          default: ''
+        productRef:
+          type: string
+          description: In `productMatch` actions, fill in this field on your request to match the item to an existing product in the marketplace.
+          default: ''
+          nullable: true
+        product:
+          $ref: '#/components/schemas/Product'
+        sku:
+          $ref: '#/components/schemas/Sku'
+      example:
+        matcherId: '{{matcherid}}'
+        score: '{{score}} (must be decimal)'
+        matchType: itemMatch
+        skuRef: '{{skuid}}(should be specifed when match is a sku match)'
+        productRef: '{{productRef}}(should be specified when match is a product match)'
+        product:
+          name: Produto exemplo
+          description: Descricao exemplo
+          categoryId: 12
+          brandId: 1234567
+          specifications: null
+        sku:
+          name: Sku exemplo
+          eans:
+          - '12345678901213'
+          refId: null
+          height: 1
+          width: 1
+          length: 1
+          weight: 1
+          images:
+          - imagem1.jpg: imageurl.example
+          unitMultiplier: 1
+          measurementUnit: un
+          specifications:
+            Embalagem: 3 kg
+    MatchMultiple:
+      title: MatchMultiple
+      type: array
+      items:
+        type: object
+        required:
+        - itemId
+        - versionId
+        - matchId
+        - matcherId
+        - categoryId
+        - sellerId
+        properties:
+          itemId:
+            type: string
+            description: This field can be used to link any string that identifies that SKU. Its most common use is the seller's SKU ID.
+            example: '1234567'
+          versionId:
+            type: string
+            description: Whenever an SKU Suggestion is updated or changed, a new version of the original one is created. All versions are logged, so you can search for previous our current states of SKU suggestions. This field is the `versionId` associated to the version you choose to search for. You can get this field's value through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). through the `latestVersionId` field.
+            example: v.2
+          matchId:
+            type: string
+            description: Whenever an SKU suggestion is matched, it is associated to a unique ID. Fill in this field with the `matchId` you wish to filter by. The `matchId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+            default: vtex-matcher
+          matcherId:
+            type: string
+            description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+            default: vtex-matcher
+          categoryId:
+            type: integer
+            format: int32
+            nullable: true
+            description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
+            example: 12
+          brandId:
+            type: integer
+            format: int32
+            nullable: true
+            description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The `brandId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). This field is nulled when the inserted value is 0, and is mandatory for the `newproduct` action.
+            example: 1234567
+          skuRef:
+            type: string
+            nullable: true
+            description: Fill in this field on your request when the matched item is an SKU. This field is mandatory for the `skuassociation` action.
+            example: 123 sku ref
+          productRef:
+            type: string
+            description: Fill in this field on your request when the matched item is a product. This field is mandatory for the `productassociation` action.
+            example: 123 product ref
+            nullable: true
+          sellerId:
+            type: string
+            description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
+            example: seller123
+    Sku:
+      title: SKU
+      required:
+      - name
+      - eans
+      - refId
+      - height
+      - width
+      - length
+      - weight
+      - images
+      - unitMultiplier
+      - measurementUnit
+      - specifications
+      type: object
+      properties:
+        name:
+          type: string
+          description: ''
+          default: ''
+        eans:
+          type: array
+          items:
+            type: string
+          description: SKU reference code.
+          default:
+          - '12345678901213'
+          nullable: true
+        refId:
+          type: string
+          description: SKU reference code.
+          default: '1234'
+          nullable: true
+        height:
+          type: integer
+          format: int32
+          description: Height of the SKU.
+          default: 10
+        width:
+          type: integer
+          format: int32
+          description: Width of the SKU.
+          default: 20
+        length:
+          type: integer
+          format: int32
+          description: Length of the SKU.
+          default: 10
+        weight:
+          type: integer
+          format: int32
+          description: Weight of the SKU.
+          default: 100
+        images:
+          $ref: '#/components/schemas/Images'
+        unitMultiplier:
+          type: integer
+          format: int32
+          description: Unit multiplier for this SKU. If this information doesn't apply, you should use the default value 1.
+          default: 1
+        measurementUnit:
+          type: string
+          description: Measurement unit that should be used for this SKU. If this information doesn't apply, you should use the default value un.
+          default: un
+          nullable: true
+        specifications:
+          $ref: '#/components/schemas/Specifications'
+      example:
+        name: Sku exemplo
+        eans:
+        - '12345678901213'
+        refId: null
+        height: 1
+        width: 1
+        length: 1
+        weight: 1
+        images:
+        - imagem1.jpg: imageurl.example
+        unitMultiplier: 1
+        measurementUnit: un
+        specifications:
+          Embalagem: 3 kg
+    Images:
+      title: Images
+      required:
+      - imagem1.jpg
+      type: array
+      properties:
+        imagem1.jpg:
+          type: string
+          description: Array containing the URLs of the SKU's images.  The image must be sent through `https` protocol, otherwise it will not be rendered in VTEX Admin.
+          default: https://imageurl.example
+      example:
+      - imagem1.jpg: imageurl.example
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

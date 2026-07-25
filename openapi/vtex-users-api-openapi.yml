@@ -1,0 +1,323 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Users API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Users
+paths:
+  /api/license-manager/users/{userId}:
+    get:
+      tags:
+      - Users
+      summary: VTex Get user
+      description: "Allows you to get a user from the database, using the `userId` as the identifier. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Remove user** |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      operationId: GetUser
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: userId
+        in: path
+        description: ID from queried user.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: e845b52a40e24654a2c70766adb5762b
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    description: ID of the user.
+                    type: string
+                  name:
+                    description: Name of the user.
+                    type: string
+                  email:
+                    description: Email of the user.
+                    type: string
+              example:
+                id: e845b52a40e24654a2c70766adb5762b
+                name: Jane
+                email: jane@mail.com
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    description: Error message.
+                    type: string
+              example:
+                Message: Invalid UserId
+        '405':
+          description: Method Not Allowed - A null `userId` sends the request to a path that is not allowed.
+      deprecated: false
+    delete:
+      tags:
+      - Users
+      summary: VTex Delete user
+      description: "Allows you to delete a user from the database, using the `userId` as the identifier. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n| License Manager | Services access control | **Remove user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: userId
+        in: path
+        description: ID from queried user.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: e845b52a40e24654a2c70766adb5762b
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    description: Error message.
+                    type: string
+              example:
+                Message: Invalid UserId
+      deprecated: false
+  /api/license-manager/users:
+    post:
+      tags:
+      - Users
+      summary: VTex Create user
+      description: "Allows you to create a user by providing an email (mandatory) and name (optional). The email must be in a valid format. The success response will contain the generated `userId` for that user. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      operationId: CreateUser
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+            example:
+              name: Jane
+              email: jane@mail.com
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    description: ID of the user.
+                    type: string
+                  email:
+                    description: Email of the user.
+                    type: string
+                  name:
+                    description: Name of the user.
+                    type: string
+              example:
+                id: a404870467d24533a085a6b3c6a5a320
+                email: jane@mail.com
+                name: Jane
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    description: Error message.
+              example:
+                Message: Invalid email
+      deprecated: false
+  /api/license-manager/site/pvt/logins/list/paged:
+    get:
+      tags:
+      - Users
+      summary: VTex Get list of users
+      description: "Returns a list of registered users. The response is divided in pages. The query parameter `numItems` defines the number of items in each page, and consequently the amount of pages for the whole list. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Get paged users** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetListUsers
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: numItems
+        in: query
+        description: Number of items in the returned page.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 10
+      - name: pageNumber
+        in: query
+        description: Which page from the whole list will be returned.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 1
+      - name: sort
+        in: query
+        description: Chooses the field that the list will be sorted by.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: name
+      - name: sortType
+        in: query
+        description: Defines the sorting order. `ASC` is used for ascendant order. `DSC` is used for descendant order.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: ASC
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUsersResponse'
+              example:
+                items:
+                - id: a404870467d24533a085a6b3c6a5a320
+                  email: mynewuser@mydomain.com
+                  isAdmin: false
+                  isReliable: false
+                  isBlocked: false
+                  roles: []
+                  accountNames: []
+                  name: testuser
+                paging:
+                  page: 1
+                  perPage: 1
+                  total: 1
+                  pages: 1
+components:
+  schemas:
+    CreateUserRequest:
+      description: Request body for creating users.
+      required:
+      - email
+      type: object
+      properties:
+        name:
+          description: Name of the user.
+          type: string
+          example: John
+        email:
+          description: Email of the user.
+          type: string
+          example: john@mail.com
+    UserItems:
+      description: Object with information about an user.
+      type: object
+      properties:
+        id:
+          description: ID of the user.
+          type: string
+        email:
+          description: Email of the user.
+          type: string
+        isAdmin:
+          description: Defines if the user has administrative access (`true`) or not (`false`).
+          type: boolean
+        isReliable:
+          description: For internal use only.
+          type: boolean
+        isBlocked:
+          description: Defines if the user is blocked (`true`) or not (`false`).
+          type: boolean
+        roles:
+          type: array
+          description: Array of user roles.
+          items:
+            type: string
+            description: Role ID.
+        accountNames:
+          type: array
+          description: Array of account names.
+          items:
+            type: string
+            description: Account names.
+        name:
+          description: Name of the user.
+          type: string
+    ListUsersResponse:
+      description: Response body for listing all users.
+      type: object
+      properties:
+        items:
+          description: Array of user objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/UserItems'
+        paging:
+          $ref: '#/components/schemas/Paging'
+    Paging:
+      description: Paging object.
+      required:
+      - page
+      - perPage
+      - total
+      - pages
+      type: object
+      properties:
+        page:
+          description: Current page number.
+          type: integer
+        perPage:
+          description: Items per page.
+          type: integer
+        total:
+          description: Total of items.
+          type: integer
+        pages:
+          description: Total of pages.
+          type: integer
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

@@ -1,0 +1,449 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Task API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Task
+paths:
+  /tasks:
+    post:
+      tags:
+      - Task
+      summary: VTex Create Task
+      description: Creates a new task in VTEX DO.
+      operationId: NewTask
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTaskRequest'
+            example:
+              target:
+              - id: 633730670642-01
+                type: order
+                url: https://recorrenciaqa.vtexcommercebeta.com.br/admin/checkout/orders/633730670642-01
+              domain: oms
+              context: Marketplace
+              name: pricing
+              priority: Critical
+              surrogateKey: 505224-0
+              description: Ajudar na doc API para lancar no postman
+              dueDate: '2016-03-01'
+              assignee:
+                id: null
+                name: null
+                email: frederico.santos@vtex.com.br
+              followers:
+              - id: null
+                name: null
+                email: alan.dantas@vtex.com.br
+              parentTaskId: null
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+              example: {}
+      deprecated: false
+    get:
+      tags:
+      - Task
+      summary: VTex List tasks
+      description: "This endpoint allows you to filter tasks. You can choose between the following filtering options: \r\n\r\n- **Assignees:** using `assignee.email` and `status`. Example: `https://{{accountName}}.{{environment}}.com.br/api/do/tasks?assignee.email={{person@email.com}}&status={{open}}`. \r\n\r\n- **Targets:** using `targetId` and `status`. Example: `https://{{accountName}}.{{environment}}.com.br/api/do/tasks?target.id={{name}}&status={{open}}`. \r\n\r\n- **Paged tasks:** using `page`, `perPage` and `status`. Example: `https://{{accountName}}.{{environment}}.com.br/api/do/tasks?page={{1}}&perPage={{10}}&status=;{{-Closed}}`. \r\n\r\n- **Context:** using `context`, `page`, `perPage` and `status`. Example: `https://{{accountName}}.{{environment}}.com.br/api/do/tasks?context={{context}}&page={{1}}&perPage={{10}}&status={{-Closed}}`."
+      operationId: Listtasksbyassignee
+      parameters:
+      - name: assignee.email
+        in: query
+        description: If you wish to list tasks by assignee, insert the desired assignee's email and status.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{assigneeEmail}}'
+      - name: target.id
+        in: query
+        description: If you wish to list tasks by target, insert the desired `targetId` and `status`.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{targetId}}'
+      - name: context
+        in: query
+        description: If you wish to list tasks by context, insert the desired context, `page`, `perPage` and `status`.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{context}}'
+      - name: page
+        in: query
+        description: If you wish to list tasks by context, also insert the desired `page`.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{page}}'
+      - name: perPage
+        in: query
+        description: If you wish to list tasks by context, also insert the desired `perPage` value.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '{{desired number per page}}'
+      - name: status
+        in: query
+        description: If you wish to list tasks by context, also insert the desired `status`.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: open
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+              example: {}
+      deprecated: false
+  /tasks/{taskId}:
+    get:
+      tags:
+      - Task
+      summary: VTex Retrieve Task
+      description: Retrieves a given task, filtering by `taskId`.
+      operationId: GetTask
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: taskId
+        in: path
+        description: Task ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 123456abc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+              example: {}
+      deprecated: false
+    put:
+      tags:
+      - Task
+      summary: VTex Update Task
+      description: Updates a given task's status, for example, filtering by `taskId`.
+      operationId: EditTask
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: taskId
+        in: path
+        description: Task ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 123456abc
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditTaskRequest'
+            example:
+              status: InProgress
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+              example: {}
+      deprecated: false
+  /tasks/{taskId}/comments:
+    post:
+      tags:
+      - Task
+      summary: VTex Add Comment on a Task
+      description: Adds a comment to a given task, filtering by `taskId`.
+      operationId: AddComment
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: taskId
+        in: path
+        description: Task ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 123456abc
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCommentRequest'
+            example:
+              text: write your comment here
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+              example: {}
+      deprecated: false
+components:
+  schemas:
+    Assignee:
+      title: Assignee
+      required:
+      - id
+      - name
+      - email
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+      example:
+        id: null
+        name: null
+        email: frederico.santos@vtex.com.br
+    Follower:
+      title: Follower
+      required:
+      - id
+      - name
+      - email
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+      example:
+        id: null
+        name: null
+        email: alan.dantas@vtex.com.br
+    Target:
+      title: Target
+      required:
+      - id
+      - type
+      - url
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
+      example:
+        id: v964735bdev-01
+        type: order
+        url: https://basedevmkp.vtexcommercebeta.com.br/admin/checkout/#/orders/v964741bdev-01
+    NewTaskRequest:
+      title: NewTaskRequest
+      required:
+      - target
+      - domain
+      - context
+      - name
+      - priority
+      - surrogateKey
+      - description
+      - dueDate
+      - assignee
+      - followers
+      - parentTaskId
+      type: object
+      properties:
+        target:
+          type: array
+          items:
+            $ref: '#/components/schemas/Target'
+          description: ''
+        domain:
+          type: string
+        context:
+          type: string
+        name:
+          type: string
+        priority:
+          type: string
+        surrogateKey:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+        assignee:
+          $ref: '#/components/schemas/Assignee'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Follower'
+          description: ''
+        parentTaskId:
+          type: string
+          nullable: true
+      example:
+        target:
+        - id: 633730670642-01
+          type: order
+          url: https://recorrenciaqa.vtexcommercebeta.com.br/admin/checkout/orders/633730670642-01
+        domain: oms
+        context: Marketplace
+        name: pricing
+        priority: Critical
+        surrogateKey: 505224-0
+        description: Ajudar na doc API para lancar no postman
+        dueDate: '2016-03-01'
+        assignee:
+          id: null
+          name: null
+          email: frederico.santos@vtex.com.br
+        followers:
+        - id: null
+          name: null
+          email: alan.dantas@vtex.com.br
+        parentTaskId: null
+    AddCommentRequest:
+      title: AddCommentRequest
+      required:
+      - text
+      type: object
+      properties:
+        text:
+          type: string
+      example:
+        text: escreva seu comentário
+    EditTaskRequest:
+      title: EditTaskRequest
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+      example:
+        status: InProgress
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

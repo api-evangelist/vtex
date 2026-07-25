@@ -1,0 +1,507 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Specification API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Specification
+paths:
+  /api/catalog/pvt/specification/{specificationId}:
+    get:
+      tags:
+      - Specification
+      summary: VTex Get specification by specification ID
+      description: "Retrieves information of a product or SKU specification.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: specificationId
+        in: path
+        required: true
+        description: Specification's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 32
+                FieldTypeId: 6
+                CategoryId: 10
+                FieldGroupId: 11
+                Name: Peso
+                Description: Peso
+                Position: 1
+                IsFilter: false
+                IsRequired: true
+                IsOnProductDetails: false
+                IsStockKeepingUnit: true
+                IsWizard: false
+                IsActive: true
+                IsTopMenuLinkActive: false
+                IsSideMenuLinkActive: false
+                DefaultValue: null
+              schema:
+                type: object
+                required:
+                - Id
+                - FieldTypeId
+                - CategoryId
+                - FieldGroupId
+                - Name
+                - Description
+                - Position
+                - IsFilter
+                - IsRequired
+                - IsOnProductDetails
+                - IsStockKeepingUnit
+                - IsWizard
+                - IsActive
+                - IsTopMenuLinkActive
+                - IsSideMenuLinkActive
+                - DefaultValue
+                properties:
+                  Id:
+                    type: integer
+                    description: Created specification's ID.
+                  FieldTypeId:
+                    type: integer
+                    description: Field type can be `1 - Text`, `2 - Multi-Line Text`, `4 - Number`, `5 - Combo`, `6 - Radio`, `7 - Checkbox`, `8 - Indexed Text`, `9 - Indexed Multi-Line Text`.
+                    enum:
+                    - 1
+                    - 2
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+                  CategoryId:
+                    type: integer
+                    description: Specification category ID.
+                  FieldGroupId:
+                    type: integer
+                    description: Numerical ID of the specification group that contains the new specification.
+                  Name:
+                    type: string
+                    description: Specification name.  Limited to 100 characters.
+                  Description:
+                    type: string
+                    description: Specification description.
+                  Position:
+                    type: integer
+                    description: The current specification's position in comparison to the other specifications.
+                  IsFilter:
+                    type: boolean
+                    description: Defines if the specification can be used as a filter.
+                  IsRequired:
+                    type: boolean
+                    description: Defines if the specification is required or not.
+                  IsOnProductDetails:
+                    type: boolean
+                    description: Defines if the specification will be shown on the product screen in the specification area.
+                  IsStockKeepingUnit:
+                    type: boolean
+                    description: Defines if the specification is applied to a specific SKU.
+                  IsWizard:
+                    type: boolean
+                    description: Deprecated field.
+                    deprecated: true
+                  IsActive:
+                    type: boolean
+                    description: Defines if the specification is active or not.
+                  IsTopMenuLinkActive:
+                    type: boolean
+                    description: Defines if the specification is shown in the main menu of the site.
+                  IsSideMenuLinkActive:
+                    type: boolean
+                    description: Defines if the specification is shown in the side menu.
+                  DefaultValue:
+                    type: string
+                    description: Specification default value.
+                    nullable: true
+    put:
+      tags:
+      - Specification
+      summary: VTex Update specification
+      description: "Updates a product specification or SKU specification.\r\n\r\n>⚠️ It is not possible to edit `FieldTypeId`, `CategoryId`, `FieldGroupId` or `IsStockKeepingUnit` in this API call.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: specificationId
+        in: path
+        required: true
+        description: Specification's unique numerical identifier.
+        schema:
+          type: integer
+          example: 88
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - FieldTypeId
+              - CategoryId
+              - FieldGroupId
+              - Name
+              - Description
+              - Position
+              - IsFilter
+              - IsRequired
+              - IsOnProductDetails
+              - IsStockKeepingUnit
+              - IsWizard
+              - IsActive
+              - IsTopMenuLinkActive
+              - IsSideMenuLinkActive
+              - DefaultValue
+              properties:
+                FieldTypeId:
+                  type: integer
+                  description: Field type can be `1 - Text`, `2 - Multi-Line Text`, `4 - Number`, `5 - Combo`, `6 - Radio`, `7 - Checkbox`, `8 - Indexed Text`, `9 - Indexed Multi-Line Text`. This information is not editable.
+                  example: 1
+                  enum:
+                  - 1
+                  - 2
+                  - 4
+                  - 5
+                  - 6
+                  - 7
+                  - 8
+                  - 9
+                CategoryId:
+                  type: integer
+                  description: Specification category ID. This information is not editable.
+                  example: 0
+                FieldGroupId:
+                  type: integer
+                  description: Numerical ID of the specification group that contains the new specification. This information is not editable.
+                  example: 0
+                Name:
+                  type: string
+                  description: Specification name. Limited to 100 characters.
+                  example: Material
+                Description:
+                  type: string
+                  description: Specification description.
+                  example: Composition of the product.
+                Position:
+                  type: integer
+                  description: The current specification's position in comparison to the other specifications.
+                  example: 1
+                IsFilter:
+                  type: boolean
+                  description: Defines if the specification can be used as a filter.
+                  example: false
+                IsRequired:
+                  type: boolean
+                  description: Defines if the specification is required or not.
+                  example: false
+                IsOnProductDetails:
+                  type: boolean
+                  description: Defines if the specification will be  shown on the product screen in the specification area.
+                  example: false
+                IsStockKeepingUnit:
+                  type: boolean
+                  description: Defines if the specification is applied to a specific SKU. This information is not editable.
+                  example: false
+                IsWizard:
+                  type: boolean
+                  description: Deprecated field.
+                  example: false
+                  deprecated: true
+                IsActive:
+                  type: boolean
+                  description: Defines if the specification is active or not.
+                  example: false
+                IsTopMenuLinkActive:
+                  type: boolean
+                  description: Defines if the specification is shown in the main menu of the site.
+                  example: false
+                IsSideMenuLinkActive:
+                  type: boolean
+                  description: Defines if the specification is shown in the side menu.
+                  example: false
+                DefaultValue:
+                  type: string
+                  description: Specification default value.
+                  example: Leather
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 88
+                FieldTypeId: 1
+                CategoryId: 4
+                FieldGroupId: 20
+                Name: Material
+                Description: Composition of the product.
+                Position: 1
+                IsFilter: true
+                IsRequired: true
+                IsOnProductDetails: false
+                IsStockKeepingUnit: false
+                IsWizard: false
+                IsActive: true
+                IsTopMenuLinkActive: false
+                IsSideMenuLinkActive: true
+                DefaultValue: Leather
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Specification ID.
+                  FieldTypeId:
+                    type: integer
+                    description: Field type ID can be `1 - Text`, `2 - Multi-Line Text`, `4 - Number`, `5 - Combo`, `6 - Radio`, `7 - Checkbox`, `8 - Indexed Text`, `9 - Indexed Multi-Line Text`.
+                  CategoryId:
+                    type: integer
+                    description: Category ID associated with this specification.
+                  FieldGroupId:
+                    type: integer
+                    description: ID of the group of specifications that contains the new specification.
+                  Name:
+                    type: string
+                    description: Specification name. Limited to 100 characters.
+                  Description:
+                    type: string
+                    deprecated: true
+                    nullable: true
+                  Position:
+                    type: integer
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - This position number is used in ordering the specifications both in the navigation menu and in the specification listing on the product page."
+                  IsFilter:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To allow the specification to be used as a facet (filter) on the search navigation bar."
+                  IsRequired:
+                    type: boolean
+                    description: Makes the specification mandatory (`true`) or optional (`false`).
+                  IsOnProductDetails:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal -If specification is visible on the product page."
+                  IsStockKeepingUnit:
+                    type: boolean
+                    description: If `true`, it will be added as a SKU specification. If `false`, it will be added as a product specification field.
+                  IsWizard:
+                    type: boolean
+                    deprecated: true
+                    description: Deprecated field.
+                    nullable: true
+                  IsActive:
+                    type: boolean
+                    description: Enable (`true`) or disable (`false`) specification.
+                  IsTopMenuLinkActive:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To make the specification visible in the store's upper menu."
+                  IsSideMenuLinkActive:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To make the specification field clickable in the search navigation bar."
+                  DefaultValue:
+                    type: string
+                    description: Specification default value.
+  /api/catalog/pvt/specification:
+    post:
+      tags:
+      - Specification
+      summary: VTex Create specification
+      description: "Creates a new product or SKU specification.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - FieldTypeId
+              - FieldGroupId
+              - Name
+              properties:
+                FieldTypeId:
+                  type: integer
+                  description: Field type ID can be `1 - Text`, `2 - Multi-Line Text`, `4 - Number`, `5 - Combo`, `6 - Radio`, `7 - Checkbox`, `8 - Indexed Text`, `9 - Indexed Multi-Line Text`.
+                  example: 1
+                  enum:
+                  - 1
+                  - 2
+                  - 4
+                  - 5
+                  - 6
+                  - 7
+                  - 8
+                  - 9
+                CategoryId:
+                  type: integer
+                  description: Category ID associated with this specification.
+                  example: 1
+                FieldGroupId:
+                  type: integer
+                  description: ID of the group of specifications that contains the new specification.
+                  example: 22
+                Name:
+                  type: string
+                  description: Specification name. Limited to 100 characters.
+                  example: Material
+                Description:
+                  type: string
+                  deprecated: true
+                  nullable: true
+                  example: Composition of the product.
+                Position:
+                  type: integer
+                  description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - This position number is used in ordering the specifications both in the navigation menu and in the specification listing on the product page."
+                  example: 1
+                IsFilter:
+                  type: boolean
+                  description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To allow the specification to be used as a facet (filter) on the search navigation bar."
+                  example: false
+                IsRequired:
+                  type: boolean
+                  description: Makes the specification mandatory (`true`) or optional (`false`).
+                  example: false
+                IsOnProductDetails:
+                  type: boolean
+                  description: "Store Framework - Deprecated.\r\nLegacy CMS Portal -If specification is visible on the product page."
+                  example: true
+                IsStockKeepingUnit:
+                  type: boolean
+                  description: If `true`, it will be added as a SKU specification. If `false`, it will be added as a product specification field.
+                  example: false
+                IsWizard:
+                  type: boolean
+                  deprecated: true
+                  description: Deprecated field.
+                  example: null
+                  nullable: true
+                IsActive:
+                  type: boolean
+                  description: Enable (`true`) or disable (`false`) specification.
+                  example: true
+                IsTopMenuLinkActive:
+                  type: boolean
+                  description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To make the specification visible in the store's upper menu."
+                  example: false
+                IsSideMenuLinkActive:
+                  type: boolean
+                  description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To make the specification field clickable in the search navigation bar."
+                  example: false
+                DefaultValue:
+                  type: string
+                  description: Specification default value.
+                  example: Cotton
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 88
+                FieldTypeId: 1
+                CategoryId: 4
+                FieldGroupId: 20
+                Name: Material
+                Description: Composition of the product.
+                Position: 1
+                IsFilter: true
+                IsRequired: true
+                IsOnProductDetails: false
+                IsStockKeepingUnit: false
+                IsWizard: false
+                IsActive: true
+                IsTopMenuLinkActive: false
+                IsSideMenuLinkActive: true
+                DefaultValue: Cotton
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Specification ID.
+                  FieldTypeId:
+                    type: integer
+                    description: Field type ID can be `1 - Text`, `2 - Multi-Line Text`, `4 - Number`, `5 - Combo`, `6 - Radio`, `7 - Checkbox`, `8 - Indexed Text`, `9 - Indexed Multi-Line Text`.
+                  CategoryId:
+                    type: integer
+                    description: Category ID associated with this specification.
+                  FieldGroupId:
+                    type: integer
+                    description: ID of the group of specifications that contains the new specification.
+                  Name:
+                    type: string
+                    description: Specification name. Limited to 100 characters.
+                  Description:
+                    type: string
+                    deprecated: true
+                    nullable: true
+                  Position:
+                    type: integer
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - This position number is used in ordering the specifications both in the navigation menu and in the specification listing on the product page."
+                  IsFilter:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To allow the specification to be used as a facet (filter) on the search navigation bar."
+                  IsRequired:
+                    type: boolean
+                    description: Makes the specification mandatory (`true`) or optional (`false`).
+                  IsOnProductDetails:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal -If specification is visible on the product page."
+                  IsStockKeepingUnit:
+                    type: boolean
+                    description: If `true`, it will be added as a SKU specification. If `false`, it will be added as a product specification field.
+                  IsWizard:
+                    type: boolean
+                    deprecated: true
+                    nullable: true
+                  IsActive:
+                    type: boolean
+                    description: Enable (`true`) or disable (`false`) specification.
+                  IsTopMenuLinkActive:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To make the specification visible in the store's upper menu."
+                  IsSideMenuLinkActive:
+                    type: boolean
+                    description: "Store Framework - Deprecated.\r\nLegacy CMS Portal - To make the specification field clickable in the search navigation bar."
+                  DefaultValue:
+                    type: string
+                    description: Specification default value.
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

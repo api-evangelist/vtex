@@ -1,0 +1,485 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Price Tables API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Price Tables
+paths:
+  /pricing/pipeline/catalog/{priceTableId}:
+    get:
+      tags:
+      - Price Tables
+      summary: VTex Get rules for a price table
+      description: "Retrieves the rules of a specific price table.\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Getrulesforapricetable
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: priceTableId
+        in: path
+        description: Price Table Name.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: b2c
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                tradePolicyId: b2c
+                rules:
+                - id: 0
+                  context:
+                    categories: {}
+                    brands:
+                      '2000009': Whiskas
+                    stockStatuses: null
+                    internalCategories: null
+                    markupRange: null
+                    dateRange: null
+                  percentualModifier: 15
+              schema:
+                type: object
+                properties:
+                  tradePolicyId:
+                    type: string
+                    description: Trade Policy ID (Price Table ID).
+                  rules:
+                    type: array
+                    description: Array of rules for the price table.
+                    items:
+                      type: object
+                      description: Object containing a price table rule.
+                      properties:
+                        id:
+                          type: number
+                          description: Rule ID.
+                        context:
+                          type: object
+                          description: Rule Context is a group of filters to be checked at an item level when applying the rule. If all those filters check out, the rule will be applied for that item, unless there is a fixed price for that item.
+                          properties:
+                            categories:
+                              type: object
+                              description: 'Categories that an item should have to be eligible for the rule. Format: key: `categoryId`, value: `categoryName`.'
+                              additionalProperties:
+                                type: string
+                                description: Category ID.
+                                additionalProperties:
+                                  type: string
+                                  description: Category Name.
+                            brands:
+                              type: object
+                              description: 'Brands that an item should have to be eligible for the rule. Format: key: `brandId`, value: `brandName`.'
+                              additionalProperties:
+                                type: string
+                                description: Brand ID.
+                                additionalProperties:
+                                  type: string
+                                  description: Brand Name.
+                            stockStatuses:
+                              type: object
+                              description: Stock statuses.
+                              nullable: true
+                            internalCategories:
+                              type: object
+                              description: Internal Categories.
+                              nullable: true
+                            markupRange:
+                              type: object
+                              description: For an item to be eligible to the rule, it's markup should be in this Markup Range.
+                              nullable: true
+                              properties:
+                                from:
+                                  type: integer
+                                  description: Item markup should be greater than or equal to this value.
+                                to:
+                                  type: integer
+                                  description: Item markup should be less than or equal to this value.
+                            dateRange:
+                              type: object
+                              description: The rule will be active during this time range.
+                              nullable: true
+                              properties:
+                                from:
+                                  type: string
+                                  description: 'Date when rule will be activated. Date format: `RFC3339`.'
+                                to:
+                                  type: string
+                                  description: 'Date when the rule will be deactivated. Date format: `RFC3339`.'
+                  percentualModifier:
+                    type: integer
+                    description: Percentual modifier.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '429':
+          description: Too many requests
+      deprecated: false
+      servers:
+      - url: https://api.vtex.com/{account}/pricing
+        variables:
+          account:
+            default: DefaultParameterValue
+    put:
+      tags:
+      - Price Tables
+      summary: VTex Update rules for a price table
+      description: "Updates the rules of a specific price table, by deleting all the rules from the requested price table and creating new rules based on the content of the request.\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Modify prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: priceTableId
+        in: path
+        description: Price Table Name.
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - rules
+              example:
+                rules:
+                - id: 1
+                  context:
+                    categories:
+                      Category ID: '1'
+                      Category Name: Alimentação
+                    brands:
+                      Brand ID: '2000002'
+                      Brand Name: Whiskas
+                    markupRange:
+                      from: 0
+                      to: 200
+                    dateRange:
+                      from: '2022-01-23T19:00:00.000Z'
+                      to: '2023-10-26T00:00:00.000Z'
+                  percentualModifier: 0
+              properties:
+                rules:
+                  type: array
+                  description: Array of rules for the price table.
+                  items:
+                    type: object
+                    description: Object containing a price table rule.
+                    required:
+                    - id
+                    - context
+                    - percentualModifier
+                    properties:
+                      id:
+                        type: integer
+                        description: Rule ID.
+                        example: 0
+                      context:
+                        type: object
+                        description: Rule Context is a group of filters to be checked at an item level when applying the rule. If all those filters check out, the rule will be applied for that item, unless there is a fixed price for that item.
+                        required:
+                        - categories
+                        - brands
+                        - markupRange
+                        - dateRange
+                        properties:
+                          categories:
+                            type: object
+                            description: 'Categories that an item should have to be eligible for the rule. Format: key: `categoryId`, value: `categoryName`.'
+                            additionalProperties:
+                              type: string
+                              description: Category ID.
+                              example: '209'
+                              additionalProperties:
+                                type: string
+                                description: Category Name.
+                                example: Books
+                          brands:
+                            type: object
+                            description: 'Brands that an item should have to be eligible for the rule. Format: key: `brandId`, value: `brandName`.'
+                            additionalProperties:
+                              type: string
+                              description: Brand ID.
+                              example: '421'
+                              additionalProperties:
+                                type: string
+                                description: Brand Name.
+                                example: Goldman
+                          stockStatuses:
+                            type: object
+                            description: Stock statuses.
+                            nullable: true
+                            example: null
+                          internalCategories:
+                            type: object
+                            description: Internal Categories.
+                            nullable: true
+                            example: null
+                          markupRange:
+                            type: object
+                            description: For an item to be eligible to the rule, it's markup should be in this Markup Range.
+                            nullable: true
+                            example: null
+                            required:
+                            - from
+                            - to
+                            properties:
+                              from:
+                                type: integer
+                                description: Item markup should be greater than or equal to this value.
+                                example: 0
+                              to:
+                                type: integer
+                                description: Item markup should be less than or equal to this value.
+                                example: 200
+                          dateRange:
+                            type: object
+                            description: The rule will be active during this time range.
+                            required:
+                            - from
+                            - to
+                            properties:
+                              from:
+                                type: string
+                                description: 'Date when rule will be activated. Date format: `RFC3339`.'
+                                example: '2019-10-23T19:00:00.000Z'
+                              to:
+                                type: string
+                                description: 'Date when the rule will be deactivated. Date format: `RFC3339`.'
+                                example: '2019-10-26T00:00:00.000Z'
+                      percentualModifier:
+                        type: number
+                        description: Percentual modifier.
+                        example: 0
+  /pricing/pipeline/catalog:
+    get:
+      tags:
+      - Price Tables
+      summary: VTex Get all price tables and their rules
+      description: "Retrieves a list of all price tables and their rules.\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: getallpricetablesandrules
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - tradePolicyId: '2'
+                rules:
+                - id: 0
+                  context:
+                    categories: {}
+                    brands: {}
+                    stockStatuses: null
+                    internalCategories: null
+                    markupRange: null
+                    dateRange: null
+                  percentualModifier: 20
+              - tradePolicyId: b2c
+                rules:
+                - id: 0
+                  context:
+                    categories: {}
+                    brands:
+                      '2000009': Whiskas
+                    stockStatuses: null
+                    internalCategories: null
+                    markupRange: null
+                    dateRange: null
+                  percentualModifier: 15
+              schema:
+                type: array
+                items:
+                  type: object
+                  description: Information about the price table.
+                  properties:
+                    tradePolicyId:
+                      type: string
+                      description: Trade Policy ID (Price Table ID).
+                    rules:
+                      type: array
+                      description: Array of rules for the price table.
+                      items:
+                        type: object
+                        description: Object containing a price table rule.
+                        properties:
+                          id:
+                            type: number
+                            description: Rule ID.
+                          context:
+                            type: object
+                            description: Rule Context is a group of filters to be checked at an item level when applying the rule. If all those filters check out, the rule will be applied for that item, unless there is a fixed price for that item.
+                            properties:
+                              categories:
+                                type: object
+                                description: 'Categories that an item should have to be eligible for the rule. Format: key: `categoryId`, value: `categoryName`.'
+                                additionalProperties:
+                                  type: string
+                                  description: Category ID.
+                                  additionalProperties:
+                                    type: string
+                                    description: Category Name.
+                              brands:
+                                type: object
+                                description: 'Brands that an item should have to be eligible for the rule. Format: key: `brandId`, value: `brandName`.'
+                                additionalProperties:
+                                  type: string
+                                  description: Brand ID.
+                                  additionalProperties:
+                                    type: string
+                                    description: Brand Name.
+                              stockStatuses:
+                                type: object
+                                description: Stock statuses.
+                                nullable: true
+                              internalCategories:
+                                type: object
+                                description: Internal Categories.
+                                nullable: true
+                              markupRange:
+                                type: object
+                                description: For an item to be eligible to the rule, it's markup should be in this Markup Range.
+                                nullable: true
+                                properties:
+                                  from:
+                                    type: integer
+                                    description: Item markup should be greater than or equal to this value.
+                                  to:
+                                    type: integer
+                                    description: Item markup should be less than or equal to this value.
+                              dateRange:
+                                type: object
+                                description: The rule will be active during this time range.
+                                nullable: true
+                                properties:
+                                  from:
+                                    type: string
+                                    description: 'Date when rule will be activated. Date format: `RFC3339`.'
+                                  to:
+                                    type: string
+                                    description: 'Date when the rule will be deactivated. Date format: `RFC3339`.'
+                    percentualModifier:
+                      type: integer
+                      description: Percentual modifier.
+      deprecated: false
+      servers:
+      - url: https://api.vtex.com/{account}/pricing
+        variables:
+          account:
+            default: DefaultParameterValue
+  /pricing/tables:
+    get:
+      tags:
+      - Price Tables
+      summary: VTex List price tables
+      description: "Retrieves a list of all price tables.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Listpricetables
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - '1'
+              - '2'
+              - '3'
+              - b2c
+              - b2b
+              - gold
+              schema:
+                type: array
+                description: Array of price tables.
+                items:
+                  type: string
+                  description: Price table name.
+      deprecated: false
+      servers:
+      - url: https://api.vtex.com/{account}/pricing
+        variables:
+          account:
+            default: DefaultParameterValue
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

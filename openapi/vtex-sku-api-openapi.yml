@@ -1,0 +1,2662 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account SKU API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: SKU
+paths:
+  /api/catalog-seller-portal/skus/_search:
+    get:
+      tags:
+      - SKU
+      summary: VTex Search for SKU
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about an SKU taking into consideration the defined search criteria. It is mandatory to use at least one query parameter.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SearchSKU
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: from
+        in: query
+        description: The first page of the interval of the product list.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '1'
+      - name: to
+        in: query
+        description: The last page of the interval of the product list.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '50'
+      - name: id
+        in: query
+        description: SKU unique idenfier number.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 1
+      - name: externalid
+        in: query
+        description: SKU reference unique identifier number in the store.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 123456789
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                - id: '2'
+                  productId: '2'
+                  externalId: '1909621862'
+                _metadata:
+                  total: 1
+                  from: 1
+                  to: 15
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: List with information about the SKU.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: SKU unique identifier number.
+                        productId:
+                          type: string
+                          description: Product unique identifier number.
+                        externalId:
+                          type: string
+                          description: Unique identifier number of the association of the SKU with a Franchise Account.
+                  _metadata:
+                    type: object
+                    description: Information about the organization and exhibition of the SKU list.
+                    properties:
+                      total:
+                        type: integer
+                        description: Total of SKUs on the list.
+                      from:
+                        type: integer
+                        description: The first page of the interval of the SKU list.
+                      to:
+                        type: integer
+                        description: The last page of the interval of the SKU list.
+  /api/catalog-seller-portal/skus/ids:
+    get:
+      tags:
+      - SKU
+      summary: VTex Get List of SKUs
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about all SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: ListSKU
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: from
+        in: query
+        description: The first page of the interval of the product list.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '1'
+      - name: to
+        in: query
+        description: The last page of the interval of the product list.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '50'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                - '1'
+                - '2'
+                _metadata:
+                  total: 2
+                  from: 1
+                  to: 5
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: List with information about the SKU.
+                    items:
+                      type: string
+                      description: SKU unique identifier number.
+                  _metadata:
+                    type: object
+                    description: Information about the organization and exhibition of the SKU list.
+                    properties:
+                      total:
+                        type: integer
+                        description: Total of SKUs on the list.
+                      from:
+                        type: integer
+                        description: The first page of the interval of the SKU list.
+                      to:
+                        type: integer
+                        description: The last page of the interval of the SKU list.
+  /api/catalog_system/pvt/sku/stockkeepingunitids:
+    get:
+      tags:
+      - SKU
+      summary: VTex List all SKU IDs
+      description: "Retrieves the IDs of all SKUs in your store. Presents the results with page size and pagination.\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: ListallSKUIDs
+      parameters:
+      - name: page
+        in: query
+        description: Number of the page from where you need to retrieve SKU IDs.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 1
+      - name: pagesize
+        in: query
+        description: Size of the page from where you need retrieve SKU IDs. The maximum value is `1000`.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 25
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array composed by SKU IDs, in the search context.
+                items:
+                  type: integer
+                  format: int32
+                  description: SKU ID.
+              example:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+              - 6
+              - 7
+              - 8
+              - 9
+              - 10
+      deprecated: false
+  /api/catalog_system/pvt/sku/stockkeepingunitbyid/{skuId}:
+    get:
+      tags:
+      - SKU
+      summary: VTex Get SKU and context
+      description: "Retrieves context of an SKU.\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SkuContext
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: skuId
+        in: path
+        description: SKU's unique identifier number.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 2001773
+      - name: sc
+        in: query
+        description: Trade policy's unique identifier number.
+        required: false
+        style: form
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSKUandContext'
+              example:
+                Id: 2001773
+                ProductId: 2001426
+                NameComplete: Tabela de Basquete
+                ComplementName: ''
+                ProductName: Tabela de Basquete
+                ProductDescription: Tabela de Basquete
+                SkuName: Tabela de Basquete
+                ProductRefId: 0987
+                TaxCode: ''
+                IsActive: true
+                IsTransported: true
+                IsInventoried: true
+                IsGiftCardRecharge: false
+                ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952-55-55/7508800GG.jpg
+                DetailUrl: /tabela-de-basquete/p
+                CSCIdentification: null
+                BrandId: '2000018'
+                BrandName: MARCA ARGOLO TESTE
+                IsBrandActive: true
+                Dimension:
+                  cubicweight: 81.6833
+                  height: 65
+                  length: 58
+                  weight: 10000
+                  width: 130
+                RealDimension:
+                  realCubicWeight: 274.1375
+                  realHeight: 241
+                  realLength: 65
+                  realWeight: 9800
+                  realWidth: 105
+                ManufacturerCode: ''
+                IsKit: false
+                KitItems: []
+                Services: []
+                Categories: []
+                CategoriesFullPath:
+                - /1/10/
+                - /1/
+                - /20/
+                Attachments:
+                - Id: 3
+                  Name: Mensagem
+                  Keys:
+                  - nome;20
+                  - foto;40
+                  Fields:
+                  - FieldName: nome
+                    MaxCaracters: '20'
+                    DomainValues: Adalberto,Pedro,João
+                  - FieldName: foto
+                    MaxCaracters: '40'
+                    DomainValues: null
+                  IsActive: true
+                  IsRequired: false
+                Collections: []
+                SkuSellers:
+                - SellerId: '1'
+                  StockKeepingUnitId: 2001773
+                  SellerStockKeepingUnitId: '2001773'
+                  IsActive: true
+                  FreightCommissionPercentage: 0
+                  ProductCommissionPercentage: 0
+                SalesChannels:
+                - 1
+                - 2
+                - 3
+                - 10
+                Images:
+                - ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
+                  ImageName: ''
+                  FileId: 168952
+                - ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168953/7508800_1GG.jpg
+                  ImageName: ''
+                  FileId: 168953
+                - ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168954/7508800_2GG.jpg
+                  ImageName: ''
+                  FileId: 168954
+                Videos:
+                - www.google.com
+                SkuSpecifications:
+                - FieldId: 102
+                  FieldName: Cor
+                  FieldValueIds:
+                  - 266
+                  FieldValues:
+                  - Padrão
+                  IsFilter: false
+                  FieldGroupId: 11
+                  FieldGroupName: Especificações
+                ProductSpecifications:
+                - FieldId: 7
+                  FieldName: Faixa Etária
+                  FieldValueIds:
+                  - 58
+                  - 56
+                  - 55
+                  - 52
+                  FieldValues:
+                  - 5 a 6 anos
+                  - 7 a 8 anos
+                  - 9 a 10 anos
+                  - Acima de 10 anos
+                  IsFilter: true
+                  FieldGroupId: 17
+                  FieldGroupName: NewGroupName 2
+                - FieldId: 23
+                  FieldName: Fabricante
+                  FieldValueIds: []
+                  FieldValues:
+                  - Xalingo
+                  IsFilter: false
+                  FieldGroupId: 17
+                  FieldGroupName: NewGroupName 2
+                ProductClustersIds: 176,187,192,194,211,217,235,242
+                PositionsInClusters:
+                  '151': 3
+                  '152': 0
+                  '158': 1
+                ProductClusterNames:
+                  '151': asdfghj
+                  '152': George
+                  '158': Coleção halloween
+                ProductClusterHighlights:
+                  '151': asdfghj
+                  '152': George
+                ProductCategoryIds: /59/
+                IsDirectCategoryActive: false
+                ProductGlobalCategoryId: null
+                ProductCategories:
+                  '59': Brinquedos
+                CommercialConditionId: 1
+                RewardValue: 100.0
+                AlternateIds:
+                  Ean: '8781'
+                  RefId: '878181'
+                AlternateIdValues:
+                - '8781'
+                - '878181'
+                EstimatedDateArrival: null
+                MeasurementUnit: un
+                UnitMultiplier: 2.0
+                InformationSource: Indexer
+                ModalType: null
+                KeyWords: basquete, tabela
+                ReleaseDate: '2020-01-06T00:00:00'
+                ProductIsVisible: true
+                ShowIfNotAvailable: true
+                IsProductActive: true
+                ProductFinalScore: 0
+      deprecated: false
+  /api/catalog/pvt/stockkeepingunit:
+    get:
+      tags:
+      - SKU
+      summary: VTex Get SKU by RefId
+      description: "Retrieves information about a specific SKU by its `RefId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: RefId
+        in: query
+        required: true
+        description: SKU reference ID.
+        schema:
+          type: string
+          example: '1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 1
+                ProductId: 1
+                IsActive: true
+                Name: Royal Canin Feline Urinary 500g
+                RefId: '0001'
+                PackagedHeight: 6.0
+                PackagedLength: 24.0
+                PackagedWidth: 14.0
+                PackagedWeightKg: 550.0
+                Height: 0.0
+                Length: 0.0
+                Width: 0.0
+                WeightKg: 0.0
+                CubicWeight: 1.0
+                IsKit: false
+                CreationDate: '2020-03-12T15:42:00'
+                RewardValue: 0.0
+                EstimatedDateArrival: null
+                ManufacturerCode: ''
+                CommercialConditionId: 1
+                MeasurementUnit: un
+                UnitMultiplier: 1.0
+                ModalType: null
+                KitItensSellApart: false
+                Videos: []
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: SKU unique identifier.
+                  ProductId:
+                    type: integer
+                    description: ID of the product associated with this SKU.
+                  IsActive:
+                    type: boolean
+                    description: Defines if the SKU is active (`true`) or not (`false`).
+                  ActivateIfPossible:
+                    type: boolean
+                    description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
+                  Name:
+                    type: string
+                    description: 'SKU name, meaning the variation of the previously added product. For example: **Product** - _Fridge_, **SKU** - _110V_.'
+                  RefId:
+                    type: string
+                    description: Reference code used internally for organizational purposes. Must be unique. Required only if `Ean` is not informed, but can be used alongside `Ean` as well.
+                  Ean:
+                    type: string
+                    description: EAN code. Required only if `RefId` is not informed, but can be used alongside `RefId` as well.
+                  PackagedHeight:
+                    type: number
+                    description: Height used for shipping calculation.
+                  PackagedLength:
+                    type: number
+                    description: Length used for shipping calculation.
+                  PackagedWidth:
+                    type: number
+                    description: Width used for shipping calculation.
+                  PackagedWeightKg:
+                    type: integer
+                    description: Weight used for shipping calculation, in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  Height:
+                    type: number
+                    description: SKU real height.
+                  Length:
+                    type: number
+                    description: SKU real length.
+                  Width:
+                    type: number
+                    description: SKU real width.
+                  WeightKg:
+                    type: number
+                    description: Weight of the SKU in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  CubicWeight:
+                    type: number
+                    description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+                  IsKit:
+                    type: boolean
+                    description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+                  CreationDate:
+                    type: string
+                    description: Date and time of the SKU's creation.
+                  RewardValue:
+                    type: number
+                    description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+                  EstimatedDateArrival:
+                    type: string
+                    description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
+                    nullable: true
+                  ManufacturerCode:
+                    type: string
+                    description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+                  CommercialConditionId:
+                    type: integer
+                    description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+                    default: 1
+                  MeasurementUnit:
+                    type: string
+                    description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+                  UnitMultiplier:
+                    type: number
+                    description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+                  ModalType:
+                    type: string
+                    nullable: true
+                    description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+                  KitItensSellApart:
+                    type: boolean
+                    description: Defines if kit components can be sold apart.
+                  Videos:
+                    type: array
+                    description: Videos URLs.
+                    items:
+                      type: string
+                      description: Video URL.
+    post:
+      tags:
+      - SKU
+      summary: VTex Create SKU
+      description: "Creates a new SKU.\r\n\r\nIf there is a need to create a new SKU with a specific custom ID, specify the `Id` (integer) in the request. Otherwise, VTEX will generate the ID automatically.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - ProductId
+              - Name
+              - PackagedHeight
+              - PackagedLength
+              - PackagedWidth
+              - PackagedWeightKg
+              properties:
+                Id:
+                  type: integer
+                  description: SKU unique identifier. If not informed, it will be automatically generated by VTEX.
+                  example: 1
+                ProductId:
+                  type: integer
+                  description: ID of the product associated with this SKU.
+                  example: 42
+                IsActive:
+                  type: boolean
+                  description: Defines if the SKU is active (`true`) or not (`false`). During SKU creation, do not set this field as `true` or you will receive a `400 Bad Request` error. You should activate the SKU afterwards, as explained in [Activating an SKU](https://developers.vtex.com/docs/guides/skus#activating-an-sku).
+                  example: false
+                ActivateIfPossible:
+                  type: boolean
+                  description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component. We recommend setting it to `true`, unless you plan to have an internal workflow to manually activate SKUs.
+                  example: true
+                Name:
+                  type: string
+                  description: 'SKU name, meaning the variation of the previously added product. For example: **Product** - _Fridge_, **SKU** - _110V_. Limited to 200 characters.'
+                  example: Size 10
+                RefId:
+                  type: string
+                  description: Reference code used internally for organizational purposes. Must be unique. Required only if `Ean` is not informed, but can be used alongside `Ean` as well.
+                  example: B096QW8Y8Z
+                Ean:
+                  type: string
+                  description: EAN code. Required only if `RefId` is not informed, but can be used alongside `RefId` as well.
+                  example: '8949461894984'
+                PackagedHeight:
+                  type: number
+                  description: Height used for shipping calculation.
+                  example: 10
+                PackagedLength:
+                  type: number
+                  description: Length used for shipping calculation.
+                  example: 10
+                PackagedWidth:
+                  type: number
+                  description: Width used for shipping calculation.
+                  example: 10
+                PackagedWeightKg:
+                  type: integer
+                  description: Weight used for shipping calculation, in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams. Do not fill in this field with `0` or `null`, because this might result in shipping issues.
+                  example: 10
+                Height:
+                  type: number
+                  description: SKU real height.
+                  example: 1.0
+                Length:
+                  type: number
+                  description: SKU real length.
+                  example: 1.0
+                Width:
+                  type: number
+                  description: SKU real width.
+                  example: 1.0
+                WeightKg:
+                  type: number
+                  description: Weight of the SKU in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  example: 1.0
+                CubicWeight:
+                  type: number
+                  description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+                  example: 0.1667
+                IsKit:
+                  type: boolean
+                  description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+                  example: false
+                CreationDate:
+                  type: string
+                  description: Date and time of the SKU's creation.
+                  example: '2020-01-25T15:51:29.2614605'
+                RewardValue:
+                  type: number
+                  description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+                  example: 1.0
+                EstimatedDateArrival:
+                  type: string
+                  nullable: true
+                  description: To add the product as pre-sale, enter the product estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format. You must take into consideration both the launch date and the freight calculation for the arrival date.
+                  example: null
+                ManufacturerCode:
+                  type: string
+                  description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+                  example: '123'
+                CommercialConditionId:
+                  type: integer
+                  description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+                  default: 1
+                MeasurementUnit:
+                  type: string
+                  description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+                  example: un
+                UnitMultiplier:
+                  type: number
+                  description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+                  example: 2.0
+                ModalType:
+                  type: string
+                  nullable: true
+                  description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+                  example: null
+                KitItensSellApart:
+                  type: boolean
+                  description: Defines if kit components can be sold apart.
+                  example: false
+                Videos:
+                  type: array
+                  description: Videos URLs.
+                  items:
+                    type: string
+                    description: URL
+                    example: https://www.youtube.com/
+                  example:
+                  - https://www.youtube.com/
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 70
+                ProductId: 42
+                IsActive: false
+                ActivateIfPossible: false
+                Name: Size 10
+                RefId: B096QW8Y8Z
+                Ean: '8949461894984'
+                PackagedHeight: 10.0
+                PackagedLength: 10.0
+                PackagedWidth: 10.0
+                PackagedWeightKg: 10.0
+                Height: 1.0
+                Length: 1.0
+                Width: 1.0
+                WeightKg: 1.0
+                CubicWeight: 0.1667
+                IsKit: false
+                CreationDate: '2020-01-25T15:51:29.2614605'
+                RewardValue: 0.0
+                EstimatedDateArrival: null
+                ManufacturerCode: ''
+                CommercialConditionId: 1
+                MeasurementUnit: un
+                UnitMultiplier: 2.0
+                ModalType: null
+                KitItensSellApart: false
+                Videos:
+                - https://www.youtube.com/
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: SKU unique identifier.
+                  ProductId:
+                    type: integer
+                    description: ID of the product associated with this SKU.
+                  IsActive:
+                    type: boolean
+                    description: Defines if the SKU is active (`true`) or not (`false`).
+                  ActivateIfPossible:
+                    type: boolean
+                    description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
+                  Name:
+                    type: string
+                    description: 'SKU name, meaning the variation of the previously added product. For example: **Product** - _Fridge_, **SKU** - _110V_.'
+                  RefId:
+                    type: string
+                    description: Reference code used internally for organizational purposes. Must be unique. Required only if `Ean` is not informed, but can be used alongside `Ean` as well.
+                  Ean:
+                    type: string
+                    description: EAN code. Required only if `RefId` is not informed, but can be used alongside `RefId` as well.
+                  PackagedHeight:
+                    type: number
+                    description: Height used for shipping calculation.
+                  PackagedLength:
+                    type: number
+                    description: Length used for shipping calculation.
+                  PackagedWidth:
+                    type: number
+                    description: Width used for shipping calculation.
+                  PackagedWeightKg:
+                    type: integer
+                    description: Weight used for shipping calculation, in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  Height:
+                    type: number
+                    description: SKU real height.
+                  Length:
+                    type: number
+                    description: SKU real length.
+                  Width:
+                    type: number
+                    description: SKU real width.
+                  WeightKg:
+                    type: number
+                    description: Weight of the SKU in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  CubicWeight:
+                    type: number
+                    description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+                  IsKit:
+                    type: boolean
+                    description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+                  CreationDate:
+                    type: string
+                    description: Date and time of the SKU's creation.
+                  RewardValue:
+                    type: number
+                    description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+                  EstimatedDateArrival:
+                    type: string
+                    description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
+                    nullable: true
+                  ManufacturerCode:
+                    type: string
+                    description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+                  CommercialConditionId:
+                    type: integer
+                    description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+                    default: 1
+                  MeasurementUnit:
+                    type: string
+                    description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `'un'`.
+                  UnitMultiplier:
+                    type: number
+                    description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+                  ModalType:
+                    type: string
+                    nullable: true
+                    description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+                  KitItensSellApart:
+                    type: boolean
+                    description: Defines if kit components can be sold apart.
+                  Videos:
+                    type: array
+                    description: Videos URLs.
+                    items:
+                      type: string
+                      description: Video URL.
+  /api/catalog_system/pvt/sku/stockkeepingunitidbyrefid/{refId}:
+    get:
+      tags:
+      - SKU
+      summary: VTex Get SKU ID by reference ID
+      description: "Retrieves an SKU ID by the SKU's reference ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SkuIdbyRefId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: RefId
+        in: path
+        description: SKU reference ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '0001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                description: SKU ID.
+              example: '1'
+      deprecated: false
+  /api/catalog_system/pvt/sku/stockkeepingunitbyalternateId/{alternateId}:
+    get:
+      tags:
+      - SKU
+      summary: VTex Get SKU by alternate ID
+      description: "Retrieves an SKU by its alternate ID, which can be the EAN or the reference ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SkubyAlternateId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: alternateId
+        in: path
+        description: Product EAN or `RefId`.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSKUAltID'
+              example:
+                Id: 310118450
+                ProductId: 2
+                NameComplete: Caixa de Areia Azul Petmate sku test
+                ComplementName: ''
+                ProductName: Caixa de Areia Azul Petmate
+                ProductDescription: ''
+                ProductRefId: ''
+                TaxCode: ''
+                SkuName: sku test
+                IsActive: true
+                IsTransported: true
+                IsInventoried: true
+                IsGiftCardRecharge: false
+                ImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155451-55-55/caixa-areia-azul-petmate.jpg?v=637139451191670000
+                DetailUrl: /caixa-de-areia-azul-petmate/p
+                CSCIdentification: null
+                BrandId: '2000005'
+                BrandName: Petmate
+                IsBrandActive: true
+                Dimension:
+                  cubicweight: 0.2083
+                  height: 10.0
+                  length: 10.0
+                  weight: 10.0
+                  width: 10.0
+                RealDimension:
+                  realCubicWeight: 0.0
+                  realHeight: 0.0
+                  realLength: 0.0
+                  realWeight: 0.0
+                  realWidth: 0.0
+                ManufacturerCode: '123'
+                IsKit: false
+                KitItems: []
+                Services: []
+                Categories: []
+                CategoriesFullPath:
+                - /3/15/
+                - /3/
+                - /1/
+                Attachments: []
+                Collections: []
+                SkuSellers:
+                - SellerId: '1'
+                  StockKeepingUnitId: 310118450
+                  SellerStockKeepingUnitId: '310118450'
+                  IsActive: true
+                  FreightCommissionPercentage: 0.0
+                  ProductCommissionPercentage: 0.0
+                SalesChannels:
+                - 1
+                - 3
+                Images:
+                - ImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155451/caixa-areia-azul-petmate.jpg?v=637139451191670000
+                  ImageName: null
+                  FileId: 155451
+                Videos: []
+                SkuSpecifications: []
+                ProductSpecifications: []
+                ProductClustersIds: 151,158
+                PositionsInClusters:
+                  '151': 1
+                  '158': 2
+                ProductClusterNames:
+                  '151': asdfghj
+                  '158': Coleção halloween
+                ProductClusterHighlights:
+                  '151': asdfghj
+                ProductCategoryIds: /3/15/
+                IsDirectCategoryActive: true
+                ProductGlobalCategoryId: 5000
+                ProductCategories:
+                  '15': Caixa de Areia
+                  '3': Higiene
+                  '1': Alimentação
+                CommercialConditionId: 1
+                RewardValue: 0.0
+                AlternateIds:
+                  RefId: '1'
+                AlternateIdValues:
+                - '1'
+                EstimatedDateArrival: null
+                MeasurementUnit: un
+                UnitMultiplier: 1.0
+                InformationSource: null
+                ModalType: null
+                KeyWords: ''
+                ReleaseDate: '2020-01-06T00:00:00Z'
+                ProductIsVisible: true
+                ShowIfNotAvailable: true
+                IsProductActive: true
+                ProductFinalScore: 0
+      deprecated: false
+  /api/catalog_system/pvt/sku/stockkeepingunitByProductId/{productId}:
+    get:
+      tags:
+      - SKU
+      summary: VTex Get SKU list by product ID
+      description: "Retrieves a list with the SKUs related to a product by the product's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SkulistbyProductId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array with information of all SKUs with the same product ID.
+                items:
+                  $ref: '#/components/schemas/SkulistbyProductId'
+              example:
+              - IsPersisted: true
+                IsRemoved: false
+                Id: 2000035
+                ProductId: 2000024
+                IsActive: true
+                Name: 33 - Preto
+                Height: 8
+                RealHeight: null
+                Width: 15
+                RealWidth: null
+                Length: 8
+                RealLength: null
+                WeightKg: 340
+                RealWeightKg: null
+                ModalId: 1
+                RefId: ''
+                CubicWeight: 0.2
+                IsKit: false
+                IsDynamicKit: null
+                InternalNote: null
+                DateUpdated: '2015-11-06T19:10:00'
+                RewardValue: 0.01
+                CommercialConditionId: 1
+                EstimatedDateArrival: null
+                FlagKitItensSellApart: false
+                ManufacturerCode: ''
+                ReferenceStockKeepingUnitId: null
+                Position: 0
+                EditionSkuId: null
+                ApprovedAdminId: 123
+                EditionAdminId: 123
+                ActivateIfPossible: true
+                SupplierCode: null
+                MeasurementUnit: un
+                UnitMultiplier: 2.0
+                IsInventoried: null
+                IsTransported: null
+                IsGiftCardRecharge: null
+                ModalType: null
+      deprecated: false
+  /api/catalog_system/pub/sku/stockkeepingunitidsbyrefids:
+    post:
+      tags:
+      - SKU
+      summary: VTex Retrieve SKU ID list by reference ID list
+      description: "Given a list of reference IDs, this endpoint returns a list with the corresponding SKU IDs.\r\n\r\n>⚠️ The list of reference IDs in the request body cannot have repeated reference IDs, or the API will return an error 500.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SkuIdlistbyRefIdlist
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              description: Array with SKU reference IDs from which you need to retrieve the related SKU IDs. Do not repeat values in the array, or the API will return an error 500.
+              items:
+                type: string
+                description: SKU reference ID.
+                example: '799'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 'Object composed by a list of SKU IDs related to each reference ID list searched. Structure: "{RefId}": "{SkuId}".'
+                additionalProperties:
+                  type: string
+                  description: Reference ID.
+              example:
+                '123': '435'
+                D25133K-B2: '4351'
+                14-556: '3155'
+                DCF880L2-BR: '4500'
+        '500':
+          description: Internal Server Error
+      deprecated: false
+  /api/catalog/pvt/stockkeepingunit/{skuId}:
+    get:
+      tags:
+      - SKU
+      summary: VTex Get SKU
+      description: "Retrieves a specific SKU by its ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Sku
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: skuId
+        in: path
+        description: SKU unique identifier number.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 70
+                ProductId: 42
+                IsActive: false
+                ActivateIfPossible: false
+                Name: Size 10
+                RefId: B096QW8Y8Z
+                PackagedHeight: 10.0
+                PackagedLength: 10.0
+                PackagedWidth: 10.0
+                PackagedWeightKg: 10.0
+                Height: 1.0
+                Length: 1.0
+                Width: 1.0
+                WeightKg: 1.0
+                CubicWeight: 0.1667
+                IsKit: false
+                CreationDate: '2020-01-25T15:51:29.2614605'
+                RewardValue: 0.0
+                EstimatedDateArrival: null
+                ManufacturerCode: ''
+                CommercialConditionId: 1
+                MeasurementUnit: un
+                UnitMultiplier: 2.0
+                ModalType: null
+                KitItensSellApart: false
+                Videos:
+                - https://www.youtube.com/
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: SKU unique identifier.
+                  ProductId:
+                    type: integer
+                    description: ID of the product associated with this SKU.
+                  IsActive:
+                    type: boolean
+                    description: Shows if the SKU is active (`true`) or not (`false`).
+                  ActivateIfPossible:
+                    type: boolean
+                    description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
+                  Name:
+                    type: string
+                    description: 'SKU name, meaning the variation of the previously added product. For example: **Product** - _Fridge_, **SKU** - _110V_.'
+                  RefId:
+                    type: string
+                    description: Reference code used internally for organizational purposes. Must be unique. It is not required only if EAN code already exists. If not, this field must be provided.
+                  PackagedHeight:
+                    type: number
+                    description: Height used for shipping calculation.
+                  PackagedLength:
+                    type: number
+                    description: Length used for shipping calculation.
+                  PackagedWidth:
+                    type: number
+                    description: Width used for shipping calculation.
+                  PackagedWeightKg:
+                    type: integer
+                    description: Weight used for shipping calculation, in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  Height:
+                    type: number
+                    description: SKU real height.
+                  Length:
+                    type: number
+                    description: SKU real length.
+                  Width:
+                    type: number
+                    description: SKU real width.
+                  WeightKg:
+                    type: number
+                    description: Weight of the SKU in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  CubicWeight:
+                    type: number
+                    description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+                  IsKit:
+                    type: boolean
+                    description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+                  CreationDate:
+                    type: string
+                    description: Date and time of the SKU's creation.
+                  RewardValue:
+                    type: number
+                    description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+                  EstimatedDateArrival:
+                    type: string
+                    nullable: true
+                    description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
+                  ManufacturerCode:
+                    type: string
+                    description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+                  CommercialConditionId:
+                    type: integer
+                    description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+                  MeasurementUnit:
+                    type: string
+                    description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+                  UnitMultiplier:
+                    type: number
+                    description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+                  ModalType:
+                    type: string
+                    nullable: true
+                    description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+                  KitItensSellApart:
+                    type: boolean
+                    description: Defines if kit components can be sold apart.
+                  Videos:
+                    type: array
+                    description: Videos URLs.
+                    items:
+                      type: string
+                      description: Video URL.
+      deprecated: false
+    put:
+      tags:
+      - SKU
+      summary: VTex Update SKU
+      description: "Updates an existing SKU.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: skuId
+        in: path
+        required: true
+        description: SKU's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - ProductId
+              - Name
+              - PackagedHeight
+              - PackagedLength
+              - PackagedWidth
+              - PackagedWeightKg
+              - IsActive
+              properties:
+                ProductId:
+                  type: integer
+                  description: ID of the product associated with this SKU.
+                  example: 42
+                IsActive:
+                  type: boolean
+                  description: Although the inclusion of the IsActive field is optional, not including it will result in the field's value being interpreted as null, leading to the deactivation of the SKU. When updating the integration with the Catalog, send (`true`) If you wish to make sure the SKU is active. Otherwise send (`false`).
+                  example: false
+                ActivateIfPossible:
+                  type: boolean
+                  description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
+                  example: false
+                Name:
+                  type: string
+                  description: 'SKU name, meaning the variation of the previously added product. For example: **Product** - _Fridge_, **SKU** - _110V_.'
+                  example: Size 10
+                RefId:
+                  type: string
+                  description: Reference code used internally for organizational purposes. Must be unique. It is not required only if EAN code already exists. If not, this field must be provided.
+                  example: B096QW8Y8Z
+                PackagedHeight:
+                  type: number
+                  description: Height used for shipping calculation.
+                  example: 10
+                PackagedLength:
+                  type: number
+                  description: Length used for shipping calculation.
+                  example: 10
+                PackagedWidth:
+                  type: number
+                  description: Width used for shipping calculation.
+                  example: 10
+                PackagedWeightKg:
+                  type: integer
+                  description: Weight used for shipping calculation, in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams. Do not fill in this field with `0` or `null`, because this might result in shipping issues.
+                  example: 10
+                Height:
+                  type: number
+                  description: SKU real height.
+                  example: 1.0
+                Length:
+                  type: number
+                  description: SKU real length.
+                  example: 1.0
+                Width:
+                  type: number
+                  description: SKU real width.
+                  example: 1.0
+                WeightKg:
+                  type: number
+                  description: Weight of the SKU in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  example: 1.0
+                CubicWeight:
+                  type: number
+                  description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+                  example: 0.1667
+                IsKit:
+                  type: boolean
+                  description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+                  example: false
+                CreationDate:
+                  type: string
+                  description: Date and time of the SKU's creation.
+                  example: '2020-01-25T15:51:00'
+                RewardValue:
+                  type: number
+                  description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+                  example: 1.0
+                EstimatedDateArrival:
+                  type: string
+                  nullable: true
+                  description: To add the product as pre-sale, enter the product estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format. You must take into consideration both the launch date and the freight calculation for the arrival date.
+                  example: null
+                ManufacturerCode:
+                  type: string
+                  description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+                  example: '123'
+                CommercialConditionId:
+                  type: integer
+                  description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+                  example: 1
+                MeasurementUnit:
+                  type: string
+                  description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+                  example: un
+                UnitMultiplier:
+                  type: number
+                  description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+                  example: 2.0
+                ModalType:
+                  type: string
+                  nullable: true
+                  description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+                  example: null
+                KitItensSellApart:
+                  type: boolean
+                  description: Defines if kit components can be sold apart.
+                  example: false
+                Videos:
+                  type: array
+                  description: Videos URLs.
+                  items:
+                    type: string
+                    description: Video URL.
+                    example: https://www.youtube.com/
+                  example:
+                  - https://www.youtube.com/
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 70
+                ProductId: 42
+                IsActive: false
+                ActivateIfPossible: false
+                Name: Size 10
+                RefId: B096QW8Y8Z
+                PackagedHeight: 10.0
+                PackagedLength: 10.0
+                PackagedWidth: 10.0
+                PackagedWeightKg: 10.0
+                Height: 1.0
+                Length: 1.0
+                Width: 1.0
+                WeightKg: 1.0
+                CubicWeight: 0.1667
+                IsKit: false
+                CreationDate: '2020-01-25T15:51:29.2614605'
+                RewardValue: 0.0
+                EstimatedDateArrival: null
+                ManufacturerCode: ''
+                CommercialConditionId: 1
+                MeasurementUnit: un
+                UnitMultiplier: 2.0
+                ModalType: null
+                KitItensSellApart: false
+                Videos:
+                - https://www.youtube.com/
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: SKU unique identifier.
+                  ProductId:
+                    type: integer
+                    description: ID of the product associated with this SKU.
+                  IsActive:
+                    type: boolean
+                    description: Defines if the SKU is active (`true`) or not (`false`).
+                  ActivateIfPossible:
+                    type: boolean
+                    description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
+                  Name:
+                    type: string
+                    description: 'SKU name, meaning the variation of the previously added product. For example: **Product** - _Fridge_, **SKU** - _110V_.'
+                  RefId:
+                    type: string
+                    description: Reference code used internally for organizational purposes. Must be unique. It is not required only if EAN code already exists. If not, this field must be provided.
+                  PackagedHeight:
+                    type: number
+                    description: Height used for shipping calculation.
+                  PackagedLength:
+                    type: number
+                    description: Length used for shipping calculation.
+                  PackagedWidth:
+                    type: number
+                    description: Width used for shipping calculation.
+                  PackagedWeightKg:
+                    type: integer
+                    description: Weight used for shipping calculation, in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  Height:
+                    type: number
+                    description: SKU real height.
+                  Length:
+                    type: number
+                    description: SKU real length.
+                  Width:
+                    type: number
+                    description: SKU real width.
+                  WeightKg:
+                    type: number
+                    description: Weight of the SKU in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+                  CubicWeight:
+                    type: number
+                    description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+                  IsKit:
+                    type: boolean
+                    description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+                  CreationDate:
+                    type: string
+                    description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+                  RewardValue:
+                    type: number
+                    description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+                  EstimatedDateArrival:
+                    type: string
+                    description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
+                    nullable: true
+                  ManufacturerCode:
+                    type: string
+                    description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+                  CommercialConditionId:
+                    type: integer
+                    description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+                    default: 1
+                  MeasurementUnit:
+                    type: string
+                    description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+                  UnitMultiplier:
+                    type: number
+                    description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+                  ModalType:
+                    type: string
+                    nullable: true
+                    description: Links an unusual type of SKU that need special transportation, suach as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+                  KitItensSellApart:
+                    type: boolean
+                    description: Defines if kit components can be sold apart.
+                  Videos:
+                    type: array
+                    description: Videos URLs.
+                    items:
+                      type: string
+                      description: Video URL.
+components:
+  schemas:
+    SkuSpecification:
+      required:
+      - FieldId
+      - FieldName
+      - FieldValueIds
+      - FieldValues
+      type: object
+      description: Object containing related SKU specifications.
+      properties:
+        FieldId:
+          type: integer
+          format: int32
+          description: Specification field ID.
+        FieldName:
+          type: string
+          description: Specification field Name.
+        FieldValueIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Specification value ID.
+          description: Array with related specification values IDs.
+        FieldValues:
+          type: array
+          items:
+            type: string
+          description: Array with related specification values.
+      example:
+        FieldId: 102
+        FieldName: Cor
+        FieldValueIds:
+        - 266
+        FieldValues:
+        - Padrão
+    Image:
+      required:
+      - ImageUrl
+      - ImageName
+      - FileId
+      type: object
+      description: Object containing SKU images details.
+      properties:
+        ImageUrl:
+          type: string
+          description: Image URL.
+        ImageName:
+          type: string
+          description: Image label.
+          nullable: true
+        FileId:
+          type: integer
+          format: int32
+          description: SKU image ID.
+      example:
+        ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
+        ImageName: ''
+        FileId: 168952
+    SkuSeller:
+      required:
+      - SellerId
+      - StockKeepingUnitId
+      - SellerStockKeepingUnitId
+      - IsActive
+      - FreightCommissionPercentage
+      - ProductCommissionPercentage
+      type: object
+      description: Object containing related SKU sellers data.
+      properties:
+        SellerId:
+          type: string
+          description: SKU seller ID. This is the ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
+        StockKeepingUnitId:
+          type: integer
+          format: int32
+          description: SKU ID.
+        SellerStockKeepingUnitId:
+          type: string
+          description: SKU ID for the SKU seller.
+        IsActive:
+          type: boolean
+          description: Defines if the SKU is active.
+        FreightCommissionPercentage:
+          type: number
+          description: Registered value for Seller Freight Commission.
+        ProductCommissionPercentage:
+          type: number
+          description: Registered value for Seller product Commission.
+      example:
+        SellerId: '1'
+        StockKeepingUnitId: 2001773
+        SellerStockKeepingUnitId: '2001773'
+        IsActive: true
+        FreightCommissionPercentage: 0
+        ProductCommissionPercentage: 0
+    GetSKUandContext:
+      required:
+      - Id
+      - ProductId
+      - NameComplete
+      - ProductName
+      - ProductDescription
+      - SkuName
+      - IsActive
+      - IsTransported
+      - IsInventoried
+      - IsGiftCardRecharge
+      - ImageUrl
+      - DetailUrl
+      - CSCIdentification
+      - BrandId
+      - BrandName
+      - Dimension
+      - RealDimension
+      - ManufacturerCode
+      - IsKit
+      - KitItems
+      - Services
+      - Categories
+      - Attachments
+      - Collections
+      - SkuSellers
+      - SalesChannels
+      - Images
+      - SkuSpecifications
+      - ProductSpecifications
+      - ProductClustersIds
+      - ProductCategoryIds
+      - ProductGlobalCategoryId
+      - ProductCategories
+      - CommercialConditionId
+      - RewardValue
+      - AlternateIds
+      - AlternateIdValues
+      - EstimatedDateArrival
+      - MeasurementUnit
+      - UnitMultiplier
+      - InformationSource
+      - ModalType
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: SKU ID.
+        ProductId:
+          type: integer
+          format: int32
+          description: ID of the related product.
+        NameComplete:
+          type: string
+          description: Product Name and SKU Name concatenated.
+        ComplementName:
+          type: string
+          description: Product Complement Name.
+        ProductName:
+          type: string
+          description: Product Name.
+        ProductDescription:
+          type: string
+          description: Product Description. HTML is allowed.
+        ProductRefId:
+          type: string
+          description: Reference ID of the related product.
+        TaxCode:
+          type: string
+          description: SKU Tax Code.
+        SkuName:
+          type: string
+          description: SKU Name.
+        IsActive:
+          type: boolean
+          description: Defines if the SKU is active or not.
+        IsTransported:
+          type: boolean
+          description: Deprecated field.
+          nullable: true
+          deprecated: true
+        IsInventoried:
+          type: boolean
+          description: Deprecated field.
+          nullable: true
+          deprecated: true
+        IsGiftCardRecharge:
+          type: boolean
+          description: Defines if the purchase will generate a reward.
+        ImageUrl:
+          type: string
+          description: SKU image URL.
+        DetailUrl:
+          type: string
+          description: Product URL.
+        CSCIdentification:
+          type: string
+          nullable: true
+          description: SKU seller identification.
+        BrandId:
+          type: string
+          description: Product brand ID.
+        BrandName:
+          type: string
+          description: Product brand Name.
+        Dimension:
+          $ref: '#/components/schemas/Dimension'
+        RealDimension:
+          $ref: '#/components/schemas/RealDimension'
+        ManufacturerCode:
+          type: string
+          description: Product Supplier ID.
+        IsKit:
+          type: boolean
+          description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+        KitItems:
+          type: array
+          items:
+            type: string
+            description: SKU ID.
+          description: Array with SKU IDs of bundle components.
+        Services:
+          type: array
+          items:
+            type: string
+            description: Service ID.
+          description: Array with Service IDs that are related to the SKU.
+        Categories:
+          type: array
+          items:
+            type: string
+            description: Category ID.
+          description: Array with Categories from the related product.
+        Attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+          description: Array with Attachments ID that are related to the SKU.
+        Collections:
+          type: array
+          items:
+            type: string
+            description: Collection ID.
+          description: Array with Collection IDs that are related to the product.
+        SkuSellers:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuSeller'
+          description: Array with SKU sellers data.
+        SalesChannels:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Trade policy ID.
+          description: Array with the ID of all the trade policies that are related to the product.
+        Images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+          description: Array with SKU images.
+        SkuSpecifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuSpecification'
+          description: Array with related SKU specifications.
+        ProductSpecifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSpecification'
+          description: Array with related product specifications.
+        ProductClustersIds:
+          type: string
+          description: Product clusters IDs.
+        ProductCategoryIds:
+          type: string
+          description: Category hierarchy with category IDs.
+        ProductGlobalCategoryId:
+          type: integer
+          nullable: true
+          description: Global category ID.
+        ProductCategories:
+          type: object
+          description: 'Object containing product categories. Structure: "{CategoryID}": "{CategoryName}".'
+          additionalProperties:
+            type: string
+            description: Category ID.
+            additionalProperties:
+              type: string
+              description: Category name.
+        CommercialConditionId:
+          type: integer
+          format: int32
+          description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+          default: 1
+        RewardValue:
+          type: number
+          description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+        AlternateIds:
+          $ref: '#/components/schemas/AlternateIds'
+        AlternateIdValues:
+          type: array
+          items:
+            type: string
+            description: Alternative SKU ID.
+          description: Array with values of alternative SKU IDs.
+        EstimatedDateArrival:
+          type: string
+          nullable: true
+          description: To add the product as pre-sale, enter the product estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format. You must take into consideration both the launch date and the freight calculation for the arrival date.
+        MeasurementUnit:
+          type: string
+          description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+        UnitMultiplier:
+          type: number
+          description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+        InformationSource:
+          type: string
+          description: Information source.
+          nullable: true
+        ModalType:
+          type: string
+          nullable: true
+          description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+        KeyWords:
+          type: string
+          nullable: true
+          description: Keywords related to the product.
+        ReleaseDate:
+          type: string
+          nullable: true
+          description: Release date of the product.
+        ProductIsVisible:
+          type: boolean
+          description: Defines if the product is visible or not.
+        ShowIfNotAvailable:
+          type: boolean
+          description: Defines if the product will be shown if it is not available.
+        IsProductActive:
+          type: boolean
+          description: Defines if the product is active or not.
+        ProductFinalScore:
+          type: integer
+          description: Product final score.
+      example:
+        Id: 310118450
+        ProductId: 2
+        NameComplete: Caixa de Areia Azul Petmate sku test
+        ComplementName: ''
+        ProductName: Caixa de Areia Azul Petmate
+        ProductDescription: ''
+        ProductRefId: ''
+        TaxCode: ''
+        SkuName: sku test
+        IsActive: true
+        IsTransported: true
+        IsInventoried: true
+        IsGiftCardRecharge: false
+        ImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155451-55-55/caixa-areia-azul-petmate.jpg?v=637139451191670000
+        DetailUrl: /caixa-de-areia-azul-petmate/p
+        CSCIdentification: null
+        BrandId: '2000005'
+        BrandName: Petmate
+        IsBrandActive: true
+        Dimension:
+          cubicweight: 0.2083
+          height: 10.0
+          length: 10.0
+          weight: 10.0
+          width: 10.0
+        RealDimension:
+          realCubicWeight: 0.0
+          realHeight: 0.0
+          realLength: 0.0
+          realWeight: 0.0
+          realWidth: 0.0
+        ManufacturerCode: '123'
+        IsKit: false
+        KitItems: []
+        Services: []
+        Categories: []
+        CategoriesFullPath:
+        - /3/15/
+        - /3/
+        - /1/
+        Attachments: []
+        Collections: []
+        SkuSellers:
+        - SellerId: '1'
+          StockKeepingUnitId: 310118450
+          SellerStockKeepingUnitId: '310118450'
+          IsActive: true
+          FreightCommissionPercentage: 0.0
+          ProductCommissionPercentage: 0.0
+        SalesChannels:
+        - 1
+        - 3
+        Images:
+        - ImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155451/caixa-areia-azul-petmate.jpg?v=637139451191670000
+          ImageName: null
+          FileId: 155451
+        Videos: []
+        SkuSpecifications: []
+        ProductSpecifications: []
+        ProductClustersIds: 151,158
+        PositionsInClusters:
+          '151': 1
+          '158': 2
+        ProductClusterNames:
+          '151': asdfghj
+          '158': Coleção halloween
+        ProductClusterHighlights:
+          '151': asdfghj
+        ProductCategoryIds: /3/15/
+        IsDirectCategoryActive: true
+        ProductGlobalCategoryId: 5000
+        ProductCategories:
+          '15': Caixa de Areia
+          '3': Higiene
+          '1': Alimentação
+        CommercialConditionId: 1
+        RewardValue: 0.0
+        AlternateIds:
+          RefId: '1'
+        AlternateIdValues:
+        - '1'
+        EstimatedDateArrival: null
+        MeasurementUnit: un
+        UnitMultiplier: 1.0
+        InformationSource: null
+        ModalType: null
+        KeyWords: ''
+        ReleaseDate: '2020-01-06T00:00:00Z'
+        ProductIsVisible: true
+        ShowIfNotAvailable: true
+        IsProductActive: true
+        ProductFinalScore: 0
+    Field:
+      required:
+      - FieldName
+      - MaxCaracters
+      - DomainValues
+      type: object
+      properties:
+        FieldName:
+          type: string
+          description: Attachment field name.
+        MaxCaracters:
+          type: string
+          description: Maximum number of characters accepted in the attachment field.
+        DomainValues:
+          type: string
+          nullable: true
+          description: Allowed key values.
+      example:
+        FieldName: nome
+        MaxCaracters: '20'
+        DomainValues: Adalberto,Pedro,João
+    SkulistbyProductId:
+      type: object
+      properties:
+        IsPersisted:
+          type: boolean
+          description: Defines if the SKU is persisted.
+        IsRemoved:
+          type: boolean
+          deprecated: true
+          description: Defines if the SKU is removed.
+        Id:
+          type: integer
+          format: int32
+          description: SKU ID.
+        ProductId:
+          type: integer
+          format: int32
+          description: Product ID.
+        IsActive:
+          type: boolean
+          description: Defines if the SKU is active or not.
+        Name:
+          type: string
+          description: SKU name.
+        Height:
+          type: number
+          description: SKU height.
+        RealHeight:
+          type: number
+          nullable: true
+          description: Real SKU height.
+        Width:
+          type: number
+          description: SKU width.
+        RealWidth:
+          type: number
+          nullable: true
+          description: Real SKU width.
+        Length:
+          type: number
+          description: SKU length.
+        RealLength:
+          type: number
+          nullable: true
+          description: Real SKU length.
+        WeightKg:
+          type: number
+          nullable: true
+          description: Weight of the SKU in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+        RealWeightKg:
+          type: number
+          nullable: true
+          description: Real weight of the SKU in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+        ModalId:
+          type: integer
+          format: int32
+          description: Delivery method (modal type) ID.
+        RefId:
+          type: string
+          description: Product reference ID.
+        CubicWeight:
+          type: number
+          description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+        IsKit:
+          type: boolean
+          description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+        IsDynamicKit:
+          type: string
+          nullable: true
+          deprecated: true
+          description: Deprecated field.
+        InternalNote:
+          type: string
+          nullable: true
+          description: Internal note.
+        DateUpdated:
+          type: string
+          description: Date when the product was updated for the most recent time.
+        RewardValue:
+          type: number
+          nullable: true
+          description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+        CommercialConditionId:
+          type: integer
+          format: int32
+          description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+          default: 1
+        EstimatedDateArrival:
+          type: string
+          nullable: true
+          description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
+        FlagKitItensSellApart:
+          type: boolean
+          description: Defines if the SKU bundle items can be sold separately.
+        ManufacturerCode:
+          type: string
+          description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+        ReferenceStockKeepingUnitId:
+          type: string
+          nullable: true
+          description: SKU reference ID.
+        Position:
+          type: integer
+          format: int32
+          description: SKU position.
+        ActivateIfPossible:
+          type: boolean
+          description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
+        MeasurementUnit:
+          type: string
+          description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+        UnitMultiplier:
+          type: number
+          description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+        IsInventoried:
+          type: boolean
+          nullable: true
+          deprecated: true
+          description: Deprecated field.
+        IsTransported:
+          type: boolean
+          nullable: true
+          deprecated: true
+          description: Deprecated field.
+        IsGiftCardRecharge:
+          type: boolean
+          nullable: true
+          description: Defines if the purchase of the SKU will generate reward value for the customer.
+        ModalType:
+          type: string
+          nullable: true
+          description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+        isKitOptimized:
+          type: boolean
+          description: Defines if the SKU is an optimized bundle.
+      example:
+        IsPersisted: true
+        Id: 1
+        ProductId: 1
+        IsActive: true
+        Name: Ração Royal Canin Feline Urinary 500g
+        Height: 6.5
+        RealHeight: 2.2
+        Width: 14.0
+        RealWidth: 3.3
+        Length: 24.0
+        RealLength: 4.4
+        WeightKg: 550.0
+        RealWeightKg: 1.1
+        ModalId: 1
+        RefId: '0001'
+        CubicWeight: 1.0
+        IsKit: false
+        InternalNote: null
+        DateUpdated: '2021-10-29T18:25:00'
+        RewardValue: null
+        CommercialConditionId: 1
+        EstimatedDateArrival: null
+        FlagKitItensSellApart: false
+        ManufacturerCode: ''
+        ReferenceStockKeepingUnitId: null
+        Position: 1
+        ActivateIfPossible: true
+        MeasurementUnit: un
+        UnitMultiplier: 300.0
+        IsInventoried: true
+        IsTransported: true
+        IsGiftCardRecharge: false
+        ModalType: null
+        isKitOptimized: false
+    AlternateIds:
+      type: object
+      description: Array with alternate SKU IDs, such as EAN and `RefId`.
+      properties:
+        Ean:
+          type: string
+          description: SKU EAN.
+        RefId:
+          type: string
+          description: SKU reference ID.
+      example:
+        Ean: '8781'
+        RefId: '878181'
+    ProductSpecification:
+      required:
+      - FieldId
+      - FieldName
+      - FieldValueIds
+      - FieldValues
+      type: object
+      properties:
+        FieldId:
+          type: integer
+          format: int32
+          description: Specification field ID.
+        FieldName:
+          type: string
+          description: Specification name. Limited to 100 characters.
+        FieldValueIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Specification value ID.
+          description: Array with related specification values IDs.
+        FieldValues:
+          type: array
+          items:
+            type: string
+          description: Array with related specification values.
+      example:
+        FieldId: 7
+        FieldName: Faixa Etária
+        FieldValueIds:
+        - 58
+        - 56
+        - 55
+        - 52
+        FieldValues:
+        - 5 a 6 anos
+        - 7 a 8 anos
+        - 9 a 10 anos
+        - Acima de 10 anos
+    Attachment:
+      required:
+      - Id
+      - Name
+      - Keys
+      - Fields
+      - IsActive
+      - IsRequired
+      type: object
+      description: Object containing information about SKU attachments.
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: Attachment ID.
+        Name:
+          type: string
+          description: Attachment Name.
+        Keys:
+          type: array
+          items:
+            type: string
+          description: Attachment Keys.
+        Fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+          description: Array containing Attachment fields.
+        IsActive:
+          type: boolean
+          description: Defines if the Attachment is active or not.
+        IsRequired:
+          type: boolean
+          description: Defines if the Attachment is required or not.
+      example:
+        Id: 3
+        Name: Mensagem
+        Keys:
+        - nome;20
+        - foto;40
+        Fields:
+        - FieldName: nome
+          MaxCaracters: '20'
+          DomainValues: Adalberto,Pedro,João
+        - FieldName: foto
+          MaxCaracters: '40'
+          DomainValues: null
+        IsActive: true
+        IsRequired: false
+    GetSKUAltID:
+      required:
+      - Id
+      - ProductId
+      - NameComplete
+      - ProductName
+      - ProductDescription
+      - SkuName
+      - IsActive
+      - IsTransported
+      - IsInventoried
+      - IsGiftCardRecharge
+      - ImageUrl
+      - DetailUrl
+      - CSCIdentification
+      - BrandId
+      - BrandName
+      - Dimension
+      - RealDimension
+      - ManufacturerCode
+      - IsKit
+      - KitItems
+      - Services
+      - Categories
+      - Attachments
+      - Collections
+      - SkuSellers
+      - SalesChannels
+      - Images
+      - SkuSpecifications
+      - ProductSpecifications
+      - ProductClustersIds
+      - ProductCategoryIds
+      - ProductGlobalCategoryId
+      - ProductCategories
+      - CommercialConditionId
+      - RewardValue
+      - AlternateIds
+      - AlternateIdValues
+      - EstimatedDateArrival
+      - MeasurementUnit
+      - UnitMultiplier
+      - InformationSource
+      - ModalType
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: SKU ID.
+        ProductId:
+          type: integer
+          format: int32
+          description: Product ID.
+        NameComplete:
+          type: string
+          description: Product name and SKU name combined.
+        ComplementName:
+          type: string
+          description: Product complement name.
+        ProductName:
+          type: string
+          description: Product name.
+        ProductDescription:
+          type: string
+          description: Product description. HTML is allowed.
+        ProductRefId:
+          type: string
+          description: Product reference ID.
+        TaxCode:
+          type: string
+          description: SKU tax code.
+        SkuName:
+          type: string
+          description: SKU name.
+        IsActive:
+          type: boolean
+          description: Defines if the SKU is active or not.
+        IsTransported:
+          type: boolean
+          deprecated: true
+          description: Deprecated field.
+        IsInventoried:
+          type: boolean
+          deprecated: true
+          description: Deprecated field.
+        IsGiftCardRecharge:
+          type: boolean
+          description: Defines if the purchase of the SKU will generate reward value for the customer.
+        ImageUrl:
+          type: string
+          description: SKU image URL.
+        DetailUrl:
+          type: string
+          description: Product slug.
+        CSCIdentification:
+          type: string
+          nullable: true
+          description: SKU seller identification.
+        BrandId:
+          type: string
+          description: Brand ID.
+        BrandName:
+          type: string
+          description: Brand name.
+        Dimension:
+          $ref: '#/components/schemas/Dimension'
+        RealDimension:
+          $ref: '#/components/schemas/RealDimension'
+        ManufacturerCode:
+          type: string
+          description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+        IsKit:
+          type: boolean
+          description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+        KitItems:
+          type: array
+          description: Array with SKU IDs of bundle components.
+          items:
+            type: string
+            description: SKU ID of each bundle component.
+        Services:
+          type: array
+          description: Array with service IDs that are related to the SKU.
+          items:
+            type: string
+            description: Service IDs of each service related to the SKU.
+        Categories:
+          type: array
+          description: Categories of the related product.
+          items:
+            type: string
+            description: Category ID.
+        CategoriesFullPath:
+          type: array
+          description: Path of categories of the related product.
+          items:
+            type: string
+            description: Path composed by category IDs separated by `/`.
+        Attachments:
+          type: array
+          description: Array with attachment IDs that are related to the product.
+          items:
+            $ref: '#/components/schemas/Attachment'
+        Collections:
+          type: array
+          description: Array with collections IDs that are related to the product.
+          items:
+            type: string
+            description: Collection ID.
+        SkuSellers:
+          type: array
+          description: Array with related sellers data.
+          items:
+            $ref: '#/components/schemas/SkuSeller'
+        SalesChannels:
+          type: array
+          description: Array of trade policy IDs.
+          items:
+            type: integer
+            format: int32
+            description: Trade policy ID.
+        Images:
+          type: array
+          description: Array of objects with SKU image details.
+          items:
+            $ref: '#/components/schemas/Image'
+        SkuSpecifications:
+          type: array
+          description: Array with related SKU specifications.
+          items:
+            $ref: '#/components/schemas/SkuSpecification'
+        ProductSpecifications:
+          type: array
+          description: Array with related product specifications.
+          items:
+            $ref: '#/components/schemas/ProductSpecification'
+        ProductClustersIds:
+          type: string
+          description: Product cluster IDs separated by comma (`,`).
+        PositionsInClusters:
+          type: object
+          description: 'Product clusters position in each cluster. Structure: "{Product cluster ID}": {Position}.
+
+
+            `{Product cluster ID}` is a string, while `{Position}` is an integer.'
+          additionalProperties:
+            type: integer
+            description: Product cluster ID.
+            additionalProperties:
+              type: integer
+              description: Position.
+        ProductClusterNames:
+          type: object
+          description: 'Product clusters names. Structure: "{Product cluster ID}": "{Product cluster name}". Both the key and the value are strings.'
+          additionalProperties:
+            type: string
+            description: Product cluster ID.
+            additionalProperties:
+              type: string
+              description: Product cluster name.
+        ProductClusterHighlights:
+          type: object
+          description: 'Product clusters highlights. Structure: "{Product cluster ID}": "{Product cluster name}". Both the key and the value are strings.'
+          additionalProperties:
+            type: string
+            description: Product cluster ID.
+            additionalProperties:
+              type: string
+              description: Product cluster highlight.
+        ProductCategoryIds:
+          type: string
+          description: Category path composed by category IDs separated by `/`.
+        IsDirectCategoryActive:
+          type: boolean
+          description: Indicates if the direct product category is active or not.
+        ProductGlobalCategoryId:
+          type: integer
+          nullable: true
+          description: Product global category ID.
+        ProductCategories:
+          type: object
+          description: 'Object containing product categories. Structure: "{CategoryID}": "{CategoryName}". Both the key and the value are strings.'
+          additionalProperties:
+            type: string
+            description: Category ID.
+            additionalProperties:
+              type: string
+              description: Category name.
+        CommercialConditionId:
+          type: integer
+          format: int32
+          description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+          default: 1
+        RewardValue:
+          type: number
+          description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+        AlternateIds:
+          $ref: '#/components/schemas/AlternateIds'
+        AlternateIdValues:
+          type: array
+          description: Array with values of alternative SKU IDs.
+          items:
+            type: string
+            description: Alternative SKU ID.
+        EstimatedDateArrival:
+          type: string
+          nullable: true
+          description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
+        MeasurementUnit:
+          type: string
+          description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+        UnitMultiplier:
+          type: number
+          description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+        InformationSource:
+          type: string
+          nullable: true
+          description: Information source.
+        ModalType:
+          type: string
+          nullable: true
+          description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+        KeyWords:
+          type: string
+          nullable: true
+          description: Keywords related to the product.
+        ReleaseDate:
+          type: string
+          nullable: true
+          description: Release date of the product.
+        ProductIsVisible:
+          type: boolean
+          description: Defines if the product is visible or not.
+        ShowIfNotAvailable:
+          type: boolean
+          description: Defines if the product will be shown if it is not available.
+        IsProductActive:
+          type: boolean
+          description: Defines if the product is active or not.
+        ProductFinalScore:
+          type: integer
+          description: Product final score.
+      example:
+        Id: 310118450
+        ProductId: 2
+        NameComplete: Caixa de Areia Azul Petmate sku test
+        ComplementName: ''
+        ProductName: Caixa de Areia Azul Petmate
+        ProductDescription: ''
+        ProductRefId: ''
+        TaxCode: ''
+        SkuName: sku test
+        IsActive: true
+        IsTransported: true
+        IsInventoried: true
+        IsGiftCardRecharge: false
+        ImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155451-55-55/caixa-areia-azul-petmate.jpg?v=637139451191670000
+        DetailUrl: /caixa-de-areia-azul-petmate/p
+        CSCIdentification: null
+        BrandId: '2000005'
+        BrandName: Petmate
+        IsBrandActive: true
+        Dimension:
+          cubicweight: 0.2083
+          height: 10.0
+          length: 10.0
+          weight: 10.0
+          width: 10.0
+        RealDimension:
+          realCubicWeight: 0.0
+          realHeight: 0.0
+          realLength: 0.0
+          realWeight: 0.0
+          realWidth: 0.0
+        ManufacturerCode: '123'
+        IsKit: false
+        KitItems: []
+        Services: []
+        Categories: []
+        CategoriesFullPath:
+        - /3/15/
+        - /3/
+        - /1/
+        Attachments: []
+        Collections: []
+        SkuSellers:
+        - SellerId: '1'
+          StockKeepingUnitId: 310118450
+          SellerStockKeepingUnitId: '310118450'
+          IsActive: true
+          FreightCommissionPercentage: 0.0
+          ProductCommissionPercentage: 0.0
+        SalesChannels:
+        - 1
+        - 3
+        Images:
+        - ImageUrl: https://lojadobreno.vteximg.com.br/arquivos/ids/155451/caixa-areia-azul-petmate.jpg?v=637139451191670000
+          ImageName: null
+          FileId: 155451
+        Videos: []
+        SkuSpecifications: []
+        ProductSpecifications: []
+        ProductClustersIds: 151,158
+        PositionsInClusters:
+          '151': 1
+          '158': 2
+        ProductClusterNames:
+          '151': asdfghj
+          '158': Coleção halloween
+        ProductClusterHighlights:
+          '151': asdfghj
+        ProductCategoryIds: /3/15/
+        IsDirectCategoryActive: true
+        ProductGlobalCategoryId: 5000
+        ProductCategories:
+          '15': Caixa de Areia
+          '3': Higiene
+          '1': Alimentação
+        CommercialConditionId: 1
+        RewardValue: 0.0
+        AlternateIds:
+          RefId: '1'
+        AlternateIdValues:
+        - '1'
+        EstimatedDateArrival: null
+        MeasurementUnit: un
+        UnitMultiplier: 1.0
+        InformationSource: null
+        ModalType: null
+        KeyWords: ''
+        ReleaseDate: '2020-01-06T00:00:00Z'
+        ProductIsVisible: true
+        ShowIfNotAvailable: true
+        IsProductActive: true
+        ProductFinalScore: 0
+    Dimension:
+      required:
+      - cubicweight
+      - height
+      - length
+      - weight
+      - width
+      type: object
+      description: Object containing the SKU dimensions to be used on the shipping calculation.
+      properties:
+        cubicweight:
+          type: number
+          description: SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
+        height:
+          type: number
+          description: SKU height.
+        length:
+          type: number
+          description: SKU length.
+        weight:
+          type: number
+          description: SKU weight.
+        width:
+          type: number
+          description: SKU width.
+      example:
+        cubicweight: 81.6833
+        height: 65
+        length: 58
+        weight: 10000
+        width: 130
+    RealDimension:
+      required:
+      - realCubicWeight
+      - realHeight
+      - realLength
+      - realWeight
+      - realWidth
+      type: object
+      description: Object containing the real SKU dimensions, which appear in the product page.
+      properties:
+        realCubicWeight:
+          type: number
+          description: Real SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
+        realHeight:
+          type: number
+          description: Real SKU height.
+        realLength:
+          type: number
+          description: Real SKU length.
+        realWeight:
+          type: number
+          description: Real SKU weight.
+        realWidth:
+          type: number
+          description: Real SKU width.
+      example:
+        realCubicWeight: 274.1375
+        realHeight: 241
+        realLength: 65
+        realWeight: 9800
+        realWidth: 105
+  parameters:
+    Content-Type_2:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Accept_2:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

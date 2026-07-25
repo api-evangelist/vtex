@@ -1,0 +1,797 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account SKU Approval Settings API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: SKU Approval Settings
+paths:
+  /suggestions/configuration/autoapproval/toggle:
+    get:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Get autoApprove Status in Account Settings
+      description: "This endpoint can be used to check whether the autoapprove setting is active or not, for a specific seller. \n\nIf the response is `true`, the autoapprove setting is active. If the response is `false`, it is inactive."
+      operationId: GetautoApprovevaluefromconfig
+      parameters:
+      - name: sellerId
+        in: query
+        description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+        required: true
+        style: form
+        schema:
+          type: string
+          default: seller123
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Enabled:
+                    type: boolean
+                    description: If the auto-approve setting is active for a given seller (`true`) or not (`false`).
+              example:
+                Enabled: false
+      deprecated: false
+    put:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Activate autoApprove in Marketplace's Account
+      description: "This endpoint enables the autoapprove rule to a marketplace's whole Received SKUs module. Once enabling the rule, received SKUs will be automatically approved on your store, regardless of the seller. \n\n For the autoapprove rule to work as expected, the approval [Matcher score](https://help.vtex.com/en/tutorial/entendendo-a-pontuacao-do-vtex-matcher--tutorials_424) should be set up as 80 (default value), but you can configure a different number through the field `Score` in [Save Account's Approval Settings](https://developers.vtex.com/vtex-rest-api/reference/saveaccountconfig)."
+      operationId: Saveautoapproveforaccount
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveautoapproveforaccountRequest'
+            example:
+              Enabled: true
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Enabled:
+                    type: boolean
+                    description: If the auto-approve setting is active (`true`) or not (`false`).
+              example:
+                Enabled: false
+      deprecated: false
+  /suggestions/configuration:
+    get:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Get Account's Approval Settings
+      description: "This endpoint retrieves the current approval settings of a marketplace's Received SKUs module. Its response includes: \n\n- `Score`: Matcher scores for approving and rejecting SKUs received from sellers. \n\n- `Matchers`: All Matchers configured on the marketplace, and their respective details. \n\n- `SpecificationsMapping`: Mapping of product and SKU specifications, per seller. \n\n- `MatchFlux`: This field determines the type of approval configuration applied to SKUs received from a seller. \n\nThe possible values include: \n\n-`default`, where the Matcher reviews the SKU, and approves it based on its score. \n\n-`manual`, for manual approvals through the Received SKU UI, or Match API. \n\n-`autoApprove`, for every SKU received from a given seller to be approved automatically, regardless of their Matcher Score."
+      operationId: Getaccountconfig
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Score:
+                    type: object
+                    description: Matcher scores for approving and rejecting SKUs received from sellers.
+                  Matchers:
+                    type: array
+                    description: All Matchers configured on the marketplace, and their respective details.
+                  Rules:
+                    type: object
+                    description: Items and products.
+                  SpecificationsMapping:
+                    type: array
+                    description: Mapping of product and SKU specifications, per seller.
+                  MatchFlux:
+                    type: string
+                    description: This field determines the type of approval configuration applied to SKUs received from a seller.
+              example:
+                Score:
+                  Approve: 80
+                  Reject: 30
+                Matchers:
+                - MatcherId: vtex-matcher
+                  hook-base-address: http://portal.vtexinternal.com/api/ssm/hooks
+                  IsActive: true
+                  UpdatesNotificationEndpoint: null
+                  Description: null
+                Rules:
+                  Item: []
+                  Product: []
+                SpecificationsMapping: []
+                MatchFlux: Default
+      deprecated: false
+    put:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Save Account's Approval Settings
+      description: "Marketplaces use this endpoint to create or update approval settings on their Received SKUs module. \n\nThe request includes all the details necessary to implement the chosen approval settings."
+      operationId: Saveaccountconfig
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveaccountconfigRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  Score:
+                    Approve: 80
+                    Reject: 30
+                  Matchers:
+                  - MatcherId: vtex-matcher
+                    hook-base-address: http://simple-suggestion-matcher.vtex.com.br
+                    IsActive: true
+                    UpdatesNotificationEndpoint: notification.endpoint
+                    Description: Note
+                  Rules:
+                    Item:
+                    - 1
+                    Product:
+                    - Shirt
+                  SpecificationsMapping:
+                  - SellerId: Store1
+                    Mapping:
+                      Yellow: Light yellow
+                  MatchFlux: AutoApprove
+                properties:
+                  Score:
+                    type: object
+                    description: '[Matcher''s rates](https://help.vtex.com/en/tutorial/understanding-vtex-matcher-scoring) to approve or reject [received SKUs](https://help.vtex.com/en/tutorial/cataloging-received-skus--tutorials_396) sent by sellers.'
+                    properties:
+                      Approve:
+                        type: integer
+                        description: Score to approve SKUs sent by sellers.
+                      Reject:
+                        type: integer
+                        description: Score to reject SKUs sent by sellers.
+                    example:
+                      Approve: 80
+                      Reject: 30
+                  Matchers:
+                    type: array
+                    description: '[Matchers](https://help.vtex.com/en/tutorial/understanding-vtex-matcher-scoring) configurations for approving and rejecting [received SKUs](https://help.vtex.com/en/tutorial/cataloging-received-skus--tutorials_396) sent by sellers.'
+                    properties:
+                      MatcherId:
+                        type: string
+                        description: Identifies the matching entity. It can be either [VTEX's matcher](https://help.vtex.com/en/tutorial/understanding-vtex-matcher-scoring), or an external matcher.
+                      hook-base-address:
+                        type: string
+                        description: The given Matcher's URL.
+                      IsActive:
+                        type: boolean
+                        description: Whether the matcher is active in the account (`true`), or not (`false`).
+                      UpdatesNotificationEndpoint:
+                        type: string
+                        description: The [received SKUs](https://help.vtex.com/en/tutorial/cataloging-received-skus--tutorials_396) module calls this endpoint for matcher's suggestions updates.
+                      Description:
+                        type: string
+                        description: The note inserted on the request body.
+                  Rules:
+                    type: object
+                    description: Items and products that belong to sellers.
+                    properties:
+                      Item:
+                        type: array
+                        description: SKUs' ID.
+                        items:
+                          type: integer
+                          description: SKU ID.
+                      Product:
+                        type: array
+                        description: Product's name.
+                        items:
+                          type: string
+                          description: Product name.
+                  SpecificationsMapping:
+                    type: array
+                    description: This attribute maps product and SKU's specifications between the marketplace and the seller.
+                    properties:
+                      SellerId:
+                        type: string
+                        description: The Seller ID.
+                      Mapping:
+                        type: object
+                        description: The attributes and values mapped between the marketplace and the seller.
+                  MatchFlux:
+                    type: string
+                    description: "Type of approval configuration that apply to received SKUs sent by sellers. The possible values are: \n\n`default`: the matcher approves the SKU. \n\n`manual`: manual SKU's approvals. \n\n`AutoApprove`: automatic SKU's approvals."
+      deprecated: false
+  /suggestions/configuration/account/config:
+    get:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Get Account's Matcher Settings
+      description: "This endpoint will be used by the marketplace to query the matcher's current approval settings on their incoming SKUs module. If the account has no matcher configured, the response will be `404 Not Found`. \n\nFor account approval configuration information, with response including specification information, see [Get Account Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis- suggestions#get-/suggestions /configuration) terminal. \n\nThe [VTEX matcher](https://help.vtex.com/pt/tutorial/entendendo-a-punctuacao-do-vtex-matcher--tutorials_424) is a tool used by marketplaces to evaluate SKUs corresponding to information from an advertisement of the seller, with those of items already present in the marketplace catalog."
+      operationId: Getmatchconfig
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseGetAccountsMatcherSettings'
+              example:
+                score:
+                  approve: 85
+                  pending: 31
+                  reject: 30
+                matchers:
+                - matcherId: example-matcher
+                  hook-base-address: http://portal.vtexinternal.com.br/api/u90/hooks
+                  isActive: true
+                  updatesNotificationEndpoint: null
+                  description: null
+                rules:
+                  item: []
+                  product: []
+                specificationsMapping: []
+                matchFlux: Default
+      deprecated: false
+  /suggestions/configuration/seller/{sellerId}:
+    get:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Get Seller's Approval Settings
+      description: "This endpoint retrieves the current Received SKUs approval settings applied to a specific seller. Its response includes: \n\n- `sellerId`: A string that identifies the seller in the marketplace. \n\n- `accountId`: Marketplace’s account ID. \n\n- `accountName`: Marketplace’s account name. \n\n- `mapping`: Mapping of SKU and product Specifications. \n\n- `matchFlux`: This field determines the type of approval configuration applied to SKUs received  from a seller. \n\nThe possible values include:  \n\n-`default`, where the Matcher reviews the SKU, and approves it based on its score. \n\n-`manual`, for manual approvals through the Received SKU UI and Match API. \n\n-`autoApprove`, for every SKU received from a given seller to be approved automatically                                                   , regardless of the Matcher Score."
+      operationId: Getselleraccountconfig
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: sellerId
+        in: path
+        description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: seller123
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseGetSellersApprovalSettings'
+              example:
+                sellerId: sellerexample
+                accountId: d74dau71f-325a-4463-bd53-ae8b0453186ca
+                accountName: marketplaceexample
+                mapping:
+                  defaultColor: white /black
+                  searchColor: color1, color2
+                  color1: black
+                  color2: white
+                  color: black
+                  size: EUR44
+                matchFlux: default
+      deprecated: false
+    put:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Save Seller's Approval Settings
+      description: "Marketplaces use this endpoint to create or update approval settings to a specific seller, on the Received SKUs module. \n\nThe request includes all the details necessary to implement the chosen approval settings."
+      operationId: Putselleraccountconfig
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: sellerId
+        in: path
+        description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: seller123
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutselleraccountconfigRequest'
+            example:
+              sellerId: 1a
+              mapping: null
+              matchFlux: Default
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /suggestions/configuration/autoapproval/toggle/seller/{sellerId}:
+    put:
+      tags:
+      - SKU Approval Settings
+      summary: VTex Activate autoApprove Setting for a Seller
+      description: This endpoint enables the auto approve setting to received SKUs from a specific seller. Be aware that once enabling the rule through this request, all received SKUs from that seller will be automatically approved on your store, regardless of the Matcher Score.
+      operationId: Saveautoapproveforaccountseller
+      parameters:
+      - name: accountName
+        in: path
+        required: true
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        schema:
+          type: string
+          default: apiexamples
+      - name: sellerId
+        in: path
+        description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: seller123
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveautoapproveforaccountsellerRequest'
+            example:
+              Enabled: true
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    SaveautoapproveforaccountRequest:
+      title: SaveautoapproveforaccountRequest
+      required:
+      - Enabled
+      type: object
+      properties:
+        Enabled:
+          type: boolean
+          description: Insert `true` if you wish to activate the autoapprove rule for an entire marketplace account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all received SKUs will be automatically approved on your store, regardless of the seller, or the Matcher Score.
+          default: true
+    responseGetAccountsMatcherSettings:
+      title: GetAccountsMatcherSettings
+      description: Response from Get Account's Matcher Settings endpoint with information about current matcher score setting, rules, spec mapping, and matchFlux.
+      type: object
+      properties:
+        score:
+          description: '[Matcher](https://help.vtex.com/pt/tutorial/entendendo-a-pontuacao-do-vtex-matcher--tutorials_424) rates received SKUs by comparing the data sent by sellers to existing fields in the marketplace. The calculation of these scores determines whether the product has been: `Approved`, `Pending` or `Denied`.'
+          type: object
+          properties:
+            approve:
+              type: integer
+              description: Minimum approval score set by the marketplace.
+              default: '80'
+            pending:
+              type: integer
+              description: Minimum value for the ad to be pending.
+              default: '31'
+            reject:
+              type: integer
+              description: Bounce score set by marketplace.
+              default: '30'
+        matchers:
+          description: "Array of objects that presents a list of matchers configured in the marketplace. If the marketplace has more than one matcher configured in the account, an array will be displayed for each matcher.\n\n By default, the VTEX Matcher is set up automatically in VTEX account."
+          type: array
+          items:
+            type: object
+            properties:
+              matcherId:
+                type: string
+                description: The Matcher Id.
+              hook-base-address:
+                type: string
+                description: The base address of the Matcher hook.
+              isActive:
+                type: boolean
+                description: Indicates if Matcher is active or not. `TRUE` = Matcher is active or `FALSE` = Matcher is inactive.
+                default: true
+        rules:
+          description: Arrays object that contains the rules defined for product approval.
+          type: object
+          properties:
+            item:
+              type: array
+              description: A list of rules for items.
+            product:
+              type: array
+              description: A list of rules for products.
+        specificationsMapping:
+          type: array
+          description: This field will show a list of which product specs and SKU are configured to be mapped.
+        matchFlux:
+          type: string
+          description: "This field shows what type of approval setting is being applied to SKUs received from a seller. \n\nPossible values include: \n\n-`default`: where Matcher reviews the SKU and approves it based on its score. \n\n-`manual`: for manual approvals via incoming SKU UI or mailing API. \n\n-`autoApprove`: so that every SKU received from a given seller is automatically approved, regardless of its Matcher Score."
+    PutselleraccountconfigRequest:
+      title: PutselleraccountconfigRequest
+      required:
+      - sellerId
+      - mapping
+      - matchFlux
+      type: object
+      properties:
+        sellerId:
+          type: string
+          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+          default: seller123
+        mapping:
+          type: object
+          description: 'Mapping of SKU and product Specifications. This object should be sent in the following format for all fields you wish to map:
+
+
+            {specificationName}:{specificationValue},
+
+
+            Example:
+
+
+            Choose voltage: Voltage,
+
+
+            Choose size: Size'
+          nullable: true
+          default:
+            Choose voltage: Voltage
+            Choose size: Size
+            Choose volume: Volume
+            Choose type: Type
+        matchFlux:
+          type: string
+          description: "This field determines the type of approval configuration applied to SKUs received  from a seller. The possible values include: \n\n- `default` where the Matcher reviews the SKU, and approves it based on its score \n\n- `manual` for manual approvals through the Received SKU UI or Match API \n\n- `autoApprove` for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
+          default: autoApprove
+    responseGetSellersApprovalSettings:
+      title: GetSellersApprovalSettings
+      type: object
+      properties:
+        sellerId:
+          type: string
+          description: A string that identifies the seller in the marketplace.
+          example: sellerexample
+        accountId:
+          type: string
+          description: Marketplace’s account ID.
+          example: d74daf1f-355a-4463-bdc7-ae8b045311c
+        accountName:
+          type: string
+          description: Marketplace’s account name.
+          example: marketplaceexample
+        mapping:
+          type: object
+          default: {}
+          description: "SKU Mapping Information and Product [Specifications](https://developers.vtex.com/docs/guides/catalog-overview#configuring-initial-settings-mandatory).\n\n The properties included within `mapping` can change according to the product type, the `color` specification and its variations described in this example are just one of the possibilities. The values received in this call's payload for those properties depend on the seller's catalog architecture, and are not default. \n\nSee some examples of specifications: \n\n- Voltage \n\n- Power \n\n- Size \n\n- Height \n\n- Width"
+          properties:
+            defaultColor:
+              type: string
+              description: 'The field will indicate the default color predefined by the seller in cases where specific product colors are not defined. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog. '
+              example: white /black
+            searchColor:
+              type: string
+              description: Field that provides the available colors to filter searches. This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
+              example: color1, color2
+            color1:
+              type: string
+              description: '`color1` available for search filter. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog.'
+              example: black
+            color2:
+              type: string
+              description: '`color2` available for search filter. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog.'
+              example: white
+            color:
+              type: string
+              description: Indicates the predominant or main color of the product. This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
+              example: black
+            size:
+              type: string
+              description: Indicates the size of the product.This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
+              example: EUR44
+        matchFlux:
+          type: string
+          description: "This field determines the type of [approval configuration applied to SKUs received from a seller](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/seller/-sellerId-). \n\nThe possible values include:  \n\n-`default`, where the Matcher reviews the SKU, and approves it based on its score. \n\n-`manual`, for manual approvals through the Received SKU UI and Match API. \n\n-`autoApprove`, for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
+          example: default
+    Matcher:
+      title: Matcher
+      required:
+      - MatcherId
+      - hook-base-address
+      - IsActive
+      - UpdatesNotificationEndpoint
+      type: object
+      properties:
+        MatcherId:
+          type: string
+          description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+          default: vtex-matcher
+        hook-base-address:
+          type: string
+          description: The chosen Matcher's url. It is the endpoint that the Received SKUs module calls, to send new suggestions for the Matcher's review.
+          default: http://simple-suggestion-matcher.vtex.com.br
+        IsActive:
+          type: boolean
+          description: Whether the matcher is active in the account (`true`), or not (`false`).
+          default: true
+        UpdatesNotificationEndpoint:
+          type: string
+          description: The Received SKUs module uses this endpoint to send updates about a suggestion, to the chosen Matcher.
+          nullable: true
+          default: null
+        Description:
+          type: string
+          description: Insert in this field any notes about the approval. This field is optional.
+          nullable: true
+          default: null
+    SaveaccountconfigRequest:
+      title: SaveaccountconfigRequest
+      required:
+      - Score
+      - Matchers
+      - SpecificationsMapping
+      - MatchFlux
+      type: object
+      properties:
+        Score:
+          $ref: '#/components/schemas/Score'
+        Matchers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Matcher'
+          description: Matchers for approving and rejecting SKUs received from sellers.
+        SpecificationsMapping:
+          type: array
+          description: This attribute maps product and SKU specifications.
+          items:
+            type: string
+            default: "                    \"SellerId\": \"sellerID\",\n                    \"Mapping\": {\n                        \"Choose voltage\": \"Voltage\",\n                        \"Choose size\": \"Size\",\n                        \"Choose volume\": \"Volume\",\n                        \"Choose type\": \"Type\"\n                    }"
+        MatchFlux:
+          type: string
+          description: "This field determines the type of approval configuration applied to SKUs received  from a seller. The possible values include: \n\n- `default` where the Matcher reviews the SKU, and approves it based on its score \n\n- `manual` for manual approvals through the Received SKU UI or Match API \n\n- `autoApprove` for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
+          default: autoApprove
+      example:
+        Score:
+          Approve: 80
+          Reject: 30
+        Matchers:
+        - MatcherId: vtex-matcher
+          hook-base-address: http://simple-suggestion-matcher.vtex.com.br
+          IsActive: true
+          UpdatesNotificationEndpoint: null
+          Description: null
+        SpecificationsMapping: []
+        MatchFlux: AutoApprove
+    SaveautoapproveforaccountsellerRequest:
+      title: SaveautoapproveforaccountsellerRequest
+      required:
+      - Enabled
+      type: object
+      properties:
+        Enabled:
+          type: boolean
+          description: Insert `true` if you wish to activate the autoapprove rule for that specific seller account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all SKUs received from this seller will be automatically approved on your store regardless of the Matcher Score.
+          default: true
+    Score:
+      title: Score
+      description: 'Matcher rates received SKUs by comparing the data sent by sellers to existing fields in the marketplace. The calculation of these scores determines whether the product has been: `Approved` or `Denied`.'
+      required:
+      - Approve
+      - Reject
+      type: object
+      properties:
+        Approve:
+          type: integer
+          description: Insert in this field the desired minimum score to approve SKUs. If this field is set as 99, it means all approvals will be made manually.
+          format: int32
+          default: 80
+        Reject:
+          type: integer
+          description: Insert in this field the desired maximum score to reject SKUs.
+          format: int32
+          default: 30
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

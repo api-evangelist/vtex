@@ -1,0 +1,428 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Payment API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Payment
+paths:
+  /api/oms/pvt/orders/{orderId}/payment-transaction:
+    get:
+      tags:
+      - Payment
+      summary: VTex Retrieve payment transaction
+      description: "Retrieves transaction details by order ID. All events in the transaction will be registered in this call's response body. \n\nIn scenarios of [order changes](https://developers.vtex.com/vtex-rest-api/reference/registerchange), it is possible to insert a [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe). The total value of the order will be updated after the insertion of the invoice, even when there is a [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe) scenario. The updated value is settled by VTEX's Payment Gateway. The reimbursement for the shopper is automatic."
+      operationId: GetPaymenttransaction
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: orderId
+        in: path
+        description: Order ID is a unique code that identifies an order.
+        example: 1172452900788-01
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 1172452900788-01
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPaymenttransaction'
+              example:
+                status: Finished
+                isActive: true
+                transactionId: CB452D77E7D04099A4DB0479087B1D2C
+                merchantName: LUXSTORE
+                payments:
+                - id: 721CBE1090324D12ABE301FE33DE775A
+                  paymentSystem: '4'
+                  paymentSystemName: Mastercard
+                  value: 10150
+                  installments: 1
+                  referenceValue: 10150
+                  cardHolder: null
+                  cardNumber: null
+                  firstDigits: '412341'
+                  lastDigits: '4123'
+                  url: null
+                  giftCardId: null
+                  giftCardName: null
+                  cvv2: null
+                  expireMonth: null
+                  expireYear: null
+                  giftCardCaption: null
+                  redemptionCode: null
+                  group: creditCard
+                  tid: '101770752'
+                  dueDate: null
+                  connectorResponses:
+                    Tid: '101770752'
+                    ReturnCode: '200'
+                    Message: logMessage
+                    authId: '170852'
+      deprecated: false
+  /api/oms/pvt/orders/{orderId}/payments/{paymentId}/payment-notification:
+    post:
+      tags:
+      - Payment
+      summary: VTex Send payment notification
+      description: "Send a payment notification of a given order, by order ID.\n\r\n\r> The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#)."
+      operationId: SendPaymentNotification
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: orderId
+        in: path
+        description: Order ID is a unique code that identifies an order.
+        example: 1172452900788-01
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 1172452900788-01
+      - name: paymentId
+        in: path
+        description: VTEX payment identifier.
+        example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request.
+        '403':
+          description: The credentials are not enabled to access the service.
+        '404':
+          description: Value not found.
+        '429':
+          description: Too many requests.
+      deprecated: false
+  /api/orders/pvt/document/{orderId}/payment/{paymentId}/notify-payment:
+    post:
+      tags:
+      - Payment
+      summary: VTex Send payment notification
+      description: "Send a payment notification of a given order, by order ID and payment ID.\n\r\n\r> The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#).\n\r\n\r> Learn more about [Transaction Details](https://help.vtex.com/en/tutorial/how-to-view-the-orders-details).\r\n\r\n\r\n## Request body properties\r\n\r\n| Attribute    | Type        | Description |\r\n| --------------- |:---------:| --------------------------------------:|\r\n| `orderId` | string | Order Id |\r\n| `paymentId` | string | Payment ID |"
+      operationId: SendPaymentNotification2
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/orderId'
+      - $ref: '#/components/parameters/paymentId'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '429':
+          description: Too Many Requests
+      deprecated: false
+components:
+  schemas:
+    GetPaymenttransaction:
+      title: GetPaymenttransaction
+      required:
+      - status
+      - isActive
+      - transactionId
+      - merchantName
+      - payments
+      type: object
+      properties:
+        status:
+          type: string
+          description: Transaction status.
+        isActive:
+          type: boolean
+          description: If it is an active transaction (`true`) or not (`false`).
+        transactionId:
+          type: string
+          description: Transaction ID.
+        merchantName:
+          type: string
+          description: Transaction merchant's name.
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment1'
+          description: Payments' details object.
+      example:
+        status: Finished
+        isActive: true
+        transactionId: CB452D77E7D04099A4DB0479087B1D2C
+        merchantName: LUXSTORE
+        payments:
+        - id: 721CBE1090324D12ABE301FE33DE775A
+          paymentSystem: '4'
+          paymentSystemName: Mastercard
+          value: 10150
+          installments: 1
+          referenceValue: 10150
+          cardHolder: null
+          cardNumber: null
+          firstDigits: '412341'
+          lastDigits: '4123'
+          cvv2: null
+          expireMonth: null
+          expireYear: null
+          url: null
+          giftCardId: null
+          giftCardName: null
+          giftCardCaption: null
+          redemptionCode: null
+          group: creditCard
+          tid: '101770752'
+          dueDate: null
+          connectorResponses:
+            Tid: '101770752'
+            ReturnCode: '200'
+            Message: logMessage
+            authId: '170852'
+    Payment1:
+      title: Payment1
+      required:
+      - id
+      - paymentSystem
+      - paymentSystemName
+      - value
+      - installments
+      - referenceValue
+      - cardHolder
+      - cardNumber
+      - firstDigits
+      - lastDigits
+      - cvv2
+      - expireMonth
+      - expireYear
+      - url
+      - giftCardId
+      - giftCardName
+      - giftCardCaption
+      - redemptionCode
+      - group
+      - tid
+      - dueDate
+      - connectorResponses
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment ID.
+        paymentSystem:
+          type: string
+          description: Payment system ID.
+        paymentSystemName:
+          type: string
+          description: Payment system name.
+        value:
+          type: integer
+          description: Payment value.
+        installments:
+          type: integer
+          description: Payment Installments quantity.
+        referenceValue:
+          type: integer
+          description: Payment reference Value.
+        cardHolder:
+          type: string
+          nullable: true
+          description: Payment card holder.
+        cardNumber:
+          type: string
+          nullable: true
+          description: Payment card number.
+        firstDigits:
+          type: string
+          description: Payment card first digits.
+        lastDigits:
+          type: string
+          description: Payment card last digits.
+        cvv2:
+          type: string
+          nullable: true
+          description: Card Verification Value (CVV2) is a security code used by payment processors to reduce fraudulent credit and debit card transactions.
+        expireMonth:
+          type: string
+          nullable: true
+          description: Payment card expire month.
+        expireYear:
+          type: string
+          nullable: true
+          description: Payment card expire year.
+        url:
+          type: string
+          nullable: true
+          description: Payment URL.
+        giftCardId:
+          type: string
+          nullable: true
+          description: Gift Card ID.
+        giftCardName:
+          type: string
+          nullable: true
+          description: Gift Card name.
+        giftCardCaption:
+          type: string
+          nullable: true
+          description: Gift Card caption.
+        redemptionCode:
+          type: string
+          nullable: true
+          description: Code for the customer to use the Gift Card.
+        group:
+          type: string
+          description: "It represents the payment method. For each method, it can have the following values: \n\r\n- **Credit card:** `creditCard` \r\n\r\n- **Debid card:** `debitCard`\r\n\r\n- **Bank invoice:** `bankInvoice`\r\n\r\n- **Promissory:** `promissory` \r\n\r\n- **Gift card:** `giftCard` \n\r\n- **Pix:** `instantPayment`."
+        tid:
+          type: string
+          description: Payment transaction ID.
+        dueDate:
+          type: string
+          nullable: true
+          description: Payment due date.
+        connectorResponses:
+          $ref: '#/components/schemas/ConnectorResponses'
+      example:
+        id: 721CBE1090324D12ABE301FE33DE775A
+        paymentSystem: '4'
+        paymentSystemName: Mastercard
+        value: 10150
+        installments: 1
+        referenceValue: 10150
+        cardHolder: null
+        cardNumber: null
+        firstDigits: '412341'
+        lastDigits: '4123'
+        cvv2: null
+        expireMonth: null
+        expireYear: null
+        url: null
+        giftCardId: null
+        giftCardName: null
+        giftCardCaption: null
+        redemptionCode: null
+        group: creditCard
+        tid: '101770752'
+        dueDate: null
+        connectorResponses:
+          Tid: '101770752'
+          ReturnCode: '200'
+          Message: logMessage
+          authId: '170852'
+    ConnectorResponses:
+      title: ConnectorResponses
+      required:
+      - Tid
+      - ReturnCode
+      - Message
+      - authId
+      type: object
+      properties:
+        Tid:
+          type: string
+          description: Connector transaction ID.
+        ReturnCode:
+          type: string
+          nullable: true
+          description: Connector return code.
+        Message:
+          type: string
+          nullable: true
+          description: Information about the connector's responses.
+        authId:
+          type: string
+          description: Connector authorization ID.
+      example:
+        Tid: '101770752'
+        ReturnCode: null
+        Message: null
+        authId: '170852'
+  parameters:
+    paymentId:
+      name: paymentId
+      in: path
+      description: ID of the payment.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 45hsfg5jkyu1384jdsfgh654sfgj1
+    orderId:
+      name: orderId
+      in: path
+      description: ID of the order.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf3941s6df1
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

@@ -1,0 +1,338 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Specification Field Value API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Specification Field Value
+paths:
+  /api/catalog_system/pvt/specification/fieldValue/{fieldValueId}:
+    get:
+      tags:
+      - Specification Field Value
+      summary: VTex Get specification field value
+      description: "Retrieves details from a specification field's value by this value's ID. \r\n>⚠️ This is a legacy endpoint. We recommend using [Get specification value](https://developers.vtex.com/docs/api-reference/catalog-api#get-/api/catalog/pvt/specificationvalue/-specificationValueId-?endpoint=get-/api/catalog/pvt/specificationvalue/-specificationValueId-) instead.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SpecificationsGetFieldValue
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: fieldValueId
+        in: path
+        description: Specification value ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '143'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                FieldValueId: 143
+                FieldId: 34
+                Name: Cotton
+                Text: Cotton fibers
+                IsActive: true
+                Position: 100
+              schema:
+                type: object
+                properties:
+                  FieldValueId:
+                    type: integer
+                    format: int32
+                    description: Specification field value ID.
+                  FieldId:
+                    type: integer
+                    description: Specification field ID.
+                  Name:
+                    type: string
+                    description: Specification field value name.
+                  Text:
+                    type: string
+                    description: Specification field value Description.
+                  IsActive:
+                    type: boolean
+                    description: Defines if the specification field Value is active (`true`) or inactive (`false`).
+                  Position:
+                    type: integer
+                    format: int32
+                    description: Specification field value position.
+      deprecated: false
+  /api/catalog_system/pub/specification/fieldvalue/{fieldId}:
+    get:
+      tags:
+      - Specification Field Value
+      summary: VTex Get specification values by specification field ID
+      description: "Gets a list of all specification values from a specification field by this field's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SpecificationsValuesByFieldId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: fieldId
+        in: path
+        description: Specification field ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 34
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetSpecFieldValue'
+              example:
+              - FieldValueId: 52
+                Value: 0 a 6 meses
+                IsActive: true
+                Position: 1
+              - FieldValueId: 53
+                Value: 1 a 2 anos
+                IsActive: true
+                Position: 4
+              - FieldValueId: 54
+                Value: 3 a 4 anos
+                IsActive: true
+                Position: 3
+              - FieldValueId: 55
+                Value: 5 a 6 anos
+                IsActive: true
+                Position: 2
+              - FieldValueId: 56
+                Value: 7 a 8 anos
+                IsActive: true
+                Position: 5
+              - FieldValueId: 57
+                Value: 9 a 10 anos
+                IsActive: true
+                Position: 6
+              - FieldValueId: 58
+                Value: Acima de 10 anos
+                IsActive: true
+                Position: 7
+      deprecated: false
+  /api/catalog_system/pvt/specification/fieldValue:
+    post:
+      tags:
+      - Specification Field Value
+      summary: VTex Create specification field value
+      description: "Creates a specification field value by the specification field's ID. \r\n>⚠️ This is a legacy endpoint. We recommend using [Create specification value](https://developers.vtex.com/docs/api-reference/catalog-api#post-/api/catalog/pvt/specificationvalue) instead.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SpecificationsInsertFieldValue
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpecificationsInsertFieldValueRequest'
+            example:
+              FieldId: 34
+              Name: Cotton
+              Text: Cotton fibers
+              IsActive: true
+              Position: 100
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                FieldValueId: 143
+                FieldId: 34
+                Name: Cotton
+                Text: Cotton fibers
+                IsActive: true
+                Position: 100
+              schema:
+                type: object
+                properties:
+                  FieldValueId:
+                    type: integer
+                    format: int32
+                    description: Specification field value ID.
+                  FieldId:
+                    type: integer
+                    description: Specification field ID.
+                  Name:
+                    type: string
+                    description: Specification field value name.
+                  Text:
+                    type: string
+                    description: Specification field value description.
+                  IsActive:
+                    type: boolean
+                    description: Defines if the specification field value is active (`true`) or inactive (`false`).
+                  Position:
+                    type: integer
+                    format: int32
+                    description: Specification field value position.
+      deprecated: false
+    put:
+      tags:
+      - Specification Field Value
+      summary: VTex Update specification field value
+      description: "Updates a specification field value by the specification field's ID. \r\n>⚠️ This is a legacy endpoint. We recommend using [Update specification field value](https://developers.vtex.com/docs/api-reference/catalog-api#put-/api/catalog/pvt/stockkeepingunit/-skuId-/specification?endpoint=put-/api/catalog/pvt/stockkeepingunit/-skuId-/specification-value-id) instead.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SpecificationsUpdateFieldValue
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpecificationsUpdateFieldValueRequest'
+            example:
+              FieldId: 1
+              FieldValueId: 143
+              Name: Cotton
+              Text: Cotton fibers
+              IsActive: true
+              Position: 100
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example: Field Value Updated
+              schema:
+                type: string
+                description: Status of the request.
+      deprecated: false
+components:
+  schemas:
+    SpecificationsUpdateFieldValueRequest:
+      required:
+      - FieldId
+      - Name
+      - Text
+      - IsActive
+      - Position
+      type: object
+      properties:
+        FieldId:
+          type: integer
+          nullable: true
+          description: Specification field ID.
+        Name:
+          type: string
+          description: Specification field value name.
+        Text:
+          type: string
+          nullable: true
+          description: Specification field value description.
+        IsActive:
+          type: boolean
+          description: Defines if the specification field value is active (`true`) or inactive (`false`).
+        Position:
+          type: integer
+          format: int32
+          description: Specification field position.
+      example:
+        FieldId: 1
+        FieldValueId: 143
+        Name: Cotton
+        Text: Cotton fibers
+        IsActive: true
+        Position: 100
+    SpecificationsInsertFieldValueRequest:
+      required:
+      - FieldId
+      - Name
+      - Text
+      - IsActive
+      - Position
+      type: object
+      properties:
+        FieldId:
+          type: integer
+          format: int32
+          description: Specification field ID.
+        Name:
+          type: string
+          description: Specification field value name.
+        Text:
+          type: string
+          description: Specification field value description.
+        IsActive:
+          type: boolean
+          description: Defines if the specification field value is active (`true`) or inactive (`false`).
+        Position:
+          type: integer
+          format: int32
+          description: Specification field value position.
+      example:
+        FieldValueId: 143
+        FieldId: 34
+        Name: Cotton
+        Text: Cotton fibers
+        IsActive: true
+        Position: 100
+    GetSpecFieldValue:
+      required:
+      - FieldValueId
+      - Value
+      - IsActive
+      - Position
+      type: object
+      properties:
+        FieldValueId:
+          type: integer
+          format: int32
+          description: Specification field value ID.
+        Value:
+          type: string
+          description: Specification field value.
+        IsActive:
+          type: boolean
+          description: Defines if the specification field is active (`true`) or inactive (`false`).
+        Position:
+          type: integer
+          format: int32
+          description: Specification field value position.
+      example:
+        FieldValueId: 52
+        Value: 0 a 6 meses
+        IsActive: true
+        Position: 1
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

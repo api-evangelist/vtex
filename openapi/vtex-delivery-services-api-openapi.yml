@@ -1,0 +1,1171 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Delivery Services API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Delivery Services
+paths:
+  /services:
+    put:
+      tags:
+      - Delivery Services
+      summary: VTex Remove Packing List
+      description: Removes Packing List on your VTEX Tracking configuration. Your request body must contain the invoice and serie fields.
+      security:
+      - Authorization:
+        - Bearer {token}
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvoiceFilter'
+      responses:
+        '200':
+          description: Success
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+      - Delivery Services
+      summary: VTex Post Delivery Service
+      description: "Creates a delivery service in your Tracking system. It allows the user to configure the Route Scheduling services, without defining the Delivery Person or Route Date. \r\n\r\n### Request body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"deliveryServiceType\": \"Entrega\",\r\n        \"shipperCustomer\": {\r\n            \"legalType\": \"PJ\",\r\n            \"companyName\": \"COMP. BRAS. DE TECN. PARA E-COMMERCE\",\r\n            \"cnpj\": \"05314972000174\",\r\n            \"addressStreet\": \"Rua Praia de Botafogo\",\r\n            \"addressNumber\": \"300\",\r\n            \"addressComplement\": \"SL\",\r\n            \"addressNeighborhood\": \"Botafogo\",\r\n            \"addressCity\": \"Rio de Janeiro\",\r\n            \"postalCode\": \"22250040\",\r\n            \"state\": \"RJ\",\r\n            \"phoneAreaCode\": \"21\",\r\n            \"phoneNumber\": \"999999999\"\r\n            },\r\n        \"invoiceOrderOfService\": \"123456\",\r\n        \"invoiceOrderOfServiceSerie\": \"2\",\r\n        \"orderNumber\": \"987654321\"\r\n    },\r\n    {\r\n        \"deliveryServiceType\": \"Entrega\",\r\n        \"shipperCustomer\": {\r\n            \"legalType\": \"PF\",\r\n            \"firstName\": \"Pedro\",\r\n            \"lastName\": \"Silva\",\r\n            \"cpf\": \"90498365778\",\r\n            \"addressStreet\": \"Rua Praia de Botafogo\",\r\n            \"addressNumber\": \"300\",\r\n            \"addressComplement\": \"SL\",\r\n            \"addressNeighborhood\": \"Botafogo\",\r\n            \"addressCity\": \"Rio de Janeiro\",\r\n            \"postalCode\": \"22250040\",\r\n            \"state\": \"RJ\",\r\n            \"phoneAreaCode\": \"21\",\r\n            \"phoneNumber\": \"999999999\"\r\n            },\r\n        \"invoiceOrderOfService\": \"123457\",\r\n        \"invoiceOrderOfServiceSerie\": \"2\",\r\n        \"orderNumber\": \"987654322\"\r\n    }\r\n]\r\n```"
+      security:
+      - Authorization: []
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryService'
+        required: true
+      responses:
+        '200':
+          description: Success
+          headers: {}
+        '400':
+          description: Bad Request
+      deprecated: false
+    get:
+      tags:
+      - Delivery Services
+      summary: VTex Get Delivery Services List
+      description: "Retrieves a list of services with pagination and URLs. You can consult the list using the following filters: the service's registration date, status, page size, and desired number of pages. Check the parameters documented below to see each filter's description.\r\n> We strongly recommend that a call to a VTEX Tracking GET endpoint is made only once every 6 hours. Retrieving data from the same endpoint more than once during a 6-hour window represents a load to our API that will slow down the overall usage of systems."
+      security:
+      - Authorization: []
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: status
+        in: query
+        description: 'Current status of the delivery service. The status parameters are not case sensitive, you can write them with upper or lower case. This field includes the following statuses as possible values: Ativo, Roteirizado, Realizado, EmAndamento, NaoRealizado'
+        style: form
+        schema:
+          type: string
+          default: Ativo
+      - name: dateInit
+        in: query
+        description: Initial date of registration of the requested service. The date format is `yyyy-mm-dd`.
+        style: form
+        schema:
+          type: string
+          format: date
+          example: '2023-07-28'
+      - name: dateEnd
+        in: query
+        description: "End date of registration of the requested service. The date format is `yyyy-mm-dd`.\n\r\n\rMake sure that the period of time between `dateInit` and `dateEnd` is not greater than 30 days."
+        style: form
+        schema:
+          type: string
+          format: date
+          example: '2023-07-29'
+      - name: pageSize
+        in: query
+        description: Number of items shown per consultation page. The default is 25
+        style: form
+        schema:
+          type: integer
+          format: int32
+          default: 40
+      - name: page
+        in: query
+        description: The consultation's desired page
+        style: form
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      responses:
+        '200':
+          description: Success
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginationResultDeliveryServiceResponsev11'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      deprecated: false
+  /services/{idDeliveryService}:
+    get:
+      tags:
+      - Delivery Services
+      summary: VTex Get Delivery Service by ID
+      description: "Retrieves a specific Service's general information by searching through its ID. \r\n> We strongly recommend that a call to a VTEX Tracking GET endpoint is made only once every 6 hours. Retrieving data from the same endpoint more than once during a 6-hour window represents a load to our API that will slow down the overall usage of systems."
+      security:
+      - Authorization: []
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: idDeliveryService
+        in: path
+        description: The delivery service's unique identifier
+        required: true
+        style: simple
+        schema:
+          type: integer
+          default: 1
+      responses:
+        '200':
+          description: Success
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryServiceResponse_v1_1'
+  /services/routes:
+    post:
+      tags:
+      - Delivery Services
+      summary: VTex Post Delivery Service With Route Scheduling
+      operationId: PostDeliveryServiceWithRouteAsync
+      description: "This endpoint creates a delivery service in your Tracking system. It allows the user to configure the Route Scheduling services with the Delivery Person and Route date already defined.\r\n\r\n ### Request body example\r\n\r\n```json\r\n[\r\n\t{\r\n\t\t\"deliveryServiceRoute\": {\r\n\t\t\t\"deliveryServiceDate\": \"2020-09-28\",\r\n\t\t\t\"displacementType\": \"Caminhão\",\r\n\t\t\t\"carrier\": {\r\n\t\t\t\t\"username\": \"empresa-joao.silva\"\r\n\t\t\t},\r\n\t\t\t\"vehicle\": {\r\n\t\t\t\t\"registrationPlate\": \"XPT-0123\"\r\n\t\t\t},\r\n\t\t\t\"addressStart\": {\r\n\t\t\t\t\"addressStreet\": \"Avenida das Américas\",\r\n\t\t\t\t\"addressNumber\": \"5000\",\r\n\t\t\t\t\"addressCity\": \"Rio de Janeiro\",\r\n\t\t\t\t\"postalCode\": \"22640102\",\r\n\t\t\t\t\"state\": \"RJ\"\r\n\t\t\t}\r\n\t\t},\r\n\t\t\"deliveryService\": [\r\n\t\t\t{\r\n\t\t\t\t\"deliveryServiceType\": \"Entrega\",\r\n\t\t\t\t\"shipperCustomer\": {\r\n\t\t\t\t\t\"legalType\": \"PJ\",\r\n\t\t\t\t\t\"companyName\": \"COMP. BRAS. DE TECN. PARA E-COMMERCE\",\r\n\t\t\t\t\t\"cnpj\": \"05314972000174\",\r\n\t\t\t\t\t\"addressStreet\": \"Rua Praia de Botafogo\",\r\n\t\t\t\t\t\"addressNumber\": \"300\",\r\n\t\t\t\t\t\"addressComplement\": \"SL\",\r\n\t\t\t\t\t\"addressNeighborhood\": \"Botafogo\",\r\n\t\t\t\t\t\"addressCity\": \"Rio de Janeiro\",\r\n\t\t\t\t\t\"postalCode\": \"22250040\",\r\n\t\t\t\t\t\"state\": \"RJ\",\r\n\t\t\t\t\t\"phoneAreaCode\": \"21\",\r\n\t\t\t\t\t\"phoneNumber\": \"999999999\"\r\n\t\t\t\t},\r\n\t\t\t\t\"invoiceOrderOfService\": \"123456\",\r\n\t\t\t\t\"invoiceOrderOfServiceSerie\": \"2\",\r\n\t\t\t\t\"orderNumber\": \"987654321\"\r\n\t\t\t},\r\n\t\t\t{\r\n\t\t\t\t\"deliveryServiceType\": \"Entrega\",\r\n\t\t\t\t\"shipperCustomer\": {\r\n\t\t\t\t\t\"legalType\": \"PF\",\r\n\t\t\t\t\t\"firstName\": \"Pedro\",\r\n\t\t\t\t\t\"lastName\": \"Silva\",\r\n\t\t\t\t\t\"cpf\": \"90498365778\",\r\n\t\t\t\t\t\"addressStreet\": \"Rua Praia de Botafogo\",\r\n\t\t\t\t\t\"addressNumber\": \"300\",\r\n\t\t\t\t\t\"addressComplement\": \"SL\",\r\n\t\t\t\t\t\"addressNeighborhood\": \"Botafogo\",\r\n\t\t\t\t\t\"addressCity\": \"Rio de Janeiro\",\r\n\t\t\t\t\t\"postalCode\": \"22250040\",\r\n\t\t\t\t\t\"state\": \"RJ\",\r\n\t\t\t\t\t\"phoneAreaCode\": \"21\",\r\n\t\t\t\t\t\"phoneNumber\": \"999999999\"\r\n\t\t\t\t},\r\n\t\t\t\t\"invoiceOrderOfService\": \"123457\",\r\n\t\t\t\t\"invoiceOrderOfServiceSerie\": \"2\",\r\n\t\t\t\t\"orderNumber\": \"987654322\"\r\n\t\t\t}\r\n\t\t]\r\n\t}\r\n]\r\n```"
+      security:
+      - Authorization: []
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostWithRoute'
+        required: true
+      responses:
+        '200':
+          description: Success
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Delivery Services
+      summary: VTex Get Delivery Services List by Route
+      description: "This endpoint retrieves a list of Delivery Services by Route Item Date Async.\r\n> We strongly recommend that a call to a VTEX Tracking GET endpoint is made only once every 6 hours. Retrieving data from the same endpoint more than once during a 6-hour window represents a load to our API that will slow down the overall usage of systems."
+      security:
+      - Authorization: []
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: status
+        in: query
+        description: 'Current status of the delivery service. Includes the following statuses as possible values: Ativo, Roteirizado, Realizado, EmAndamento, NaoRealizado'
+        style: form
+        schema:
+          type: string
+          default: Ativo
+      - name: dateInit
+        in: query
+        description: Initial date of registration of the requested service. The date format is `yyyy-mm-dd`.
+        style: form
+        schema:
+          type: string
+          format: date
+          example: '2023-07-28'
+      - name: dateEnd
+        in: query
+        description: "End date of registration of the requested service. The date format is `yyyy-mm-dd`.\n\r\n\rMake sure that the period of time between `dateInit` and `dateEnd` is not greater than 30 days."
+        style: form
+        schema:
+          type: string
+          format: date
+          example: '2023-07-29'
+      - name: pageSize
+        in: query
+        description: Number of items shown per consultation page. The default is 25
+        style: form
+        schema:
+          type: integer
+          format: int32
+          default: 40
+      - name: page
+        in: query
+        description: The desired page for the consultation
+        style: form
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      responses:
+        '200':
+          description: Success
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginationResultDeliveryServiceResponsev11'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+  /services/invoice:
+    get:
+      tags:
+      - Delivery Services
+      summary: VTex Get Delivery Service by Invoice
+      description: "This endpoint retrieves a given Service's information by filtering through the chosen invoice number.\r\n> We strongly recommend that a call to a VTEX Tracking GET endpoint is made only once every 6 hours. Retrieving data from the same endpoint more than once during a 6-hour window represents a load to our API that will slow down the overall usage of systems."
+      security:
+      - Authorization: []
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: invoice
+        in: query
+        description: Invoice code
+        style: form
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Success
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginationResultDeliveryServiceResponsev11'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      deprecated: false
+components:
+  schemas:
+    DeliveryServiceResponse_v1_1:
+      title: Delivery Service Response body _v1_1
+      type: object
+      properties:
+        pictures:
+          type: array
+          items:
+            type: string
+          description: ''
+        idDeliveryService:
+          type: integer
+          format: int32
+        deliveryServiceType:
+          $ref: '#/components/schemas/DeliveryServiceTypeResponse'
+        deliveryServiceStatus:
+          $ref: '#/components/schemas/DeliveryServiceStatusResponse'
+        shipper:
+          $ref: '#/components/schemas/ShipperResponse'
+        shipperCustomer:
+          $ref: '#/components/schemas/ShipperCustomerResponse'
+        carrier:
+          $ref: '#/components/schemas/CarrierResponse'
+        displacementType:
+          $ref: '#/components/schemas/DisplacementTypeResponse'
+        state:
+          $ref: '#/components/schemas/StateResponse'
+        country:
+          $ref: '#/components/schemas/CountryResponse'
+        nonDeliveryReason:
+          $ref: '#/components/schemas/NonDeliveryReasonResponse'
+        shipperPartner:
+          $ref: '#/components/schemas/ShipperPartnerResponse'
+        shipperBranch:
+          $ref: '#/components/schemas/ShipperBranchResponse'
+        freightPrice:
+          $ref: '#/components/schemas/FreightPriceResponse'
+        shippingCompany:
+          $ref: '#/components/schemas/ShippingCompanyResponse'
+        invoiceOrderOfService:
+          type: string
+        description:
+          type: string
+        addressStreet:
+          type: string
+        addressNumber:
+          type: string
+        addressComplement:
+          type: string
+        addressNeighborhood:
+          type: string
+        addressCity:
+          type: string
+        postalCode:
+          type: string
+        estimateDeliveryHour:
+          type: string
+          format: date-time
+        created:
+          type: string
+          format: date-time
+        initialEstimateDeliveryHour:
+          type: string
+          format: date-time
+        deliveryDateTime:
+          type: string
+          format: date-time
+        estimateDeliveryDistance:
+          type: integer
+          format: int32
+        travelledDeliveryDistance:
+          type: integer
+          format: int32
+        orderNumber:
+          type: string
+        cteNumber:
+          type: string
+        cteDate:
+          type: string
+          format: date-time
+        sender:
+          type: string
+        senderCity:
+          type: string
+        senderState:
+          type: integer
+          format: int32
+        weight:
+          type: number
+        cubicMeter:
+          type: number
+        cubicMeterWeight:
+          type: number
+        value:
+          type: number
+        freightPriceReceived:
+          type: number
+        deliveryAttempts:
+          type: integer
+          format: int32
+        serviceTime:
+          type: integer
+          format: int32
+        invoiceOrderOfServiceSerie:
+          type: string
+        leadTime:
+          type: string
+          format: date-time
+        cnpjcarrier:
+          type: string
+        cnpjbranch:
+          type: string
+        idExternal:
+          type: string
+        billingInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingInfoResponse'
+          description: ''
+        deliveryServiceRouteItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryServiceRouteItemResponse'
+          description: ''
+    PostWithRoute:
+      title: PostWithRoute
+      required:
+      - deliveryServiceDate
+      type: object
+      properties:
+        deliveryService:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryService'
+          description: ''
+        deliveryServiceRoute:
+          $ref: '#/components/schemas/DeliveryServiceRoute'
+    DeliveryServiceRouteStatusResponse:
+      title: DeliveryServiceRouteStatusResponse
+      type: object
+      properties:
+        description:
+          type: string
+    ShipperTypeResponse:
+      title: ShipperTypeResponse
+      type: object
+      properties:
+        description:
+          type: string
+    DeliveryServiceStatusResponse:
+      title: DeliveryServiceStatusResponse
+      type: object
+      properties:
+        description:
+          type: string
+    Carrier:
+      title: Carrier
+      required:
+      - username
+      type: object
+      properties:
+        username:
+          maxLength: 100
+          minLength: 0
+          type: string
+        firstName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        lastName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        cpf:
+          maxLength: 14
+          minLength: 0
+          type: string
+        email:
+          maxLength: 254
+          minLength: 0
+          type: string
+        mobileAreaCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+        mobile:
+          maxLength: 10
+          minLength: 0
+          type: string
+        phoneAreaCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 10
+          minLength: 0
+          type: string
+        idExternalCarrier:
+          maxLength: 30
+          minLength: 0
+          type: string
+        rg:
+          maxLength: 12
+          minLength: 0
+          type: string
+        idShipperBranch:
+          type: integer
+          format: int32
+        idShippingCompany:
+          type: integer
+          format: int32
+    ShippingCompanyResponse:
+      title: ShippingCompanyResponse
+      type: object
+      properties:
+        companyName:
+          type: string
+        trade:
+          type: string
+        cnpj:
+          type: string
+        companyContact:
+          type: string
+        telephoneArea:
+          type: string
+        telephone:
+          type: string
+        mobileArea:
+          type: string
+        mobile:
+          type: string
+        email:
+          type: string
+    DeliveryService:
+      title: DeliveryService
+      type: array
+      items:
+        $ref: '#/components/schemas/DeliveryServiceObject'
+    DeliveryReasonResponse:
+      title: DeliveryReasonResponse
+      type: object
+      properties:
+        description:
+          type: string
+    StateResponse:
+      title: StateResponse
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+    DeliveryServiceTypeResponse:
+      title: DeliveryServiceTypeResponse
+      type: object
+      properties:
+        description:
+          type: string
+    DisplacementTypeResponse:
+      title: DisplacementTypeResponse
+      type: object
+      properties:
+        description:
+          type: string
+        vehicleType:
+          $ref: '#/components/schemas/VehicleTypeResponse'
+    CarrierResponse:
+      title: CarrierResponse
+      type: object
+      properties:
+        username:
+          maxLength: 100
+          minLength: 0
+          type: string
+        firstName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        lastName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        cpf:
+          maxLength: 14
+          minLength: 0
+          type: string
+        email:
+          maxLength: 254
+          minLength: 0
+          type: string
+        cnpjtransportCompany:
+          type: string
+        mobileAreaCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+        mobile:
+          maxLength: 10
+          minLength: 0
+          type: string
+        phoneAreaCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+        phone:
+          maxLength: 10
+          minLength: 0
+          type: string
+        created:
+          type: string
+          format: date-time
+        idExternalCarrier:
+          maxLength: 30
+          minLength: 0
+          type: string
+        isCarrierAppOnline:
+          type: boolean
+        shippingCompany:
+          $ref: '#/components/schemas/ShippingCompanyResponse'
+        rg:
+          maxLength: 12
+          minLength: 0
+          type: string
+    DeliveryServiceRoute:
+      title: DeliveryServiceRoute
+      required:
+      - carrier
+      - displacementType
+      - deliveryServiceDate
+      type: object
+      properties:
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+        displacementType:
+          maxLength: 15
+          minLength: 0
+          type: string
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        deliveryServiceRouteTimeOfDay:
+          maxLength: 10
+          minLength: 0
+          type: string
+        deliveryServiceDate:
+          type: string
+          format: date-time
+        idExternalRoute:
+          maxLength: 50
+          minLength: 0
+          type: string
+        itinerantDate:
+          type: string
+          format: date-time
+        addressStart:
+          $ref: '#/components/schemas/AddressStart'
+    ShipperBranchResponse:
+      title: ShipperBranchResponse
+      type: object
+      properties:
+        shipperType:
+          $ref: '#/components/schemas/ShipperTypeResponse'
+        companyName:
+          type: string
+        trade:
+          type: string
+        cnpj:
+          type: string
+        companyContact:
+          type: string
+        telephoneArea:
+          type: string
+        telephone:
+          type: string
+        mobileArea:
+          type: string
+        mobile:
+          type: string
+        email:
+          type: string
+    Vehicle:
+      title: Vehicle
+      type: object
+      properties:
+        registrationPlate:
+          maxLength: 50
+          minLength: 0
+          type: string
+    DeliveryServiceRouteItemResponse:
+      title: DeliveryServiceRouteItemResponse
+      type: object
+      properties:
+        idDeliveryServiceRouteItem:
+          type: integer
+          format: int32
+        deliveryServiceRoute:
+          $ref: '#/components/schemas/DeliveryServiceRouteResponse'
+        deliveryServiceRouteItemStatus:
+          $ref: '#/components/schemas/DeliveryServiceRouteItemStatusResponse'
+        nonDeliveryDescription:
+          type: string
+        index:
+          type: integer
+          format: int32
+        created:
+          type: string
+          format: date-time
+        startDisplacementDateTime:
+          type: string
+          format: date-time
+        startDisplacementLatitude:
+          type: number
+        startDisplacementLongitude:
+          type: number
+        finishedDisplacementLatitude:
+          type: number
+        finishedDisplacementLongitude:
+          type: number
+        receiverName:
+          type: string
+        receiverDocument:
+          type: string
+        description:
+          type: string
+        deliveryArrived:
+          type: string
+          format: date-time
+        comment:
+          type: string
+        rating:
+          type: integer
+          format: int32
+        pauseDisplacementDateTime:
+          type: string
+          format: date-time
+        deliveryLeft:
+          type: string
+          format: date-time
+        deliveryReason:
+          $ref: '#/components/schemas/DeliveryReasonResponse'
+    BillingInfoResponse:
+      title: BillingInfoResponse
+      type: object
+      properties:
+        receivableAmount:
+          type: number
+        money:
+          type: number
+        cheque:
+          type: number
+        creditCard:
+          type: number
+        webComment:
+          type: string
+        carrierComment:
+          type: string
+        billingConfirmDate:
+          type: string
+          format: date-time
+        created:
+          type: string
+          format: date-time
+    NonDeliveryReasonResponse:
+      title: NonDeliveryReasonResponse
+      type: object
+      properties:
+        description:
+          type: string
+    LegalTypeResponse:
+      title: LegalTypeResponse
+      type: object
+      properties:
+        description:
+          type: string
+    ShipperCustomer:
+      title: ShipperCustomer
+      required:
+      - legalType
+      - addressStreet
+      - postalCode
+      type: object
+      properties:
+        legalType:
+          maxLength: 2
+          minLength: 2
+          type: string
+        email:
+          maxLength: 254
+          minLength: 0
+          type: string
+        firstName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        lastName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        cpf:
+          maxLength: 50
+          minLength: 0
+          type: string
+        addressStreet:
+          maxLength: 150
+          minLength: 0
+          type: string
+        addressNumber:
+          maxLength: 50
+          minLength: 0
+          type: string
+        addressComplement:
+          maxLength: 50
+          minLength: 0
+          type: string
+        addressNeighborhood:
+          maxLength: 150
+          minLength: 0
+          type: string
+        addressCity:
+          maxLength: 100
+          minLength: 0
+          type: string
+        postalCode:
+          maxLength: 9
+          minLength: 0
+          type: string
+        state:
+          maxLength: 2
+          minLength: 2
+          type: string
+        companyName:
+          maxLength: 150
+          minLength: 0
+          type: string
+        cnpj:
+          maxLength: 50
+          minLength: 0
+          type: string
+        idExternalShipperCustomer:
+          maxLength: 30
+          minLength: 0
+          type: string
+        phoneAreaCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+        phoneNumber:
+          maxLength: 12
+          minLength: 0
+          type: string
+    InvoiceFilter:
+      title: Request body
+      type: object
+      properties:
+        invoice:
+          type: string
+          description: Chosen invoice filter
+          default: string
+        serie:
+          type: string
+          description: Serie's number on the invoice
+          default: string
+    DeliveryServiceRouteResponse:
+      title: DeliveryServiceRouteResponse
+      type: object
+      properties:
+        idDeliveryServiceRoute:
+          type: integer
+          format: int32
+        deliveryServiceRouteStatus:
+          $ref: '#/components/schemas/DeliveryServiceRouteStatusResponse'
+        deliveryServiceDate:
+          type: string
+          format: date-time
+        created:
+          type: string
+          format: date-time
+        startWorkDayDateTime:
+          type: string
+          format: date-time
+        finishWorkDayDateTime:
+          type: string
+          format: date-time
+        itinerantDate:
+          type: string
+          format: date-time
+    DeliveryServiceObject:
+      title: Delivery Service Object
+      required:
+      - deliveryServiceType
+      - shipperCustomer
+      type: object
+      properties:
+        deliveryServiceType:
+          maxLength: 11
+          minLength: 0
+          type: string
+        idExternalShipperCustomer:
+          maxLength: 30
+          minLength: 0
+          type: string
+        shipperCustomer:
+          $ref: '#/components/schemas/ShipperCustomer'
+        invoiceOrderOfService:
+          type: string
+        invoiceOrderOfServiceSerie:
+          maxLength: 3
+          minLength: 0
+          type: string
+        description:
+          type: string
+        sender:
+          type: string
+        cnpjShipperPartner:
+          type: string
+        orderNumber:
+          maxLength: 200
+          minLength: 0
+          type: string
+        deliveryServiceHighLighter:
+          maxLength: 11
+          minLength: 0
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        deliveryServiceScheduling:
+          $ref: '#/components/schemas/Scheduling'
+        cnpjcarrier:
+          type: string
+        cnpjbranch:
+          type: string
+        idExternal:
+          maxLength: 30
+          minLength: 0
+          type: string
+        idShippingCompany:
+          type: integer
+          format: int32
+        packingList:
+          maxLength: 50
+          minLength: 0
+          type: string
+        packingListDateTime:
+          type: string
+          format: date-time
+        integrationDateTime:
+          type: string
+          format: date-time
+    Scheduling:
+      title: Scheduling
+      type: object
+      properties:
+        shipperCustomerSchedulingDateTime:
+          type: string
+          format: date-time
+        shipperSchedulingDateTime:
+          type: string
+          format: date-time
+        morningPeriod:
+          type: boolean
+        afternoonPeriod:
+          type: boolean
+        nightPeriod:
+          type: boolean
+        origin:
+          type: integer
+          format: int32
+    CountryResponse:
+      title: CountryResponse
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+    ShipperPartnerResponse:
+      title: ShipperPartnerResponse
+      type: object
+      properties:
+        cnpj:
+          type: string
+        name:
+          type: string
+    ShipperCustomerResponse:
+      title: ShipperCustomerResponse
+      type: object
+      properties:
+        idShipperCustomer:
+          type: integer
+          format: int32
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        cpf:
+          type: string
+        addressStreet:
+          type: string
+        addressNumber:
+          type: string
+        addressComplement:
+          type: string
+        addressNeighborhood:
+          type: string
+        addressCity:
+          type: string
+        postalCode:
+          type: string
+        state:
+          $ref: '#/components/schemas/StateResponse'
+        country:
+          $ref: '#/components/schemas/CountryResponse'
+        created:
+          type: string
+          format: date-time
+        companyName:
+          type: string
+        cnpj:
+          type: string
+        legalType:
+          $ref: '#/components/schemas/LegalTypeResponse'
+        idExternalShipperCustomer:
+          type: string
+        phoneAreaCode:
+          type: string
+        phoneNumber:
+          type: string
+    DeliveryServiceRouteItemStatusResponse:
+      title: DeliveryServiceRouteItemStatusResponse
+      type: object
+      properties:
+        description:
+          type: string
+    ShipperResponse:
+      title: ShipperResponse
+      type: object
+      properties:
+        companyName:
+          type: string
+    AddressStart:
+      title: AddressStart
+      type: object
+      properties:
+        addressStreet:
+          type: string
+        addressNumber:
+          type: string
+        postalCode:
+          type: string
+        addressCity:
+          type: string
+        state:
+          maxLength: 2
+          minLength: 0
+          type: string
+    FreightPriceResponse:
+      title: FreightPriceResponse
+      type: object
+      properties:
+        description:
+          type: string
+        firstPostalCodeInterval:
+          type: string
+        secondPostalCodeInterval:
+          type: string
+        price:
+          type: number
+        created:
+          type: string
+          format: date-time
+    PaginationResultDeliveryServiceResponsev11:
+      title: Pagination Result[Delivery Service Response _v1_1]
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryServiceResponse_v1_1'
+          description: ''
+    VehicleTypeResponse:
+      title: VehicleTypeResponse
+      type: object
+      properties:
+        description:
+          type: string
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

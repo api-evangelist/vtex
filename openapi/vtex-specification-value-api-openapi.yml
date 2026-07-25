@@ -1,0 +1,246 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Specification Value API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Specification Value
+paths:
+  /api/catalog/pvt/specificationvalue/{specificationValueId}:
+    get:
+      tags:
+      - Specification Value
+      summary: VTex Get specification value
+      description: "Retrieves general information about a specification value.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: specificationValueId
+        in: path
+        required: true
+        description: Specification value's unique numerical identifier.
+        schema:
+          type: integer
+          example: 143
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                FieldValueId: 143
+                FieldId: 34
+                Name: Cotton
+                Text: Cotton fibers
+                IsActive: true
+                Position: 100
+              schema:
+                type: object
+                properties:
+                  FieldValueId:
+                    type: integer
+                    format: int32
+                    description: Specification field value ID.
+                  FieldId:
+                    type: integer
+                    description: Specification field ID.
+                  Name:
+                    type: string
+                    description: Specification field value name.
+                  Text:
+                    type: string
+                    description: Specification field value description.
+                  IsActive:
+                    type: boolean
+                    description: Defines if the specification field value is active (`true`) or inactive (`false`).
+                  Position:
+                    type: integer
+                    format: int32
+                    description: Specification field value position.
+    put:
+      tags:
+      - Specification Value
+      summary: VTex Update specification value
+      description: "Updates a new specification value for a category.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: specificationValueId
+        in: path
+        required: true
+        description: ' specification value''s unique numerical identifier.'
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - FieldId
+              - Name
+              properties:
+                FieldId:
+                  type: integer
+                  description: Specification ID associated with this specification value.
+                  example: 193
+                Name:
+                  type: string
+                  description: Specification value name.
+                  example: Metal
+                Text:
+                  type: string
+                  deprecated: true
+                  nullable: true
+                  description: Specification value text.
+                IsActive:
+                  type: boolean
+                  description: Enable (`true`) or disable (`false`) specification value.
+                  example: true
+                Position:
+                  type: integer
+                  description: The position of the value to be shown on product registration page (`/admin/Site/Produto.aspx`).
+                  example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                FieldValueId: 360
+                FieldId: 193
+                Name: Metal
+                Text: null
+                IsActive: true
+                Position: 1
+              schema:
+                type: object
+                properties:
+                  FieldValueId:
+                    type: integer
+                    description: Specification value ID.
+                  FieldId:
+                    type: integer
+                    description: Specification field ID associated with this specification value.
+                  Name:
+                    type: string
+                    description: Specification value name.
+                  Text:
+                    type: string
+                    deprecated: true
+                    nullable: true
+                    description: Specification value text.
+                  IsActive:
+                    type: boolean
+                    description: Enable (`true`) or disable (`false`) specification value.
+                  Position:
+                    type: integer
+                    description: The position of the value to be shown on product registration page (`/admin/Site/Produto.aspx`).
+  /api/catalog/pvt/specificationvalue:
+    post:
+      tags:
+      - Specification Value
+      summary: VTex Create specification value
+      description: "Creates a new specification value for a category.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Commercial | **SKU management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - FieldId
+              - Name
+              properties:
+                FieldId:
+                  type: integer
+                  description: Specification field ID associated with this specification value.
+                  example: 193
+                Name:
+                  type: string
+                  description: Specification value name.
+                  example: Metal
+                Text:
+                  type: string
+                  deprecated: true
+                  nullable: true
+                  description: Specification value text.
+                IsActive:
+                  type: boolean
+                  description: Enable (`true`) or disable (`false`) specification value.
+                  example: true
+                Position:
+                  type: integer
+                  description: The position of the value to be shown on product registration page (`/admin/Site/Produto.aspx`).
+                  example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                FieldValueId: 360
+                FieldId: 193
+                Name: Metal
+                Text: null
+                IsActive: true
+                Position: 1
+              schema:
+                type: object
+                properties:
+                  FieldValueId:
+                    type: integer
+                    description: Specification value ID.
+                  FieldId:
+                    type: integer
+                    description: Specification field ID associated with this specification value.
+                  Name:
+                    type: string
+                    description: Specification value name.
+                  Text:
+                    type: string
+                    deprecated: true
+                    nullable: true
+                    description: Specification value text.
+                  IsActive:
+                    type: boolean
+                    description: Enable (`true`) or disable (`false`) specification value.
+                  Position:
+                    type: integer
+                    description: The position of the value to be shown on product registration page (`/admin/Site/Produto.aspx`).
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

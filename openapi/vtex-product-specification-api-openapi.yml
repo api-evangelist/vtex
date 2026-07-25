@@ -1,0 +1,390 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Product Specification API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Product Specification
+paths:
+  /api/catalog_system/pvt/products/{productId}/specification:
+    get:
+      tags:
+      - Product Specification
+      summary: VTex Get product specifications by product ID
+      description: "Retrieves all specifications of a product by the product's ID.\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProductSpecification
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - Value:
+                - Iron
+                - Plastic
+                Id: 30
+                Name: Material
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetorUpdateProductSpecification'
+      deprecated: false
+    post:
+      tags:
+      - Product Specification
+      summary: VTex Update product specification by product ID
+      description: "Updates the value of a product specification by the product's ID. The specification's ID or name can be used to identify what product specification will be updated. specification fields must be previously created in your Catalog.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: UpdateProductSpecification
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product's unique identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetorUpdateProductSpecification'
+        required: true
+      responses:
+        '200':
+          description: OK
+      deprecated: false
+  /api/catalog/pvt/product/{productId}/specification:
+    get:
+      tags:
+      - Product Specification
+      summary: VTex Get product specifications and their information by product ID
+      description: "Retrieves information of all specifications of a product by the product's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProductSpecificationbyProductID
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - Id: 227
+                ProductId: 1
+                FieldId: 33
+                FieldValueId: 135
+                Text: ValueA
+              - Id: 228
+                ProductId: 1
+                FieldId: 34
+                FieldValueId: 1
+                Text: Giant
+              schema:
+                type: array
+                items:
+                  type: object
+                  description: Object with the product specification information.
+                  properties:
+                    Id:
+                      type: integer
+                      description: ID of the association of the specification and the product. This ID is used to update or delete the specification.
+                    ProductId:
+                      type: integer
+                      description: Product ID.
+                    FieldId:
+                      type: integer
+                      description: Specification field ID.
+                    FieldValueId:
+                      type: integer
+                      description: Current specification value ID.
+                    Text:
+                      type: string
+                      description: Current specification value text.
+      deprecated: false
+    post:
+      tags:
+      - Product Specification
+      summary: VTex Associate product specification
+      description: "Associates a previously defined specification to a product.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        required: true
+        description: Product's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - FieldId
+              properties:
+                FieldId:
+                  type: integer
+                  description: Specification field ID.
+                  example: 19
+                FieldValueId:
+                  type: integer
+                  description: Specification value ID. Mandatory for `FieldTypeId` `5`, `6` and `7`. Must not be used for any other Field types.
+                  example: 12
+                Text:
+                  type: string
+                  description: Value of specification. Only for `FieldTypeId` different from `5`, `6` and `7`.
+                  example: Metal
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 41
+                FieldId: 19
+                FieldValueId: 1
+                Text: test
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: ID of the association of the specification and the product. This ID is used to update or delete the specification.
+                  ProductId:
+                    type: integer
+                    description: Product ID.
+                  FieldId:
+                    type: integer
+                    description: Specification field ID.
+                  FieldValueId:
+                    type: integer
+                    description: Specification value ID. Mandatory for `FieldTypeId` `5`, `6` and `7`. Must not be used for any other field types.
+                  Text:
+                    type: string
+                    description: Value of specification. Only for `FieldTypeId` different from `5`, `6` and `7`.
+    delete:
+      tags:
+      - Product Specification
+      summary: VTex Delete all product specifications by product ID
+      description: "Deletes all product specifications given a specific product ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: DeleteAllProductSpecifications
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+  /api/catalog/pvt/product/{productId}/specification/{specificationId}:
+    delete:
+      tags:
+      - Product Specification
+      summary: VTex Delete a product specification
+      description: "Deletes a product specification given a product ID and a specification ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: DeleteaProductSpecification
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      - name: specificationId
+        in: path
+        description: Product specification's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 7
+      responses:
+        '200':
+          description: OK
+  /api/catalog/pvt/product/{productId}/specificationvalue:
+    put:
+      tags:
+      - Product Specification
+      summary: VTex Associate product specification using specification name and group name
+      description: "Associates a specification to a product using specification name and group name. Automatically creates the informed group, specification and values if they had not been created before.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        required: true
+        description: Product's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            example:
+              FieldName: Material
+              GroupName: Composition
+              RootLevelSpecification: true
+              FieldValues:
+              - Cotton
+              - Polyester
+            schema:
+              type: object
+              description: Object with product specification information.
+              required:
+              - FieldName
+              - GroupName
+              - RootLevelSpecification
+              - FieldValues
+              properties:
+                FieldName:
+                  type: string
+                  description: Specification name. Limited to 100 characters.
+                  example: Material
+                GroupName:
+                  type: string
+                  description: Group name.
+                  example: Composition
+                RootLevelSpecification:
+                  type: boolean
+                  description: Root level specification.
+                  example: true
+                FieldValues:
+                  type: array
+                  description: Array of specification values.
+                  example:
+                  - Cotton
+                  - Polyester
+                  items:
+                    type: string
+                    description: Specification value.
+                    example: Cotton
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - Id: 239
+                ProductId: 1
+                FieldId: 85
+                FieldValueId: 193
+                Text: Value123
+              schema:
+                type: array
+                description: Array with information of all product specifications.
+                items:
+                  type: object
+                  description: Object with information of the specification.
+                  properties:
+                    Id:
+                      type: integer
+                      description: ID of the association of the product and the specification.
+                    ProductId:
+                      type: integer
+                      description: Product ID.
+                    FieldId:
+                      type: integer
+                      description: Specification field ID.
+                    FieldValueId:
+                      type: integer
+                      description: Current specification value ID.
+                    Text:
+                      type: string
+                      description: Current specification value text.
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  schemas:
+    GetorUpdateProductSpecification:
+      required:
+      - Value
+      type: object
+      properties:
+        Value:
+          type: array
+          description: Array with specification values.
+          items:
+            type: string
+            description: Specification value.
+            example: Cotton
+        Id:
+          type: integer
+          format: int32
+          description: Specification field ID, which is the same as `FieldId` in other specification endpoints.
+          example: 7
+        Name:
+          type: string
+          description: Name of the specification.
+          example: Fabric
+      example:
+        Value:
+        - Iron
+        - Plastic
+        Id: 30
+        Name: Material
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

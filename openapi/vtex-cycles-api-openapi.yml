@@ -1,0 +1,332 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Cycles API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Cycles
+paths:
+  /api/rns/pub/cycles/{cycleId}:
+    get:
+      tags:
+      - Cycles
+      summary: VTex Get cycle details
+      description: Retrieve a specific cycle by its ID.
+      parameters:
+      - name: cycleId
+        in: path
+        description: ID from the desired cycle.
+        required: true
+        schema:
+          type: string
+          nullable: true
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/SubscriptionCycleResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionCycleResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionCycleResponse'
+  /api/rns/pub/cycles:
+    get:
+      tags:
+      - Cycles
+      summary: VTex List cycles
+      description: List cycles filtering by some arguments.
+      parameters:
+      - name: beginDate
+        in: query
+        description: Lower limit for the date of creation of the cycle
+        schema:
+          type: string
+          nullable: true
+      - name: endDate
+        description: Upper limit for the date of creation of the cycle
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: subscriptionId
+        description: Id from the subscription that generated the cycle
+        in: query
+        schema:
+          type: string
+          nullable: true
+      - name: customerEmail
+        in: query
+        description: Customer that owns the subscription. Defaults to the current logged user
+        schema:
+          type: string
+          nullable: true
+      - name: status
+        in: query
+        description: Current cycle status
+        schema:
+          type: string
+          nullable: true
+      - name: page
+        in: query
+        description: Page used for pagination
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: size
+        in: query
+        description: Page size used for pagination
+        schema:
+          type: integer
+          format: int32
+          default: 15
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionCycleResponse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionCycleResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionCycleResponse'
+  /api/rns/pub/cycles/{cycleId}/retry:
+    post:
+      tags:
+      - Cycles
+      summary: VTex Retry cycle
+      description: Every subscription order has an execution count called cycle, which determines the position of an order counting from when the shopper subscribed. This endpoint reruns a cycle that is currently in error state.
+      parameters:
+      - name: cycleId
+        in: path
+        description: Id from the cycle that will be retried
+        required: true
+        schema:
+          type: string
+          nullable: true
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    SubscriptionCycleContext:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionCycleItemContext'
+          nullable: true
+        paymentSystem:
+          type: string
+          nullable: true
+        paymentSystemName:
+          type: string
+          nullable: true
+        paymentSystemGroup:
+          type: string
+          nullable: true
+        paymentAccountId:
+          type: string
+          nullable: true
+        addressId:
+          type: string
+          nullable: true
+        addressType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SubscriptionCycleItemContext:
+      type: object
+      properties:
+        subscriptionItemId:
+          type: string
+          nullable: true
+        skuId:
+          type: string
+          nullable: true
+          title: skuId
+          description: SKU ID.
+          example: '12'
+        quantity:
+          type: integer
+          format: int32
+          title: quantity
+          description: Amount of units in the cart.
+          example: 5
+        status:
+          $ref: '#/components/schemas/Status'
+        isSkipped:
+          type: boolean
+        cycleCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    SubscriptionCycleOrderInfo:
+      type: object
+      properties:
+        orderId:
+          type: string
+          nullable: true
+        orderGroup:
+          type: string
+          nullable: true
+        paymentURL:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int64
+      additionalProperties: false
+    SubscriptionCycleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        subscriptionId:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        customerEmail:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date-time
+        lastUpdate:
+          type: string
+          format: date-time
+        cycleCount:
+          type: integer
+          format: int32
+        isInRetry:
+          type: boolean
+        message:
+          type: string
+          nullable: true
+        orderInfo:
+          $ref: '#/components/schemas/SubscriptionCycleOrderInfo'
+        context:
+          $ref: '#/components/schemas/SubscriptionCycleContext'
+        simulationItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimulationItemResult'
+          nullable: true
+      additionalProperties: false
+    Status:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      type: integer
+      format: int32
+    SimulationItemResult:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        quantity:
+          type: integer
+          format: int32
+          title: quantity
+          description: Amount of units in the cart.
+          example: 5
+        unitPrice:
+          type: integer
+          format: int64
+          nullable: true
+        status:
+          $ref: '#/components/schemas/ItemSimulationStatus'
+        statusName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ItemSimulationStatus:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      format: int32
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

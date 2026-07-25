@@ -1,0 +1,255 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Sales Channel API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Sales Channel
+paths:
+  /api/catalog_system/pvt/saleschannel/list:
+    get:
+      tags:
+      - Sales Channel
+      summary: VTex Get Sales channel list
+      description: "Retrieves a list with details about the store's sales channels. \r\n## Response body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"Id\": 1,\r\n        \"Name\": \"Loja Principal\",\r\n        \"IsActive\": true,\r\n        \"ProductClusterId\": null,\r\n        \"CountryCode\": \"BRA\",\r\n        \"CultureInfo\": \"pt-BR\",\r\n        \"TimeZone\": \"E. South America Standard Time\",\r\n        \"CurrencyCode\": \"BRL\",\r\n        \"CurrencySymbol\": \"R$\",\r\n        \"CurrencyLocale\": 1046,\r\n        \"CurrencyFormatInfo\": {\r\n            \"CurrencyDecimalDigits\": 1,\r\n            \"CurrencyDecimalSeparator\": \",\",\r\n            \"CurrencyGroupSeparator\": \".\",\r\n            \"CurrencyGroupSize\": 3,\r\n            \"StartsWithCurrencySymbol\": true\r\n        },\r\n        \"Origin\": null,\r\n        \"Position\": 2,\r\n        \"ConditionRule\": null,\r\n        \"CurrencyDecimalDigits\": 1\r\n    }\r\n]\r\n```"
+      operationId: SalesChannelList
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Id:
+                      type: integer
+                      description: Sales channel unique identifier.
+                      example: 1
+                    Name:
+                      type: string
+                      description: Sales channel name.
+                      example: Loja Principal
+                    IsActive:
+                      type: boolean
+                      description: Defines if the Sales channel is active (`true`) or not (`false`).
+                    ProductClusterId:
+                      type: integer
+                      description: Product Cluster ID, if the Sales channel has releated product Cluster.
+                      nullable: true
+                      example: null
+                    CountryCode:
+                      type: string
+                      description: Country Code in ISO 3166-1 alfa-3 Standard.
+                      example: BRA
+                    CultureInfo:
+                      type: string
+                      description: Language Country code in LCIDstring Standard.
+                      example: pt-BR
+                    TimeZone:
+                      type: string
+                      description: Name of Time Zone.
+                      example: E. South America Standard Time
+                    CurrencyCode:
+                      type: string
+                      description: Currency Code in ISO 4217 standard.
+                      example: BRL
+                    CurrencySymbol:
+                      type: string
+                      description: Currency symbol.
+                      example: R$
+                    CurrencyLocale:
+                      type: integer
+                      description: Currency Locale Code in LCID standard.
+                      example: 1046
+                    CurrencyFormatInfo:
+                      type: object
+                      description: Object with currency format.
+                      properties:
+                        CurrencyDecimalDigits:
+                          type: integer
+                          description: Quantity of Currency Decimal Digits.
+                          example: 1
+                        CurrencyDecimalSeparator:
+                          type: string
+                          description: Defines which Currency Decimal Separator will be applied.
+                          example: ','
+                        CurrencyGroupSeparator:
+                          type: string
+                          description: Defines which Currency Group Separator will be applied.
+                          example: .
+                        CurrencyGroupSize:
+                          type: integer
+                          description: Define how many characters will be grouped.
+                          example: 3
+                        StartsWithCurrencySymbol:
+                          type: boolean
+                          description: Defines if all prices will be initiated with Currency Symbol (`true`) or not (`false`).
+                          example: true
+                    Origin:
+                      type: string
+                      description: Origin of products in the Sales channel.
+                      nullable: true
+                      example: null
+                    Position:
+                      type: integer
+                      description: Defines the position on index.
+                      nullable: true
+                      example: 1
+                    ConditionRule:
+                      type: string
+                      description: Defines what is the conditional rule to activate de Sales channel.
+                      nullable: true
+                      example: approved=true
+                    CurrencyDecimalDigits:
+                      type: integer
+                      description: Quantity of Currency Decimal Digits.
+                      example: 1
+      deprecated: false
+  /api/catalog_system/pub/saleschannel/{salesChannelId}:
+    get:
+      tags:
+      - Sales Channel
+      summary: VTex Get Sales channel by ID
+      description: "Retrieves a specific sales channel by its ID. \r\n\r\n## Response body example\r\n\r\n```json\r\n{\r\n    \"Id\": 1,\r\n    \"Name\": \"Loja Principal\",\r\n    \"IsActive\": true,\r\n    \"ProductClusterId\": null,\r\n    \"CountryCode\": \"BRA\",\r\n    \"CultureInfo\": \"pt-BR\",\r\n    \"TimeZone\": \"E. South America Standard Time\",\r\n    \"CurrencyCode\": \"BRL\",\r\n    \"CurrencySymbol\": \"R$\",\r\n    \"CurrencyLocale\": 1046,\r\n    \"CurrencyFormatInfo\": {\r\n        \"CurrencyDecimalDigits\": 1,\r\n        \"CurrencyDecimalSeparator\": \",\",\r\n        \"CurrencyGroupSeparator\": \".\",\r\n        \"CurrencyGroupSize\": 3,\r\n        \"StartsWithCurrencySymbol\": true\r\n    },\r\n    \"Origin\": null,\r\n    \"Position\": 2,\r\n    \"ConditionRule\": null,\r\n    \"CurrencyDecimalDigits\": 1\r\n}\r\n```"
+      operationId: SalesChannelbyId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: salesChannelId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Sales channel unique identifier.
+                    example: 1
+                  Name:
+                    type: string
+                    description: Sales channel name.
+                    example: Loja Principal
+                  IsActive:
+                    type: boolean
+                    description: Defines if the Sales channel is active (`true`) or not (`false`).
+                  ProductClusterId:
+                    type: integer
+                    description: Product Cluster ID, if the Sales channel has releated product Cluster.
+                    nullable: true
+                    example: null
+                  CountryCode:
+                    type: string
+                    description: Country Code in ISO 3166-1 alfa-3 Standard.
+                    example: BRA
+                  CultureInfo:
+                    type: string
+                    description: Language Country code in LCIDstring Standard.
+                    example: pt-BR
+                  TimeZone:
+                    type: string
+                    description: Name of Time Zone.
+                    example: E. South America Standard Time
+                  CurrencyCode:
+                    type: string
+                    description: Currency Code in ISO 4217 standard.
+                    example: BRL
+                  CurrencySymbol:
+                    type: string
+                    description: Currency symbol.
+                    example: R$
+                  CurrencyLocale:
+                    type: integer
+                    description: Currency Locale Code in LCID standard.
+                    example: 1046
+                  CurrencyFormatInfo:
+                    type: object
+                    description: Object with currency format.
+                    properties:
+                      CurrencyDecimalDigits:
+                        type: integer
+                        description: Quantity of Currency Decimal Digits.
+                        example: 1
+                      CurrencyDecimalSeparator:
+                        type: string
+                        description: Defines which Currency Decimal Separator will be applied.
+                        example: ','
+                      CurrencyGroupSeparator:
+                        type: string
+                        description: Defines which Currency Group Separator will be applied.
+                        example: .
+                      CurrencyGroupSize:
+                        type: integer
+                        description: Define how many characters will be grouped.
+                        example: 3
+                      StartsWithCurrencySymbol:
+                        type: boolean
+                        description: Defines if all prices will be initiated with Currency Symbol (`true`) or not (`false`).
+                        example: true
+                  Origin:
+                    type: string
+                    description: Origin of products in the Sales channel.
+                    nullable: true
+                    example: null
+                  Position:
+                    type: integer
+                    description: Defines the position on index.
+                    nullable: true
+                    example: 1
+                  ConditionRule:
+                    type: string
+                    description: Defines what is the conditional rule to activate de Sales channel.
+                    nullable: true
+                    example: approved=true
+                  CurrencyDecimalDigits:
+                    type: integer
+                    description: Quantity of Currency Decimal Digits.
+                    example: 1
+      deprecated: false
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

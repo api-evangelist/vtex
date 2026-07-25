@@ -1,0 +1,199 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Trade Policy API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Trade Policy
+paths:
+  /api/catalog/pvt/product/{productId}/salespolicy:
+    get:
+      tags:
+      - Trade Policy
+      summary: VTex Get Trade Policies by product ID
+      description: "Retrieves a list of Trade Policies associated to a product based on the product's ID. \r\n## Response body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"ProductId\": 1,\r\n        \"StoreId\": 1\r\n    },\r\n    {\r\n        \"ProductId\": 1,\r\n        \"StoreId\": 2\r\n    },\r\n    {\r\n        \"ProductId\": 1,\r\n        \"StoreId\": 3\r\n    },\r\n    {\r\n        \"ProductId\": 1,\r\n        \"StoreId\": 4\r\n    }\r\n]\r\n```"
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        required: true
+        description: Product's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  description: Object containing the product ID and the trade policy ID.
+                  properties:
+                    ProductId:
+                      type: integer
+                      description: Product's unique numerical identifier.
+                      example: 1
+                    StoreId:
+                      type: integer
+                      description: Trade policy's unique numerical identifier.
+                      example: 1
+  /api/catalog/pvt/product/{productId}/salespolicy/{tradepolicyId}:
+    post:
+      tags:
+      - Trade Policy
+      summary: VTex Associate product with trade policy
+      description: Associates an existing trade policy with a product.
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        required: true
+        description: Product's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      - name: tradepolicyId
+        in: path
+        required: true
+        description: Trade policy's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+      - Trade Policy
+      summary: VTex Remove product from trade policy
+      description: Disassociates a trade policy of a product.
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        required: true
+        description: Product's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      - name: tradepolicyId
+        in: path
+        required: true
+        description: Trade policy's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+  /api/catalog_system/pvt/sku/stockkeepingunitidsbysaleschannel:
+    get:
+      tags:
+      - Trade Policy
+      summary: VTex List all SKUs of a trade policy
+      description: Retrieves a list of SKU IDs of a trade policy.
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: sc
+        in: query
+        required: true
+        description: Trade policy's unique numerical identifier.
+        style: form
+        schema:
+          type: integer
+          example: 1
+      - name: page
+        in: query
+        required: false
+        description: Page number.
+        schema:
+          type: integer
+          example: 1
+      - name: pageSize
+        in: query
+        required: false
+        description: Number of items in the page.
+        schema:
+          type: integer
+          example: 1
+      - name: onlyAssigned
+        in: query
+        required: false
+        description: If set as `false`, it allows the user to decide if the SKUs that are not assigned to a specific trade policy should be also returned.
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - 405380
+              - 405381
+              - 405382
+              - 405383
+              - 405384
+              - 405385
+              - 405386
+              - 405387
+              - 405388
+              - 405389
+              - 405390
+              - 405391
+              - 405392
+              - 405393
+              - 405394
+              - 405395
+              - 405396
+              - 405397
+              - 405398
+              - 405399
+              - 405400
+              - 405556
+              schema:
+                type: array
+                description: List of SKU IDs of the trade policy.
+                items:
+                  type: integer
+                  example: 1
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

@@ -1,0 +1,843 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Review API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Review
+paths:
+  /reviews-and-ratings/api/review/{reviewId}:
+    get:
+      tags:
+      - Review
+      summary: VTex Get product review by review ID
+      description: "Retrieves information of a product review based on the review's ID.\r\n\r\n ## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      operationId: GetReviewbyReviewId
+      parameters:
+      - name: reviewId
+        in: path
+        description: Review ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1'
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Response body object.
+                type: object
+                properties:
+                  id:
+                    description: Review ID.
+                    type: string
+                  productId:
+                    description: Product ID.
+                    type: string
+                  rating:
+                    description: Customer rating.
+                    type: number
+                  title:
+                    description: Review's title.
+                    type: string
+                  text:
+                    description: Review's text.
+                    type: string
+                  reviewerName:
+                    description: Reviewer name.
+                    type: string
+                  shopperId:
+                    description: Shopper email.
+                    type: string
+                  reviewDateTime:
+                    description: Review's date and time.
+                    type: string
+                  searchDate:
+                    description: Review's search date.
+                    type: string
+                  verifiedPurchaser:
+                    description: Indicates if the reviewer is a verified purchaser (`true`) or not (`false`).
+                    type: boolean
+                  sku:
+                    description: SKU ID.
+                    type: string
+                    nullable: true
+                  approved:
+                    description: Indicates if the review was approved (`true`) or not (`false`).
+                    type: boolean
+                  location:
+                    description: Review's origin location.
+                    type: string
+                    nullable: true
+                  locale:
+                    description: Review's locale.
+                    type: string
+                    nullable: true
+                  pastReviews:
+                    description: Past reviews of the same product.
+                    type: string
+                    nullable: true
+              example:
+                id: 5323fdaa-c012-11ec-835d-0ebee58edbb3
+                productId: '1'
+                rating: 5
+                title: Great product
+                text: Great product.
+                reviewerName: Arturo
+                shopperId: user@email.com
+                reviewDateTime: 04/19/2022 18:55:58
+                searchDate: '2022-04-19T18:55:58Z'
+                verifiedPurchaser: false
+                sku: '2'
+                approved: false
+                location: null
+                locale: en-US
+                pastReviews: null
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Response body object.
+                properties:
+                  code:
+                    type: string
+                    description: Error type code.
+                  message:
+                    type: string
+                    description: Error message.
+                  source:
+                    type: string
+                    description: Error source.
+                  requestId:
+                    type: string
+                    description: VTEX request identifier.
+              example:
+                code: NotFound
+                message: apiexamples.myvtex.com.br not found
+                source: Vtex.Kube.Router.WebApi
+                requestId: b49522afa7c94b76885450f652be7bfc
+        '500':
+          description: Internal Server Error
+      deprecated: false
+    delete:
+      tags:
+      - Review
+      summary: VTex Delete review
+      description: "Deletes an existing review. \r\n\r\n ## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      operationId: DeleteReview
+      parameters:
+      - name: reviewId
+        in: path
+        description: Review ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1'
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Indicates if the review was deleted (`true`) or not (`false`).
+                type: boolean
+              example: true
+      security:
+      - appKey: []
+        appToken: []
+      - VtexIdclientAutCookie: []
+      deprecated: false
+    patch:
+      tags:
+      - Review
+      summary: VTex Update a review
+      description: "Updates the information of a review. \r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      operationId: EditReview
+      parameters:
+      - name: reviewId
+        in: path
+        description: Review ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 5323fdaa-c012-11ec-835d-0ebee58edbb3
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - productId
+              - rating
+              - title
+              - text
+              - reviewerName
+              properties:
+                productId:
+                  description: Product ID.
+                  type: string
+                  example: '1'
+                rating:
+                  description: Customer rating.
+                  type: number
+                  example: 5
+                title:
+                  description: Review's title.
+                  type: string
+                  example: Great product
+                text:
+                  description: Review's text.
+                  type: string
+                  example: Great product.
+                reviewerName:
+                  description: Reviewer name.
+                  type: string
+                  example: Arturo
+                shopperId:
+                  description: Shopper email.
+                  type: string
+                  example: user@email.com
+                verifiedPurchaser:
+                  description: Indicates if the reviewer is a verified purchaser (`true`) or not (`false`).
+                  type: boolean
+                  example: false
+                locale:
+                  description: Review's locale.
+                  type: string
+                  nullable: true
+                  example: en-US
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Response body object.
+                type: object
+                properties:
+                  id:
+                    description: Review ID.
+                    type: string
+                  productId:
+                    description: Product ID.
+                    type: string
+                  rating:
+                    description: Customer rating.
+                    type: number
+                  title:
+                    description: Review's title.
+                    type: string
+                  text:
+                    description: Review's text.
+                    type: string
+                  reviewerName:
+                    description: Reviewer name.
+                    type: string
+                  shopperId:
+                    description: Shopper email.
+                    type: string
+                  reviewDateTime:
+                    description: Review's date and time.
+                    type: string
+                  searchDate:
+                    description: Review's search date.
+                    type: string
+                  verifiedPurchaser:
+                    description: Indicates if the reviewer is a verified purchaser (`true`) or not (`false`).
+                    type: boolean
+                  sku:
+                    description: SKU ID.
+                    type: string
+                    nullable: true
+                  approved:
+                    description: Indicates if the review was approved (`true`) or not (`false`).
+                    type: boolean
+                  location:
+                    description: Review's origin location.
+                    type: string
+                    nullable: true
+                  locale:
+                    description: Review's locale.
+                    type: string
+                    nullable: true
+                  pastReviews:
+                    description: Past reviews of the same product.
+                    type: string
+                    nullable: true
+              example:
+                id: 5323fdaa-c012-11ec-835d-0ebee58edbb3
+                productId: '1'
+                rating: 5
+                title: Great product
+                text: Great product.
+                reviewerName: Arturo
+                shopperId: user@email.com
+                reviewDateTime: 04/19/2022 18:55:58
+                searchDate: '2022-04-19T18:55:58Z'
+                verifiedPurchaser: false
+                sku: '2'
+                approved: false
+                location: null
+                locale: en-US
+                pastReviews: null
+      deprecated: false
+  /reviews-and-ratings/api/reviews:
+    get:
+      tags:
+      - Review
+      summary: VTex Get list of reviews
+      description: "Retrieves a list of reviews related to a product.\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      operationId: GetalistofReviews
+      parameters:
+      - name: search_term
+        in: query
+        description: Returns Reviews that contain the search term in `productId`, `sku`, `shopperId`, or `reviewerName`.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: search_term
+      - name: from
+        in: query
+        description: Zero base starting record number, `0` is the default value.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '0'
+      - name: to
+        in: query
+        description: Zero base ending record number, `3` is the default value.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '3'
+      - name: order_by
+        in: query
+        description: Case-sensitive fieldName to order records (optionally add `:asc` or `:desc`).
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: :asc
+      - name: status
+        in: query
+        description: Status of the review, approved (`true`) or not (`false`).
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          example: true
+      - name: product_id
+        in: query
+        description: Filter the reviews by product ID.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: '1'
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Response body object.
+                type: object
+                properties:
+                  data:
+                    description: Array of reviews.
+                    type: array
+                    items:
+                      description: Review's information.
+                      type: object
+                      properties:
+                        id:
+                          description: Review ID.
+                          type: string
+                        productId:
+                          description: Product ID.
+                          type: string
+                        rating:
+                          description: Customer rating.
+                          type: number
+                        title:
+                          description: Review's title.
+                          type: string
+                        text:
+                          description: Review's text.
+                          type: string
+                        reviewerName:
+                          description: Reviewer name.
+                          type: string
+                        shopperId:
+                          description: Shopper email.
+                          type: string
+                        reviewDateTime:
+                          description: Review's date and time.
+                          type: string
+                        searchDate:
+                          description: Review's search date.
+                          type: string
+                        verifiedPurchaser:
+                          description: Indicates if the reviewer is a verified purchaser (`true`) or not (`false`).
+                          type: boolean
+                        sku:
+                          description: SKU ID.
+                          type: string
+                          nullable: true
+                        approved:
+                          description: Indicates if the review was approved (`true`) or not (`false`).
+                          type: boolean
+                        location:
+                          description: Review's origin location.
+                          type: string
+                          nullable: true
+                        locale:
+                          description: Review's locale.
+                          type: string
+                          nullable: true
+                        pastReviews:
+                          description: Past reviews of the same product.
+                          type: string
+                          nullable: true
+                  range:
+                    description: Range of the reviews list.
+                    type: object
+                    properties:
+                      total:
+                        description: Total number of reviews on the list.
+                        type: number
+                      from:
+                        description: Zero base starting record number.
+                        type: number
+                      to:
+                        description: Zero base ending record number.
+                        type: number
+              example:
+                data:
+                - id: '1'
+                  productId: '880035'
+                  rating: 3
+                  title: anon
+                  text: anon
+                  reviewerName: anon
+                  shopperId: anon@email.com
+                  reviewDateTime: 06/02/2021 20:58:43
+                  searchDate: '2021-06-02T20:58:43Z'
+                  verifiedPurchaser: false
+                  sku: null
+                  approved: true
+                  location: ''
+                  locale: null
+                  pastReviews: null
+                - id: '2'
+                  productId: '880035'
+                  rating: 5
+                  title: logged in
+                  text: it's cool
+                  reviewerName: Brian
+                  shopperId: brian@email.com.br
+                  reviewDateTime: 06/02/2021 21:00:00
+                  searchDate: '2021-06-02T21:00:00Z'
+                  verifiedPurchaser: false
+                  sku: null
+                  approved: true
+                  location: ''
+                  locale: null
+                  pastReviews: null
+                - id: c66d8bc0-787c-11ec-82ac-028dd4526e77
+                  productId: '880035'
+                  rating: 3
+                  title: Korean
+                  text: ko-KR
+                  reviewerName: ko-KR
+                  shopperId: user@email.com
+                  reviewDateTime: 01/18/2022 16:36:33
+                  searchDate: '2022-01-18T16:36:33Z'
+                  verifiedPurchaser: false
+                  sku: null
+                  approved: true
+                  location: null
+                  locale: ko-KR
+                  pastReviews: null
+                range:
+                  total: 26
+                  from: 0
+                  to: 3
+      deprecated: false
+    post:
+      tags:
+      - Review
+      summary: VTex Create multiple reviews
+      description: "Creates multiple reviews for more than one product in a single operation.\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). \r\n For authentication, you must generate and use only the Application Key and the Application Token to work with this endpoint. Refer to the [API authentication using application keys](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) and [Generating internal application keys](https://help.vtex.com/en/tutorial/application-keys--2iffYzlvvz4BDMr6WGUtet#generating-internal-application-keys) guide for more information."
+      operationId: SaveMultipleReviews
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              description: List of reviews.
+              items:
+                $ref: '#/components/schemas/SaveMultipleReviewsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: List of review IDs.
+                type: array
+                items:
+                  description: Review ID.
+                  type: string
+              example:
+              - 8e1a5e11-c0c9-11ec-835d-0a591b8a3ec1
+              - 9257c203-c0c9-11ec-835d-0e02dd207951
+      deprecated: false
+    delete:
+      tags:
+      - Review
+      summary: VTex Delete multiple reviews
+      description: "Deletes multiple reviews at once. \r\n\r\n ## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      operationId: DeleteMultipleReviews
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: Array of reviews IDs.
+              type: array
+              items:
+                type: string
+                description: Review ID.
+                example: babefcf4-e0f7-11ec-835d-16c4e59c4351
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Indicates if the review was deleted (`true`) or not (`false`).
+                type: boolean
+              example: true
+      deprecated: false
+  /reviews-and-ratings/api/review:
+    post:
+      tags:
+      - Review
+      summary: VTex Create a review
+      description: "Creates a single review. \r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). \r\n For authentication, you must generate and use only your `VtexidClientAutCookie` to work with this endpoint. Refer to the [Generating user tokens](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens#generating-a-user-token-with-the-vtex-io-cli) guide for more information."
+      operationId: SaveReview
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveReviewRequest'
+            example:
+              productId: '65444'
+              rating: 5
+              title: Good Product
+              text: It is the best product that I have seen
+              reviewerName: Arturo
+              approved: true
+        required: true
+      security:
+      - VtexIdclientAutCookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Response body object.
+                type: object
+                properties:
+                  id:
+                    description: Review ID.
+                    type: string
+                  productId:
+                    description: Product ID.
+                    type: string
+                  rating:
+                    description: Customer rating.
+                    type: number
+                  title:
+                    description: Review's title.
+                    type: string
+                  text:
+                    description: Review's text.
+                    type: string
+                  reviewerName:
+                    description: Reviewer name.
+                    type: string
+                  shopperId:
+                    description: Shopper email.
+                    type: string
+                  reviewDateTime:
+                    description: Review's date and time.
+                    type: string
+                  searchDate:
+                    description: Review's search date.
+                    type: string
+                  verifiedPurchaser:
+                    description: Indicates if the reviewer is a verified purchaser (`true`) or not (`false`).
+                    type: boolean
+                  sku:
+                    description: SKU ID.
+                    type: string
+                    nullable: true
+                  approved:
+                    description: Indicates if the review was approved (`true`) or not (`false`).
+                    type: boolean
+                  location:
+                    description: Review's origin location.
+                    type: string
+                    nullable: true
+                  locale:
+                    description: Review's locale.
+                    type: string
+                    nullable: true
+                  pastReviews:
+                    description: Past reviews of the same product.
+                    type: string
+                    nullable: true
+              example:
+                id: 5323fdaa-c012-11ec-835d-0ebee58edbb3
+                productId: '65444'
+                rating: 5
+                title: Good Product
+                text: It is the best product that I have seen
+                reviewerName: Arturo
+                shopperId: user@email.com
+                reviewDateTime: 04/19/2022 18:55:58
+                searchDate: '2022-04-19T18:55:58Z'
+                verifiedPurchaser: false
+                sku: '2'
+                approved: false
+                location: null
+                locale: en-US
+                pastReviews: null
+      deprecated: false
+components:
+  schemas:
+    SaveReviewRequest:
+      title: SaveReviewRequest
+      required:
+      - productId
+      - rating
+      - title
+      - text
+      - reviewerName
+      - approved
+      type: object
+      description: Request body.
+      properties:
+        productId:
+          description: Product ID.
+          type: string
+          example: '65444'
+        rating:
+          description: Customer rating.
+          type: integer
+          format: int32
+          example: 5
+        title:
+          description: Review's title.
+          type: string
+          example: Good Product
+        text:
+          description: Review's text.
+          type: string
+          example: It is the best product that I have seen
+        reviewerName:
+          description: Reviewer name.
+          type: string
+          example: Arturo
+        approved:
+          description: Indicates if the review was approved (`true`) or not (`false`).
+          type: boolean
+          example: true
+    SaveMultipleReviewsRequest:
+      title: SaveMultipleReviewsRequest
+      required:
+      - productId
+      - rating
+      - title
+      - text
+      - reviewerName
+      - approved
+      type: object
+      description: Request body.
+      properties:
+        id:
+          description: Review ID.
+          type: string
+          example: '1'
+        productId:
+          description: Product ID.
+          type: string
+          example: '65444'
+        rating:
+          description: Customer rating.
+          type: number
+          example: 4
+        title:
+          description: Review's title.
+          type: string
+          example: Great product
+        text:
+          description: Review's text.
+          type: string
+          example: Great product!
+        reviewerName:
+          description: Reviewer name.
+          type: string
+          example: Arturo
+        approved:
+          description: Defines if the review was approved (`true`) or not (`false`).
+          type: boolean
+          example: true
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

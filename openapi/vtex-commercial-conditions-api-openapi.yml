@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Commercial Conditions API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Commercial Conditions
+paths:
+  /api/catalog_system/pvt/commercialcondition/list:
+    get:
+      tags:
+      - Commercial Conditions
+      summary: VTex Get all commercial conditions
+      description: "Lists all commercial conditions on the store. \r\n## Response body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"Id\": 1,\r\n        \"Name\": \"Padrão\",\r\n        \"IsDefault\": true\r\n    },\r\n    {\r\n        \"Id\": 2,\r\n        \"Name\": \"Teste Fast\",\r\n        \"IsDefault\": false\r\n    }\r\n]\r\n```"
+      operationId: GetAllCommercialConditions
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                - Id: 1
+                  Name: Padrão
+                  IsDefault: true
+                - Id: 2
+                  Name: Secundária
+                  IsDefault: false
+                - Id: 3
+                  Name: Parcelamento 18x
+                  IsDefault: false
+                items:
+                  type: object
+                  description: Object with information of the commercial condition.
+                  example:
+                    Id: 1
+                    Name: Padrão
+                    IsDefault: true
+                  properties:
+                    Id:
+                      type: integer
+                      description: Commercial condition ID.
+                      example: 1
+                    Name:
+                      type: string
+                      description: Commercial condition name.
+                      example: Padrão
+                    IsDefault:
+                      type: boolean
+                      description: Defines if the commercial condition is default (`true`) or not (`false`).
+                      example: true
+  /api/catalog_system/pvt/commercialcondition/{commercialConditionId}:
+    get:
+      tags:
+      - Commercial Conditions
+      summary: VTex Get commercial condition
+      description: "Retrieves information of a commercial condition by its ID. \r\n## Response body example\r\n\r\n```json\r\n{\r\n    \"Id\": 1,\r\n    \"Name\": \"Padrão\",\r\n    \"IsDefault\": true\r\n}\r\n```"
+      operationId: GetCommercialConditions
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: commercialConditionId
+        in: path
+        required: true
+        description: Commercial condition unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Object with information of the commercial condition.
+                example:
+                  Id: 1
+                  Name: Padrão
+                  IsDefault: true
+                properties:
+                  Id:
+                    type: integer
+                    description: Commercial condition ID.
+                    example: 1
+                  Name:
+                    type: string
+                    description: Commercial condition name.
+                    example: Padrão
+                  IsDefault:
+                    type: boolean
+                    description: If the commercial condition is default (`true`) or not (`false`).
+                    example: true
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

@@ -1,0 +1,685 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Prices and Fixed Prices API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Prices and Fixed Prices
+paths:
+  /pricing/prices/{itemId}:
+    get:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Get price by SKU ID
+      description: "Retrieves price data given a specific SKU ID. Within the `fixedPrices` object, there might be a list of prices for specific Trade Policies and Minimium Quantities of the SKU. Fixed Prices may also be scheduled.\r\n\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetPrice
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: itemId
+        in: path
+        description: SKU ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Getprice'
+              example:
+                itemId: '1234512354'
+                listPrice: 300
+                costPrice: 10
+                markup: 2400
+                basePrice: 250
+                fixedPrices:
+                - tradePolicyId: '1'
+                  value: 666.66
+                  listPrice: null
+                  minQuantity: 1
+                - tradePolicyId: '9'
+                  value: 4500
+                  listPrice: null
+                  minQuantity: 1
+                - tradePolicyId: '9'
+                  value: 600
+                  listPrice: null
+                  minQuantity: 1
+                  dateRange:
+                    from: '2017-12-07T14:30:00Z'
+                    to: '2017-12-30T14:30:00Z'
+                - tradePolicyId: '9'
+                  value: 5555.55
+                  listPrice: null
+                  minQuantity: 1
+                  dateRange:
+                    from: '2017-12-20T14:30:00Z'
+                    to: '2017-12-22T14:30:00Z'
+                - tradePolicyId: '9'
+                  value: 555.55
+                  listPrice: null
+                  minQuantity: 1
+                  dateRange:
+                    from: '2017-12-06T15:00:00Z'
+                    to: '2017-12-14T15:00:00Z'
+                - tradePolicyId: '10'
+                  value: 5555.55
+                  listPrice: null
+                  minQuantity: 1
+                - tradePolicyId: '18'
+                  value: 555.55
+                  listPrice: null
+                  minQuantity: 1
+      deprecated: false
+    delete:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Delete price all base and fixed prices of an SKU
+      description: "Deletes the Base Price and all available Fixed Prices for an SKU in all trade policies.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Delete all prices from account** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: DeletePrice
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: itemId
+        in: path
+        description: SKU ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+      deprecated: false
+    put:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Create or update base price or fixed prices
+      description: "Creates or updates an SKU Base Price or Fixed Prices. The **base price** is the basic selling price of a product, it comprises the cost price and the markup wanted in the sale of the product. The **fixed price** is an optional price of the SKU for a specific trade policy with a specific minimum quantity to be activated.\r\n\r\nYou may optionally set a list price. Additionally, you may set either a cost price or a markup value. By defining either one of them, the other will be calculated to conform to the formula`costPrice * (1 + markup) = basePrice`.\r\n\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Modify prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: CreateUpdatePriceOrFixedPrice
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: itemId
+        in: path
+        description: SKU unique identifier number.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - markup
+              - basePrice
+              - listPrice
+              properties:
+                markup:
+                  type: integer
+                  description: The profit percentage that is to be obtained from the sale of that SKU. If you decide to fill the `markup` item, you must also fill the `costPrice`. The `basePrice` will be automatically generated based on both values.
+                  example: 30
+                listPrice:
+                  type: number
+                  description: SKU's suggested selling price.
+                  example: 50
+                basePrice:
+                  type: number
+                  description: SKU selling base price. If you decide to fill only the `basePrice` item, the `markup` and `costPrice` will be automatically generated to adapt to the number inserted in `basePrice`.
+                  example: 100
+                costPrice:
+                  type: number
+                  description: SKU selling cost price. If you decide to fill the `costPrice` item, you must also fill the `markup` and `basePrice` will be automatically generated based on both values.
+                  example: 35
+                fixedPrices:
+                  type: array
+                  description: Information  about the SKU's fixed prices.
+                  items:
+                    description: Array with general information about the SKU's fixed prices.
+                    type: object
+                    required:
+                    - minQuantity
+                    - value
+                    - tradePolicyId
+                    properties:
+                      tradePolicyId:
+                        type: string
+                        description: Trade policy name or ID that will have the fixed price configured.
+                        example: '1'
+                      value:
+                        type: number
+                        description: Fixed price value.
+                        example: 50.5
+                      listPrice:
+                        type: number
+                        description: SKU List Fixed Price.
+                        example: 50.5
+                      minQuantity:
+                        type: integer
+                        description: Minimum quantity of the SKU for the fixed price to be applied.
+                        example: 2
+                      dateRange:
+                        type: object
+                        description: Period of time when the fixed price will be applied to the SKU.
+                        required:
+                        - from
+                        - to
+                        properties:
+                          from:
+                            type: string
+                            description: Start date of the price.
+                            example: '2021-12-30T22:00:00-03:00'
+                          to:
+                            type: string
+                            description: End date of the price.
+                            example: '2021-12-30T22:00:00-03:00'
+            example:
+              markup: 30
+              listPrice: 50
+              basePrice: 100
+              costPrice: 35
+              fixedPrices:
+              - tradePolicyId: '1'
+                value: 50.5
+                listPrice: 50.5
+                minQuantity: 2
+                dateRange:
+                  from: '2021-12-30T22:00:00-03:00'
+                  to: '2021-12-30T22:00:00-03:00'
+      responses:
+        '200':
+          description: OK
+  /pricing/prices/{itemId}/fixed:
+    get:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Get fixed prices
+      description: "The **fixed price** is an optional price of the SKU for a specific trade policy with a specific minimum quantity to be activated. This method retrieves an array of Fixed Prices for an SKU in a Trade Policy with Minimum Quantities.\r\n\r\nThe default value for a Minimum Quantity is `1`. This means a Fixed Price will be valid for a SKU in a Trade Policy for orders containing the specified number of Minimum Quantity or above, unless a higher Minimum Quantity is specified.\r\n\r\nFixed prices may, optionally, be scheduled. If so, these objects will contain the `dateRange` object with `from` and `to` properties, indicating the start and end time of the scheduled fixed price in the RFC3339 timestamp format (`YYYY-MM-DDT23:59:60Z`).\r\n\r\n Note that the 'Z', at the end, represents the UTC time (GMT+00:00). If it was in GMT-03:00, for example, it would be (`YYYY-MM-DDT23:59:60-03:00`).\r\n\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetFixedPrices
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: itemId
+        in: path
+        description: SKU ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedPrice'
+              example:
+              - tradePolicyId: '6'
+                value: 20.9
+                listPrice: 22.9
+                minQuantity: 1
+                dateRange:
+                  from: '2021-12-30T22:00:00-03:00'
+                  to: '2021-12-30T22:00:00-03:00'
+              - tradePolicyId: '1'
+                value: 18.9
+                listPrice: null
+                minQuantity: 1
+                dateRange:
+                  from: '2021-12-30T22:00:00-03:00'
+                  to: '2021-12-30T22:00:00-03:00'
+      deprecated: false
+  /pricing/prices/{itemId}/fixed/{priceTableId}:
+    post:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Create or update fixed prices on a price table or trade policy
+      description: "Creates or updates the fixed prices of an SKU for a specific price table or trade policy. You can add one or multiple fixed prices per SKU.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Modify prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n> ❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: createorupdatefixedpricesonpricetableortradepolicy
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: itemId
+        in: path
+        description: SKU ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      - name: priceTableId
+        in: path
+        description: SKU **price table** name or **trade policy** ID.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: priceTableA
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                description: Information about prices and fixed prices.
+                required:
+                - value
+                - minQuantity
+                properties:
+                  value:
+                    type: number
+                    description: Fixed price value.
+                    example: 50.5
+                  listPrice:
+                    type: number
+                    description: SKU List Fixed Price.
+                    example: 50.5
+                  minQuantity:
+                    type: integer
+                    description: The minimum SKU quantity for the fixed price to be applied.
+                    example: 2
+                  dateRange:
+                    type: object
+                    description: Period of time when the fixed price will be applied to the SKU.
+                    required:
+                    - from
+                    - to
+                    properties:
+                      from:
+                        type: string
+                        description: Start date of the price.
+                        example: '2021-12-30T22:00:00-03:00'
+                      to:
+                        type: string
+                        description: End date of the price.
+                        example: '2021-12-30T22:00:00-04:00'
+      responses:
+        '200':
+          description: OK
+      deprecated: false
+    get:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Get fixed prices on a price table or trade policy
+      description: "Retrieves all Fixed Prices on a price table or trade policy. \r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetFixedPricesonapricetable
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: itemId
+        in: path
+        description: SKU ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      - name: priceTableId
+        in: path
+        description: Price Table Name
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gold
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedPrice'
+              example:
+              - tradePolicyId: '6'
+                value: 20.9
+                listPrice: 22.9
+                minQuantity: 1
+                dateRange:
+                  from: '2021-12-30T22:00:00-03:00'
+                  to: '2021-12-30T22:00:00-04:00'
+              - tradePolicyId: '1'
+                value: 18.9
+                listPrice: null
+                minQuantity: 1
+      deprecated: false
+    delete:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Delete fixed prices on a price table or trade policy
+      description: "Deletes all Fixed Prices of an SKU in a specific Price Table or Trade Policy.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Delete all prices from account** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Deletefixedpricesonapricetableortradepolicy
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: itemId
+        in: path
+        description: SKU ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      - name: priceTableId
+        in: path
+        description: Price Table or Trade Policy Name.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gold
+      responses:
+        '200':
+          description: OK
+      deprecated: false
+  /pricing/prices/{itemId}/computed/{priceTableId}:
+    get:
+      tags:
+      - Prices and Fixed Prices
+      summary: VTex Get computed price by price table or trade policy
+      description: "Gets the Computed Price, which is the price after all the steps in the Pricing pipeline, for an SKU in a specific price table or trade policy. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint: \r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>u2757 To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetComputedPricebypricetable
+      parameters:
+      - name: categoryIds
+        in: query
+        description: Category ID.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 1
+      - name: brandId
+        in: query
+        description: Brand ID.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 3
+      - name: quantity
+        in: query
+        description: SKU quantity.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 2
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: itemId
+        in: path
+        description: SKU ID.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      - name: priceTableId
+        in: path
+        description: SKU Price Table Name.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gold
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/Getcomputedprice'
+              example:
+                tradePolicyId: '1'
+                listPrice: 30
+                costPrice: 76.92
+                sellingPrice: 18.9
+                priceValidUntil: '2018-12-20T18:12:14Z'
+      deprecated: false
+      servers:
+      - url: https://api.vtex.com/{account}/pricing
+        variables:
+          account:
+            default: DefaultParameterValue
+components:
+  schemas:
+    DateRange:
+      description: Trade Policy Fixed Price Validity Period Object.
+      required:
+      - from
+      - to
+      type: object
+      properties:
+        from:
+          type: string
+          description: Indicates the date and time when the fixed price will start to be valid.
+        to:
+          type: string
+          description: Indicates the date and time from which the fixed price will no longer be valid.
+    FixedPrice:
+      required:
+      - tradePolicyId
+      - value
+      - listPrice
+      - minQuantity
+      type: object
+      description: Fixed price request body information.
+      properties:
+        tradePolicyId:
+          type: string
+          description: Trade Policy ID.
+        value:
+          type: number
+          description: Trade Policy Fixed Price Value.
+        listPrice:
+          type: number
+          description: Trade Policy List Price Value.
+          nullable: true
+        minQuantity:
+          type: integer
+          format: int32
+          description: Trade Policy Fixed Price Minimum Item Quantity.
+        dateRange:
+          $ref: '#/components/schemas/DateRange'
+    Getprice:
+      required:
+      - itemId
+      - listPrice
+      - costPrice
+      - markup
+      - basePrice
+      - fixedPrices
+      type: object
+      description: Price request body information.
+      properties:
+        itemId:
+          type: string
+          description: SKU ID.
+        listPrice:
+          type: integer
+          format: int32
+          description: Suggested retail price for the SKU.
+        costPrice:
+          type: integer
+          format: int32
+          description: SKU's cost price.
+        markup:
+          type: integer
+          format: int32
+          description: Desired profit margin with the SKU's sale.
+        basePrice:
+          type: integer
+          format: int32
+          description: SKU's reference price.
+        fixedPrices:
+          type: array
+          items:
+            $ref: '#/components/schemas/FixedPrice'
+          description: The fixed price is a price that overlaps all other existing price configurations of a price table.
+    Getcomputedprice:
+      required:
+      - tradePolicyId
+      - listPrice
+      - sellingPrice
+      - priceValidUntil
+      type: object
+      description: Computed price request body information.
+      properties:
+        tradePolicyId:
+          type: string
+          description: Trade Policy ID ou `priceTableId`.
+        listPrice:
+          type: integer
+          format: int32
+          description: Trade Policy List Price, also known as "from" price.
+        costPrice:
+          type: number
+          description: Cost price.
+        sellingPrice:
+          type: number
+          description: Computed Price before applying coupons, promotions and taxes. This price may change before reaching the shelf.
+        priceValidUntil:
+          type: string
+          description: Date until when the computed price will be valid, due to price scheduling. If no price scheduling applies, this will be set a year from the current time.
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

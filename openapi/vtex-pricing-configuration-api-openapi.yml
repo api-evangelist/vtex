@@ -1,0 +1,348 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Pricing Configuration API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Pricing Configuration
+paths:
+  /pricing/config:
+    get:
+      tags:
+      - Pricing Configuration
+      summary: VTex Get pricing configuration
+      description: "Retrieves Pricing configuration.\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetPricingConfig
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Credentials:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 'true'
+            Access-Control-Allow-Origin:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '*'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Encoding:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: gzip
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '118'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Tue, 21 Feb 2017 16:11:39 GMT
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.35.3
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: pricing-v3.21.12
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PricingConfiguration'
+              example:
+                hasMigrated: true
+                migrationStatus: Completed
+                defaultMarkup: 100
+                priceVariation:
+                  upperLimit: null
+                  lowerLimit: null
+                minimumMarkups:
+                  '1': 100
+                  '2': 90
+                tradePolicyConfigs: []
+                sellersToOverride: []
+                hasPriceInheritance: false
+                priceInheritance: never
+                hasOptionalBasePrice: false
+                blockAccount: false
+                blockedRoutes: null
+                priceTableSelectionStrategy: first
+                priceTableLimit: null
+      deprecated: false
+      servers:
+      - url: https://api.vtex.com/{account}/pricing
+        variables:
+          account:
+            default: DefaultParameterValue
+  /pricing/migration:
+    get:
+      tags:
+      - Pricing Configuration
+      summary: VTex Get pricing v2 status
+      description: "Retrieves Pricing v2 status.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetPricingv2Status
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Access-Control-Allow-Credentials:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 'true'
+            Access-Control-Allow-Origin:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '*'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Encoding:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: gzip
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '52'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Tue, 21 Feb 2017 16:13:39 GMT
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.35.3
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: pricing-v3.21.12
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  isActive:
+                    type: boolean
+                    description: Defines if the account is active.
+                  hasMigrated:
+                    type: boolean
+                    description: Defines if the account has migrated to Pricing V2.
+              example:
+                isActive: true
+                hasMigrated: true
+      deprecated: false
+      servers:
+      - url: https://api.vtex.com/{account}/pricing
+        variables:
+          account:
+            default: DefaultParameterValue
+components:
+  schemas:
+    PricingConfiguration:
+      required:
+      - hasMigrated
+      - defaultMarkup
+      - minimumMarkups
+      type: object
+      description: Pricing configuration request body information.
+      properties:
+        hasMigrated:
+          type: boolean
+          description: Defines if the account has migrated to Pricing V2.
+        migrationStatus:
+          type: string
+          description: Pricing V2 migration status.
+        defaultMarkup:
+          type: integer
+          format: int32
+          description: Account default markup.
+        priceVariation:
+          type: object
+          description: Price Variation object.
+          properties:
+            upperLimit:
+              type: integer
+              description: Upper variation limit.
+              nullable: true
+            lowerLimit:
+              type: integer
+              description: Lower variation limit.
+              nullable: true
+        minimumMarkups:
+          type: object
+          description: Account minimum markup.
+          additionalProperties:
+            description: Additional property.
+            type: integer
+            format: int32
+        tradePolicyConfigs:
+          type: array
+          description: Trade Policy Configurations array.
+          items:
+            type: object
+            description: Information trade polity configuration.
+            properties:
+              tradePolicyId:
+                type: string
+                description: Trade Policy ID.
+              minimumMarkup:
+                type: integer
+                description: Trade Policy Minimum Markup.
+              rulesShouldAffectListPrice:
+                type: boolean
+                description: Defines if the Price Rule should affect the list price too.
+        sellersToOverride:
+          type: array
+          description: Overrides prices from sellers.
+          nullable: true
+          items:
+            type: string
+            description: Seller ID.
+        hasPriceInheritance:
+          type: boolean
+          description: Deprecated. Use the `priceInheritance` field instead.
+          deprecated: true
+        priceInheritance:
+          type: string
+          description: 'Condition of price inheritance from its parent account. This field can have three possible values: `never` if the store should never inherit prices, `nonexistent` if the store should only inherit prices in case of nonexistent prices for a given product, or `always` if the store should always inherit prices, regardless of its own prices.'
+        hasOptionalBasePrice:
+          type: boolean
+          description: Defines if optional base price is allowed.
+        blockAccount:
+          type: boolean
+          description: Defines if access to the Pricing APIs is blocked for external requests.
+        blockedRoutes:
+          type: array
+          description: Array with all blocked routes.
+          nullable: true
+          items:
+            type: string
+            description: Blocked route.
+        priceTableSelectionStrategy:
+          type: string
+          description: 'The strategy used to get prices when there is more than one option. Possible values: `first`, `highest`, `lowest`. Default: `first`.'
+          default: first
+        priceTableLimit:
+          type: integer
+          description: Price Table Limit.
+          nullable: true
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

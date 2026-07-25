@@ -1,0 +1,287 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Versions API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Versions
+paths:
+  /api/dataentities/{dataEntityName}/documents/{id}/versions:
+    get:
+      tags:
+      - Versions
+      summary: VTex List versions
+      description: "Lists the versions of a document. \r\n\r\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Dynamic Storage | Dynamic storage generic resources | **Read only documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Listversions
+      parameters:
+      - $ref: '#/components/parameters/dataEntityName'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/id'
+      - name: load
+        in: query
+        description: If true, return all the fields in each version of the document.
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - name: fields
+        in: query
+        description: If `load` is true, the response will return only these specific fields.
+        required: false
+        schema:
+          type: string
+          default: id,dataEntityId,isNewsletterOptIn,createdBy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Listversion'
+              example:
+              - id: _EAR0cJ7XB5k5grnmm0zeKGlVvVM9WCPy_
+                date: '2016-10-18T16:53:32+00:00'
+                document:
+                  id: 72e7f8dd-1168-23ec-82ac-0e2b61663eb4
+                  dataEntityId: Newsletter
+                  isNewsletterOptIn: true
+                  createdBy: 81fc8b10-25b7-48de-b425-7b93554002cc
+              - id: _E5SH9WXVvhPBNnbQtYAAGqrIysIeNYhV_
+                date: '2016-09-08T20:11:42+00:00'
+                document:
+                  id: 72e7f8dd-1168-23ec-82ac-0e2b61663eb4
+                  dataEntityId: Newsletter
+                  isNewsletterOptIn: true
+                  createdBy: 81fc8b10-25b7-48de-b425-7b93554002cc
+      deprecated: false
+  /api/dataentities/{dataEntityName}/documents/{id}/versions/{versionId}:
+    get:
+      tags:
+      - Versions
+      summary: VTex Get version
+      description: "Returns the version of a document. \r\n\r\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Dynamic Storage | Dynamic storage generic resources | **Read only documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Getversion
+      parameters:
+      - $ref: '#/components/parameters/dataEntityName'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/versionId'
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Getversion'
+              example:
+                id: cSIAceEelBEmSOqRkzJYLRQuGgi6.CqF
+                author: 1f936e42-79b3-4e5b-91d2-da9a8af0b215
+                document:
+                  id: cbfc4f67-6ea3-11ee-83ab-0a8d18f9f827
+                  dataEntityId: Newsletter
+                  accountId: a8b27fb4-6516-4cc0-82b6-a5f2b011e6e2
+                  accountName: apiexamples
+                  followers: []
+                  schemas:
+                  - testprofile
+                  - testprofile2
+                  email: clark.kent@examplemail.com
+      deprecated: false
+    put:
+      tags:
+      - Versions
+      summary: VTex Update version
+      description: "Updates the document's version value.\r\n\r\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Putversion
+      parameters:
+      - $ref: '#/components/parameters/dataEntityName'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/id'
+      - name: versionId
+        in: path
+        description: ID of the version to update
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: _8sZcvyj4nng7FgA2RgtVVZmkIxb4Pbfe_
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentResponse'
+              example:
+                Id: Newsletter-b818cbda-e489-11e6-94f4-0ac138d2d42e
+                Href: http://api.vtex.com/apiexamples/dataentities/Newsletter/documents/b818cbda-e489-11e6-94f4-0ac138d2d42e
+        '304':
+          description: Not Modified
+      deprecated: false
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: ID of the Document.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: b818cbda-e489-11e6-94f4-0ac138d2d42e
+    dataEntityName:
+      name: dataEntityName
+      in: path
+      required: true
+      description: Name of the data entity.
+      schema:
+        type: string
+        example: Newsletter
+    versionId:
+      name: versionId
+      in: path
+      description: ID of the version to update.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: _8sZcvyj4nng7FgA2RgtVVZmkIxb4Pbfe_
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+  schemas:
+    Getversion:
+      title: Getversion
+      required:
+      - id
+      - author
+      - document
+      type: object
+      description: Request body object.
+      properties:
+        id:
+          type: string
+          description: Version ID.
+        author:
+          type: string
+          description: ID of the user who created the version.
+        document:
+          $ref: '#/components/schemas/Document'
+    documentResponse:
+      required:
+      - Id
+      - Href
+      type: object
+      description: Response body object.
+      properties:
+        Id:
+          type: string
+          description: ID of the document that was created or updated.
+        Href:
+          type: string
+          description: Document reference URL.
+    Listversion:
+      title: Listversion
+      required:
+      - id
+      - date
+      type: object
+      description: Version information.
+      properties:
+        id:
+          type: string
+          description: Version ID.
+        date:
+          type: string
+          description: Date when the version was created in ISO 8601 format.
+        document:
+          type: object
+          description: Information about the document.
+          properties:
+            id:
+              type: string
+              description: Document ID.
+            dataEntityId:
+              type: string
+              description: Data entity name.
+            isNewsletterOptIn:
+              type: boolean
+              description: Indicates whether client otped to receive the store newsletter (`true`) or not (`false`).
+              example: false
+              nullable: true
+            createdBy:
+              type: string
+              description: ID of the user who created the document.
+    Document:
+      title: Document
+      required:
+      - id
+      - dataEntityId
+      - accountId
+      - accountName
+      - followers
+      type: object
+      description: Document information.
+      properties:
+        id:
+          type: string
+          description: ID of the document.
+        dataEntityId:
+          type: string
+          description: Data entity name.
+        accountId:
+          type: string
+          description: ID of the VTEX account.
+        accountName:
+          type: string
+          description: Name of the VTEX account.
+        followers:
+          type: array
+          description: Followers.
+          deprecated: true
+          items:
+            type: string
+            description: Follower.
+        schemas:
+          type: array
+          description: Schemas which the document is compliant with.
+          items:
+            type: string
+            description: Schema name.
+        email:
+          type: string
+          description: User email.
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

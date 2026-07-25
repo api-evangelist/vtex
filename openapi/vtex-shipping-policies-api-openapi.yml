@@ -1,0 +1,673 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Shipping Policies API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Shipping Policies
+paths:
+  /api/logistics/pvt/shipping-policies/{id}:
+    get:
+      tags:
+      - Shipping Policies
+      summary: VTex Retrieve shipping policy by ID
+      description: "This endpoint lists existing [shipping policies](https://help.vtex.com/en/tutorial/shipping-policy--tutorials_140) from carriers in your store, searching by their IDs.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns **Scheduled Delivery** related time fields adjusted to the configured time zone of the account."
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: id
+        in: path
+        required: true
+        description: ID of the shipping policy.
+        schema:
+          type: string
+          example: id
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+      - Shipping Policies
+      summary: VTex Delete shipping policies by ID
+      description: This endpoint deletes existing shipping policies from carriers in your store, searching by their IDs.
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: id
+        in: path
+        required: true
+        description: ID of the shipping policy.
+        schema:
+          type: string
+          example: id
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+      - Shipping Policies
+      summary: VTex Update shipping policy
+      description: "This endpoint updates information on existing Shipping Policies from carriers.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns **Scheduled Delivery** related time fields adjusted to the configured time zone of the account."
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: id
+        in: path
+        required: true
+        description: Shipping policy's ID
+        schema:
+          type: string
+          example: shippingpolicyid1
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Request body
+              required:
+              - name
+              - shippingMethod
+              - deliveryOnWeekends
+              - maxDimension
+              - isActive
+              properties:
+                name:
+                  type: string
+                  title: name
+                  description: Name of the shipping policy.
+                  example: Correios PAC
+                shippingMethod:
+                  type: string
+                  title: shippingMethod
+                  description: Type of shipping available for this shipping policy (carrier). Options shown on freight simulation.
+                  example: Normal
+                deliveryOnWeekends:
+                  type: boolean
+                  title: deliveryOnWeekends
+                  description: If the shipping policy (carrier) delivers on weekends.
+                  example: false
+                maxDimension:
+                  type: object
+                  title: maxDimension
+                  description: Object containing attributes of maximum dimension permitted by the shipping policy (carrier).
+                  example:
+                    largestMeasure: 10
+                    maxMeasureSum: 30
+                  required:
+                  - largestMeasure
+                  - maxMeasureSum
+                  properties:
+                    largestMeasure:
+                      type: number
+                      title: largestMeasure
+                      description: Largest measure of the package.
+                      example: 0
+                    maxMeasureSum:
+                      type: number
+                      title: maxMeasureSum
+                      description: Sum of all maximum measures of the package.
+                      example: 0
+                isActive:
+                  type: boolean
+                  title: isActive
+                  description: If the shipping policy is active or not.
+                  example: true
+                deliveryScheduleSettings:
+                  type: object
+                  description: Settings for the Scheduled Delivery feature.
+                  required:
+                  - useDeliverySchedule
+                  - dayOfWeekForDelivery
+                  - maxRangeDelivery
+                  properties:
+                    useDeliverySchedule:
+                      type: boolean
+                      description: Select the Scheduled Delivery configuration.
+                      example: true
+                    maxRangeDelivery:
+                      type: number
+                      description: Range of days available within a delivery window, for the customer to choose the scheduled delivery. For example, if the configured maxRangeDelivery is equal 7, and the customer buys something on a Tuesday, the options for scheduled delivery will be shown until the following Tuesday (7 days from the purchase day). If no options are available within the maxRangeDelivery set, this shipping policy won't be shown on the checkout.
+                      example: 0
+                    dayOfWeekForDelivery:
+                      type: array
+                      description: 'Select the chosen days for delivery. Values for each day of the week are: 0 = sunday, 1 = monday, 2 = tuesday, 3 = wednesday, 4 = thursday, 5 = friday, 6 = saturday. Make sure to add the available hours for the chosen days, following the example.'
+                      items:
+                        type: object
+                        required:
+                        - dayOfWeek
+                        - deliveryRanges
+                        properties:
+                          dayOfWeek:
+                            type: integer
+                            description: Day of the week, from `0` (sunday) to `6` (saturday).
+                            example: 2
+                          deliveryRanges:
+                            type: array
+                            description: Reservation windows for scheduled delivery.
+                            items:
+                              type: object
+                              required:
+                              - startTime
+                              - endTime
+                              - listPrice
+                              properties:
+                                startTime:
+                                  type: string
+                                  title: startTime
+                                  description: Start time for day of the week.
+                                  example: '11:00:00'
+                                endTime:
+                                  type: string
+                                  description: End time for day of the week.
+                                  example: '12:30:00'
+                                listPrice:
+                                  type: number
+                                  description: List price for day of the week.
+                                  example: 0
+                                deliveryCapacity:
+                                  type: array
+                                  description: Sets maximum delivery capacity for a given reservation window for scheduled delivery.
+                                  items:
+                                    type: object
+                                    example:
+                                      capacityType: ORDERS_QUANTITY
+                                      maxValue: 55
+                                    required:
+                                    - capacityType
+                                    - maxValue
+                                    properties:
+                                      capacityType:
+                                        type: string
+                                        description: Defines how the delivery capacity is measured for this reservation window, by maximum number of orders (`"ORDERS_QUANTITY"`) or SKUs (`"SKUS_QUANTITY"`).
+                                        example: ORDERS_QUANTITY
+                                      maxValue:
+                                        type: number
+                                        description: Maximum number of orders or SKUs that the store is capable of fulfilling.
+                                        example: 0
+  /api/logistics/pvt/shipping-policies:
+    get:
+      tags:
+      - Shipping Policies
+      summary: VTex List shipping policies
+      description: "This endpoint lists existing shipping policies from carriers in your store.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns **Scheduled Delivery** related time fields adjusted to the configured time zone of the account."
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: page
+        in: query
+        required: true
+        description: Desired number of pages to retrieve information from your Shipping Policies.
+        schema:
+          type: string
+          example: page
+      - name: perPage
+        in: query
+        required: true
+        description: Desired number of items per page, to retrieve information from your Shipping Policies.
+        schema:
+          type: string
+          example: perPage
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+      - Shipping Policies
+      summary: VTex Create shipping policy
+      description: "This endpoint creates new shipping policies from carriers in your store.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns **Scheduled Delivery** related time fields adjusted to the configured time zone of the account."
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Request body
+              required:
+              - id
+              - name
+              - shippingMethod
+              - weekendAndHolidays
+              - maxDimension
+              - numberOfItemsPerShipment
+              - minimumValueAceptable
+              - maximumValueAceptable
+              - deliveryScheduleSettings
+              - cubicWeightSettings
+              - modalSettings
+              - businessHourSettings
+              - pickupPointsSettings
+              - isActive
+              properties:
+                id:
+                  type: string
+                  title: id schema
+                  description: ID of the shipping policy.
+                  example: '123'
+                name:
+                  type: string
+                  title: name
+                  description: Name of the shipping policy.
+                  example: Normal
+                shippingMethod:
+                  type: string
+                  title: shippingMethod
+                  description: Type of shipping available for this shipping policy (carrier). Options shown on freight simulation.
+                  example: Normal
+                weekendAndHolidays:
+                  type: object
+                  title: weekendAndHolidays
+                  description: If the shipping policy includes deliveries on weekends and holidays.
+                  example:
+                    saturday: false
+                    sunday: false
+                    holiday: false
+                  required:
+                  - saturday
+                  - sunday
+                  - holiday
+                  properties:
+                    saturday:
+                      type: boolean
+                      title: saturday
+                      description: If the shipping policy allows deliveries on Saturdays (`true`), or not (`false`).
+                      example: false
+                    sunday:
+                      type: boolean
+                      title: sunday
+                      description: If the shipping policy allows deliveries on Sundays (`true`), or not (`false`).
+                      example: false
+                    holiday:
+                      type: boolean
+                      title: holiday
+                      description: If the shipping policy allows deliveries on holidays (`true`), or not (`false`).
+                      example: false
+                maxDimension:
+                  type: object
+                  title: maxDimension
+                  description: Object containing attributes of maximum dimension permitted by the shipping policy (carrier).
+                  example:
+                    largestMeasure: 15
+                    maxMeasureSum: 25
+                  required:
+                  - largestMeasure
+                  - maxMeasureSum
+                  properties:
+                    largestMeasure:
+                      type: number
+                      title: largestMeasure
+                      description: Largest measure of the package.
+                      example: 0
+                    maxMeasureSum:
+                      type: number
+                      title: maxMeasureSum
+                      description: Sum of all maximum measures of the package.
+                      example: 0
+                numberOfItemsPerShipment:
+                  type: integer
+                  title: numberOfItemsPerShipment
+                  description: Capacity of your store's logistics of shipment, determines number of items permitted per shipment.
+                  example: 5
+                minimumValueAceptable:
+                  type: number
+                  title: minimumValueAceptable
+                  description: Minimum value accepted by the carrier, to realize the shipping.
+                  example: 0
+                maximumValueAceptable:
+                  type: number
+                  title: maximumValueAceptable
+                  description: Maximum value accepted by the carrier, to realize the shipping.
+                  example: 0
+                deliveryScheduleSettings:
+                  type: object
+                  title: deliveryScheduleSettings
+                  description: Settings for the Scheduled Delivery feature.
+                  example:
+                    useDeliverySchedule: true
+                    dayOfWeekForDelivery:
+                    - dayOfWeek: 2
+                      deliveryRanges:
+                      - startTime: 08:00:00
+                        endTime: '12:00:00'
+                        listPrice: 5
+                      - startTime: '12:01:00'
+                        endTime: '18:00:00'
+                        listPrice: 10
+                    maxRangeDelivery: 5
+                  required:
+                  - useDeliverySchedule
+                  - dayOfWeekForDelivery
+                  - maxRangeDelivery
+                  properties:
+                    useDeliverySchedule:
+                      type: boolean
+                      title: useDeliverySchedule
+                      description: Select the Scheduled Delivery configuration.
+                      example: true
+                    maxRangeDelivery:
+                      type: number
+                      title: maxRangeDelivery
+                      description: Range of days available within a delivery window, for the customer to choose the scheduled delivery. For example, if the configured maxRangeDelivery is equal 7, and the customer buys something on a Tuesday, the options for scheduled delivery will be shown until the following Tuesday (7 days from the purchase day). If no options are available within the maxRangeDelivery set, this shipping policy won't be shown on the checkout.
+                      example: 0
+                    dayOfWeekForDelivery:
+                      type: array
+                      title: dayOfWeekForDelivery
+                      description: 'Select the chosen days for delivery. Values for each day of the week are: 0 = sunday, 1 = monday, 2 = tuesday, 3 = wednesday, 4 = thursday, 5 = friday, 6 = saturday. Make sure to add the available hours for the chosen days, following the example.'
+                      items:
+                        type: object
+                        required:
+                        - dayOfWeek
+                        - deliveryRanges
+                        properties:
+                          dayOfWeek:
+                            type: integer
+                            description: Day of the week, from `0` (sunday) to `6` (saturday).
+                            example: 2
+                          deliveryRanges:
+                            type: array
+                            description: Reservation windows for scheduled delivery.
+                            items:
+                              type: object
+                              required:
+                              - startTime
+                              - endTime
+                              - listPrice
+                              properties:
+                                startTime:
+                                  type: string
+                                  title: startTime
+                                  description: Start time for day of the week.
+                                  example: '11:00:00'
+                                endTime:
+                                  type: string
+                                  description: End time for day of the week.
+                                  example: '12:30:00'
+                                listPrice:
+                                  type: number
+                                  description: List price for day of the week.
+                                  example: 0
+                                deliveryCapacity:
+                                  type: array
+                                  description: Sets maximum delivery capacity for a given reservation window for scheduled delivery.
+                                  items:
+                                    type: object
+                                    example:
+                                      capacityType: ORDERS_QUANTITY
+                                      maxValue: 55
+                                    required:
+                                    - capacityType
+                                    - maxValue
+                                    properties:
+                                      capacityType:
+                                        type: string
+                                        description: Defines how the delivery capacity is measured for this reservation window, by maximum number of orders (`"ORDERS_QUANTITY"`) or SKUs (`"SKUS_QUANTITY"`).
+                                        example: ORDERS_QUANTITY
+                                      maxValue:
+                                        type: number
+                                        description: Maximum number of orders or SKUs that the store is capable of fulfilling.
+                                        example: 0
+                      example:
+                      - dayOfWeek: 2
+                        deliveryRanges:
+                        - startTime: 08:00:00
+                          endTime: '12:00:00'
+                          listPrice: 10
+                        - startTime: '12:01:00'
+                          endTime: '18:00:00'
+                          listPrice: 10
+                        maxRangeDelivery: 5
+                carrierSchedule:
+                  type: array
+                  title: carrierSchedule
+                  description: Schedule sent by the carrier to configure the shipping policy.
+                  items:
+                    type: object
+                    properties:
+                      dayOfWeek:
+                        type: integer
+                        description: Day of the week, from `0` (sunday) to `6` (saturday).
+                        example: 0
+                      timeLimit:
+                        type: string
+                        description: Time limit.
+                        example: time_limit
+                cubicWeightSettings:
+                  type: object
+                  title: cubicWeightSettings
+                  description: Measure that accounts package's volume, and not only weight.
+                  example:
+                    volumetricFactor: 3
+                    minimunAcceptableVolumetricWeight: 5
+                  required:
+                  - volumetricFactor
+                  - minimunAcceptableVolumetricWeight
+                  properties:
+                    volumetricFactor:
+                      type: number
+                      title: volumetricFactor
+                      description: Factor that will be used on the cubic weight calculation.
+                      example: 0
+                    minimunAcceptableVolumetricWeight:
+                      type: number
+                      title: minimunAcceptableVolumetricWeight
+                      description: Packages' minimum acceptable [volumetric weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
+                      example: 0
+                modalSettings:
+                  type: object
+                  title: modalSettings
+                  description: Configurations for the [modal](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125), which is the attachement of a specific product to a carrier specialized in delivering that type of product.
+                  example:
+                    modals:
+                    - ELECTRONICS
+                    - FURNITURE
+                    useOnlyItemsWithDefinedModal: false
+                  required:
+                  - modals
+                  - useOnlyItemsWithDefinedModal
+                  properties:
+                    modals:
+                      type: array
+                      title: modals
+                      description: "Type of special freight. The possible values are: \r\n- `CHEMICALS` \r\n- `ELECTRONICS` \r\n- `FURNITURE` \r\n- `GLASS` \r\n- `LIQUID` \r\n- `MATTRESSES` \r\n- `REFRIGERATED` \r\n- `TIRES` \r\n- `WHITE_GOODS` \r\n- `FIREARMS`."
+                      example:
+                      - ELECTRONICS
+                      - FURNITURE
+                      items:
+                        type: string
+                        enum:
+                        - CHEMICALS
+                        - ELECTRONICS
+                        - FURNITURE
+                        - GLASS
+                        - LIQUID
+                        - MATTRESSES
+                        - REFRIGERATED
+                        - TIRES
+                        - WHITE_GOODS
+                        - FIREARMS
+                        description: Modal values assigned to the special freight.
+                    useOnlyItemsWithDefinedModal:
+                      type: boolean
+                      title: useOnlyItemsWithDefinedModal
+                      description: When set as `true`, the modal's configurations will apply only for items with a defined modal.
+                      example: false
+                businessHourSettings:
+                  type: object
+                  title: businessHourSettings
+                  description: Business hour configuration.
+                  example:
+                    carrierBusinessHours:
+                    - dayOfWeek: 0
+                      openingTime: 09:00:00
+                      closingTime: '18:59:59'
+                    isOpenOutsideBusinessHours: true
+                  required:
+                  - carrierBusinessHours
+                  - isOpenOutsideBusinessHours
+                  properties:
+                    carrierBusinessHours:
+                      type: array
+                      title: carrierBusinessHours
+                      description: Array containing objects with business hour configurations.
+                      items:
+                        type: object
+                        description: Object containing business hour configuration.
+                        required:
+                        - openingTime
+                        - closingTime
+                        - dayOfWeek
+                        properties:
+                          openingTime:
+                            type: string
+                            title: openingTime
+                            description: Opening time.
+                            example: 00:00:00
+                          closingTime:
+                            type: string
+                            title: closingTime
+                            description: Closing time.
+                            example: '23:59:59'
+                          dayOfWeek:
+                            type: integer
+                            title: dayOfWeek
+                            description: Day of the week, from `0` (sunday) to `6` (saturday).
+                            example: 1
+                    isOpenOutsideBusinessHours:
+                      type: boolean
+                      title: isOpenOutsideBusinessHours
+                      description: Select whether the shipping policy allows deliveries outside business hours.
+                      example: true
+                pickupPointsSettings:
+                  type: object
+                  title: pickupPointsSettings
+                  description: Configuration for Pickup Points.
+                  example:
+                    pickupPointIds:
+                    - 'null'
+                    pickupPointTags:
+                    - 'null'
+                    sellers:
+                    - cosmetics2
+                  required:
+                  - pickupPointIds
+                  - pickupPointTags
+                  - sellers
+                  properties:
+                    pickupPointIds:
+                      type: array
+                      title: pickupPointIds
+                      description: Insert the IDs for pickup points previously configured in your store.
+                      example:
+                      - Id1
+                      - Id2
+                      items: {}
+                    pickupPointTags:
+                      type: array
+                      title: pickupPointTags
+                      description: Insert the tags for pickup points previously configured in your store.
+                      example:
+                      - Tag1
+                      - Tag2
+                      items: {}
+                    sellers:
+                      type: array
+                      title: sellers
+                      description: Sellers that will be associated with the [pickup points](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R) of the shipping policy being created.
+                      example:
+                      - Seller1
+                      items: {}
+                isActive:
+                  type: boolean
+                  description: Indicates whether shipping policy is active or not.
+                  example: false
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

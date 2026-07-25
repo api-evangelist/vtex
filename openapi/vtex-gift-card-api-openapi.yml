@@ -1,0 +1,489 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Gift Card API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Gift Card
+paths:
+  /giftcards:
+    post:
+      tags:
+      - Gift Card
+      summary: VTex Create a gift card
+      description: "Creates a gift card for a specific user.\r\n\r\n>⚠️ The `redemptionCode` field is auto-generated during gift card creation and cannot be set to an arbitrary value.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| GiftCard | GiftCard | **Gift card full access** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: CreateGiftCard
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/vnd.vtex.giftcard.v1+json:
+            schema:
+              $ref: '#/components/schemas/CreateGiftCardRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response'
+              example:
+                id: '954'
+                redemptionToken: 32ScL57220Vapb8pc50HJ3mWH1cl1L8x
+                redemptionCode: '***********ASDQ'
+                balance: 0
+                relationName: cardName
+                emissionDate: '2014-04-24T20:22:58.163'
+                expiringDate: '2016-01-01T00:00:00'
+                caption: Programa Vtex Fidelidade
+                currencyCode: USD
+                transactions:
+                  href: cards/954/transactions
+      deprecated: false
+  /giftcards/{giftCardId}:
+    get:
+      tags:
+      - Gift Card
+      summary: VTex Get a gift card by ID
+      description: "Returns information for a specific gift card.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| GiftCard | GiftCard | **Gift card full access** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetGiftCardbyID
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: giftCardId
+        in: path
+        description: Gift card identification.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                required:
+                - id
+                - redemptionToken
+                - redemptionCode
+                - balance
+                - emissionDate
+                - expiringDate
+                - transactions
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Gift card identification.
+                  redemptionToken:
+                    type: string
+                    description: Gift card redemption token.
+                  redemptionCode:
+                    type: string
+                    description: Gift card identification code used at checkout. Minimum of 6 characters.
+                  balance:
+                    type: number
+                    description: Gift card current balance. For newly created gift cards, the balance will be 0.0.
+                  emissionDate:
+                    type: string
+                    description: Gift card creation date.
+                  expiringDate:
+                    type: string
+                    description: Gift card expiration date.
+                  currencyCode:
+                    type: string
+                    description: Currency code in ISO 4217.
+                  transactions:
+                    $ref: '#/components/schemas/Transactions'
+              example:
+                id: '954'
+                redemptionToken: 32ScL57220Vapb8pc50HJ3mWH1cl1L8x
+                redemptionCode: '***********ASDQ'
+                balance: 0
+                emissionDate: '2014-04-24T20:22:58.163'
+                expiringDate: '2016-01-01T00:00:00'
+                currencyCode: USD
+                transactions:
+                  href: cards/954/transactions
+      deprecated: false
+  /giftcards/_search:
+    post:
+      tags:
+      - Gift Card
+      summary: VTex List all gift cards
+      description: "Returns a list of all gift cards available for a specific customer's cart.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| GiftCard | GiftCard | **Gift card full access** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SearchGiftCardsfromcartdata
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: REST-Range
+        in: header
+        description: Pagination control. This query variable must follow the format _resources={from}-{to}_.
+        required: false
+        style: simple
+        schema:
+          type: string
+          default: resources=0-49
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetGiftCardusingJSONRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response2'
+              example:
+                items:
+                - id: '589'
+                  _self:
+                    href: cards/589
+                - id: '590'
+                  _self:
+                    href: cards/590
+                - id: '591'
+                  _self:
+                    href: cards/591
+                - id: '592'
+                  _self:
+                    href: cards/592
+                paging:
+                  page: 0
+                  perPage: 10
+                  total: 4
+                  pages: 1
+      deprecated: false
+components:
+  schemas:
+    Client:
+      type: object
+      required:
+      - id
+      - email
+      - document
+      properties:
+        id:
+          type: string
+          description: Customer's identification.
+          example: 3b1abc17
+        email:
+          type: string
+          description: Customer's email address.
+          example: email@domain.com
+        document:
+          type: string
+          description: Document number informed by the customer.
+          example: '234235'
+    GetGiftCardusingJSONRequest:
+      type: object
+      required:
+      - cart
+      - client
+      properties:
+        cart:
+          $ref: '#/components/schemas/Cart'
+        client:
+          $ref: '#/components/schemas/Client'
+    CreateGiftCardRequest:
+      type: object
+      required:
+      - relationName
+      - expiringDate
+      - caption
+      - profileId
+      properties:
+        relationName:
+          type: string
+          description: Represents the relationship between the client and the store.
+          example: loyalty-program
+        expiringDate:
+          type: string
+          description: It must be in the format `YYYY-MM-DDThh:mm:ss.fff` (ISO 8601 format).
+          example: '2020-09-01T13:15:30Z'
+        caption:
+          type: string
+          description: Field to be filled in if a loyalty program must be created for the gift card.
+          example: rewards program
+        profileId:
+          type: string
+          description: Client ID. You can use the customer's registered email or the `userId` parameter which can be found in the [Master Data](https://help.vtex.com/en/tutorial/master-data--4otjBnR27u4WUIciQsmkAw).
+          example: 92de2449-0e02-4ca9-a4aa-a09cc9d8f7ff
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217.
+          example: USD
+        restrictedToOwner:
+          type: boolean
+          description: The gift card can only be used for a specified client's ID.
+          example: false
+        multipleCredits:
+          type: boolean
+          description: The gift card balance can be changed.
+          example: false
+        multipleRedemptions:
+          type: boolean
+          description: The gift card can be used to make new purchases until its value is completely used.
+          example: false
+    Item:
+      type: object
+      required:
+      - productId
+      - id
+      - refId
+      - name
+      - price
+      - quantity
+      properties:
+        productId:
+          type: string
+          description: Product ID.
+          example: '2000000'
+        id:
+          type: string
+          description: The ID of the SKU in VTEX platform.
+          example: '2000002'
+        refId:
+          type: string
+          description: Product Reference ID.
+          example: MEV41
+        name:
+          type: string
+          description: Product name.
+          example: Shoes
+        price:
+          type: integer
+          description: Product price.
+          example: 200
+        quantity:
+          type: integer
+          description: Product quantity.
+          example: 1
+    Transactions:
+      type: object
+      description: Transactions information.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: Gift card resource URL. The number described in the URL refers to the gift card identification.
+          example: cards/954/transactions
+    response2:
+      type: object
+      required:
+      - items
+      - paging
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item1'
+          description: Items information.
+        paging:
+          $ref: '#/components/schemas/Paging'
+    Paging:
+      type: object
+      required:
+      - page
+      - perPage
+      - total
+      - pages
+      properties:
+        page:
+          type: integer
+          description: Page number of the gift card list.
+          example: 0
+        perPage:
+          type: integer
+          description: Quantity of gift cards per page.
+          example: 10
+        total:
+          type: integer
+          description: Total of gift cards in the store.
+          example: 4
+        pages:
+          type: integer
+          description: Total number of pages.
+          example: 1
+    Self:
+      type: object
+      description: Object that carries an auto reference of the transaction (on its API).
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+          example: cards/890/transactions/268
+    Cart:
+      type: object
+      required:
+      - grandTotal
+      - relationName
+      - redemptionCode
+      - discounts
+      - shipping
+      - taxes
+      - items
+      - itemsTotal
+      properties:
+        grandTotal:
+          type: integer
+          description: Total payment value.
+          example: 182
+        relationName:
+          type: string
+          nullable: true
+          description: Represents the relationship between the client and the store.
+          example: null
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: BAHD-ASDB-ADQW-ASDQ
+        discounts:
+          type: integer
+          description: Discounts value.
+          example: 20
+        shipping:
+          type: integer
+          description: Shipping value.
+          example: 2
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: Items information.
+        itemsTotal:
+          type: integer
+          description: Total items value.
+          example: 200
+    Item1:
+      type: object
+      required:
+      - id
+      - _self
+      properties:
+        id:
+          type: string
+          description: Item identification.
+          example: '589'
+        _self:
+          $ref: '#/components/schemas/Self'
+    response:
+      type: object
+      required:
+      - id
+      - redemptionToken
+      - redemptionCode
+      - balance
+      - relationName
+      - emissionDate
+      - expiringDate
+      - caption
+      - transactions
+      properties:
+        id:
+          type: string
+          description: Gift card identification.
+          example: '954'
+        redemptionToken:
+          type: string
+          description: Gift card redemption token.
+          example: 32ScL57220Vapb8pc50HJ3mWH1cl1L8x
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: '***********ASDQ'
+        balance:
+          type: number
+          description: Gift card current balance. For newly created gift cards, the balance will be 0.0.
+          example: 0
+        relationName:
+          type: string
+          description: Field to be filled in when it is not necessary to use a loyalty program for the gift card. Note that a new `relationNamevalue` is required for each new gift card to be created.
+          example: cardName
+        emissionDate:
+          type: string
+          description: Gift card creation date.
+          example: '2014-04-24T20:22:58.163'
+        expiringDate:
+          type: string
+          description: Gift card expiration date.
+          example: '2016-01-01T00:00:00'
+        caption:
+          type: string
+          description: Field to be filled in if a loyalty program must be created for the Gift Card.
+          example: VTEX Loyalty Program
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217.
+          example: USD
+        transactions:
+          $ref: '#/components/schemas/Transactions'
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

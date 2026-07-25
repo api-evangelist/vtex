@@ -1,0 +1,203 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Supplier API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Supplier
+paths:
+  /api/catalog/pvt/supplier:
+    post:
+      tags:
+      - Supplier
+      summary: VTex Create Supplier
+      description: "Creates a new Supplier. \r\n## Request body example\r\n\r\n```json\r\n{\r\n    \"Name\": \"Supplier\",\r\n    \"CorporateName\": \"TopStore\",\r\n    \"StateInscription\": \"\",\r\n    \"Cnpj\": \"33304981001272\",\r\n    \"Phone\": \"3333333333\",\r\n    \"CellPhone\": \"4444444444\",\r\n    \"CorportePhone\": \"5555555555\",\r\n    \"Email\": \"email@email.com\",\r\n    \"IsActive\": true\r\n}\r\n```\r\n\r\n## Response body example\r\n\r\n```json\r\n{\r\n    \"Id\": 1,\r\n    \"Name\": \"Supplier\",\r\n    \"CorporateName\": \"TopStore\",\r\n    \"StateInscription\": \"\",\r\n    \"Cnpj\": \"33304981001272\",\r\n    \"Phone\": \"3333333333\",\r\n    \"CellPhone\": \"4444444444\",\r\n    \"CorportePhone\": \"5555555555\",\r\n    \"Email\": \"email@email.com\",\r\n    \"IsActive\": true\r\n}\r\n```"
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierResponse'
+  /api/catalog/pvt/supplier/{supplierId}:
+    put:
+      tags:
+      - Supplier
+      summary: VTex Update Supplier
+      description: "Updates general information of an existing Supplier. \r\n## Request body example\r\n\r\n```json\r\n{\r\n    \"Name\": \"Supplier\",\r\n    \"CorporateName\": \"TopStore\",\r\n    \"StateInscription\": \"\",\r\n    \"Cnpj\": \"33304981001272\",\r\n    \"Phone\": \"3333333333\",\r\n    \"CellPhone\": \"4444444444\",\r\n    \"CorportePhone\": \"5555555555\",\r\n    \"Email\": \"email@email.com\",\r\n    \"IsActive\": true\r\n}\r\n```\r\n\r\n## Response body example\r\n\r\n```json\r\n{\r\n    \"Id\": 1,\r\n    \"Name\": \"Supplier\",\r\n    \"CorporateName\": \"TopStore\",\r\n    \"StateInscription\": \"\",\r\n    \"Cnpj\": \"33304981001272\",\r\n    \"Phone\": \"3333333333\",\r\n    \"CellPhone\": \"4444444444\",\r\n    \"CorportePhone\": \"5555555555\",\r\n    \"Email\": \"email@email.com\",\r\n    \"IsActive\": true\r\n}\r\n```"
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: supplierId
+        in: path
+        required: true
+        description: Supplier's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierResponse'
+    delete:
+      tags:
+      - Supplier
+      summary: VTex Delete Supplier
+      description: Deletes an existing Supplier.
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: supplierId
+        in: path
+        required: true
+        description: Supplier's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    SupplierRequest:
+      type: object
+      required:
+      - Name
+      - CorporateName
+      - StateInscription
+      - Cnpj
+      - Phone
+      - CellPhone
+      - CorportePhone
+      - Email
+      - IsActive
+      properties:
+        Name:
+          type: string
+          description: Supplier Name.
+          example: Supplier
+        CorporateName:
+          type: string
+          description: Supplier Corporate Name.
+          example: TopStore
+        StateInscription:
+          type: string
+          description: State Inscription.
+          example: '123456'
+        Cnpj:
+          type: string
+          description: Corporate legal ID.
+          example: '33304981001272'
+        Phone:
+          type: string
+          description: Supplier Phone.
+          example: '3333333333'
+        CellPhone:
+          type: string
+          description: Supplier Cellphone.
+          example: '4444444444'
+        CorportePhone:
+          type: string
+          description: Supplier Corporate Phone.
+          example: '5555555555'
+        Email:
+          type: string
+          description: Supplier email.
+          example: email@email.com
+        IsActive:
+          type: boolean
+          description: Defines if the Supplier is active (`true`) or not (`false`).
+          example: false
+    SupplierResponse:
+      type: object
+      properties:
+        Id:
+          type: integer
+          description: Supplier unique identifier code.
+          example: 123
+        Name:
+          type: string
+          description: Supplier Name.
+          example: Supplier
+        CorporateName:
+          type: string
+          description: Supplier Corporate Name.
+          example: TopStore
+        StateInscription:
+          type: string
+          description: State Inscription.
+          example: '123456'
+        Cnpj:
+          type: string
+          description: Corporate legal ID.
+          example: '33304981001272'
+        Phone:
+          type: string
+          description: Supplier Phone.
+          example: '3333333333'
+        CellPhone:
+          type: string
+          description: Supplier Cellphone.
+          example: '4444444444'
+        CorportePhone:
+          type: string
+          description: Supplier Corporate Phone.
+          example: '5555555555'
+        Email:
+          type: string
+          description: Supplier email.
+          example: email@email.com
+        IsActive:
+          type: boolean
+          description: Defines if the Supplier is active (`true`) or not (`false`).
+          example: false
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

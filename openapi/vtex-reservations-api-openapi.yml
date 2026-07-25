@@ -1,0 +1,1391 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Reservations API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Reservations
+paths:
+  /api/logistics/pvt/inventory/reservations:
+    post:
+      tags:
+      - Reservations
+      summary: VTex Create reservation
+      description: Creates [reservation](https://help.vtex.com/en/tutorial/how-does-reservation-work--tutorials_92).
+      operationId: CreateReservation
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              title: CreateReservationRequest
+              required:
+              - salesChannel
+              - lockId
+              - autorizationExpirationTTL
+              - deliveryItemOptions
+              type: object
+              properties:
+                salesChannel:
+                  type: string
+                lockId:
+                  type: string
+                  nullable: true
+                autorizationExpirationTTL:
+                  type: string
+                deliveryItemOptions:
+                  type: array
+                  items:
+                    title: DeliveryItemOption
+                    required:
+                    - item
+                    - slaType
+                    - slaTypeName
+                    - listPrice
+                    - promotionalPrice
+                    - transitTime
+                    - dockTime
+                    - timeToDockPlusDockTime
+                    - aditionalTimeBlockedDays
+                    - totalTime
+                    - deliveryWindows
+                    - wareHouseId
+                    - dockId
+                    - location
+                    type: object
+                    properties:
+                      item:
+                        title: Item
+                        required:
+                        - id
+                        - groupItemId
+                        - kitItem
+                        - quantity
+                        - price
+                        - additionalHandlingTime
+                        - dimension
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          groupItemId:
+                            type: string
+                            nullable: true
+                          kitItem:
+                            type: array
+                            items:
+                              type: string
+                            description: '[Kit](https://help.vtex.com/en/tutorial/what-is-a-kit--5ov5s3eHM4AqAAgqWwoc28) item information.'
+                          quantity:
+                            type: integer
+                            format: int32
+                          price:
+                            type: integer
+                            format: int32
+                          additionalHandlingTime:
+                            type: string
+                          dimension:
+                            title: Dimension
+                            required:
+                            - weight
+                            - height
+                            - width
+                            - length
+                            type: object
+                            properties:
+                              weight:
+                                type: integer
+                                format: int32
+                              height:
+                                type: integer
+                                format: int32
+                              width:
+                                type: integer
+                                format: int32
+                              length:
+                                type: integer
+                                format: int32
+                            example:
+                              weight: 150
+                              height: 1
+                              width: 1
+                              length: 1
+                        example:
+                          id: '2390059'
+                          groupItemId: null
+                          kitItem: []
+                          quantity: 1
+                          price: 0
+                          additionalHandlingTime: 00:00:00
+                          dimension:
+                            weight: 150
+                            height: 1
+                            width: 1
+                            length: 1
+                      slaType:
+                        type: string
+                      slaTypeName:
+                        type: string
+                      listPrice:
+                        type: number
+                      promotionalPrice:
+                        type: number
+                      transitTime:
+                        type: string
+                      dockTime:
+                        type: string
+                      timeToDockPlusDockTime:
+                        type: string
+                      aditionalTimeBlockedDays:
+                        type: string
+                      totalTime:
+                        type: string
+                      deliveryWindows:
+                        type: array
+                        items:
+                          type: string
+                        description: '[Delivery windows](https://help.vtex.com/en/tutorial/managing-delivery-capacity--2y217FQZCjD0I1n62yxVcz).'
+                      wareHouseId:
+                        type: string
+                        nullable: true
+                      dockId:
+                        type: string
+                      location:
+                        title: Location
+                        required:
+                        - zipCode
+                        - country
+                        - inStore
+                        type: object
+                        properties:
+                          zipCode:
+                            type: string
+                          country:
+                            type: string
+                          inStore:
+                            title: InStore
+                            required:
+                            - IsCheckedIn
+                            - StoreId
+                            type: object
+                            properties:
+                              IsCheckedIn:
+                                type: boolean
+                              StoreId:
+                                type: string
+                                nullable: true
+                            example:
+                              IsCheckedIn: false
+                              StoreId: null
+                        example:
+                          zipCode: '22220070'
+                          country: BRA
+                          inStore:
+                            IsCheckedIn: false
+                            StoreId: null
+                    example:
+                      item:
+                        id: '2390059'
+                        groupItemId: null
+                        kitItem: []
+                        quantity: 1
+                        price: 0
+                        additionalHandlingTime: 00:00:00
+                        dimension:
+                          weight: 150
+                          height: 1
+                          width: 1
+                          length: 1
+                      slaType: Expressa
+                      slaTypeName: Expressa
+                      listPrice: 10.5
+                      promotionalPrice: 10.5
+                      transitTime: 2.00:00:00
+                      dockTime: 00:00:00
+                      timeToDockPlusDockTime: 1.00:00:00
+                      aditionalTimeBlockedDays: 00:00:00
+                      totalTime: 3.00:00:00
+                      deliveryWindows: []
+                      wareHouseId: null
+                      dockId: 1a8bce3
+                      location:
+                        zipCode: '22220070'
+                        country: BRA
+                        inStore:
+                          IsCheckedIn: false
+                          StoreId: null
+                  description: Array of objects with delivery item options information.
+              example:
+                salesChannel: '1'
+                lockId: null
+                autorizationExpirationTTL: 00:10:00
+                deliveryItemOptions:
+                - item:
+                    id: '2390059'
+                    groupItemId: null
+                    kitItem: []
+                    quantity: 1
+                    price: 0
+                    additionalHandlingTime: 00:00:00
+                    dimension:
+                      weight: 150
+                      height: 1
+                      width: 1
+                      length: 1
+                  slaType: Expressa
+                  slaTypeName: Expressa
+                  listPrice: 10.5
+                  promotionalPrice: 10.5
+                  transitTime: 2.00:00:00
+                  dockTime: 00:00:00
+                  timeToDockPlusDockTime: 1.00:00:00
+                  aditionalTimeBlockedDays: 00:00:00
+                  totalTime: 3.00:00:00
+                  deliveryWindows: []
+                  wareHouseId: null
+                  dockId: 1a8bce3
+                  location:
+                    zipCode: '22220070'
+                    country: BRA
+                    inStore:
+                      IsCheckedIn: false
+                      StoreId: null
+            example:
+              salesChannel: '1'
+              lockId: null
+              autorizationExpirationTTL: 00:10:00
+              deliveryItemOptions:
+              - item:
+                  id: '2390059'
+                  groupItemId: null
+                  kitItem: []
+                  quantity: 1
+                  price: 0
+                  additionalHandlingTime: 00:00:00
+                  dimension:
+                    weight: 150
+                    height: 1
+                    width: 1
+                    length: 1
+                slaType: Expressa
+                slaTypeName: Expressa
+                listPrice: 10.5
+                promotionalPrice: 10.5
+                transitTime: 2.00:00:00
+                dockTime: 00:00:00
+                timeToDockPlusDockTime: 1.00:00:00
+                aditionalTimeBlockedDays: 00:00:00
+                totalTime: 3.00:00:00
+                deliveryWindows: []
+                wareHouseId: null
+                dockId: 1a8bce3
+                location:
+                  zipCode: '22220070'
+                  country: BRA
+                  inStore:
+                    IsCheckedIn: false
+                    StoreId: null
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Encoding:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: gzip
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '620'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 15 Apr 2016 19:59:18 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            Vary:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Accept-Encoding
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx5
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.8
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.26.4
+            X-Powered-by-VTEX-Janus-Router:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 2.1.155
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.2.96-stable+863
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 4e3847c0-596e-4abd-a761-e711bb68bdfa
+          content:
+            application/json; charset=utf-8:
+              schema:
+                required:
+                - LastUpdateDateUtc
+                - SalesChannel
+                - LockId
+                - ReservationDateUtc
+                - MaximumConfirmationDateUtc
+                - Status
+                - SlaRequest
+                - PickupPointItemOptions
+                - CanceledDateUtc
+                - AuthorizedDateUtc
+                - ConfirmedDateUtc
+                - Errors
+                - IsSucess
+                type: object
+                properties:
+                  LastUpdateDateUtc:
+                    type: string
+                  SalesChannel:
+                    type: string
+                  LockId:
+                    type: string
+                  ReservationDateUtc:
+                    type: string
+                  MaximumConfirmationDateUtc:
+                    type: string
+                  Status:
+                    type: integer
+                    format: int32
+                  SlaRequest:
+                    type: array
+                    items:
+                      title: SlaRequest
+                      required:
+                      - item
+                      - slaType
+                      - slaTypeName
+                      - freightTableName
+                      - freightTableId
+                      - listPrice
+                      - promotionalPrice
+                      - transitTime
+                      - dockTime
+                      - timeToDockPlusDockTime
+                      - totalTime
+                      - deliveryWindows
+                      - wareHouseId
+                      - dockId
+                      - wmsEndPoint
+                      - location
+                      - pickupStoreInfo
+                      type: object
+                      properties:
+                        item:
+                          title: Item1
+                          required:
+                          - id
+                          - groupItemId
+                          - quantity
+                          - price
+                          - modal
+                          - additionalHandlingTime
+                          - dimension
+                          - kitItem
+                          - unlimitedQuantity
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            groupItemId:
+                              type: string
+                              nullable: true
+                            quantity:
+                              type: integer
+                              format: int32
+                            price:
+                              type: number
+                            modal:
+                              type: string
+                              nullable: true
+                            additionalHandlingTime:
+                              type: string
+                            dimension:
+                              title: Dimension1
+                              required:
+                              - weight
+                              - height
+                              - width
+                              - length
+                              - maxSumDimension
+                              type: object
+                              properties:
+                                weight:
+                                  type: number
+                                height:
+                                  type: number
+                                width:
+                                  type: number
+                                length:
+                                  type: number
+                                maxSumDimension:
+                                  type: number
+                              example:
+                                weight: 800
+                                height: 10
+                                width: 12
+                                length: 35
+                                maxSumDimension: 0
+                            kitItem:
+                              type: array
+                              items:
+                                type: string
+                              description: '[Kit](https://help.vtex.com/en/tutorial/what-is-a-kit--5ov5s3eHM4AqAAgqWwoc28) item information.'
+                            unlimitedQuantity:
+                              type: boolean
+                          example:
+                            id: '2390059'
+                            groupItemId: null
+                            quantity: 1
+                            price: 0
+                            modal: null
+                            additionalHandlingTime: 00:00:00
+                            dimension:
+                              weight: 800
+                              height: 10
+                              width: 12
+                              length: 35
+                              maxSumDimension: 0
+                            kitItem: []
+                            unlimitedQuantity: false
+                        slaType:
+                          type: string
+                        slaTypeName:
+                          type: string
+                        freightTableName:
+                          type: string
+                        freightTableId:
+                          type: string
+                        listPrice:
+                          type: number
+                        promotionalPrice:
+                          type: number
+                        transitTime:
+                          type: string
+                        dockTime:
+                          type: string
+                        timeToDockPlusDockTime:
+                          type: string
+                        totalTime:
+                          type: string
+                        deliveryWindows:
+                          type: string
+                          nullable: true
+                        wareHouseId:
+                          type: string
+                        dockId:
+                          type: string
+                        wmsEndPoint:
+                          type: string
+                        location:
+                          title: Location1
+                          required:
+                          - zipCode
+                          - country
+                          - deliveryPointId
+                          - point
+                          - inStore
+                          type: object
+                          properties:
+                            zipCode:
+                              type: string
+                            country:
+                              type: string
+                            deliveryPointId:
+                              type: string
+                              nullable: true
+                            point:
+                              type: string
+                              nullable: true
+                            inStore:
+                              title: InStore1
+                              required:
+                              - IsCheckedIn
+                              - StoreId
+                              type: object
+                              properties:
+                                IsCheckedIn:
+                                  type: boolean
+                                StoreId:
+                                  type: string
+                              example:
+                                IsCheckedIn: false
+                                StoreId: '180082'
+                          example:
+                            zipCode: '22220070'
+                            country: BRA
+                            deliveryPointId: null
+                            point: null
+                            inStore:
+                              IsCheckedIn: false
+                              StoreId: '180082'
+                        pickupStoreInfo:
+                          type: string
+                          nullable: true
+                      example:
+                        item:
+                          id: '2390059'
+                          groupItemId: null
+                          quantity: 1
+                          price: 0
+                          modal: null
+                          additionalHandlingTime: 00:00:00
+                          dimension:
+                            weight: 800
+                            height: 10
+                            width: 12
+                            length: 35
+                            maxSumDimension: 0
+                          kitItem: []
+                          unlimitedQuantity: false
+                        slaType: Normal
+                        slaTypeName: Normal
+                        freightTableName: Correios PAC
+                        freightTableId: 11cc4b6
+                        listPrice: 10.5
+                        promotionalPrice: 10.5
+                        transitTime: 2.00:00:00
+                        dockTime: 00:00:00
+                        timeToDockPlusDockTime: 1.00:00:00
+                        totalTime: 3.00:00:00
+                        deliveryWindows: null
+                        wareHouseId: '1937054'
+                        dockId: '1_1_1'
+                        wmsEndPoint: ''
+                        location:
+                          zipCode: '22220070'
+                          country: BRA
+                          deliveryPointId: null
+                          point: null
+                          inStore:
+                            IsCheckedIn: false
+                            StoreId: '180082'
+                        pickupStoreInfo: null
+                    description: SLA (Service Level Agreement) information.
+                  PickupPointItemOptions:
+                    type: string
+                    nullable: true
+                  CanceledDateUtc:
+                    type: string
+                  AuthorizedDateUtc:
+                    type: string
+                  ConfirmedDateUtc:
+                    type: string
+                  Errors:
+                    type: array
+                    items:
+                      type: string
+                    description: Errors details.
+                  IsSucess:
+                    type: boolean
+                example:
+                  LastUpdateDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                  SalesChannel: '2'
+                  LockId: 3bfe679d-c0a8-475a-b315-706f84a9deb4
+                  ReservationDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                  MaximumConfirmationDateUtc: '2016-04-15T20:09:20.0397988+00:00'
+                  Status: 1
+                  SlaRequest:
+                  - item:
+                      id: '2390059'
+                      groupItemId: null
+                      quantity: 1
+                      price: 0
+                      modal: null
+                      additionalHandlingTime: 00:00:00
+                      dimension:
+                        weight: 800
+                        height: 10
+                        width: 12
+                        length: 35
+                        maxSumDimension: 0
+                      kitItem: []
+                      unlimitedQuantity: false
+                    slaType: Normal
+                    slaTypeName: Normal
+                    freightTableName: Correios PAC
+                    freightTableId: 11cc4b6
+                    listPrice: 10.5
+                    promotionalPrice: 10.5
+                    transitTime: 2.00:00:00
+                    dockTime: 00:00:00
+                    timeToDockPlusDockTime: 1.00:00:00
+                    totalTime: 3.00:00:00
+                    deliveryWindows: null
+                    wareHouseId: '1937054'
+                    dockId: '1_1_1'
+                    wmsEndPoint: ''
+                    location:
+                      zipCode: '22220070'
+                      country: BRA
+                      deliveryPointId: null
+                      point: null
+                      inStore:
+                        IsCheckedIn: false
+                        StoreId: '180082'
+                    pickupStoreInfo: null
+                  PickupPointItemOptions: null
+                  CanceledDateUtc: '0001-01-01T00:00:00+00:00'
+                  AuthorizedDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                  ConfirmedDateUtc: '0001-01-01T00:00:00+00:00'
+                  Errors: []
+                  IsSucess: true
+              example:
+                LastUpdateDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                SalesChannel: '2'
+                LockId: 3bfe679d-c0a8-475a-b315-706f84a9deb4
+                ReservationDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                MaximumConfirmationDateUtc: '2016-04-15T20:09:20.0397988+00:00'
+                Status: 1
+                SlaRequest:
+                - item:
+                    id: '2390059'
+                    groupItemId: null
+                    quantity: 1
+                    price: 0
+                    modal: null
+                    additionalHandlingTime: 00:00:00
+                    dimension:
+                      weight: 800
+                      height: 10
+                      width: 12
+                      length: 35
+                      maxSumDimension: 0
+                    kitItem: []
+                    unlimitedQuantity: false
+                  slaType: Normal
+                  slaTypeName: Normal
+                  freightTableName: Correios PAC
+                  freightTableId: 11cc4b6
+                  listPrice: 10.5
+                  promotionalPrice: 10.5
+                  transitTime: 2.00:00:00
+                  dockTime: 00:00:00
+                  timeToDockPlusDockTime: 1.00:00:00
+                  totalTime: 3.00:00:00
+                  deliveryWindows: null
+                  wareHouseId: '1937054'
+                  dockId: '1_1_1'
+                  wmsEndPoint: ''
+                  location:
+                    zipCode: '22220070'
+                    country: BRA
+                    deliveryPointId: null
+                    point: null
+                    inStore:
+                      IsCheckedIn: false
+                      StoreId: '180082'
+                  pickupStoreInfo: null
+                PickupPointItemOptions: null
+                CanceledDateUtc: '0001-01-01T00:00:00+00:00'
+                AuthorizedDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                ConfirmedDateUtc: '0001-01-01T00:00:00+00:00'
+                Errors: []
+                IsSucess: true
+      deprecated: false
+  /api/logistics/pvt/inventory/reservations/{reservationId}:
+    get:
+      tags:
+      - Reservations
+      summary: VTex List reservation by ID
+      description: Lists reservation's information by ID.
+      operationId: ReservationById
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: reservationId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Encoding:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: gzip
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '621'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 15 Apr 2016 20:00:01 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            Vary:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Accept-Encoding
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx5
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.8
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.26.4
+            X-Powered-by-VTEX-Janus-Router:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 2.1.155
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Cache-Status-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: MISS
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.2.96-stable+863
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: ffa62df6-4fd0-4cf0-a348-1f3964abc4c4
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  LastUpdateDateUtc:
+                    type: string
+                    description: Date of the last update in UTC.
+                  SalesChannel:
+                    type: string
+                    description: Sales channel.
+                  LockId:
+                    type: string
+                    description: Lock ID.
+                  ReservationDateUtc:
+                    type: string
+                    description: Reservation date in UTC.
+                  MaximumConfirmationDateUtc:
+                    type: string
+                    description: Maximum confirmation date in UTC.
+                  Status:
+                    type: integer
+                    format: int32
+                    description: "Reservation status, being:\r\n\r\n- `0`: `NotCommitted`\r\n\r\n- `1`: `Authorized`\r\n\r\n- `2`: `Confirmed`\r\n\r\n- `3`: `Canceled_AbortedCommitted`\r\n\r\n- `4`: `Canceled_AuthorizationExpired`\r\n\r\n- `5`: `Canceled_Manually`."
+                  SlaRequest:
+                    type: array
+                    description: Information on SLA request.
+                    items:
+                      type: object
+                      properties:
+                        item:
+                          title: Item1
+                          required:
+                          - id
+                          - groupItemId
+                          - quantity
+                          - price
+                          - modal
+                          - additionalHandlingTime
+                          - dimension
+                          - kitItem
+                          - unlimitedQuantity
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            groupItemId:
+                              type: string
+                              nullable: true
+                            quantity:
+                              type: integer
+                              format: int32
+                            price:
+                              type: number
+                            modal:
+                              type: string
+                              nullable: true
+                            additionalHandlingTime:
+                              type: string
+                            dimension:
+                              title: Dimension1
+                              required:
+                              - weight
+                              - height
+                              - width
+                              - length
+                              - maxSumDimension
+                              type: object
+                              properties:
+                                weight:
+                                  type: number
+                                height:
+                                  type: number
+                                width:
+                                  type: number
+                                length:
+                                  type: number
+                                maxSumDimension:
+                                  type: number
+                              example:
+                                weight: 800
+                                height: 10
+                                width: 12
+                                length: 35
+                                maxSumDimension: 0
+                            kitItem:
+                              type: array
+                              items:
+                                type: string
+                              description: '[Kit](https://help.vtex.com/en/tutorial/what-is-a-kit--5ov5s3eHM4AqAAgqWwoc28) item information.'
+                            unlimitedQuantity:
+                              type: boolean
+                          example:
+                            id: '2390059'
+                            groupItemId: null
+                            quantity: 1
+                            price: 0
+                            modal: null
+                            additionalHandlingTime: 00:00:00
+                            dimension:
+                              weight: 800
+                              height: 10
+                              width: 12
+                              length: 35
+                              maxSumDimension: 0
+                            kitItem: []
+                            unlimitedQuantity: false
+                        slaType:
+                          type: string
+                        slaTypeName:
+                          type: string
+                        freightTableName:
+                          type: string
+                        freightTableId:
+                          type: string
+                        listPrice:
+                          type: number
+                        promotionalPrice:
+                          type: number
+                        transitTime:
+                          type: string
+                        dockTime:
+                          type: string
+                        timeToDockPlusDockTime:
+                          type: string
+                        totalTime:
+                          type: string
+                        deliveryWindows:
+                          type: string
+                          nullable: true
+                        wareHouseId:
+                          type: string
+                        dockId:
+                          type: string
+                        wmsEndPoint:
+                          type: string
+                        location:
+                          title: Location1
+                          required:
+                          - zipCode
+                          - country
+                          - deliveryPointId
+                          - point
+                          - inStore
+                          type: object
+                          properties:
+                            zipCode:
+                              type: string
+                            country:
+                              type: string
+                            deliveryPointId:
+                              type: string
+                              nullable: true
+                            point:
+                              type: string
+                              nullable: true
+                            inStore:
+                              title: InStore1
+                              required:
+                              - IsCheckedIn
+                              - StoreId
+                              type: object
+                              properties:
+                                IsCheckedIn:
+                                  type: boolean
+                                StoreId:
+                                  type: string
+                              example:
+                                IsCheckedIn: false
+                                StoreId: '180082'
+                          example:
+                            zipCode: '22220070'
+                            country: BRA
+                            deliveryPointId: null
+                            point: null
+                            inStore:
+                              IsCheckedIn: false
+                              StoreId: '180082'
+                        pickupStoreInfo:
+                          type: string
+                          nullable: true
+                  PickupPointItemOptions:
+                    type: string
+                    description: Pickup point item options.
+                  CanceledDateUtc:
+                    type: string
+                    description: Canceled date in UTC.
+                  AuthorizedDateUtc:
+                    type: string
+                    description: Authorized date in UTC.
+                  ConfirmedDateUtc:
+                    type: string
+                    description: Confirmed date in UTC.
+                  Errors:
+                    type: array
+                    description: Information on errors, if there are any.
+                    items:
+                      type: string
+                  IsSucess:
+                    type: boolean
+                example:
+                  LastUpdateDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                  SalesChannel: '2'
+                  LockId: 3bfe679d-c0a8-475a-b315-706f84a9deb4
+                  ReservationDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                  MaximumConfirmationDateUtc: '2016-04-15T20:09:20.0397988+00:00'
+                  Status: 1
+                  SlaRequest:
+                  - item:
+                      id: '2390059'
+                      groupItemId: null
+                      quantity: 1
+                      price: 0
+                      modal: null
+                      additionalHandlingTime: 00:00:00
+                      dimension:
+                        weight: 800
+                        height: 10
+                        width: 12
+                        length: 35
+                        maxSumDimension: 0
+                      kitItem: []
+                      unlimitedQuantity: false
+                    slaType: Normal
+                    slaTypeName: Normal
+                    freightTableName: Correios PAC
+                    freightTableId: 11cc4b6
+                    listPrice: 10.5
+                    promotionalPrice: 10.5
+                    transitTime: 2.00:00:00
+                    dockTime: 00:00:00
+                    timeToDockPlusDockTime: 1.00:00:00
+                    totalTime: 3.00:00:00
+                    deliveryWindows: null
+                    wareHouseId: '1937054'
+                    dockId: '1_1_1'
+                    wmsEndPoint: ''
+                    location:
+                      zipCode: '22220070'
+                      country: BRA
+                      deliveryPointId: null
+                      point: null
+                      inStore:
+                        IsCheckedIn: false
+                        StoreId: '180082'
+                    pickupStoreInfo: null
+                  PickupPointItemOptions: PUP 1
+                  CanceledDateUtc: '0001-01-01T00:00:00+00:00'
+                  AuthorizedDateUtc: '2016-04-15T19:59:20.0397988+00:00'
+                  ConfirmedDateUtc: '0001-01-01T00:00:00+00:00'
+                  Errors: []
+                  IsSucess: true
+              example:
+                LastUpdateDateUtc: '2016-04-15T19:59:40.9832533+00:00'
+                SalesChannel: '2'
+                LockId: 621a9121-06c9-4731-96d1-edf8c5c23877
+                ReservationDateUtc: '2016-04-15T19:59:40.9832533+00:00'
+                MaximumConfirmationDateUtc: '2016-04-15T20:09:40.9832533+00:00'
+                Status: 1
+                SlaRequest:
+                - item:
+                    id: '2390059'
+                    groupItemId: null
+                    quantity: 1
+                    price: 0
+                    modal: null
+                    additionalHandlingTime: 00:00:00
+                    dimension:
+                      weight: 800
+                      height: 10
+                      width: 12
+                      length: 35
+                      maxSumDimension: 0
+                    kitItem: []
+                    unlimitedQuantity: false
+                  slaType: Normal
+                  slaTypeName: Normal
+                  freightTableName: Correios PAC
+                  freightTableId: 11cc4b6
+                  listPrice: 10.5
+                  promotionalPrice: 10.5
+                  transitTime: 2.00:00:00
+                  dockTime: 00:00:00
+                  timeToDockPlusDockTime: 1.00:00:00
+                  totalTime: 3.00:00:00
+                  deliveryWindows: null
+                  wareHouseId: '1937054'
+                  dockId: '1_1_1'
+                  wmsEndPoint: ''
+                  location:
+                    zipCode: '22220070'
+                    country: BRA
+                    deliveryPointId: null
+                    point: null
+                    inStore:
+                      IsCheckedIn: false
+                      StoreId: '180082'
+                  pickupStoreInfo: null
+                PickupPointItemOptions: PUP 1
+                CanceledDateUtc: '0001-01-01T00:00:00+00:00'
+                AuthorizedDateUtc: '2016-04-15T19:59:40.9832533+00:00'
+                ConfirmedDateUtc: '0001-01-01T00:00:00+00:00'
+                Errors: []
+                IsSucess: true
+      deprecated: false
+  /api/logistics/pvt/inventory/reservations/{reservationId}/confirm:
+    post:
+      tags:
+      - Reservations
+      summary: VTex Confirm reservation
+      description: Confirms reservation by reservation ID.
+      operationId: ConfirmReservation
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: reservationId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/inventory/reservations/{reservationId}/acknowledge:
+    post:
+      tags:
+      - Reservations
+      summary: VTex Acknowledgment reservation
+      description: Acknowledges reservations made by reservation ID.
+      operationId: AcknowledgmentReservation
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: reservationId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/inventory/reservations/{reservationId}/cancel:
+    post:
+      tags:
+      - Reservations
+      summary: VTex Cancel reservation
+      description: Cancels reservation by reservation ID.
+      operationId: CancelReservation
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: reservationId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/inventory/reservations/{warehouseId}/{skuId}:
+    get:
+      tags:
+      - Reservations
+      summary: VTex List reservation by warehouse and SKU
+      description: Lists reservations in your store, by searching through warehouse and SKU.
+      operationId: ReservationbyWarehouseandSku
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: warehouseId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      - name: skuId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

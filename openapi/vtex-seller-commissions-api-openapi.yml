@@ -1,0 +1,277 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Seller Commissions API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Seller Commissions
+paths:
+  /seller-register/pvt/sellers/{sellerId}/commissions:
+    get:
+      tags:
+      - Seller Commissions
+      summary: VTex List Seller Commissions by seller ID
+      description: "This endpoint retrieves all comissions configured for a specific seller. It is not necessary to send a request body.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** | **Role** |\r\n|---|---|---|---|\r\n| Seller Register | Seller adminstration | View Seller | View all sellers linked to the Marketplace account described on the sellers management page, including recovering seller data, either from the sellers listing, or a specific seller. |\r\n| Seller Register | Seller administration | Save Seller | Create new sellers and edit data from all sellers linked to Marketplace account from the sellers management page. |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with this feature or use one of the predefined roles from the list above.\r\n\r\n >❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm). To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      operationId: ListSellerCommissions
+      parameters:
+      - $ref: '#/components/parameters/accountName'
+      - $ref: '#/components/parameters/environment'
+      - $ref: '#/components/parameters/sellerId'
+      - $ref: '#/components/parameters/accept'
+      - $ref: '#/components/parameters/contentType'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array with objects containing information about the category, seller and percentage of commission applied.
+                items:
+                  $ref: '#/components/schemas/responseSellerCommissionsID'
+      deprecated: false
+    put:
+      tags:
+      - Seller Commissions
+      summary: VTex Upsert Seller Commissions in bulk
+      description: "This endpoint is used by marketplace operators to define comissions for multiple categories, sending an array with multiple objects in the same call.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** | **Role** |\r\n|----|----|----|----|\r\n| Seller Register | Seller administration | Save Seller | Create new sellers and edit data from all sellers linked to Marketplace account from the sellers management page. |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with this feature or use one of the predefined roles from the list above.\r\n\r\n >❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm). To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      operationId: BulkUpsertSellerCommissions
+      parameters:
+      - $ref: '#/components/parameters/accountName'
+      - $ref: '#/components/parameters/environment'
+      - $ref: '#/components/parameters/accept'
+      - $ref: '#/components/parameters/contentType'
+      - $ref: '#/components/parameters/sellerId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              description: Array with objects containing information about the category, seller and commission percentage to be applied.
+              items:
+                $ref: '#/components/schemas/BulkUpsertSellerCommissionsRequest'
+        required: true
+      responses:
+        '204':
+          description: No Content
+      deprecated: false
+  /seller-register/pvt/sellers/{sellerId}/commissions/{categoryId}:
+    delete:
+      tags:
+      - Seller Commissions
+      summary: VTex Remove Seller Commissions by Category ID
+      operationId: RemoveSellerCommissions
+      description: "This endpoint removes a seller comission on the selected category.\r\n\r\n >❗This action cannot be undone, to reconfigure the commission it is necessary to use the [Upsert Seller Commissions in Bulk endpoint](https://developers.vtex.com/docs/api-reference/marketplace-apis#put-/seller-register/pvt/sellers/-sellerId-/commissions/categories?endpoint=put-/seller-register/pvt/sellers/-sellerId-/commissions/categories). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** | **Role** |\r\n|----|----|----|----|\r\n| Seller Register | Seller administration | Save Seller | Create new sellers and edit data from all sellers linked to Marketplace account from the sellers management page. |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with this feature or use one of the predefined roles from the list above.\r\n\r\n >❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm). To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      parameters:
+      - $ref: '#/components/parameters/accountName'
+      - $ref: '#/components/parameters/environment'
+      - $ref: '#/components/parameters/accept'
+      - $ref: '#/components/parameters/contentType'
+      - $ref: '#/components/parameters/sellerId'
+      - $ref: '#/components/parameters/categoryId'
+      responses:
+        '204':
+          description: No Content
+      deprecated: false
+    get:
+      tags:
+      - Seller Commissions
+      summary: VTex Get Seller Commissions by Category ID
+      operationId: RetrieveSellerCommissions
+      description: "This endpoint retrieves seller comissions applied to the selected category. It is not necessary to send a request body.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** | **Role** |\r\n|---|---|---|---|\r\n| Seller Register | Seller adminstration | View Seller | View all sellers linked to the Marketplace account described on the sellers management page, including recovering seller data, either from the sellers listing, or a specific seller. |\r\n| Seller Register | Seller administration | Save Seller | Create new sellers and edit data from all sellers linked to Marketplace account from the sellers management page. |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with this feature or use one of the predefined roles from the list above.\r\n\r\n >❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm). To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      parameters:
+      - name: accountName
+        in: path
+        description: Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account.
+        required: true
+        schema:
+          type: string
+          default: apiexamples
+      - name: environment
+        in: path
+        required: true
+        description: Environment to use. Used as part of the URL.
+        schema:
+          type: string
+          default: vtexcommercestable
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Describes the type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: sellerId
+        in: path
+        description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: seller123
+      - name: categoryId
+        in: path
+        description: ID of the category in which the comission was applied
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: '6'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseSellerCommissionsID'
+      deprecated: false
+components:
+  parameters:
+    sellerId:
+      name: sellerId
+      in: path
+      description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: seller123
+    accountName:
+      name: accountName
+      in: path
+      required: true
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
+      schema:
+        type: string
+        example: apiexamples
+    accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    contentType:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    categoryId:
+      name: categoryId
+      in: path
+      description: ID of the category in which the comission was applied
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: '6'
+    environment:
+      name: environment
+      in: path
+      required: true
+      description: Environment to use. Used as part of the URL.
+      schema:
+        type: string
+        default: vtexcommercestable
+  schemas:
+    BulkUpsertSellerCommissionsRequest:
+      required:
+      - categoryId
+      - categoryFullPath
+      - productCommissionPercentage
+      - freightCommissionPercentage
+      type: object
+      properties:
+        categoryId:
+          type: string
+          description: Marketplace's Category ID that the product belongs to, configured in the Catalog.
+          example: '6'
+        categoryFullPath:
+          type: string
+          nullable: true
+          description: 'Full path to the SKU''s category. It should be written as {department}/{category}. For example: if the department is **Appliances** and the category is **Oven**, the full path should be ''Appliances/Oven''.'
+          example: Appliances/Oven
+        productCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the product in decimals.
+          example: 9.85
+        freightCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the freight in decimals.
+          example: 2.43
+      example:
+      - categoryId: '6'
+        categoryFullPath: null
+        productCommissionPercentage: 9.85
+        freightCommissionPercentage: 2.43
+      - categoryId: '51'
+        categoryFullPath: Appliances/Oven
+        productCommissionPercentage: 7.85
+        freightCommissionPercentage: 3.43
+    responseSellerCommissionsID:
+      type: object
+      description: Object with the category properties and the commission percentage applied to it.
+      properties:
+        categoryId:
+          type: string
+          description: Marketplace's Category ID that the product belongs to, configured in the Catalog.
+          example: '51'
+        categoryName:
+          type: string
+          description: Category name with applied commission.
+          example: Clothes
+        categoryFullPath:
+          type: array
+          description: Full path to the SKU's category.
+          items:
+            type: string
+            example: '2.0'
+          example:
+          - '2.0'
+          - Boys
+          - Clothes
+        productCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the product in decimals.
+          example: 7.75
+        freightCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the freight in decimals.
+          example: 2.33
+      example:
+        categoryId: '51'
+        categoryName: Clothes
+        categoryFullPath:
+        - '2.0'
+        - Boys
+        - Clothes
+        productCommissionPercentage: 7.75
+        freightCommissionPercentage: 2.33
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

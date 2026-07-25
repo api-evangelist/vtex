@@ -1,0 +1,667 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Warehouses API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Warehouses
+paths:
+  /api/logistics/pvt/configuration/warehouses:
+    post:
+      tags:
+      - Warehouses
+      summary: VTex Create/update warehouse
+      description: Creates or updates your store's warehouses.
+      operationId: Create/UpdateWarehouse
+      parameters:
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              title: Create/UpdateWarehouseRequest
+              required:
+              - id
+              - name
+              - warehouseDocks
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                warehouseDocks:
+                  type: array
+                  items:
+                    title: WarehouseDock
+                    required:
+                    - dockId
+                    - name
+                    - time
+                    - cost
+                    - translateDays
+                    - costToDisplay
+                    type: object
+                    properties:
+                      dockId:
+                        type: string
+                      name:
+                        type: string
+                      time:
+                        type: string
+                      cost:
+                        type: string
+                      translateDays:
+                        type: string
+                      costToDisplay:
+                        type: string
+                    example:
+                      dockId: 1a8bce3
+                      name: Centro de Distribui├º├úo Principal
+                      time: 3.00:00:00
+                      cost: '5.00'
+                      translateDays: dias
+                      costToDisplay: 5,00
+                  description: List of loading docks to associate with the warehouse.
+              example:
+                id: 15bfc76
+                name: Estoque Principal
+                warehouseDocks:
+                - dockId: 1a8bce3
+                  name: Centro de Distribui├º├úo Principal
+                  time: 3.00:00:00
+                  cost: '5.00'
+                  translateDays: dias
+                  costToDisplay: 5,00
+            example:
+              id: 15bfc76
+              name: Estoque Principal
+              warehouseDocks:
+              - dockId: 1a8bce3
+                name: Centro de Distribui├º├úo Principal
+                time: 3.00:00:00
+                cost: '5.00'
+                translateDays: dias
+                costToDisplay: 5,00
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Warehouses
+      summary: VTex List all warehouses
+      description: Lists information about all warehouses set up in your store.
+      operationId: AllWarehouses
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '877'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 15 Apr 2016 20:00:55 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx5
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.8
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.26.4
+            X-Powered-by-VTEX-Janus-Router:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 2.1.155
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Cache-Status-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: MISS
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.2.96-stable+863
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 718fc3ea-7ad8-458c-a20b-e9cc63df3173
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  required:
+                  - id
+                  - name
+                  - warehouseDocks
+                  - pickupPointIds
+                  - priority
+                  - isActive
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Code that identifies a warehouse.
+                      example: warehouse123
+                    name:
+                      type: string
+                      description: Name of the warehouse.
+                      example: Main Warehouse
+                    warehouseDocks:
+                      type: array
+                      items:
+                        title: WarehouseDock1
+                        description: Information related to the docks available for the given warehouse.
+                        required:
+                        - dockId
+                        - time
+                        - cost
+                        type: object
+                        properties:
+                          dockId:
+                            type: string
+                            description: Code that identifies a dock.
+                            example: dock1
+                          time:
+                            type: string
+                            description: This field returns the dock's processing time in days and hours. If none is configured, the request returns `00:00:00`.
+                            example: 00:00:00
+                          cost:
+                            type: number
+                            description: Extra charges added to the shipping rate when **Additional shipping costs** are configured.
+                            example: 1
+                        example:
+                          dockId: '1_1_1'
+                          time: 1.00:00:00
+                          cost: 0
+                      description: Information related to the docks available for the warehouses.
+                    pickupPointIds:
+                      type: array
+                      description: This field returns a list of the [pickup points' IDs](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R) associated with the given warehouse.
+                      example:
+                      - NameId1
+                      items: {}
+                    priority:
+                      type: integer
+                      description: If the warehouse was configured as a priority. When no priority was set, the value returns`0`.
+                      example: 0
+                    isActive:
+                      type: boolean
+                      description: Shows if the warehouse is active (`true`) or inactive (`false`).
+                      example: true
+                  example:
+                    id: '1937054'
+                    name: Estoque A
+                    warehouseDocks:
+                    - dockId: '1_1_1'
+                      time: 1.00:00:00
+                      cost: 0
+                    pickupPointIds:
+                    - 1
+                    - 2
+                    - 3
+                    priority: 0
+                    isActive: true
+              example:
+              - id: '1937054'
+                name: Estoque A
+                warehouseDocks:
+                - dockId: '1_1_1'
+                  time: 1.00:00:00
+                  cost: 0
+                pickupPointIds:
+                - 1
+                - 2
+                - 3
+                priority: 0
+                isActive: true
+              - id: 140ac66
+                name: Estoque B
+                warehouseDocks:
+                - dockId: 139270d
+                  time: 00:00:00
+                  cost: 0
+                pickupPointIds:
+                - 1
+                - 2
+                - 3
+                priority: 0
+                isActive: true
+      deprecated: false
+  /api/logistics/pvt/configuration/warehouses/{warehouseId}:
+    get:
+      tags:
+      - Warehouses
+      summary: VTex List warehouse by ID
+      description: Lists the information of a given warehouse, searching by warehouse ID.
+      operationId: WarehouseById
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: warehouseId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Encoding:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: gzip
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '119'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 15 Apr 2016 20:01:12 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx5
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.8
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.26.4
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Cache-Status-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: MISS
+            X-VTEX-Janus-Processado:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '119'
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.2.96-stable+863
+            X-VTEX-Janus-SO:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Linux
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 22863291-d5a7-43a6-b611-352e80d6fd24
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  warehouseDocks:
+                    type: array
+                    items:
+                      title: WarehouseDock1
+                      required:
+                      - dockId
+                      - time
+                      - cost
+                      type: object
+                      properties:
+                        dockId:
+                          type: string
+                        time:
+                          type: string
+                        cost:
+                          type: number
+                      example:
+                        dockId: '1_1_1'
+                        time: 1.00:00:00
+                        cost: 0
+                    description: List of loading docks associated with the warehouse.
+                  pickupPointIds:
+                    type: array
+                    description: This field returns a list of the [pickup points' IDs](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R) associated with the given warehouse.
+                    example:
+                    - NameId1
+                    items: {}
+                  priority:
+                    type: integer
+                    description: If the warehouse was configured as a priority. When no priority was set, the value returns`0`.
+                    example: 0
+                  isActive:
+                    type: boolean
+                    description: Shows if the warehouse is active (`true`) or inactive (`false`).
+                    example: true
+                example:
+                  id: '1937054'
+                  name: Estoque A
+                  warehouseDocks:
+                  - dockId: '1_1_1'
+                    time: 1.00:00:00
+                    cost: 0
+                  pickupPointIds:
+                  - 1
+                  - 2
+                  - 3
+                  priority: 0
+                  isActive: true
+              example:
+                id: 15bfc76
+                name: Estoque Principal
+                warehouseDocks:
+                - dockId: 1a8bce3
+                  time: 3.00:00:00
+                  cost: 5
+                pickupPointIds:
+                - 1
+                - 2
+                - 3
+                priority: 0
+                isActive: true
+      deprecated: false
+    delete:
+      tags:
+      - Warehouses
+      summary: VTex Remove warehouse
+      description: Deletes given warehouse by warehouse ID.
+      operationId: RemoveWarehouse
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: warehouseId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/configuration/warehouses/{warehouseId}/activation:
+    post:
+      tags:
+      - Warehouses
+      summary: VTex Activate warehouse
+      description: Activates a given warehouse, by warehouse ID.
+      operationId: ActivateWarehouse
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: warehouseId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/configuration/warehouses/{warehouseId}/deactivation:
+    post:
+      tags:
+      - Warehouses
+      summary: VTex Deactivate warehouse
+      description: Deactivates a given warehouse by warehouse ID.
+      operationId: DeactivateWarehouse
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: warehouseId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

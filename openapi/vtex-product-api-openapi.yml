@@ -1,0 +1,2984 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Product API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Product
+paths:
+  /api/catalog-seller-portal/products/{productId}:
+    get:
+      tags:
+      - Product
+      summary: VTex Get Product by ID
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about a product by its ID. The response also has information about the product's SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProduct
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product unique identifier number.
+        required: true
+        schema:
+          type: string
+          example: '189371'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                id: '189371'
+                status: active
+                name: VTEX 10 Shirt
+                brandId: '1'
+                description: Description data for product.
+                brandName: AOC
+                categoryIds:
+                - '732'
+                categoryNames:
+                - /sandboxintegracao/Acessórios/
+                specs:
+                - name: Color
+                  values:
+                  - Black
+                  - White
+                - name: Size
+                  values:
+                  - S
+                  - M
+                  - L
+                attributes:
+                - name: Fabric
+                  value: Cotton
+                - name: Gender
+                  value: Feminine
+                slug: /vtex-shirt
+                images:
+                - id: vtex_logo.jpg
+                  url: https://vtxleo7778.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                  alt: VTEX
+                skus:
+                - id: '182907'
+                  externalId: '1909621862'
+                  manufacturerCode: '1234567'
+                  isActive: true
+                  weight: 12
+                  dimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  RealWeight: 300
+                  RealDimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  specs:
+                  - name: Color
+                    value: Black
+                  - name: Size
+                    value: S
+                  images:
+                  - vtex_logo.jpg
+                - id: '182908'
+                  externalId: '1909621862'
+                  manufacturerCode: '1234568'
+                  isActive: true
+                  weight: 300
+                  dimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  specs:
+                  - name: Color
+                    value: White
+                  - name: Size
+                    value: L
+                  images:
+                  - vtex_logo.jpg
+                transportModal: '123'
+                taxCode: '100'
+                origin: vtxleo7778
+                createdAt: '2022-10-31T16:28:25.578067Z'
+                updatedAt: '2022-10-31T17:09:12.639088Z'
+              schema:
+                type: object
+                required:
+                - status
+                - name
+                - brandId
+                - brandName
+                - categoryIds
+                - categoryNames
+                - specs
+                - attributes
+                - slug
+                - images
+                - skus
+                - origin
+                - createdAt
+                - updatedAt
+                properties:
+                  id:
+                    type: string
+                    description: Product's unique identifier number.
+                  externalId:
+                    type: string
+                    description: Product reference unique identifier number in the store.
+                  status:
+                    type: string
+                    description: Status of the product. Its values can be `active` or `inactive`.
+                  name:
+                    type: string
+                    description: Product name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                  brandId:
+                    type: string
+                    description: Product's brand unique identifier number.
+                  description:
+                    type: string
+                    description: Description data for product.
+                  brandName:
+                    type: string
+                    description: Name of the brand associated with the product.
+                  categoryIds:
+                    type: array
+                    description: Product's categories unique identifier numbers. It can have multiples IDs for each category and subcategories.
+                    items:
+                      type: string
+                      description: Product's category unique identifier number.
+                  categoryNames:
+                    type: array
+                    description: Names of the product's categories, displayed in a path format.
+                    items:
+                      type: string
+                      description: Name of the product's category.
+                  specs:
+                    type: array
+                    description: Specifications that will differentiate the possible product SKUs.
+                    items:
+                      type: object
+                      description: SKU specifications.
+                      required:
+                      - name
+                      - values
+                      properties:
+                        name:
+                          type: string
+                          description: Specification name.
+                        values:
+                          type: array
+                          description: Specification values.
+                          items:
+                            type: string
+                            description: Specification value.
+                  attributes:
+                    type: array
+                    description: Attributes of the product. Attributes are additional properties used to create site browsing filters.
+                    items:
+                      type: object
+                      description: Product attribute.
+                      required:
+                      - name
+                      - value
+                      properties:
+                        name:
+                          type: string
+                          description: Attribute name.
+                        value:
+                          type: string
+                          description: Attribute value.
+                  slug:
+                    type: string
+                    description: Reference of the product in the URL of the store.
+                  images:
+                    type: array
+                    description: Information of the images of the product.
+                    items:
+                      type: object
+                      description: Information of the images of the product.
+                      required:
+                      - id
+                      - url
+                      properties:
+                        id:
+                          type: string
+                          description: Image ID.
+                        url:
+                          type: string
+                          description: 'Image URL, which must be in the following format: `https://{accountName}.vtexassets.com/assets/{path}`, saved using the [Catalog Images app](https://developers.vtex.com/vtex-developer-docs/docs/vtex-catalog-images).'
+                        alt:
+                          type: string
+                          description: Image alternative description.
+                  skus:
+                    type: array
+                    description: SKUs of the product.
+                    items:
+                      type: object
+                      description: Informations about an SKU.
+                      required:
+                      - id
+                      - isActive
+                      - weight
+                      - dimensions
+                      - specs
+                      - images
+                      properties:
+                        id:
+                          type: string
+                          description: SKU unique identifier number.
+                        externalId:
+                          type: string
+                          description: Unique reference code created to improve the store's organization.
+                        ean:
+                          type: string
+                          description: Unique SKU identification code (barcode), composed of up to 13 numeric characters.
+                        manufacturerCode:
+                          type: string
+                          description: SKU reference code in the store.
+                        isActive:
+                          type: boolean
+                          description: If the SKU is active (`true`) or inactive (`false`).
+                        weight:
+                          type: integer
+                          description: SKU weight. It can be lighter than 1000 g.
+                        dimensions:
+                          type: object
+                          description: SKU dimensions.
+                          required:
+                          - width
+                          - height
+                          - length
+                          properties:
+                            width:
+                              type: number
+                              description: SKU width.
+                            height:
+                              type: number
+                              description: SKU height.
+                            length:
+                              type: number
+                              description: SKU length.
+                        RealWeight:
+                          type: number
+                          description: The product's real weight.
+                        RealDimensions:
+                          type: object
+                          description: The product's real dimensions.
+                          required:
+                          - width
+                          - height
+                          - length
+                          properties:
+                            width:
+                              type: number
+                              description: The product's real width.
+                            height:
+                              type: number
+                              description: The product's real height.
+                            length:
+                              type: number
+                              description: The product's real length.
+                        specs:
+                          type: array
+                          description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
+                          nullable: true
+                          items:
+                            type: object
+                            description: SKU specification.
+                            required:
+                            - name
+                            - value
+                            properties:
+                              name:
+                                type: string
+                                description: SKU's specification name.
+                              value:
+                                type: string
+                                description: SKU's specification values.
+                        images:
+                          type: array
+                          description: SKU's images IDs.
+                          items:
+                            description: SKU image ID.
+                            type: string
+                  transportModal:
+                    type: string
+                    description: Transport modal of the product.
+                    nullable: true
+                  taxCode:
+                    type: string
+                    description: Product tax code.
+                    nullable: true
+                  origin:
+                    type: string
+                    description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
+                  createdAt:
+                    type: string
+                    description: Date when the product was created.
+                  updatedAt:
+                    type: string
+                    description: Last date when the product was updated.
+    put:
+      tags:
+      - Product
+      summary: VTex Update Product
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Updates an existing product and its SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: PutProduct
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product unique identifier number.
+        required: true
+        schema:
+          type: string
+          example: '189371'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - status
+              - name
+              - brandId
+              - categoryIds
+              - specs
+              - attributes
+              - slug
+              - images
+              - skus
+              - origin
+              properties:
+                id:
+                  type: string
+                  description: Product's unique identifier number.
+                  example: '189371'
+                externalId:
+                  type: string
+                  description: Product reference unique identifier number in the store.
+                  example: sandboxintegracao-310117347
+                status:
+                  type: string
+                  description: Status of the product. Its values can be `active` or `inactive`.
+                  example: active
+                name:
+                  type: string
+                  description: Product name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                  example: Camiseta VTEX 10
+                brandId:
+                  type: string
+                  description: Product's brand unique identifier number.
+                  example: '1'
+                description:
+                  type: string
+                  description: New description data for SKU/product.
+                  example: VTEX Shirt Black Size S Long Sleeze.
+                categoryIds:
+                  type: array
+                  description: Product's categories unique identifier numbers. It can have multiples IDs for each category and subcategories.
+                  example:
+                  - '732'
+                  - '412'
+                  items:
+                    type: string
+                    description: Product's category unique identifier number.
+                    example: '732'
+                specs:
+                  type: array
+                  description: Specifications that will differentiate the possible product SKUs.
+                  example:
+                  - name: Color
+                    values:
+                    - Black
+                    - White
+                  - name: Size
+                    values:
+                    - S
+                    - M
+                    - L
+                  items:
+                    type: object
+                    description: SKU specification.
+                    required:
+                    - name
+                    - values
+                    properties:
+                      name:
+                        type: string
+                        description: Specification name.
+                        example: Color
+                      values:
+                        type: array
+                        description: Specification values.
+                        example:
+                        - Black
+                        - White
+                        items:
+                          type: string
+                          description: Specification value.
+                attributes:
+                  type: array
+                  description: Attributes of the product. Attributes are additional properties used to create site browsing filters.
+                  example:
+                  - name: Fabric
+                    value: Cotton
+                  - name: Gender
+                    value: Feminine
+                  items:
+                    type: object
+                    description: Product attribute.
+                    required:
+                    - name
+                    - value
+                    properties:
+                      name:
+                        type: string
+                        description: Attribute name.
+                        example: Fabric
+                      value:
+                        type: string
+                        description: Attribute value.
+                        example: Cotton
+                slug:
+                  type: string
+                  description: Reference of the product in the URL of the store.
+                  example: /vtex-shirt
+                transportModal:
+                  type: string
+                  description: Transport modal of the product.
+                  example: '1'
+                  nullable: true
+                taxCode:
+                  type: string
+                  description: Product tax code.
+                  example: '123'
+                  nullable: true
+                images:
+                  type: array
+                  description: Information of the images of the product.
+                  example:
+                  - id: vtex_logo.jpg
+                    url: https://vtxleo7778.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                    alt: imagem
+                  items:
+                    type: object
+                    description: Image information.
+                    required:
+                    - id
+                    - url
+                    properties:
+                      id:
+                        type: string
+                        description: Image ID.
+                        example: vtex_logo.jpg
+                      url:
+                        type: string
+                        description: 'Image URL, which must be in the following format: `https://{accountName}.vtexassets.com/assets/{path}`, saved using the [Catalog Images app](https://developers.vtex.com/vtex-developer-docs/docs/vtex-catalog-images).'
+                        example: https://mystore.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                      alt:
+                        type: string
+                        description: Image alternative description.
+                        example: imagem
+                skus:
+                  type: array
+                  description: SKUs of the product.
+                  example:
+                  - id: '182907'
+                    name: VTEX Shirt Black Size S
+                    externalId: '1909621862'
+                    ean: 978-1909621862
+                    manufacturerCode: '1234567'
+                    isActive: true
+                    weight: 12
+                    dimensions:
+                      width: 1.5
+                      height: 2.1
+                      length: 1.6
+                    RealWeight: 1.6
+                    RealDimensions:
+                      width: 1.5
+                      height: 2.1
+                      length: 1.6
+                    specs:
+                    - name: Color
+                      value: Black
+                    - name: Size
+                      value: S
+                    images:
+                    - vtex_logo.jpg
+                  - id: '182908'
+                    name: VTEX Shirt White Size L
+                    externalId: '1909621862'
+                    ean: 978-1909621862
+                    manufacturerCode: '1234568'
+                    isActive: true
+                    weight: 300
+                    dimensions:
+                      width: 1.5
+                      height: 2.1
+                      length: 1.6
+                    specs:
+                    - name: Color
+                      value: White
+                    - name: Size
+                      value: L
+                    images:
+                    - vtex_logo.jpg
+                  items:
+                    type: object
+                    required:
+                    - isActive
+                    - weight
+                    - dimensions
+                    - specs
+                    - images
+                    properties:
+                      id:
+                        type: string
+                        description: SKU unique identifier number. Do not include this field when adding a new SKU, only when editing existing SKUs.
+                        example: '182907'
+                      name:
+                        type: string
+                        description: SKU name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                        example: VTEX Shirt Black Size S
+                      externalId:
+                        type: string
+                        description: Unique reference code created to improve the store's organization.
+                        example: '1909621862'
+                      description:
+                        type: string
+                        description: New description data for SKU or product.
+                      ean:
+                        type: string
+                        description: Unique SKU identification code (barcode), composed of up to 13 numeric characters.
+                        example: 978-1909621862
+                      manufacturerCode:
+                        type: string
+                        description: SKU reference code in the store.
+                        example: '1234567'
+                      isActive:
+                        type: boolean
+                        description: Defines if the SKU is active (`true`) or inactive (`false`).
+                        example: false
+                      weight:
+                        type: integer
+                        description: SKU weight. It can be lighter than 1000 g.
+                        example: 300
+                      dimensions:
+                        type: object
+                        description: SKU dimensions.
+                        example:
+                          width: 1.5
+                          height: 2.1
+                          length: 1.6
+                        required:
+                        - width
+                        - height
+                        - length
+                        properties:
+                          width:
+                            type: number
+                            description: SKU width.
+                            example: 1.5
+                          height:
+                            type: number
+                            description: SKU height.
+                            example: 2.1
+                          length:
+                            type: number
+                            description: SKU length.
+                            example: 1.6
+                      RealWeight:
+                        type: number
+                        description: The product's real weight.
+                        example: 1.6
+                      RealDimensions:
+                        type: object
+                        description: The product's real dimensions.
+                        required:
+                        - width
+                        - height
+                        - length
+                        properties:
+                          width:
+                            type: number
+                            description: The product's real width.
+                            example: 1.5
+                          height:
+                            type: number
+                            description: The product's real height.
+                            example: 2.1
+                          length:
+                            type: number
+                            description: The product's real length.
+                            example: 1.6
+                      specs:
+                        type: array
+                        description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
+                        nullable: true
+                        example:
+                        - name: Color
+                          value: Black
+                        - name: Size
+                          value: S
+                        items:
+                          type: object
+                          required:
+                          - name
+                          - value
+                          properties:
+                            name:
+                              type: string
+                              description: SKU's specification name.
+                              example: Color
+                            value:
+                              type: string
+                              description: SKU's specification values.
+                              example: Black
+                      images:
+                        type: array
+                        description: Array of SKU's images IDs.
+                        items:
+                          type: string
+                          description: SKU image ID.
+                        example:
+                        - vtex_logo.jpg
+                origin:
+                  type: string
+                  description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
+                  example: vtxleo7778
+      responses:
+        '204':
+          description: No Content
+  /api/catalog-seller-portal/products/{productId}/description:
+    get:
+      tags:
+      - Product
+      summary: VTex Get Product Description by Product ID
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center.](https://support.vtex.com/hc/en-us/requests) \r\n\r\n Retrieves the description of a product given a product ID.\r\n\r\n ## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProductDescription
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product unique identifier number.
+        required: true
+        schema:
+          type: string
+          example: '189371'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                productId: '61'
+                description: Beautifully handmade laptop case/sleeve made in the Nepal Himalaya. It can be slipped inside your backpack or carried alone with space for all your work bits and pieces!
+                createdAt: '2022-10-10T19:18:45.612317Z'
+                updatedAt: '2022-10-11T18:12:58.825544Z'
+              schema:
+                type: object
+                required:
+                - productId
+                - createdAt
+                - updatedAt
+                properties:
+                  productId:
+                    type: string
+                    description: Product's unique identifier number.
+                  createdAt:
+                    type: string
+                    description: Date when the brand was created.
+                  updatedAt:
+                    type: string
+                    description: Last date when the brand was updated.
+    put:
+      tags:
+      - Product
+      summary: VTex Update Product Description by Product ID
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Updates the description of a product given a product ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: PutProductDescription
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: productId
+        in: path
+        description: Product unique identifier number.
+        required: true
+        schema:
+          type: string
+          example: '71'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - productId
+              - description
+              properties:
+                productId:
+                  type: string
+                  description: Product's unique identifier number.
+                  example: '71'
+                description:
+                  type: string
+                  description: Product description.
+                  example: White shirt.
+      responses:
+        '204':
+          description: No Content
+  /api/catalog-seller-portal/products/{param}:
+    get:
+      tags:
+      - Product
+      summary: VTex Get Product by external ID,  SKU ID, SKU external ID or slug
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about a product by its external ID, SKU ID, SKU external ID or product slug. The response also has information about the product's SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProductQuery
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: param
+        in: path
+        description: 'This part of the path must follow this format: `{param}={value}`. Replace `{param}` with the name of the parameter used to fetch a product, which can be one of the following: `external-id` (product reference unique identifier number in the store), `sku-id` (SKU unique identifier number), `sku-external-id` (SKU reference unique identifier number in the store) or `slug` (reference of the product in the URL of the store). Replace `{value}` with the value of the selected param. Make sure there is a `=` between them.'
+        required: true
+        schema:
+          type: string
+          example: external-id=189371
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                id: '189371'
+                status: active
+                name: VTEX 10 Shirt
+                brandId: '1'
+                brandName: AOC
+                categoryIds:
+                - '732'
+                categoryNames:
+                - /Men/Acessories/
+                specs:
+                - name: Color
+                  values:
+                  - Black
+                  - White
+                - name: Size
+                  values:
+                  - S
+                  - M
+                  - L
+                attributes:
+                - name: Fabric
+                  value: Cotton
+                - name: Gender
+                  value: Feminine
+                slug: /vtex-shirt
+                images:
+                - id: vtex_logo.jpg
+                  url: https://vtxleo7778.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                  alt: VTEX
+                skus:
+                - id: '182907'
+                  name: VTEX Shirt Black Size S
+                  externalId: '1909621862'
+                  manufacturerCode: '1234567'
+                  isActive: true
+                  weight: 12
+                  dimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  RealWeight: 1.6
+                  RealDimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  specs:
+                  - name: Color
+                    value: Black
+                  - name: Size
+                    value: S
+                  images:
+                  - vtex_logo.jpg
+                - id: '182908'
+                  name: VTEX Shirt White Size L
+                  externalId: '1909621862'
+                  manufacturerCode: '1234568'
+                  isActive: true
+                  weight: 12
+                  dimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  specs:
+                  - name: Color
+                    value: White
+                  - name: Size
+                    value: L
+                  images:
+                  - vtex_logo.jpg
+                transportModal: '123'
+                taxCode: '100'
+                origin: vtxleo7778
+                createdAt: '2022-10-31T16:28:25.578067Z'
+                updatedAt: '2022-10-31T16:28:25.578067Z'
+              schema:
+                type: object
+                required:
+                - status
+                - name
+                - brandId
+                - brandName
+                - categoryIds
+                - categoryNames
+                - specs
+                - attributes
+                - slug
+                - images
+                - skus
+                - origin
+                - createdAt
+                - updatedAt
+                properties:
+                  id:
+                    type: string
+                    description: Product's unique identifier number.
+                  externalId:
+                    type: string
+                    description: Product reference unique identifier number in the store.
+                  description:
+                    type: string
+                    description: Description data for product.
+                  status:
+                    type: string
+                    description: Status of the product. Its values can be `active` or `inactive`.
+                  name:
+                    type: string
+                    description: Product name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                  brandId:
+                    type: string
+                    description: Product's brand unique identifier number.
+                  brandName:
+                    type: string
+                    description: Name of the brand associated with the product.
+                  categoryIds:
+                    type: array
+                    description: Product's categories unique identifier numbers. It can have multiples IDs for each category and subcategories.
+                    items:
+                      type: string
+                      description: Product's category unique identifier number.
+                  categoryNames:
+                    type: array
+                    description: Names of the product's categories, displayed in a path format.
+                    items:
+                      type: string
+                      description: Name of the product's category.
+                  specs:
+                    type: array
+                    description: Specifications that will differentiate the possible product SKUs.
+                    items:
+                      type: object
+                      description: SKU specification.
+                      required:
+                      - name
+                      - values
+                      properties:
+                        name:
+                          type: string
+                          description: Specification name.
+                        values:
+                          type: array
+                          description: Specification values.
+                          items:
+                            type: string
+                            description: Specification value.
+                  attributes:
+                    type: array
+                    description: Attributes of the product. Attributes are additional properties used to create site browsing filters.
+                    items:
+                      type: object
+                      description: Product attribute.
+                      required:
+                      - name
+                      - value
+                      properties:
+                        name:
+                          type: string
+                          description: Attribute name.
+                        value:
+                          type: string
+                          description: Attribute value.
+                  slug:
+                    type: string
+                    description: Reference of the product in the URL of the store.
+                  images:
+                    type: array
+                    description: Information of the images of the product.
+                    items:
+                      type: object
+                      description: Image informations.
+                      required:
+                      - id
+                      - url
+                      properties:
+                        id:
+                          type: string
+                          description: Image ID.
+                        url:
+                          type: string
+                          description: 'Image URL, which must be in the following format: `https://{accountName}.vtexassets.com/assets/{path}`, saved using the [Catalog Images app](https://developers.vtex.com/vtex-developer-docs/docs/vtex-catalog-images).'
+                          example: https://mystore.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                        alt:
+                          type: string
+                          description: Image alternative description.
+                  skus:
+                    type: array
+                    description: SKUs of the product.
+                    items:
+                      type: object
+                      description: SKU information.
+                      required:
+                      - id
+                      - isActive
+                      - weight
+                      - dimensions
+                      - specs
+                      - images
+                      properties:
+                        id:
+                          type: string
+                          description: SKU unique identifier number.
+                        externalId:
+                          type: string
+                          description: Unique reference code created to improve the store's organization.
+                        description:
+                          type: string
+                          description: Description data for product.
+                        ean:
+                          type: string
+                          description: Unique SKU identification code (barcode), composed of up to 13 numeric characters.
+                        manufacturerCode:
+                          type: string
+                          description: SKU reference code in the store.
+                        isActive:
+                          type: boolean
+                          description: If the SKU is active (`true`) or inactive (`false`).
+                        weight:
+                          type: integer
+                          description: SKU weight. It can be lighter than 1000 g.
+                        dimensions:
+                          type: object
+                          description: SKU dimensions.
+                          required:
+                          - width
+                          - height
+                          - length
+                          properties:
+                            width:
+                              type: number
+                              description: SKU width.
+                            height:
+                              type: number
+                              description: SKU height.
+                            length:
+                              type: number
+                              description: SKU length.
+                        RealWeight:
+                          type: number
+                          description: The product's real weight.
+                        RealDimensions:
+                          type: object
+                          description: The product's real dimensions.
+                          required:
+                          - width
+                          - height
+                          - length
+                          properties:
+                            width:
+                              type: number
+                              description: The product's real width.
+                            height:
+                              type: number
+                              description: The product's real height.
+                            length:
+                              type: number
+                              description: The product's real length.
+                        specs:
+                          type: array
+                          description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
+                          nullable: true
+                          items:
+                            type: object
+                            description: SKU specification.
+                            required:
+                            - name
+                            - value
+                            properties:
+                              name:
+                                type: string
+                                description: SKU's specification name.
+                              value:
+                                type: string
+                                description: SKU's specification values.
+                        images:
+                          type: array
+                          description: SKU's images IDs.
+                          items:
+                            type: string
+                            description: SKU image ID.
+                  transportModal:
+                    type: string
+                    description: Transport modal of the product.
+                  taxCode:
+                    type: string
+                    description: Product tax code.
+                  origin:
+                    type: string
+                    description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
+                  createdAt:
+                    type: string
+                    description: Date when the product was created.
+                  updatedAt:
+                    type: string
+                    description: Last date when the product was updated.
+  /api/catalog-seller-portal/products:
+    post:
+      tags:
+      - Product
+      summary: VTex Create Product
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Creates a new product and its SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: PostProduct
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - status
+              - name
+              - brandId
+              - categoryIds
+              - specs
+              - attributes
+              - slug
+              - images
+              - skus
+              - origin
+              properties:
+                externalId:
+                  type: string
+                  description: Product reference unique identifier number in the store.
+                  example: sandboxintegracao-310117347
+                status:
+                  type: string
+                  description: Status of the product. Its values can be `active` or `inactive`.
+                  example: active
+                name:
+                  type: string
+                  description: Product name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                  example: VTEX Shirt
+                brandId:
+                  type: string
+                  description: Product's brand unique identifier number.
+                  example: '1'
+                description:
+                  type: string
+                  description: Product's data description.
+                  example: VTEX Shirt Black Size S.
+                categoryIds:
+                  type: array
+                  description: Product's categories unique identifier numbers. It can have multiples IDs for each category and subcategories.
+                  example:
+                  - '732'
+                  - '421'
+                  items:
+                    type: string
+                    description: Product's Category unique idenfier number.
+                    example: '732'
+                specs:
+                  type: array
+                  description: Specifications that will differentiate the possible product SKUs.
+                  example:
+                  - name: Color
+                    values:
+                    - Black
+                    - White
+                  - name: Size
+                    values:
+                    - S
+                    - M
+                    - L
+                  items:
+                    type: object
+                    description: Product specification.
+                    required:
+                    - name
+                    - values
+                    properties:
+                      name:
+                        type: string
+                        description: Specification name.
+                        example: Color
+                      values:
+                        type: array
+                        description: Specification values.
+                        example:
+                        - Black
+                        - White
+                        items:
+                          type: string
+                          description: Specification value.
+                          example: Black
+                attributes:
+                  type: array
+                  description: Attributes of the product. Attributes are additional properties used to create site browsing filters.
+                  example:
+                  - name: Fabric
+                    value: Cotton
+                  - name: Gender
+                    value: Feminine
+                  items:
+                    type: object
+                    description: Product attribute.
+                    required:
+                    - name
+                    - value
+                    properties:
+                      name:
+                        type: string
+                        description: Attribute name.
+                        example: Fabric
+                      value:
+                        type: string
+                        description: Attribute value.
+                        example: Cotton
+                slug:
+                  type: string
+                  description: Reference of the product in the URL of the store.
+                  example: /vtex-shirt
+                images:
+                  type: array
+                  description: Information of the images of the product.
+                  example:
+                  - id: vtex_logo.jpg
+                    url: https://vtxleo7778.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                    alt: imagem
+                  items:
+                    type: object
+                    description: Image information.
+                    required:
+                    - id
+                    - url
+                    properties:
+                      id:
+                        type: string
+                        description: Image ID.
+                        example: vtex_logo.jpg
+                      url:
+                        type: string
+                        description: 'Image URL, which must be in the following format: `https://{accountName}.vtexassets.com/assets/{path}`, saved using the [Catalog Images app](https://developers.vtex.com/vtex-developer-docs/docs/vtex-catalog-images).'
+                        example: https://mystore.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                      alt:
+                        type: string
+                        description: Image alternative description.
+                        example: imagem
+                skus:
+                  type: array
+                  description: SKUs of the product.
+                  example:
+                  - name: VTEX Shirt Black Size S
+                    externalId: '1909621862'
+                    ean: 978-1909621862
+                    manufacturerCode: '1234567'
+                    isActive: true
+                    weight: 12
+                    dimensions:
+                      width: 1.5
+                      height: 2.1
+                      length: 1.6
+                    RealWeight: 1.6
+                    RealDimensions:
+                      width: 1.5
+                      height: 2.1
+                      length: 1.6
+                    specs:
+                    - name: Color
+                      value: Black
+                    - name: Size
+                      value: S
+                    images:
+                    - https://mystore.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                  - name: VTEX Shirt White Size L
+                    externalId: '1909621862'
+                    ean: 978-1909621862
+                    manufacturerCode: '1234568'
+                    isActive: true
+                    weight: 300
+                    dimensions:
+                      width: 1.5
+                      height: 2.1
+                      length: 1.6
+                    specs:
+                    - name: Color
+                      value: White
+                    - name: Size
+                      value: L
+                    images:
+                    - vtex_logo.jpg
+                  items:
+                    type: object
+                    description: SKU information.
+                    required:
+                    - name
+                    - isActive
+                    - weight
+                    - dimensions
+                    - specs
+                    - images
+                    properties:
+                      name:
+                        type: string
+                        description: SKU name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                        example: VTEX Shirt Black Size S.
+                      externalId:
+                        type: string
+                        description: Unique reference code created to improve the store's organization.
+                        example: '1909621862'
+                      description:
+                        type: string
+                        description: SKU description.
+                        example: VTEX Shirt Black Size S Long Sleeze.
+                      ean:
+                        type: string
+                        description: Unique SKU identification code (barcode), composed of up to 13 numeric characters.
+                        example: 978-1909621862
+                      manufacturerCode:
+                        type: string
+                        description: SKU reference code in the store.
+                        example: '1234567'
+                      isActive:
+                        type: boolean
+                        description: If the SKU is active (`true`) or inactive (`false`).
+                        example: false
+                      weight:
+                        type: integer
+                        description: SKU weight. It can be lighter than 1000 g.
+                        example: 300
+                      dimensions:
+                        type: object
+                        description: SKU dimensions.
+                        example:
+                          width: 1.5
+                          height: 2.1
+                          length: 1.6
+                        required:
+                        - width
+                        - height
+                        - length
+                        properties:
+                          width:
+                            type: number
+                            description: SKU width.
+                            example: 1.5
+                          height:
+                            type: number
+                            description: SKU height.
+                            example: 2.1
+                          length:
+                            type: number
+                            description: SKU length.
+                            example: 1.6
+                      RealWeight:
+                        type: number
+                        description: The product's real weight.
+                        example: 1.6
+                      RealDimensions:
+                        type: object
+                        description: The product's real dimensions.
+                        required:
+                        - width
+                        - height
+                        - length
+                        properties:
+                          width:
+                            type: number
+                            description: The product's real width.
+                            example: 1.5
+                          height:
+                            type: number
+                            description: The product's real height.
+                            example: 2.1
+                          length:
+                            type: number
+                            description: The product's real length.
+                            example: 1.6
+                      specs:
+                        type: array
+                        description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
+                        nullable: true
+                        example:
+                        - name: Color
+                          value: Black
+                        - name: Size
+                          value: S
+                        items:
+                          type: object
+                          description: SKU specification.
+                          required:
+                          - name
+                          - value
+                          properties:
+                            name:
+                              type: string
+                              description: SKU's specification name.
+                              example: Color
+                            value:
+                              type: string
+                              description: SKU's specification values.
+                              example: Black
+                      images:
+                        type: array
+                        description: SKU's images IDs.
+                        example:
+                        - vtex_logo.jpg
+                        items:
+                          type: string
+                          description: SKU's image ID.
+                origin:
+                  type: string
+                  description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
+                  example: vtxleo7778
+                transportModal:
+                  type: string
+                  description: Transport modal of the product.
+                  example: '1'
+                  nullable: true
+                taxCode:
+                  type: string
+                  description: Product tax code.
+                  example: '123'
+                  nullable: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                id: '189371'
+                status: active
+                name: VTEX 10 Shirt
+                brandId: '1'
+                brandName: AOC
+                categoryIds:
+                - '732'
+                categoryNames:
+                - /sandboxintegracao/Acessórios/
+                specs:
+                - name: Color
+                  values:
+                  - Black
+                  - White
+                - name: Size
+                  values:
+                  - S
+                  - M
+                  - L
+                attributes:
+                - name: Fabric
+                  value: Cotton
+                - name: Gender
+                  value: Feminine
+                slug: /vtex-shirt
+                transportModal: null
+                taxCode: null
+                images:
+                - id: vtex_logo.jpg
+                  url: https://vtxleo7778.vtexassets.com/assets/vtex.catalog-images/products/vtex_logo.jpg
+                  alt: VTEX
+                skus:
+                - id: '182907'
+                  externalId: '1909621862'
+                  manufacturerCode: '1234567'
+                  isActive: true
+                  weight: 12
+                  dimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  RealWeight: 1.6
+                  RealDimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  specs:
+                  - name: Color
+                    value: Black
+                  - name: Size
+                    value: S
+                  images:
+                  - vtex_logo.jpg
+                - id: '182908'
+                  externalId: '1909621862'
+                  manufacturerCode: '1234568'
+                  isActive: true
+                  weight: 300
+                  dimensions:
+                    width: 1.5
+                    height: 2.1
+                    length: 1.6
+                  specs:
+                  - name: Color
+                    value: White
+                  - name: Size
+                    value: L
+                  images:
+                  - vtex_logo.jpg
+                origin: vtxleo7778
+                createdAt: '2021-01-18T14:41:45.696488+00:00'
+                updatedAt: '2021-01-18T14:41:45.696488+00:00'
+              schema:
+                type: object
+                required:
+                - status
+                - name
+                - brandId
+                - brandName
+                - categoryIds
+                - categoryNames
+                - specs
+                - attributes
+                - slug
+                - images
+                - skus
+                - origin
+                - createdAt
+                - updatedAt
+                properties:
+                  id:
+                    type: string
+                    description: Product's unique identifier number.
+                  externalId:
+                    type: string
+                    description: Product reference unique identifier number in the store.
+                  status:
+                    type: string
+                    description: Status of the product. Its values can be `active` or `inactive`.
+                  name:
+                    type: string
+                    description: Product name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                  brandId:
+                    type: string
+                    description: Product's brand unique identifier number.
+                  brandName:
+                    type: string
+                    description: Name of the brand associated with the product.
+                  description:
+                    type: string
+                    description: Description data for product.
+                  categoryIds:
+                    type: array
+                    description: Product's categories unique identifier numbers. It can have multiples IDs for each category and subcategories.
+                    items:
+                      type: string
+                      description: Product's category unique identifier number.
+                  categoryNames:
+                    type: array
+                    description: Names of the product's categories, displayed in a path format.
+                    items:
+                      type: string
+                      description: Name of the product's category.
+                  specs:
+                    type: array
+                    description: Specifications that will differentiate the possible product SKUs.
+                    items:
+                      type: object
+                      description: Product specification.
+                      required:
+                      - name
+                      - values
+                      properties:
+                        name:
+                          type: string
+                          description: Specification name.
+                        values:
+                          type: array
+                          description: Specification values.
+                          items:
+                            type: string
+                            description: Specification value.
+                  attributes:
+                    type: array
+                    description: Attributes of the product. Attributes are additional properties used to create site browsing filters.
+                    items:
+                      required:
+                      - name
+                      - value
+                      properties:
+                        name:
+                          type: string
+                          description: Attribute name.
+                        value:
+                          type: string
+                          description: Attribute value.
+                  slug:
+                    type: string
+                    description: Reference of the product in the URL of the store.
+                  images:
+                    type: array
+                    description: Information of the images of the product.
+                    items:
+                      type: object
+                      description: Image information.
+                      required:
+                      - id
+                      - url
+                      properties:
+                        id:
+                          type: string
+                          description: Image ID.
+                        url:
+                          type: string
+                          description: 'Image URL, which must be in the following format: `https://{accountName}.vtexassets.com/assets/{path}`, saved using the [Catalog Images app](https://developers.vtex.com/vtex-developer-docs/docs/vtex-catalog-images).'
+                        alt:
+                          type: string
+                          description: Image alternative description.
+                  skus:
+                    type: array
+                    description: SKUs of the product.
+                    items:
+                      type: object
+                      description: SKU information.
+                      required:
+                      - id
+                      - isActive
+                      - weight
+                      - dimensions
+                      - specs
+                      - images
+                      properties:
+                        id:
+                          type: string
+                          description: SKU unique identifier number.
+                        name:
+                          type: string
+                          description: SKU name. Use simple words and avoid other languages or complex writing. This field is essential for SEO and must respect the 150 character limit.
+                        externalId:
+                          type: string
+                          description: Unique reference code created to improve the store's organization.
+                        ean:
+                          type: string
+                          description: Unique SKU identification code (barcode), composed of up to 13 numeric characters.
+                        manufacturerCode:
+                          type: string
+                          description: SKU reference code in the store.
+                        isActive:
+                          type: boolean
+                          description: If the SKU is active (`true`) or inactive (`false`).
+                        weight:
+                          type: integer
+                          description: SKU weight. It can be lighter than 1000 g.
+                        dimensions:
+                          type: object
+                          description: SKU dimensions.
+                          required:
+                          - width
+                          - height
+                          - length
+                          properties:
+                            width:
+                              type: number
+                              description: SKU width.
+                            height:
+                              type: number
+                              description: SKU height.
+                            length:
+                              type: number
+                              description: SKU length.
+                        RealWeight:
+                          type: number
+                          description: The product's real weight.
+                          example: 1.6
+                        RealDimensions:
+                          type: object
+                          description: The product's real dimensions.
+                          required:
+                          - width
+                          - height
+                          - length
+                          properties:
+                            width:
+                              type: number
+                              description: The product's real width.
+                            height:
+                              type: number
+                              description: The product's real height.
+                            length:
+                              type: number
+                              description: The product's real length.
+                        specs:
+                          type: array
+                          description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
+                          nullable: true
+                          items:
+                            type: object
+                            description: SKU specification.
+                            required:
+                            - name
+                            - value
+                            properties:
+                              name:
+                                type: string
+                                description: SKU's specification name.
+                              value:
+                                type: string
+                                description: SKU's specification values.
+                        images:
+                          type: array
+                          description: SKU's images IDs.
+                          items:
+                            description: SKU image ID.
+                            type: string
+                  origin:
+                    type: string
+                    description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
+                  transportModal:
+                    type: string
+                    description: Transport modal of the product.
+                    nullable: true
+                  taxCode:
+                    type: string
+                    description: Product tax code.
+                    nullable: true
+                  createdAt:
+                    type: string
+                    description: Date when the product was created.
+                  updatedAt:
+                    type: string
+                    description: Last date when the product was updated.
+        '204':
+          description: No Content
+  /api/catalog_system/pvt/products/GetProductAndSkuIds:
+    get:
+      tags:
+      - Product
+      summary: VTex Get product and SKU IDs
+      description: "Retrieves the IDs of products and SKUs. \r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: ProductAndSkuIds
+      parameters:
+      - name: categoryId
+        in: query
+        description: ID of the category from which you need to retrieve products and SKUs.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: _from
+        in: query
+        description: Insert the ID that will start the request result.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: _to
+        in: query
+        description: Insert the ID that will end the request result.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 10
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  '3':
+                  - 5
+                  '8':
+                  - 310118453
+                  - 310118459
+                  - 310118463
+                  '2':
+                  - 3
+                  - 310118450
+                  - 310118451
+                  - 4
+                  - 8
+                  '9':
+                  - 310118454
+                  - 310118455
+                  - 310118456
+                  - 310118457
+                  - 310118458
+                  - 310118460
+                  - 310118461
+                  - 310118462
+                  - 310118464
+                  '12':
+                  - 310118490
+                  '6': []
+                  '7':
+                  - 310118452
+                  '1':
+                  - 1
+                  - 123456
+                  - 310118449
+                  - 310118489
+                  - 7
+                  - 2
+                  '5':
+                  - 310118465
+                  '4':
+                  - 310118448
+                  '10': []
+                  '11': []
+                range:
+                  total: 12
+                  from: 1
+                  to: 20
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    description: Object composed of product IDs and SKU IDs, where the parent ID is from products and the children IDs are from SKUs.
+                    properties:
+                      Product ID:
+                        type: array
+                        description: Array with SKU IDs of a certain product.
+                        items:
+                          type: integer
+                          description: Product SKU ID.
+                  range:
+                    type: object
+                    description: Object with information about the product and SKUs list.
+                    properties:
+                      total:
+                        type: integer
+                        description: Total quantity of SKUs.
+                      from:
+                        type: integer
+                        description: Initial product ID.
+                      to:
+                        type: integer
+                        description: Final product ID.
+  /api/catalog/pvt/product/{productId}:
+    get:
+      tags:
+      - Product
+      summary: VTex Get product by ID
+      description: "Retrieves a specific product by its ID. The response body fields are exactly the inforamtion  needed to create a new product. \r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetProductbyid
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 42
+                Name: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                DepartmentId: 2000089
+                CategoryId: 2000090
+                BrandId: 12121219
+                LinkId: stefan-janoski-canvas-varsity-red
+                RefId: sr_1_90
+                IsVisible: true
+                Description: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                DescriptionShort: The Nike Zoom Stefan Janoski is made with a premium leather.
+                ReleaseDate: '2020-01-01T00:00:00'
+                KeyWords: Zoom,Stefan,Janoski
+                Title: Zoom Stefan Janoski Canvas RM SB Varsity Re
+                IsActive: true
+                TaxCode: ''
+                MetaTagDescription: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                SupplierId: 1
+                ShowWithoutStock: true
+                AdWordsRemarketingCode: ''
+                LomadeeCampaignCode: ''
+                Score: 1
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Product's unique numerical identifier.
+                  Name:
+                    type: string
+                    description: Product's name. Limited to 150 characters.
+                  DepartmentId:
+                    type: integer
+                    description: Department ID according to the product's category.
+                  CategoryId:
+                    type: integer
+                    description: Category ID associated with this product.
+                  BrandId:
+                    type: integer
+                    description: Brand ID associated with this product.
+                  LinkId:
+                    type: string
+                    description: Slug that will be used to build the product page URL. If it not informed, it will be generated according to the product's name replacing spaces and special characters by hyphens (`-`).
+                  RefId:
+                    type: string
+                    description: Product Reference Code.
+                  IsVisible:
+                    type: boolean
+                    description: Shows (`true`) or hides (`false`) the product in search result and product pages, but the product can still be added to the shopping cart. Usually applicable for gifts.
+                  Description:
+                    type: string
+                    description: Product description.
+                  DescriptionShort:
+                    type: string
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                  ReleaseDate:
+                    type: string
+                    description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
+                  KeyWords:
+                    type: string
+                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                  Title:
+                    type: string
+                    description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
+                  IsActive:
+                    type: boolean
+                    description: Activate (`true`) or inactivate (`false`) product.
+                  TaxCode:
+                    type: string
+                    description: Product tax code, used for tax calculation.
+                  MetaTagDescription:
+                    type: string
+                    description: Brief description of the product for SEO. It is recommended not to exceed 150 characters.
+                  SupplierId:
+                    type: integer
+                    description: Deprecated field.
+                    deprecated: true
+                    nullable: true
+                  ShowWithoutStock:
+                    type: boolean
+                    description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
+                  AdWordsRemarketingCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  LomadeeCampaignCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  Score:
+                    type: integer
+                    description: Value used to set the priority on the search result page.
+      deprecated: false
+    put:
+      tags:
+      - Product
+      summary: VTex Update product
+      description: "Updates an existing product.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: productId
+        in: path
+        required: true
+        description: Product's unique numerical identifier.
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - Name
+              - CategoryId
+              - BrandId
+              properties:
+                Name:
+                  type: string
+                  description: Product's name. Limited to 150 characters.
+                  example: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                DepartmentId:
+                  type: integer
+                  description: Department ID according to the product's category.
+                  example: 2000089
+                CategoryId:
+                  type: integer
+                  description: Category ID associated with this product.
+                  example: 2000090
+                BrandId:
+                  type: integer
+                  description: Brand ID associated with this product.
+                  example: 12121219
+                LinkId:
+                  type: string
+                  description: Slug that will be used to build the product page URL. If it not informed, it will be generated according to the product's name replacing spaces and special characters by hyphens (`-`).
+                  example: stefan-janoski-canvas-varsity-red
+                RefId:
+                  type: string
+                  description: Product Reference Code.
+                  example: sr_1_90
+                IsVisible:
+                  type: boolean
+                  description: Shows (`true`) or hides (`false`) the product in search result and product pages, but the product can still be added to the shopping cart. Usually applicable for gifts.
+                  example: true
+                Description:
+                  type: string
+                  description: Product description.
+                  example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                DescriptionShort:
+                  type: string
+                  description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                  example: The Nike Zoom Stefan Janoski is made with a premium leather.
+                ReleaseDate:
+                  type: string
+                  description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
+                  example: '2019-01-01T00:00:00'
+                KeyWords:
+                  type: string
+                  description: "Store Framework: Deprecated. \r\nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                  example: Zoom,Stefan,Janoski
+                Title:
+                  type: string
+                  description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
+                  example: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                IsActive:
+                  type: boolean
+                  description: Activate (`true`) or inactivate (`false`) product.
+                  example: true
+                TaxCode:
+                  type: string
+                  description: Product tax code, used for tax calculation.
+                  example: '12345'
+                MetaTagDescription:
+                  type: string
+                  description: Brief description of the product for SEO. It is recommended not to exceed 150 characters.
+                  example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                SupplierId:
+                  type: integer
+                  description: Deprecated field.
+                  deprecated: true
+                  nullable: true
+                  example: null
+                ShowWithoutStock:
+                  type: boolean
+                  description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
+                  example: true
+                AdWordsRemarketingCode:
+                  type: string
+                  description: This is a legacy field. Do not take this information into consideration.
+                  deprecated: true
+                  nullable: true
+                  example: null
+                LomadeeCampaignCode:
+                  type: string
+                  description: This is a legacy field. Do not take this information into consideration.
+                  deprecated: true
+                  nullable: true
+                  example: null
+                Score:
+                  type: integer
+                  description: Value used to set the priority on the search result page.
+                  example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 42
+                Name: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                DepartmentId: 2000089
+                CategoryId: 2000090
+                BrandId: 12121219
+                LinkId: stefan-janoski-canvas-varsity-red
+                RefId: sr_1_90
+                IsVisible: true
+                Description: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                DescriptionShort: The Nike Zoom Stefan Janoski is made with a premium leather.
+                ReleaseDate: '2020-01-01T00:00:00'
+                KeyWords: Zoom,Stefan,Janoski
+                Title: Zoom Stefan Janoski Canvas RM SB Varsity Re
+                IsActive: true
+                TaxCode: ''
+                MetaTagDescription: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                SupplierId: 1
+                ShowWithoutStock: true
+                AdWordsRemarketingCode: ''
+                LomadeeCampaignCode: ''
+                Score: 1
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Product's unique numerical identifier.
+                  Name:
+                    type: string
+                    description: Product's name. Limited to 150 characters.
+                  DepartmentId:
+                    type: integer
+                    description: Department ID according to the product's category.
+                  CategoryId:
+                    type: integer
+                    description: Category ID associated with this product.
+                  BrandId:
+                    type: integer
+                    description: Brand ID associated with this product.
+                  LinkId:
+                    type: string
+                    description: Slug that will be used to build the product page URL. If not informed, it will be generated according to the product's name replacing spaces and special characters by hyphens (`-`).
+                  RefId:
+                    type: string
+                    description: Product reference code.
+                  IsVisible:
+                    type: boolean
+                    description: Shows (`true`) or hides (`false`) the product in search result and product pages, but the product can still be added to the shopping cart. Usually applicable for gifts.
+                  Description:
+                    type: string
+                    description: Product description.
+                  DescriptionShort:
+                    type: string
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                  ReleaseDate:
+                    type: string
+                    description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
+                  KeyWords:
+                    type: string
+                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal:  Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                  Title:
+                    type: string
+                    description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
+                  IsActive:
+                    type: boolean
+                    description: Activate (`true`) or inactivate (`false`) product.
+                  TaxCode:
+                    type: string
+                    description: Product tax code, used for tax calculation.
+                  MetaTagDescription:
+                    type: string
+                    description: Brief description of the product for SEO. It's recommended that you don't exceed 150 characters.
+                  SupplierId:
+                    type: integer
+                    description: Deprecated field.
+                    deprecated: true
+                    nullable: true
+                  ShowWithoutStock:
+                    type: boolean
+                    description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
+                  AdWordsRemarketingCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  LomadeeCampaignCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  Score:
+                    type: integer
+                    description: Value used to set the priority on the search result page.
+  /api/catalog_system/pvt/products/productget/{productId}:
+    get:
+      tags:
+      - Product
+      summary: VTex Get product and its general context
+      description: "Retrieves a specific product's general information as name, description and the trade policies where it is included.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product Form** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: ProductandTradePolicy
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 1
+                Name: Ração Royal Canin Feline Urinary
+                DepartmentId: 1
+                CategoryId: 10
+                BrandId: 2000000
+                LinkId: racao-royal-canin-feline-urinary
+                RefId: ''
+                IsVisible: true
+                Description: Descrição.
+                DescriptionShort: ''
+                ReleaseDate: '2020-01-06T00:00:00'
+                KeyWords: bbbbbbbbbbbb*, a@
+                Title: Ração Royal Canin Feline Urinary
+                IsActive: true
+                TaxCode: ''
+                MetaTagDescription: Descrição.
+                SupplierId: 1
+                ShowWithoutStock: true
+                ListStoreId:
+                - 1
+                - 2
+                - 3
+                AdWordsRemarketingCode: ''
+                LomadeeCampaignCode: ''
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Product ID.
+                  Name:
+                    type: string
+                    description: Product's name. Limited to 150 characters.
+                  DepartmentId:
+                    type: integer
+                    description: Product department ID.
+                  CategoryId:
+                    type: integer
+                    description: Product category ID.
+                  BrandId:
+                    type: integer
+                    description: Product brand ID.
+                  LinkId:
+                    type: string
+                    description: Product text link.
+                  RefId:
+                    type: string
+                    description: Product reference code.
+                  IsVisible:
+                    type: boolean
+                    description: If the product is visible on the store.
+                  Description:
+                    type: string
+                    description: Product description.
+                  DescriptionShort:
+                    type: string
+                    description: Product complement name.
+                  ReleaseDate:
+                    type: string
+                    description: Product release date.
+                  KeyWords:
+                    type: string
+                    description: Substitutes words for the product.
+                  Title:
+                    type: string
+                    description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
+                  IsActive:
+                    type: boolean
+                    description: If the product is active (`true`) or not (`false`) at the store.
+                  TaxCode:
+                    type: string
+                    description: Product fiscal code.
+                  MetaTagDescription:
+                    type: string
+                    description: Product meta tag description.
+                  SupplierId:
+                    type: integer
+                    description: Product supplier ID.
+                  ShowWithoutStock:
+                    type: boolean
+                    description: Defines if the product will be shown in the store even if it's out of stock (`true`) or not (`false`).
+                  ListStoreId:
+                    type: array
+                    description: List with the IDs of trade policies where the product is included.
+                    items:
+                      type: integer
+                      description: Trade policy ID.
+                  AdWordsRemarketingCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  LomadeeCampaignCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+  /api/catalog_system/pvt/products/productgetbyrefid/{refId}:
+    get:
+      tags:
+      - Product
+      summary: VTex Get product by reference ID
+      description: "Retrieves a specific product by its Reference ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: ProductbyRefId
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: refId
+        in: path
+        description: Product reference code.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '12345'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 17
+                Name: BLACK+DECKER 20V MAX Cordless Drill / Driver with 30-Piece Accessories (LD120VA)
+                DepartmentId: 9287
+                CategoryId: 9287
+                BrandId: 9280
+                LinkId: black-decker-20v-max-cordless-drill-driver-with-30-piece-acessories-ld120va
+                RefId: '880010'
+                IsVisible: true
+                Description: 'The Black and Decker LD120-VoltA 20-Volt Max Lithium Drill/Driver with 30 Accessories come with the Black and Decker 20-volt max Lithium Ion Battery. These batteries are always ready, holding a charge up to 18 months. This drill provides an extra level of control with a 24 position clutch that helps to prevent stripping and overdriving screws. It has a soft grip handle that provides added comfort during use and a light weight to prevent user fatigue. This drill is ideal for drilling and screwdriving through wood, metal, and plastic. The LD120-VoltA set includes: LD120 20-Volt MAX Lithium Drill/Driver, (1) LB20 20-Volt MAX Lithium Ion Battery, (1) LCS20 Charger, (6) Brad Point Drill Bits, (10) 1-Inch Screwdriving Bits, (9) 2-Inch Screwdriving Bits, (4) Nut Drivers, (1) Magnetic Bit Tip Holder and is backed by Black and Decker''s 2 year limited warranty.'
+                DescriptionShort: 'The Black and Decker LD120-VoltA 20-Volt Max Lithium Drill/Driver with 30 Accessories come with the Black and Decker 20-volt max Lithium Ion Battery. These batteries are always ready, holding a charge up to 18 months. This drill provides an extra level of control with a 24 position clutch that helps to prevent stripping and overdriving screws. It has a soft grip handle that provides added comfort during use and a light weight to prevent user fatigue. This drill is ideal for drilling and screwdriving through wood, metal, and plastic. The LD120-VoltA set includes: LD120 20-Volt MAX Lithium Drill/Driver, (1) LB20 20-Volt MAX Lithium Ion Battery, (1) LCS20 Charger, (6) Brad Point Drill Bits, (10) 1-Inch Screwdriving Bits, (9) 2-Inch Screwdriving Bits, (4) Nut Drivers, (1) Magnetic Bit Tip Holder and is backed by Black and Decker''s 2 year limited warranty.'
+                ReleaseDate: '2020-01-01T00:00:00'
+                KeyWords: product,sample
+                Title: BLACK+DECKER 20V MAX Cordless Drill / Driver with 30-Piece Accessories (LD120VA)
+                IsActive: true
+                TaxCode: ''
+                MetaTagDescription: 'The Black and Decker LD120-VoltA 20-Volt Max Lithium Drill/Driver with 30 Accessories come with the Black and Decker 20-volt max Lithium Ion Battery. These batteries are always ready, holding a charge up to 18 months. This drill provides an extra level of control with a 24 position clutch that helps to prevent stripping and overdriving screws. It has a soft grip handle that provides added comfort during use and a light weight to prevent user fatigue. This drill is ideal for drilling and screwdriving through wood, metal, and plastic. The LD120-VoltA set includes: LD120 20-Volt MAX Lithium Drill/Driver, (1) LB20 20-Volt MAX Lithium Ion Battery, (1) LCS20 Charger, (6) Brad Point Drill Bits, (10) 1-Inch Screwdriving Bits, (9) 2-Inch Screwdriving Bits, (4) Nut Drivers, (1) Magnetic Bit Tip Holder and is backed by Black and Decker''s 2 year limited warranty.'
+                SupplierId: 1
+                ShowWithoutStock: true
+                ListStoreId:
+                - 1
+                AdWordsRemarketingCode: ''
+                LomadeeCampaignCode: ''
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: ID of the product.
+                  Name:
+                    type: string
+                    description: Name of the product.
+                  DepartmentId:
+                    type: integer
+                    description: ID of product department.
+                  CategoryId:
+                    type: integer
+                    description: ID of product category.
+                  BrandId:
+                    type: integer
+                    description: ID of the product brand.
+                  LinkId:
+                    type: string
+                    description: Category URL.
+                  RefId:
+                    type: string
+                    description: Product Reference ID.
+                  IsVisible:
+                    type: boolean
+                    description: If the product are visible in search and list pages.
+                  Description:
+                    type: string
+                    description: Product Description, HTML is allowed.
+                  DescriptionShort:
+                    type: string
+                    description: Product Short Description.
+                  ReleaseDate:
+                    type: string
+                    description: Product Release Date, for list ordering and product cluster highlight.
+                  KeyWords:
+                    type: string
+                    description: Alternatives Keywords to improve the product findability.
+                  Title:
+                    type: string
+                    description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
+                  IsActive:
+                    type: boolean
+                    description: If the product is Active.
+                  TaxCode:
+                    type: string
+                    description: SKU Tax Code.
+                  MetaTagDescription:
+                    type: string
+                    description: Meta Description for the product page.
+                  SupplierId:
+                    type: integer
+                    description: Product Supplier ID.
+                  ShowWithoutStock:
+                    type: boolean
+                    description: If the product can be visible without stock.
+                  ListStoreId:
+                    type: array
+                    description: Array with the ID of all the trade policies that are related to the product.
+                    items:
+                      type: integer
+                      description: Trade policy ID.
+                  AdWordsRemarketingCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  LomadeeCampaignCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+      deprecated: false
+  /api/catalog_system/pub/products/variations/{productId}:
+    get:
+      tags:
+      - Product
+      summary: VTex Get product's SKUs by product ID
+      description: "Retrieves data about a product and all SKUs related to it given the product's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: ProductVariations
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                productId: 9
+                name: Tshirt
+                salesChannel: '2'
+                available: true
+                displayMode: list
+                dimensions:
+                - Color
+                - Size
+                - Origin country
+                - Gender
+                dimensionsInputType:
+                  Color: Combo
+                  Size: Combo
+                  Origin country: Combo
+                  Gender: Combo
+                dimensionsMap:
+                  Color:
+                  - Yellow
+                  - Blue
+                  - Red
+                  Size:
+                  - S
+                  - M
+                  - L
+                  Origin country:
+                  - Brazil
+                  Gender:
+                  - Male
+                skus:
+                - sku: 310118454
+                  skuname: Yellow - L
+                  dimensions:
+                    Color: Yellow
+                    Size: L
+                    Origin country: Brazil
+                    Gender: Male
+                  available: false
+                  availablequantity: 0
+                  cacheVersionUsedToCallCheckout: null
+                  listPriceFormated: R$ 0,00
+                  listPrice: 0
+                  taxFormated: R$ 0,00
+                  taxAsInt: 0
+                  bestPriceFormated: R$ 9.999.876,00
+                  bestPrice: 999987600
+                  spotPrice: 999987600
+                  installments: 0
+                  installmentsValue: 0
+                  installmentsInsterestRate: null
+                  image: https://lojadobreno.vteximg.com.br/arquivos/ids/155467-292-292/image-5d7ad76ad1954c53adecab4138319034.jpg?v=637321899584500000
+                  sellerId: '1'
+                  seller: lojadobreno
+                  measures:
+                    cubicweight: 1.0
+                    height: 5.0
+                    length: 20.0
+                    weight: 200.0
+                    width: 20.0
+                  unitMultiplier: 1.0
+                  rewardValue: 0
+                - sku: 310118455
+                  skuname: Red - M
+                  dimensions:
+                    Color: Red
+                    Size: M
+                    Origin country: Brazil
+                    Gender: Male
+                  available: true
+                  availablequantity: 99999
+                  cacheVersionUsedToCallCheckout: 38395F1AEF59DF5CEAEDE472328145CD_
+                  listPriceFormated: R$ 0,00
+                  listPrice: 0
+                  taxFormated: R$ 0,00
+                  taxAsInt: 0
+                  bestPriceFormated: R$ 20,00
+                  bestPrice: 2000
+                  spotPrice: 2000
+                  installments: 1
+                  installmentsValue: 2000
+                  installmentsInsterestRate: 0
+                  image: https://lojadobreno.vteximg.com.br/arquivos/ids/155468-292-292/image-601a6099aace48b89d26fc9f22e8e611.jpg?v=637321906602470000
+                  sellerId: pedrostore
+                  seller: pedrostore
+                  measures:
+                    cubicweight: 0.4167
+                    height: 5.0
+                    length: 20.0
+                    weight: 200.0
+                    width: 20.0
+                  unitMultiplier: 1.0
+                  rewardValue: 0
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: integer
+                    description: Product's unique numerical identifier.
+                  name:
+                    type: string
+                    description: Product name.
+                  salesChannel:
+                    type: string
+                    description: Trade policy ID.
+                  available:
+                    type: boolean
+                    description: Defines if the product is available (`true`) or not (`false`).
+                  displayMode:
+                    type: string
+                    description: Defines the mannner SKUs are displayed.
+                  dimensions:
+                    type: array
+                    description: Lists SKU specifications.
+                    items:
+                      type: string
+                      description: Name of the SKU specification.
+                  dimensionsInputType:
+                    type: object
+                    description: 'Lists SKU specifications and their Field type, in the following format: `"{specificationName}":"{fieldType}"`.'
+                  dimensionsMap:
+                    type: object
+                    description: Lists SKU specifications and their possible values inside arrays.
+                  skus:
+                    type: array
+                    description: Array containing information about the product's SKUs.
+                    items:
+                      type: object
+                      description: Object containing information about a specific SKU.
+                      properties:
+                        sku:
+                          type: integer
+                          description: SKU ID.
+                        skuname:
+                          type: string
+                          description: SKU Name.
+                        dimensions:
+                          type: object
+                          description: Lists SKU specifications and their respective values.
+                        available:
+                          type: boolean
+                          description: Defines if the SKU is available (`true`) or not (`false`).
+                        availablequantity:
+                          type: integer
+                          description: Available quantity of the SKU in stock.
+                        cacheVersionUsedToCallCheckout:
+                          type: string
+                          description: Cache version used to call Checkout.
+                          nullable: true
+                        listPriceFormated:
+                          type: string
+                          description: List price formatted according to the valid currency.
+                        listPrice:
+                          type: integer
+                          description: List price.
+                        taxFormated:
+                          type: string
+                          description: Tax value formatted according to the valid currency.
+                        taxAsInt:
+                          type: integer
+                          description: Tax value.
+                        bestPriceFormated:
+                          type: string
+                          description: Best price formatted according to the valid currency.
+                        bestPrice:
+                          type: integer
+                          description: Best price.
+                        spotPrice:
+                          type: integer
+                          description: Spot price.
+                        installments:
+                          type: integer
+                          description: Number of installments.
+                        installmentsValue:
+                          type: integer
+                          description: Value of installments.
+                        installmentsInsterestRate:
+                          type: integer
+                          description: Interest rate of installments.
+                          nullable: true
+                        image:
+                          type: string
+                          description: SKU image URL.
+                        sellerId:
+                          type: string
+                          description: Seller ID.
+                        measures:
+                          type: object
+                          description: SKU measures.
+                          properties:
+                            cubicweight:
+                              type: number
+                              description: Cubic weight.
+                            height:
+                              type: number
+                              description: Height.
+                            length:
+                              type: number
+                              description: Length.
+                            weight:
+                              type: number
+                              description: Weight.
+                            width:
+                              type: number
+                              description: Width.
+                        unitMultiplier:
+                          type: number
+                          description: SKU Unit Multiplier.
+                        rewardValue:
+                          type: integer
+                          description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+      deprecated: false
+  /api/addon/pvt/review/GetProductRate/{productId}:
+    get:
+      tags:
+      - Product
+      summary: VTex Get product review rate by product ID
+      description: "Retrieves the review rate of a product given the product's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Reviews list** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: productId
+        in: path
+        description: Product's unique numerical identifier.
+        required: true
+        style: simple
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: number
+                description: Review rate number.
+              example: 3.0
+      deprecated: false
+  /api/catalog/pvt/product:
+    post:
+      tags:
+      - Product
+      summary: VTex Create product with category and brand
+      description: "This endpoint allows two types of request:\r\n\r\n**Type 1:** Creating a new product as well as a new category path (including subcategories) and a new brand by using `CategoryPath` and `BrandName` parameters.\r\n\r\n**Type 2:** Creating a new product given an existing `BrandId` and an existing `CategoryId`.\r\n\r\nWhen creating a product, regardless of the type of request, if there is a need to create a new product with a specific custom product ID, specify the `Id` (integer) in the request body. Otherwise, VTEX will generate the ID automatically.\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - type: object
+                description: Request type that creates a new product as well as a new category path (including subcategories) and a new brand by using `CategoryPath` and `BrandName` parameters.
+                title: New category and brand
+                required:
+                - Name
+                properties:
+                  Id:
+                    type: integer
+                    description: Product's unique numerical identifier. If not informed, it will be automatically generated by VTEX.
+                    example: 42
+                  Name:
+                    type: string
+                    description: Product's name. Limited to 150 characters.
+                    example: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                  CategoryPath:
+                    type: string
+                    description: Path of categories associated with this product, from the highest level of category to the lowest level, separated by `/`. It is mandatory to use either this field or the `CategoryId` field.
+                    example: Mens/Clothing/T-Shirts
+                  DepartmentId:
+                    type: integer
+                    description: Department ID according to the product's category.
+                    example: 1
+                  BrandName:
+                    type: string
+                    description: Name of the brand that will be associated with this product. It is mandatory to use either this field or the `BrandId` field. If you wish to create a new brand, that is, in case the brand does not exist yet, use this field instead of `BrandId`.
+                    example: Sample brand
+                  LinkId:
+                    type: string
+                    description: Slug that will be used to build the product page URL. If it not informed, it will be generated according to the product's name replacing spaces and special characters by hyphens (`-`).
+                    example: stefan-janoski-canvas-varsity-red
+                  RefId:
+                    type: string
+                    description: Product Reference Code.
+                    example: sr_1_90
+                  IsVisible:
+                    type: boolean
+                    description: Shows (`true`) or hides (`false`) the product in search result and product pages, but the product can still be added to the shopping cart. Usually applicable for gifts.
+                    example: true
+                  Description:
+                    type: string
+                    description: Product description.
+                    example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                  ReleaseDate:
+                    type: string
+                    description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
+                    example: '2019-01-01T00:00:00'
+                  Title:
+                    type: string
+                    description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
+                    example: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                  IsActive:
+                    type: boolean
+                    description: Activate (`true`) or inactivate (`false`) product.
+                    example: true
+                  TaxCode:
+                    type: string
+                    description: Product tax code, used for tax calculation. This field is important for SEO. Limited to 150 characters.
+                    example: '12345'
+                  MetaTagDescription:
+                    type: string
+                    description: Brief description of the product for SEO. It is recommended not to exceed 150 characters.
+                    example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                  ShowWithoutStock:
+                    type: boolean
+                    description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
+                    example: true
+                  LomadeeCampaignCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                    example: null
+                    nullable: true
+                  Score:
+                    type: integer
+                    description: Value used to set the priority on the search result page.
+                    example: 1
+              - type: object
+                description: Request type that creates a new product given an existing `BrandId` and an existing `CategoryId`.
+                title: Associating it to an existing category and brand
+                required:
+                - Name
+                properties:
+                  Id:
+                    type: integer
+                    description: Product's unique numerical identifier. If not informed, it will be automatically generated by VTEX.
+                    example: 42
+                  Name:
+                    type: string
+                    description: Product's name. Limited to 150 characters.
+                    example: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                  DepartmentId:
+                    type: integer
+                    description: Department ID according to the product's category.
+                    example: 1
+                  CategoryId:
+                    type: integer
+                    description: ID of an existing category that will be associated with this product. It is mandatory to use either this field or the `CategoryPath` field.
+                    example: 2000090
+                  BrandId:
+                    type: integer
+                    description: ID of an existing brand that will be associated with this product. It is mandatory to use either this field or the `BrandName` field.
+                    example: 12121219
+                  LinkId:
+                    type: string
+                    description: Slug that will be used to build the product page URL. If it not informed, it will be generated according to the product's name replacing spaces and special characters by hyphens (`-`).
+                    example: stefan-janoski-canvas-varsity-red
+                  RefId:
+                    type: string
+                    description: Product Reference Code.
+                    example: sr_1_90
+                  IsVisible:
+                    type: boolean
+                    description: Shows (`true`) or hides (`false`) the product in search result and product pages, but the product can still be added to the shopping cart. Usually applicable for gifts.
+                    example: true
+                  Description:
+                    type: string
+                    description: Product description.
+                    example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                  DescriptionShort:
+                    type: string
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                    example: The Nike Zoom Stefan Janoski is made with a premium leather.
+                  ReleaseDate:
+                    type: string
+                    description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
+                    example: '2019-01-01T00:00:00'
+                  KeyWords:
+                    type: string
+                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                    example: Zoom,Stefan,Janoski
+                  Title:
+                    type: string
+                    description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
+                    example: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                  IsActive:
+                    type: boolean
+                    description: Activate (`true`) or inactivate (`false`) product.
+                    example: true
+                  TaxCode:
+                    type: string
+                    description: Product tax code, used for tax calculation. This field is important for SEO. Limited to 150 characters.
+                    example: '12345'
+                  MetaTagDescription:
+                    type: string
+                    description: Brief description of the product for SEO. It is recommended not to exceed 150 characters.
+                    example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                  SupplierId:
+                    type: integer
+                    description: Deprecated field.
+                    example: null
+                    deprecated: true
+                    nullable: true
+                  ShowWithoutStock:
+                    type: boolean
+                    description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
+                    example: true
+                  AdWordsRemarketingCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                    nullable: true
+                    example: null
+                  LomadeeCampaignCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                    nullable: true
+                    example: null
+                  Score:
+                    type: integer
+                    description: Value used to set the priority on the search result page.
+                    example: 1
+            examples:
+              New category and brand:
+                value:
+                  Id: 42
+                  Name: Black T-Shirt
+                  CategoryPath: Mens/Clothing/T-Shirts
+                  DepartmentId: 1
+                  BrandName: Nike
+                  RefId: '31011706925'
+                  Title: Black T-Shirt
+                  LinkId: tshirt-black
+                  Description: This is a cool Tshirt
+                  ReleaseDate: '2022-01-01T00:00:00'
+                  IsVisible: true
+                  IsActive: true
+                  TaxCode: '12345'
+                  MetaTagDescription: tshirt black
+                  ShowWithoutStock: true
+                  LomadeeCampaignCode: null
+                  Score: 1
+              Associating it to an existing category and brand:
+                value:
+                  Id: 42
+                  Name: Black T-Shirt
+                  DepartmentId: 1
+                  CategoryId: 2
+                  BrandId: 2000000
+                  LinkId: insert-product-test
+                  RefId: '310117869'
+                  IsVisible: true
+                  Description: texto de descrição
+                  DescriptionShort: Utilize o CEP 04548-005 para frete grátis
+                  ReleaseDate: '2019-01-01T00:00:00'
+                  KeyWords: teste,teste2
+                  Title: product de teste
+                  IsActive: true
+                  TaxCode: '12345'
+                  MetaTagDescription: tag test
+                  SupplierId: null
+                  ShowWithoutStock: true
+                  AdWordsRemarketingCode: null
+                  LomadeeCampaignCode: null
+                  Score: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 42
+                Name: Zoom Stefan Janoski Canvas RM SB Varsity Red
+                DepartmentId: 2000089
+                CategoryId: 2000090
+                BrandId: 12121219
+                LinkId: stefan-janoski-canvas-varsity-red
+                RefId: sr_1_90
+                IsVisible: true
+                Description: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                DescriptionShort: The Nike Zoom Stefan Janoski is made with a premium leather.
+                ReleaseDate: '2020-01-01T00:00:00'
+                KeyWords: Zoom,Stefan,Janoski
+                Title: Zoom Stefan Janoski Canvas RM SB Varsity Re
+                IsActive: true
+                TaxCode: ''
+                MetaTagDescription: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
+                SupplierId: 1
+                ShowWithoutStock: true
+                AdWordsRemarketingCode: ''
+                LomadeeCampaignCode: ''
+                Score: 1
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    description: Product's unique numerical identifier.
+                  Name:
+                    type: string
+                    description: Product's name. Limited to 150 characters.
+                  DepartmentId:
+                    type: integer
+                    description: Department ID according to the product's category.
+                  CategoryId:
+                    type: integer
+                    description: Category ID associated with this product.
+                  BrandId:
+                    type: integer
+                    description: Brand ID associated with this product.
+                  LinkId:
+                    type: string
+                    description: Slug that will be used to build the product page URL. If it not informed, it will be generated according to the product's name replacing spaces and special characters by hyphens (`-`).
+                  RefId:
+                    type: string
+                    description: Product Reference Code.
+                  IsVisible:
+                    type: boolean
+                    description: Shows (`true`) or hides (`false`) the product in search result and product pages, but the product can still be added to the shopping cart. Usually applicable for gifts.
+                  Description:
+                    type: string
+                    description: Product description.
+                  DescriptionShort:
+                    type: string
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                  ReleaseDate:
+                    type: string
+                    description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
+                  KeyWords:
+                    type: string
+                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal:  Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                  Title:
+                    type: string
+                    description: Product's title tag, which corresponds to the title of the product page, presented in the browser tab. This field is important for SEO. Limited to 150 characters.
+                  IsActive:
+                    type: boolean
+                    description: Activate (`true`) or inactivate (`false`) product.
+                  TaxCode:
+                    type: string
+                    description: Product tax code, used for tax calculation.
+                  MetaTagDescription:
+                    type: string
+                    description: Brief description of the product for SEO. It's recommended that you don't exceed 150 characters.
+                  SupplierId:
+                    type: integer
+                    deprecated: true
+                    nullable: true
+                  ShowWithoutStock:
+                    type: boolean
+                    description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
+                  AdWordsRemarketingCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  LomadeeCampaignCode:
+                    type: string
+                    description: This is a legacy field. Do not take this information into consideration.
+                    deprecated: true
+                  Score:
+                    type: integer
+                    description: Value used to set the priority on the search result page.
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Accept_2:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type_2:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

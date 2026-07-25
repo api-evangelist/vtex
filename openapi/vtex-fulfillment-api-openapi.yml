@@ -1,0 +1,326 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Fulfillment API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Fulfillment
+paths:
+  /api/checkout/pub/pickup-points:
+    get:
+      tags:
+      - Fulfillment
+      summary: VTex List pickup points by location
+      description: "Retrieves information on pickup points close to a given location determined by geocoordinates or postal code.\n\r\n\rThe pickup points returned are not necessarily all active ones. Make sure to validate the information consumed by integrations.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      operationId: ListPickupPpointsByLocation
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: geoCoordinates
+        in: query
+        description: Geocoordinates (first longitude, then latitude) around which to search for pickup points. If you use this type of search, do not pass postal and country codes.
+        required: false
+        style: form
+        schema:
+          type: array
+          example:
+          - -47.924747467041016
+          - -15.832582473754883
+          items:
+            description: Geocoordinate.
+            type: number
+            example: -47.924747467041016
+      - name: postalCode
+        in: query
+        description: Postal code around which to search for pickup points. If you use this type of search, make sure to pass a `countryCode` and do not pass `geoCoordinates`.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: '1234000'
+      - name: countryCode
+        in: query
+        description: Three letter country code refering to the `postalCode` field. Pass the country code only if you are searching pickup points by postal code.
+        required: false
+        style: form
+        schema:
+          type: string
+          example: BRA
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                paging:
+                  page: 1
+                  pageSize: 30
+                  total: 1
+                  pages: 1
+                items:
+                - distance: 0.8469786518616546
+                  pickupPoint:
+                    friendlyName: physical-store-02
+                    address:
+                      addressType: pickup
+                      receiverName: null
+                      addressId: physical-store-02
+                      isDisposable: true
+                      postalCode: 23450-070
+                      city: Rio de Janeiro
+                      state: RJ
+                      country: BRA
+                      street: Praia de Botafogo
+                      number: '132'
+                      neighborhood: Botafogo
+                      complement: Apto 101
+                      reference: null
+                      geoCoordinates:
+                      - -47.924747467041016
+                      - -15.832582473754883
+                    additionalInfo: null
+                    id: 02_Physical
+                    businessHours:
+                    - DayOfWeek: 0
+                      OpeningTime: 00:00:00
+                      ClosingTime: '23:59:00'
+                    - DayOfWeek: 1
+                      OpeningTime: 00:00:00
+                      ClosingTime: '23:59:00'
+                    - DayOfWeek: 2
+                      OpeningTime: 00:00:00
+                      ClosingTime: '23:59:00'
+                    - DayOfWeek: 3
+                      OpeningTime: 00:00:00
+                      ClosingTime: '23:59:00'
+                    - DayOfWeek: 4
+                      OpeningTime: 00:00:00
+                      ClosingTime: '23:50:00'
+                    - DayOfWeek: 5
+                      OpeningTime: 00:00:00
+                      ClosingTime: '23:59:00'
+                    - DayOfWeek: 6
+                      OpeningTime: 00:00:00
+                      ClosingTime: '23:59:00'
+              schema:
+                type: object
+                properties:
+                  paging:
+                    description: Paging.
+                    type: object
+                    properties:
+                      page:
+                        description: Page number.
+                        type: integer
+                      pageSize:
+                        description: Page size.
+                        type: integer
+                      total:
+                        description: Total pages.
+                        type: integer
+                      pages:
+                        description: Pages.
+                        type: integer
+                  items:
+                    description: Items.
+                    type: array
+                    items:
+                      description: Item information.
+                      type: object
+                      properties:
+                        distance:
+                          description: Distance.
+                          type: integer
+                        pickupPoint:
+                          description: Pickup point.
+                          type: object
+                          properties:
+                            friendlyName:
+                              description: Friendly name.
+                              type: string
+                            address:
+                              description: Address.
+                              type: object
+                              properties:
+                                addressType:
+                                  description: Address type.
+                                  type: string
+                                receiverName:
+                                  description: Receiver name.
+                                  type: string
+                                addressId:
+                                  description: Address ID.
+                                  type: string
+                                  nullable: true
+                                isDisposable:
+                                  description: Is disposable.
+                                  type: boolean
+                                postalCode:
+                                  description: Postal code.
+                                  type: string
+                                city:
+                                  description: City.
+                                  type: string
+                                state:
+                                  description: State.
+                                  type: string
+                                country:
+                                  description: Country.
+                                  type: string
+                                street:
+                                  description: Street.
+                                  type: string
+                                number:
+                                  description: Number.
+                                  type: string
+                                neighborhood:
+                                  description: Neighborhood.
+                                  type: string
+                                complement:
+                                  description: Complement.
+                                  type: string
+                                reference:
+                                  description: Racao.
+                                  type: string
+                                geoCoordinates:
+                                  description: Geo coordinates.
+                                  type: array
+                                  items:
+                                    description: Geo coordinate.
+                                    type: integer
+                            additionalInfo:
+                              description: Additional info.
+                              type: string
+                            id:
+                              description: ID.
+                              type: string
+                            businessHours:
+                              description: Array with business hours.
+                              type: array
+                              items:
+                                description: Business hours.
+                                type: object
+                                properties:
+                                  DayOfWeek:
+                                    description: Day of week.
+                                    type: integer
+                                  OpeningTime:
+                                    description: Opening time.
+                                    type: string
+                                  ClosingTime:
+                                    description: Closing time.
+                                    type: string
+  /api/checkout/pub/postal-code/{countryCode}/{postalCode}:
+    get:
+      tags:
+      - Fulfillment
+      summary: VTex Get address by postal code
+      description: "Retrieves address information for a given postal code and country.\r\n\r\nThis request can be used to implement auto complete functionality when a customer needs to fill in an address.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      operationId: GetAddressByPostalCode
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: countryCode
+        in: path
+        description: Three letter country code refering to the `postalCode` field.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: BRA
+      - name: postalCode
+        in: path
+        description: Postal code.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '1234000'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                postalCode: '12345000'
+                city: Rio de Janeiro
+                state: RJ
+                country: BRA
+                street: My street
+                number: '34'
+                neighborhood: My neighborhood
+                complement: Apto 101
+                reference: Reference
+                geoCoordinates: []
+              schema:
+                description: Address.
+                type: object
+                properties:
+                  postalCode:
+                    description: Postal code.
+                    type: string
+                  city:
+                    description: City.
+                    type: string
+                  state:
+                    description: State.
+                    type: string
+                  country:
+                    description: Country.
+                    type: string
+                  street:
+                    description: Street.
+                    type: string
+                  number:
+                    description: Number.
+                    type: string
+                  neighborhood:
+                    description: Neighborhood.
+                    type: string
+                  complement:
+                    description: Complement.
+                    type: string
+                  reference:
+                    description: Reference.
+                    type: string
+                  geoCoordinates:
+                    description: Geo coordinates.
+                    type: array
+                    items:
+                      description: Geo coordinate.
+                      type: integer
+components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

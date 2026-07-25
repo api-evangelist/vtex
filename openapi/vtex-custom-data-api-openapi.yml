@@ -1,0 +1,1797 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Custom Data API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Custom Data
+paths:
+  /api/checkout/pub/orderForm/{orderFormId}/customData/{appId}:
+    put:
+      tags:
+      - Custom Data
+      summary: VTex Set multiple custom field values
+      description: "Your account may create `apps`, which contain custom fields, through the [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm) request. The values of these custom fields can then be updated by this request.\n\r\n\rTo do that, you need to inform the ID of the app you created with the configuration API (`appId`).\n\r\n\rIn the body of the request, for each field created in this app (`appFieldName`) you will inform a value (`appFieldValue`).\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Read Shopping Cart** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SetMultipleCustomFieldValues
+      security: []
+      parameters:
+      - name: orderFormId
+        in: path
+        description: ID of the orderForm that will receive the new custom field values.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 29154e27383145cc8ce1f7a1df0d99c4
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: appId
+        in: path
+        description: ID of the app created with the configuration API.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: appId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: Here you must add the pairs of Field Name and Field Value.
+              type: object
+              additionalProperties: true
+              example:
+                fieldName: fieldValue
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orderForm'
+              example:
+                orderFormId: ede846222cd44046ba6c638442c3505a
+                salesChannel: '1'
+                loggedIn: false
+                isCheckedIn: false
+                storeId: '1'
+                checkedInPickupPointId: '21'
+                allowManualPrice: false
+                canEditData: true
+                userProfileId: fb542e51-5488-4c34-8d17-ed8fcf597a94
+                userType: User type
+                ignoreProfileData: false
+                value: 10000
+                messages: []
+                items:
+                - uniqueId: E0F2B7AF5CD74D668F1E27537206912C
+                  id: '1'
+                  productId: '1'
+                  productRefId: '1'
+                  refId: '0001'
+                  ean: '123456789'
+                  name: Ração Royal Canin Feline Urinary 500g
+                  skuName: Ração Royal Canin Feline Urinary 500g
+                  modalType: null
+                  parentItemIndex: null
+                  parentAssemblyBinding: null
+                  assemblies: []
+                  priceValidUntil: '2021-02-27T14:59:00.8288784Z'
+                  tax: 0
+                  price: 15000
+                  listPrice: 30000
+                  manualPrice: 10000
+                  sellingPrice: 10000
+                  rewardValue: 0
+                  isGift: false
+                  additionalInfo:
+                    brandName: Royal Canin
+                    brandId: '2000000'
+                    offeringInfo: null
+                    offeringType: null
+                    offeringTypeId: null
+                  preSaleDate: null
+                  productCategoryIds: /1/10/
+                  productCategories:
+                    '1': Alimentação
+                    '10': Ração Seca
+                  quantity: 1
+                  seller: '1'
+                  sellerChain:
+                  - '1'
+                  imageUrl: http://lojadobreno.vteximg.com.br/arquivos/ids/155450-55-55/Racao-Royal-Canin-Feline-Urinary-SO.jpg?v=637139444438700000
+                  detailUrl: /racao-royal-canin-feline-urinary/p
+                  components: []
+                  bundleItems: []
+                  attachments: []
+                  attachmentOfferings: []
+                  offerings: []
+                  priceTags:
+                  - name: DISCOUNT@MANUALPRICE
+                    value: -5000
+                    rawValue: -50
+                    isPercentual: false
+                    identifier: null
+                  availability: available
+                  measurementUnit: un
+                  unitMultiplier: 1
+                  manufacturerCode: null
+                selectableGifts: []
+                totalizers:
+                - id: Items
+                  name: Total dos Itens
+                  value: 15000
+                - id: Discounts
+                  name: Total dos Descontos
+                  value: -5000
+                shippingData:
+                  address: null
+                  logisticsInfo:
+                  - itemIndex: 0
+                    selectedSla: Normal
+                    selectedDeliveryChannel: delivery
+                    addressId: 666c2e830bd9474ab6f6cc53fb6dd2d2
+                    slas: []
+                    shipsTo:
+                    - BRA
+                    itemId: '1'
+                    deliveryChannels:
+                    - id: pickup-in-point
+                    - id: delivery
+                  selectedAddresses: []
+                  availableAddresses: []
+                  pickupPoints: []
+                clientProfileData: null
+                paymentData:
+                  installmentOptions:
+                  - paymentSystem: 2
+                    bin: null
+                    paymentName: null
+                    paymentGroupName: null
+                    value: 10000
+                    installments:
+                    - count: 1
+                      hasInterestRate: false
+                      interestRate: 0
+                      value: 10000
+                      total: 10000
+                      sellerMerchantInstallments:
+                      - id: LOJADOBRENO
+                        count: 1
+                        hasInterestRate: false
+                        interestRate: 0
+                        value: 10000
+                        total: 10000
+                    - count: 2
+                      hasInterestRate: false
+                      interestRate: 0
+                      value: 5000
+                      total: 10000
+                      sellerMerchantInstallments:
+                      - id: LOJADOBRENO
+                        count: 2
+                        hasInterestRate: false
+                        interestRate: 0
+                        value: 5000
+                        total: 10000
+                  paymentSystems:
+                  - id: 2
+                    name: Visa
+                    groupName: creditCardPaymentGroup
+                    validator:
+                      regex: ^4[0-9]{15}$
+                      mask: 9999 9999 9999 9999
+                      cardCodeRegex: ^[0-9]{3}$
+                      cardCodeMask: '999'
+                      weights:
+                      - 2
+                      - 1
+                      - 2
+                      - 1
+                      useCvv: true
+                      useExpirationDate: true
+                      useCardHolderName: true
+                      useBillingAddress: true
+                    stringId: '2'
+                    template: creditCardPaymentGroup-template
+                    requiresDocument: false
+                    isCustom: false
+                    description: Payment description
+                    requiresAuthentication: false
+                    dueDate: '2020-03-05T16:42:31.7836281Z'
+                    availablePayments: null
+                  payments:
+                  - paymentSystem: 6
+                    bin: null
+                    accountId: '12'
+                    tokenId: null
+                    value: 34390
+                    referenceValue: 34390
+                    giftCardRedemptionCode: null
+                    giftCardProvider: null
+                    giftCardId: null
+                  giftCards: []
+                  giftCardMessages: []
+                  availableAccounts: []
+                  availableTokens: []
+                marketingData: null
+                sellers:
+                - id: '1'
+                  name: lojadobreno
+                  logo: Logo
+                clientPreferencesData:
+                  locale: pt-BR
+                  optinNewsLetter: null
+                commercialConditionData: null
+                storePreferencesData:
+                  countryCode: BRA
+                  saveUserData: true
+                  timeZone: E. South America Standard Time
+                  currencyCode: BRL
+                  currencyLocale: 1046
+                  currencySymbol: R$
+                  currencyFormatInfo:
+                    currencyDecimalDigits: 2
+                    currencyDecimalSeparator: ','
+                    currencyGroupSeparator: .
+                    currencyGroupSize: 3
+                    startsWithCurrencySymbol: true
+                giftRegistryData: null
+                openTextField: null
+                invoiceData: null
+                customData:
+                  customApps:
+                  - fields:
+                      testField1: testValue1
+                      testField2: testValue2
+                    id: abcd
+                    major: 1
+                itemMetadata:
+                  items:
+                  - id: '1'
+                    seller: '1'
+                    name: Ração Royal Canin Feline Urinary 500g
+                    skuName: Ração Royal Canin Feline Urinary 500g
+                    productId: '1'
+                    refId: '0001'
+                    ean: '123456789'
+                    imageUrl: http://lojadobreno.vteximg.com.br/arquivos/ids/155450-55-55/Racao-Royal-Canin-Feline-Urinary-SO.jpg?v=637139444438700000
+                    detailUrl: /racao-royal-canin-feline-urinary/p
+                    assemblyOptions: []
+                hooksData: null
+                ratesAndBenefitsData:
+                  rateAndBenefitsIdentifiers: []
+                  teaser: []
+                subscriptionData: null
+                itemsOrdination:
+                  criteria: NAME
+                  ascending: true
+      deprecated: false
+  /api/checkout/pub/orderForm/{orderFormId}/customData/{appId}/{appFieldName}:
+    put:
+      tags:
+      - Custom Data
+      summary: VTex Set single custom field value
+      description: "Your account may create `apps`, which contain custom fields, through the [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm) request. The value of a specific custom field can then be updated by this request.\n\r\n\rTo do that, you need to inform in the URL the ID of the app you created with the configuration API (`appId`).\n\r\n\rIn the body of the request, you will inform the new value (`appFieldValue`, passed through the body) of the specific field created in this app (identified by the `appFieldName` parameter, passed through the URL).\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Read Shopping Cart** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: SetSingleCustomFieldValue
+      security: []
+      parameters:
+      - name: orderFormId
+        in: path
+        description: The ID of the orderForm whose custom field's value you want to change.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 29154e27383145cc8ce1f7a1df0d99c4
+      - name: appId
+        in: path
+        description: ID of the app created through the Update orderForm Configuration endpoint.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: appId
+      - name: appFieldName
+        in: path
+        description: Name of the app's field created through the Update orderForm Configuration endpoint.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: appFieldName
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetsinglecustomfieldvalueRequest'
+            example:
+              value: '{appFieldValue}'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                orderFormId: ede846222cd44046ba6c638442c3505a
+                salesChannel: '1'
+                loggedIn: false
+                isCheckedIn: false
+                storeId: '1'
+                checkedInPickupPointId: '21'
+                allowManualPrice: false
+                canEditData: true
+                userProfileId: fb542e51-5488-4c34-8d17-ed8fcf597a94
+                userType: User type
+                ignoreProfileData: false
+                value: 10000
+                messages: []
+                items:
+                - uniqueId: E0F2B7AF5CD74D668F1E27537206912C
+                  id: '1'
+                  productId: '1'
+                  productRefId: '1'
+                  refId: '0001'
+                  ean: '123456789'
+                  name: Ração Royal Canin Feline Urinary 500g
+                  skuName: Ração Royal Canin Feline Urinary 500g
+                  modalType: null
+                  parentItemIndex: null
+                  parentAssemblyBinding: null
+                  assemblies: []
+                  priceValidUntil: '2021-02-27T14:59:00.8288784Z'
+                  tax: 0
+                  price: 15000
+                  listPrice: 30000
+                  manualPrice: 10000
+                  sellingPrice: 10000
+                  rewardValue: 0
+                  isGift: false
+                  additionalInfo:
+                    brandName: Royal Canin
+                    brandId: '2000000'
+                    offeringInfo: null
+                    offeringType: null
+                    offeringTypeId: null
+                  preSaleDate: null
+                  productCategoryIds: /1/10/
+                  productCategories:
+                    '1': Alimentação
+                    '10': Ração Seca
+                  quantity: 1
+                  seller: '1'
+                  sellerChain:
+                  - '1'
+                  imageUrl: http://lojadobreno.vteximg.com.br/arquivos/ids/155450-55-55/Racao-Royal-Canin-Feline-Urinary-SO.jpg?v=637139444438700000
+                  detailUrl: /racao-royal-canin-feline-urinary/p
+                  components: []
+                  bundleItems: []
+                  attachments: []
+                  attachmentOfferings: []
+                  offerings: []
+                  priceTags:
+                  - name: DISCOUNT@MANUALPRICE
+                    value: -5000
+                    rawValue: -50
+                    isPercentual: false
+                    identifier: null
+                  availability: available
+                  measurementUnit: un
+                  unitMultiplier: 1
+                  manufacturerCode: null
+                selectableGifts: []
+                totalizers:
+                - id: Items
+                  name: Total dos Itens
+                  value: 15000
+                - id: Discounts
+                  name: Total dos Descontos
+                  value: -5000
+                shippingData:
+                  address: null
+                  logisticsInfo:
+                  - itemIndex: 0
+                    selectedSla: Normal
+                    selectedDeliveryChannel: delivery
+                    addressId: 666c2e830bd9474ab6f6cc53fb6dd2d2
+                    slas: []
+                    shipsTo:
+                    - BRA
+                    itemId: '1'
+                    deliveryChannels:
+                    - id: pickup-in-point
+                    - id: delivery
+                  selectedAddresses: []
+                  availableAddresses: []
+                  pickupPoints: []
+                clientProfileData: null
+                paymentData:
+                  installmentOptions:
+                  - paymentSystem: 2
+                    bin: null
+                    paymentName: null
+                    paymentGroupName: null
+                    value: 10000
+                    installments:
+                    - count: 1
+                      hasInterestRate: false
+                      interestRate: 0
+                      value: 10000
+                      total: 10000
+                      sellerMerchantInstallments:
+                      - id: LOJADOBRENO
+                        count: 1
+                        hasInterestRate: false
+                        interestRate: 0
+                        value: 10000
+                        total: 10000
+                    - count: 2
+                      hasInterestRate: false
+                      interestRate: 0
+                      value: 5000
+                      total: 10000
+                      sellerMerchantInstallments:
+                      - id: LOJADOBRENO
+                        count: 2
+                        hasInterestRate: false
+                        interestRate: 0
+                        value: 5000
+                        total: 10000
+                  paymentSystems:
+                  - id: 2
+                    name: Visa
+                    groupName: creditCardPaymentGroup
+                    validator:
+                      regex: ^4[0-9]{15}$
+                      mask: 9999 9999 9999 9999
+                      cardCodeRegex: ^[0-9]{3}$
+                      cardCodeMask: '999'
+                      weights:
+                      - 2
+                      - 1
+                      - 2
+                      - 1
+                      - 2
+                      useCvv: true
+                      useExpirationDate: true
+                      useCardHolderName: true
+                      useBillingAddress: true
+                    stringId: '2'
+                    template: creditCardPaymentGroup-template
+                    requiresDocument: false
+                    isCustom: false
+                    description: Payment description
+                    requiresAuthentication: false
+                    dueDate: '2020-03-05T16:42:31.7836281Z'
+                    availablePayments: null
+                  payments:
+                  - paymentSystem: 6
+                    bin: null
+                    accountId: '12'
+                    tokenId: null
+                    value: 34390
+                    referenceValue: 34390
+                    giftCardRedemptionCode: null
+                    giftCardProvider: null
+                    giftCardId: null
+                  giftCards: []
+                  giftCardMessages: []
+                  availableAccounts: []
+                  availableTokens: []
+                marketingData: null
+                sellers:
+                - id: '1'
+                  name: lojadobreno
+                  logo: Logo
+                clientPreferencesData:
+                  locale: pt-BR
+                  optinNewsLetter: null
+                commercialConditionData: null
+                storePreferencesData:
+                  countryCode: BRA
+                  saveUserData: true
+                  timeZone: E. South America Standard Time
+                  currencyCode: BRL
+                  currencyLocale: 1046
+                  currencySymbol: R$
+                  currencyFormatInfo:
+                    currencyDecimalDigits: 2
+                    currencyDecimalSeparator: ','
+                    currencyGroupSeparator: .
+                    currencyGroupSize: 3
+                    startsWithCurrencySymbol: true
+                giftRegistryData: null
+                openTextField: null
+                invoiceData: null
+                customData:
+                  customApps:
+                  - fields:
+                      testField1: Hello World
+                      testField2: testValue2
+                    id: abcd
+                    major: 1
+                itemMetadata:
+                  items:
+                  - id: '1'
+                    seller: '1'
+                    name: Ração Royal Canin Feline Urinary 500g
+                    skuName: Ração Royal Canin Feline Urinary 500g
+                    productId: '1'
+                    refId: '0001'
+                    ean: '123456789'
+                    imageUrl: http://lojadobreno.vteximg.com.br/arquivos/ids/155450-55-55/Racao-Royal-Canin-Feline-Urinary-SO.jpg?v=637139444438700000
+                    detailUrl: /racao-royal-canin-feline-urinary/p
+                    assemblyOptions: []
+                hooksData: null
+                ratesAndBenefitsData:
+                  rateAndBenefitsIdentifiers: []
+                  teaser: []
+                subscriptionData: null
+                itemsOrdination:
+                  criteria: NAME
+                  ascending: true
+              schema:
+                $ref: '#/components/schemas/orderForm'
+      deprecated: false
+    delete:
+      tags:
+      - Custom Data
+      summary: VTex Remove single custom field value
+      description: "Your account may create `apps`, which contain custom fields, through the [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm) request. The value of a specific custom field can be removed by this request.\n\r\n\rTo do that, you need to inform in the URL the ID of the app you created with the configuration API (`appId`).\n\r\n\rYou also need to iform the specific field created in this app (identified by the `appFieldName` parameter, also passed through the URL) whose value you want to remove.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Read Shopping Cart** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Removesinglecustomfieldvalue
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: orderFormId
+        in: path
+        description: The ID of the orderForm from which you want to remove the custom field value.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: 29154e27383145cc8ce1f7a1df0d99c4
+      - name: appId
+        in: path
+        description: ID of the app created through the Update orderForm Configuration endpoint.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: appId
+      - name: appFieldName
+        in: path
+        description: Name of the app's field created through the Update orderForm Configuration endpoint and which will be deleted.
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: appFieldName
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                orderFormId: ede846222cd44046ba6c638442c3505a
+                salesChannel: '1'
+                loggedIn: false
+                isCheckedIn: false
+                storeId: '1'
+                checkedInPickupPointId: '21'
+                allowManualPrice: false
+                canEditData: true
+                userProfileId: fb542e51-5488-4c34-8d17-ed8fcf597a94
+                userType: User type
+                ignoreProfileData: false
+                value: 10000
+                messages: []
+                items:
+                - uniqueId: E0F2B7AF5CD74D668F1E27537206912C
+                  id: '1'
+                  productId: '1'
+                  productRefId: '1'
+                  refId: '0001'
+                  ean: '123456789'
+                  name: Ração Royal Canin Feline Urinary 500g
+                  skuName: Ração Royal Canin Feline Urinary 500g
+                  modalType: null
+                  parentItemIndex: null
+                  parentAssemblyBinding: null
+                  assemblies: []
+                  priceValidUntil: '2021-02-27T14:59:00.8288784Z'
+                  tax: 0
+                  price: 15000
+                  listPrice: 30000
+                  manualPrice: 10000
+                  sellingPrice: 10000
+                  rewardValue: 0
+                  isGift: false
+                  additionalInfo:
+                    brandName: Royal Canin
+                    brandId: '2000000'
+                    offeringInfo: null
+                    offeringType: null
+                    offeringTypeId: null
+                  preSaleDate: null
+                  productCategoryIds: /1/10/
+                  productCategories:
+                    '1': Alimentação
+                    '10': Ração Seca
+                  quantity: 1
+                  seller: '1'
+                  sellerChain:
+                  - '1'
+                  imageUrl: http://lojadobreno.vteximg.com.br/arquivos/ids/155450-55-55/Racao-Royal-Canin-Feline-Urinary-SO.jpg?v=637139444438700000
+                  detailUrl: /racao-royal-canin-feline-urinary/p
+                  components: []
+                  bundleItems: []
+                  attachments: []
+                  attachmentOfferings: []
+                  offerings: []
+                  priceTags:
+                  - name: DISCOUNT@MANUALPRICE
+                    value: -5000
+                    rawValue: -50
+                    isPercentual: false
+                    identifier: null
+                  availability: available
+                  measurementUnit: un
+                  unitMultiplier: 1
+                  manufacturerCode: null
+                selectableGifts: []
+                totalizers:
+                - id: Items
+                  name: Total dos Itens
+                  value: 15000
+                - id: Discounts
+                  name: Total dos Descontos
+                  value: -5000
+                shippingData:
+                  address: null
+                  logisticsInfo:
+                  - itemIndex: 0
+                    selectedSla: Normal
+                    selectedDeliveryChannel: delivery
+                    addressId: 666c2e830bd9474ab6f6cc53fb6dd2d2
+                    slas: []
+                    shipsTo:
+                    - BRA
+                    itemId: '1'
+                    deliveryChannels:
+                    - id: pickup-in-point
+                    - id: delivery
+                  selectedAddresses: []
+                  availableAddresses: []
+                  pickupPoints: []
+                clientProfileData: null
+                paymentData:
+                  installmentOptions:
+                  - paymentSystem: 2
+                    bin: null
+                    paymentName: null
+                    paymentGroupName: null
+                    value: 10000
+                    installments:
+                    - count: 1
+                      hasInterestRate: false
+                      interestRate: 0
+                      value: 10000
+                      total: 10000
+                      sellerMerchantInstallments:
+                      - id: LOJADOBRENO
+                        count: 1
+                        hasInterestRate: false
+                        interestRate: 0
+                        value: 10000
+                        total: 10000
+                    - count: 2
+                      hasInterestRate: false
+                      interestRate: 0
+                      value: 5000
+                      total: 10000
+                      sellerMerchantInstallments:
+                      - id: LOJADOBRENO
+                        count: 2
+                        hasInterestRate: false
+                        interestRate: 0
+                        value: 5000
+                        total: 10000
+                  paymentSystems:
+                  - id: 2
+                    name: Visa
+                    groupName: creditCardPaymentGroup
+                    validator:
+                      regex: ^4[0-9]{15}$
+                      mask: 9999 9999 9999 9999
+                      cardCodeRegex: ^[0-9]{3}$
+                      cardCodeMask: '999'
+                      weights:
+                      - 2
+                      - 1
+                      - 2
+                      - 1
+                      - 2
+                      useCvv: true
+                      useExpirationDate: true
+                      useCardHolderName: true
+                      useBillingAddress: true
+                    stringId: '2'
+                    template: creditCardPaymentGroup-template
+                    requiresDocument: false
+                    isCustom: false
+                    description: Payment description
+                    requiresAuthentication: false
+                    dueDate: '2020-03-05T16:42:31.7836281Z'
+                    availablePayments: null
+                  payments:
+                  - paymentSystem: 6
+                    bin: null
+                    accountId: '12'
+                    tokenId: null
+                    value: 34390
+                    referenceValue: 34390
+                    giftCardRedemptionCode: null
+                    giftCardProvider: null
+                    giftCardId: null
+                  giftCards: []
+                  giftCardMessages: []
+                  availableAccounts: []
+                  availableTokens: []
+                marketingData: null
+                sellers:
+                - id: '1'
+                  name: lojadobreno
+                  logo: Logo
+                clientPreferencesData:
+                  locale: pt-BR
+                  optinNewsLetter: null
+                commercialConditionData: null
+                storePreferencesData:
+                  countryCode: BRA
+                  saveUserData: true
+                  timeZone: E. South America Standard Time
+                  currencyCode: BRL
+                  currencyLocale: 1046
+                  currencySymbol: R$
+                  currencyFormatInfo:
+                    currencyDecimalDigits: 2
+                    currencyDecimalSeparator: ','
+                    currencyGroupSeparator: .
+                    currencyGroupSize: 3
+                    startsWithCurrencySymbol: true
+                giftRegistryData: null
+                openTextField: null
+                invoiceData: null
+                customData:
+                  customApps:
+                  - fields:
+                      testField2: testValue2
+                    id: abcd
+                    major: 1
+                itemMetadata:
+                  items:
+                  - id: '1'
+                    seller: '1'
+                    name: Ração Royal Canin Feline Urinary 500g
+                    skuName: Ração Royal Canin Feline Urinary 500g
+                    productId: '1'
+                    refId: '0001'
+                    ean: '123456789'
+                    imageUrl: http://lojadobreno.vteximg.com.br/arquivos/ids/155450-55-55/Racao-Royal-Canin-Feline-Urinary-SO.jpg?v=637139444438700000
+                    detailUrl: /racao-royal-canin-feline-urinary/p
+                    assemblyOptions: []
+                hooksData: null
+                ratesAndBenefitsData:
+                  rateAndBenefitsIdentifiers: []
+                  teaser: []
+                subscriptionData: null
+                itemsOrdination:
+                  criteria: NAME
+                  ascending: true
+              schema:
+                $ref: '#/components/schemas/orderForm'
+      deprecated: false
+components:
+  schemas:
+    SetsinglecustomfieldvalueRequest:
+      required:
+      - value
+      type: object
+      properties:
+        value:
+          type: string
+          description: The value you want to set to the specified field.
+    orderForm:
+      type: object
+      properties:
+        orderFormId:
+          type: string
+          description: ID of the orderForm corresponding to a specific cart.
+        salesChannel:
+          type: string
+          description: Attribute created by the seller, in their VTEX store configuration.
+        loggedIn:
+          type: boolean
+          description: Indicates whether the user is logged into the store.
+        isCheckedIn:
+          type: boolean
+          description: Indicates whether order is checked in.
+        storeId:
+          type: string
+          description: ID of the store.
+          nullable: true
+        allowManualPrice:
+          type: boolean
+          description: Permission to modify item price manually.
+        canEditData:
+          type: boolean
+          description: Data can be edited.
+        userProfileId:
+          type: string
+          description: Unique ID associated with the customer profile.
+        profileProvider:
+          type: string
+          description: Profile provider.
+        availableAccounts:
+          type: array
+          description: Available accounts.
+          items:
+            type: string
+            description: Account.
+        availableAddresses:
+          type: array
+          description: Information on each available address.
+          items:
+            type: object
+            properties:
+              addressType:
+                type: string
+                description: Address type.
+              receiverName:
+                type: string
+                description: Name of the receiver.
+              addressId:
+                type: string
+                description: Address ID.
+                nullable: true
+              isDisposable:
+                type: boolean
+                description: Indicates whether address is disposable.
+              city:
+                type: string
+                description: City of the address.
+              state:
+                type: string
+                description: State of the address.
+              country:
+                type: string
+                description: Country of the address. ISO three-letter code.
+              street:
+                type: string
+                description: Street of the address.
+              number:
+                type: string
+                description: Number of the address.
+              neighborhood:
+                type: string
+                description: Neighborhood of the address.
+              complement:
+                type: string
+                description: Complement to the address.
+                nullable: true
+              reference:
+                type: string
+                description: Reference that may help in the location of the address.
+                nullable: true
+              geoCoordinates:
+                type: array
+                description: 'Array with two strings that represent geocoordinates: first latitude, then longitude.'
+                items:
+                  type: number
+                  description: Geocoordinates.
+        userType:
+          type: string
+          description: User type.
+          nullable: true
+        ignoreProfileData:
+          type: boolean
+          description: Ignore customer profile data.
+        value:
+          type: integer
+          description: Total value of the order without separating cents. For example, $24.99 is represented as `2499`.
+        messages:
+          type: array
+          description: Array containing an object for each message generated by our servers while processing the request.
+          items:
+            type: string
+            description: Message.
+        items:
+          type: array
+          description: Information on each item in the order.
+          items:
+            type: object
+            properties:
+              uniqueId:
+                type: string
+                description: Unique ID.
+              id:
+                type: string
+                description: ID of the item.
+              productId:
+                type: string
+                description: Product ID.
+              productRefId:
+                type: string
+                description: Product Ref ID.
+              refId:
+                type: string
+                description: Ref ID.
+              ean:
+                type: string
+                description: European Article Number.
+                nullable: true
+              name:
+                type: string
+                description: Product name.
+              skuName:
+                type: string
+                description: SKU name.
+              modalType:
+                type: string
+                description: Modal type.
+                nullable: true
+              parentItemIndex:
+                type: integer
+                description: Parent item index.
+                nullable: true
+              parentAssemblyBinding:
+                type: string
+                description: Parent assembly binding.
+                nullable: true
+              priceValidUntil:
+                type: string
+                description: Price expiration date and time.
+              tax:
+                type: integer
+                description: Tax value in cents.
+              taxCode:
+                type: string
+                description: A unique identifier code assigned to a tax within the VTEX Admin.
+              price:
+                type: integer
+                description: Price in cents.
+              listPrice:
+                type: integer
+                description: List price in cents.
+              manualPrice:
+                type: integer
+                description: Manual price in cents.
+                nullable: true
+              manualPriceAppliedBy:
+                type: string
+                description: User that applied the manual price, if that is the case.
+                nullable: true
+              sellingPrice:
+                type: integer
+                description: Selling price in cents. Note that this field may be subject to rounding discrepancies. We recommend retrieving data from the `priceDefinition` data structure instead.
+              rewardValue:
+                type: integer
+                description: Reward value in cents.
+              isGift:
+                type: boolean
+                description: Indicates whether item is a gift.
+              additionalInfo:
+                type: object
+                description: Additional information.
+                properties:
+                  dimension:
+                    type: string
+                    description: Dimension.
+                    nullable: true
+                  brandName:
+                    type: string
+                    description: Brand name.
+                  brandId:
+                    type: string
+                    description: Brand ID.
+                  offeringInfo:
+                    type: string
+                    description: Offering information.
+                    nullable: true
+                  offeringType:
+                    type: string
+                    description: Offering type.
+                    nullable: true
+                  offeringTypeId:
+                    type: string
+                    description: Offering type ID.
+                    nullable: true
+              preSaleDate:
+                type: string
+                description: Presale date.
+                nullable: true
+              productCategoryIds:
+                type: string
+                description: Product category IDs.
+              productCategories:
+                type: object
+                description: Object, where each field is an ID from `productCategoryIds`.
+                properties:
+                  '{ID}':
+                    type: string
+                    description: Product category corresponding to the ID in the field key.
+              quantity:
+                type: integer
+                description: Quantity.
+              seller:
+                type: string
+                description: Seller.
+              sellerChain:
+                type: array
+                description: Sellers involved in the chain. The list should contain only one seller, unless it is a [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) order.
+                items:
+                  type: string
+                  description: Seller.
+              imageUrl:
+                type: string
+                description: Image URL.
+              detailUrl:
+                type: string
+                description: Detail URL.
+              bundleItems:
+                type: array
+                description: 'Information on services sold along with the SKU. Example: a gift package.'
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      description: Service type.
+                    id:
+                      type: integer
+                      description: Service identifier.
+                    name:
+                      type: string
+                      description: Service name.
+                    price:
+                      type: integer
+                      description: Service price in cents.
+              attachments:
+                type: array
+                description: Array containing information on attachments.
+                items:
+                  type: string
+              priceTags:
+                type: array
+                description: Array of price tags, each of which, modifies the price in some way, like discounts or rates that apply to the item in the context of the order.
+                items:
+                  type: object
+                  properties:
+                    identifier:
+                      type: string
+                      description: Price tag identifier.
+                      nullable: true
+                    isPercentual:
+                      type: boolean
+                      description: Indicates whether price tag value is applied through a percentage.
+                    name:
+                      type: string
+                      description: Price tag name.
+                    rawValue:
+                      type: integer
+                      description: Price tag raw value.
+                    value:
+                      type: integer
+                      description: Price tag value.
+              availability:
+                type: string
+                description: Availability.
+              measurementUnit:
+                type: string
+                description: Measurement unit.
+              unitMultiplier:
+                type: integer
+                description: Unit multiplier.
+              manufacturerCode:
+                type: string
+                description: Manufacturer code.
+                nullable: true
+              priceDefinition:
+                type: object
+                description: Price information for all units of a specific item.
+                properties:
+                  calculatedSellingPrice:
+                    type: integer
+                    description: Item's calculated unitary selling price in cents.
+                  total:
+                    type: integer
+                    description: Total value for all units of the item in cents.
+                  sellingPrices:
+                    type: array
+                    description: Array of objects, each containing value (in cents) and quantity for the different rounding instances that can be combined to form the correctly rounded total.
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: integer
+                          description: Value in cents for that specific rounding.
+                        quantity:
+                          type: integer
+                          description: Rounding quantity, meaning how many items are rounded to this value.
+        selectableGifts:
+          type: array
+          description: Array containing the data of the item selected as a gift.
+          items:
+            type: string
+            description: Gift.
+        totalizers:
+          type: array
+          description: Array containing an object for each totalizer for the purchase. Totalizers contain the sum of values for a specific part of the order (e.g. Total item value, Total shipping value).
+          items:
+            type: object
+            description: Totalizer of purchases.
+        shippingData:
+          type: object
+          description: Shipping information pertinent to the order.
+          nullable: true
+          properties:
+            address:
+              type: object
+              description: Address information.
+              nullable: true
+              properties:
+                addressType:
+                  type: string
+                  description: Type of address. For example, `Residential` or `Pickup`.
+                receiverName:
+                  type: string
+                  description: Name of the person who is going to receive the order.
+                addressId:
+                  type: string
+                  description: Address ID.
+                  nullable: true
+                isDisposable:
+                  type: boolean
+                  description: Indicates whether address is disposable.
+                postalCode:
+                  type: string
+                  description: Postal code.
+                city:
+                  type: string
+                  description: City of the shipping address.
+                state:
+                  type: string
+                  description: State of the shipping address.
+                country:
+                  type: string
+                  description: Three letter ISO code of the country of the shipping address.
+                street:
+                  type: string
+                  description: Street of the shipping address.
+                number:
+                  type: string
+                  description: Number of the building, house or apartment in the shipping address.
+                neighborhood:
+                  type: string
+                  description: Neighborhood of the shipping address.
+                complement:
+                  type: string
+                  description: Complement to the shipping address, in case it applies.
+                  nullable: true
+                reference:
+                  type: string
+                  description: Complement that might help locate the shipping address more precisely in case of delivery.
+                  nullable: true
+                geoCoordinates:
+                  type: array
+                  description: 'Array with two strings that represent geocoordinates: first latitude, then longitude.'
+                  items:
+                    type: number
+                    description: Geocoordinates.
+            logisticsInfo:
+              type: array
+              description: Array with logistics information. Each object in this array corresponds to an object in the `items` array, based on the respective `itemIndex`.
+              items:
+                type: object
+                properties:
+                  itemIndex:
+                    type: integer
+                    description: Index corresponding to the position of the object in the `items` array.
+                  selectedSla:
+                    type: string
+                    description: SLA selected by the customer.
+                    nullable: true
+                  selectedDeliveryChannel:
+                    type: string
+                    description: Delivery channel selected by the customer.
+                    nullable: true
+                  addressId:
+                    type: string
+                    description: Address ID.
+                    nullable: true
+                  slas:
+                    type: array
+                    description: Information on available SLAs.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: SLA ID.
+                        deliveryChannel:
+                          type: string
+                          description: Delivery channel.
+                        name:
+                          type: string
+                          description: SLA name.
+                        deliveryIds:
+                          type: array
+                          description: Information on each delivery ID.
+                          items:
+                            type: object
+                            properties:
+                              courierId:
+                                type: string
+                                description: Courier ID.
+                              warehouseId:
+                                type: string
+                                description: Warehouse ID.
+                              dockId:
+                                type: string
+                                description: Warehouse ID.
+                              courierName:
+                                type: string
+                                description: Courier name.
+                              quantity:
+                                type: integer
+                                description: Quantity.
+                        shippingEstimate:
+                          type: string
+                          description: Shipping estimate. For instance, "three business days" will be represented as `3bd`.
+                        shippingEstimateDate:
+                          type: string
+                          description: Shipping estimate date.
+                          nullable: true
+                        lockTTL:
+                          type: string
+                          description: Estimate date of delivery.
+                          nullable: true
+                        price:
+                          type: integer
+                          description: Price in cents.
+                        listPrice:
+                          type: integer
+                          description: List price in cents.
+                        tax:
+                          type: integer
+                          description: Tax in cents.
+                        pickupStoreInfo:
+                          type: object
+                          description: Information on the pickup store.
+                          properties:
+                            isPickupStore:
+                              type: boolean
+                              description: Indicates whether it is the pickup store.
+                            friendlyName:
+                              type: string
+                              description: Friendly name.
+                              nullable: true
+                            address:
+                              type: object
+                              description: Address information.
+                              nullable: true
+                              properties:
+                                addressType:
+                                  type: string
+                                  description: Type of address. For example, `Residential` or `Pickup`.
+                                postalCode:
+                                  type: string
+                                  description: Postal code.
+                                city:
+                                  type: string
+                                  description: City of the shipping address.
+                                state:
+                                  type: string
+                                  description: State of the shipping address.
+                                country:
+                                  type: string
+                                  description: Three letter ISO code of the country of the shipping address.
+                                street:
+                                  type: string
+                                  description: Street of the shipping address.
+                                number:
+                                  type: string
+                                  description: Number of the building, house or apartment in the shipping address.
+                                neighborhood:
+                                  type: string
+                                  description: Neighborhood of the shipping address.
+                                complement:
+                                  type: string
+                                  description: Complement to the shipping address, in case it applies.
+                                  nullable: true
+                                reference:
+                                  type: string
+                                  description: Complement that might help locate the shipping address more precisely in case of delivery.
+                                  nullable: true
+                                geoCoordinates:
+                                  type: array
+                                  description: 'Array with two strings that repesent geocoordinates: first latitude, then longitude.'
+                                  items:
+                                    type: number
+                                    description: Geocoordinates.
+                            additionalInfo:
+                              type: string
+                              description: Additional information.
+                              nullable: true
+                            dockId:
+                              type: string
+                              description: Corresponding dock ID.
+                              nullable: true
+                        pickupPointId:
+                          type: string
+                          description: Pickup point ID.
+                          nullable: true
+                        pickupDistance:
+                          type: integer
+                          description: Pickup point distance.
+                        polygonName:
+                          type: string
+                          description: Polygon name.
+                          nullable: true
+                        transitTime:
+                          type: string
+                          description: Transit time. For instance, "three business days" is represented as `3bd`.
+                  shipsTo:
+                    type: array
+                    description: List of countries that the item may be shipped to.
+                    items:
+                      type: string
+                      description: Three letter country code.
+                  itemId:
+                    type: string
+                    description: Item ID.
+                  deliveryChannels:
+                    type: array
+                    description: List of available delivery channels.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Delivery channel ID.
+            selectedAddresses:
+              type: array
+              description: Array with information on the selected addresses for the order.
+              items:
+                type: object
+                properties:
+                  addressType:
+                    type: string
+                    description: Type of address. For example, `Residential` or `Pickup`.
+                  receiverName:
+                    type: string
+                    description: Name of the person who is going to receive the order.
+                  addressId:
+                    type: string
+                    description: Address ID.
+                    nullable: true
+                  isDisposable:
+                    type: boolean
+                    description: Indicates whether address is disposable.
+                  postalCode:
+                    type: string
+                    description: Postal code.
+                  city:
+                    type: string
+                    description: City of the shipping address.
+                  state:
+                    type: string
+                    description: State of the shipping address.
+                  country:
+                    type: string
+                    description: Three letter ISO code of the country of the shipping address.
+                  street:
+                    type: string
+                    description: Street of the shipping address.
+                  number:
+                    type: string
+                    description: Number of the building, house or apartment in the shipping address.
+                  neighborhood:
+                    type: string
+                    description: Neighborhood of the shipping address.
+                  complement:
+                    type: string
+                    description: Complement to the shipping address, in case it applies.
+                  reference:
+                    type: string
+                    description: Complement that might help locate the shipping address more precisely in case of delivery.
+                    nullable: true
+                  geoCoordinates:
+                    type: array
+                    description: 'Array with two strings that represent geocoordinates: first latitude, then longitude.'
+                    items:
+                      type: number
+                      description: Geocoordinates.
+            availableAddresses:
+              type: array
+              description: Array with information on the available addresses for the order.
+              items:
+                type: object
+                properties:
+                  addressType:
+                    type: string
+                    description: Type of address. For example, `Residential` or `Pickup`.
+                  receiverName:
+                    type: string
+                    description: Name of the person who is going to receive the order.
+                  addressId:
+                    type: string
+                    description: Address ID.
+                    nullable: true
+                  isDisposable:
+                    type: boolean
+                    description: Indicates whether address is disposable.
+                  postalCode:
+                    type: string
+                    description: Postal code.
+                  city:
+                    type: string
+                    description: City of the shipping address.
+                  state:
+                    type: string
+                    description: State of the shipping address.
+                  country:
+                    type: string
+                    description: Three letter ISO code of the country of the shipping address.
+                  street:
+                    type: string
+                    description: Street of the shipping address.
+                  number:
+                    type: string
+                    description: Number of the building, house or apartment in the shipping address.
+                  neighborhood:
+                    type: string
+                    description: Neighborhood of the shipping address.
+                  complement:
+                    type: string
+                    description: Complement to the shipping address, in case it applies.
+                  reference:
+                    type: string
+                    description: Complement that might help locate the shipping address more precisely in case of delivery.
+                    nullable: true
+                  geoCoordinates:
+                    type: array
+                    description: 'Array with two strings that represent geocoordinates: first latitude, then longitude.'
+                    items:
+                      type: number
+                      description: Geocoordinates.
+        clientProfileData:
+          type: object
+          description: Customer's profile information.
+          nullable: true
+          properties:
+            email:
+              type: string
+              description: Email address.
+              nullable: true
+            firstName:
+              type: string
+              description: First name.
+              nullable: true
+            lastName:
+              type: string
+              description: Last name.
+            documentType:
+              type: string
+              description: Type of the document informed by the customer.
+            document:
+              type: string
+              description: Document informed by the customer.
+            phone:
+              type: string
+              description: Phone number.
+            corporateName:
+              type: string
+              description: Company name, if the customer is a legal entity.
+              nullable: true
+            tradeName:
+              type: string
+              description: Trade name, if the customer is a legal entity.
+              nullable: true
+            corporateDocument:
+              type: string
+              description: Corporate document, if the customer is a legal entity.
+              nullable: true
+            stateInscription:
+              type: string
+              description: State inscription, if the customer is a legal entity.
+              nullable: true
+            corporatePhone:
+              type: string
+              description: Corporate phone number, if the customer is a legal entity.
+              nullable: true
+            isCorporate:
+              type: boolean
+              description: Indicates whether the customer is a legal entity.
+            profileCompleteOnLoading:
+              type: boolean
+              description: Indicates whether profile is complete on loading.
+            profileErrorOnLoading:
+              type: boolean
+              description: Indicates whether profile presents error on loading.
+              nullable: true
+            customerClass:
+              type: string
+              description: Customer class.
+              nullable: true
+        paymentData:
+          type: object
+          description: Information on the order's payment.
+          properties:
+            giftCards:
+              type: array
+              description: Gift card information, if it applies to the order.
+              items:
+                type: object
+                properties:
+                  redemptionCode:
+                    type: string
+                    description: Gift card redemption code.
+                  value:
+                    type: integer
+                    description: Gift card value in cents.
+                  balance:
+                    type: integer
+                    description: Gift card balance in cents.
+                  name:
+                    type: string
+                    description: Gift card name.
+                  id:
+                    type: string
+                    description: Gift card ID.
+                  inUse:
+                    type: boolean
+                    description: Indicates whether gift card is in use.
+                  isSpecialCard:
+                    type: boolean
+                    description: Indicates whether gift card is special.
+            transactions:
+              type: array
+              description: Information on each transaction pertinent to the order.
+              items:
+                type: object
+                properties:
+                  isActive:
+                    type: boolean
+                    description: Indicates whether transaction is active.
+                  transactionId:
+                    type: string
+                    description: Transaction ID.
+                  merchantName:
+                    type: string
+                    description: Merchant name.
+                  payments:
+                    type: array
+                    description: Information on each payment.
+                    items:
+                      type: object
+                      properties:
+                        accountId:
+                          type: string
+                          description: Account ID.
+                        bin:
+                          type: string
+                          description: Bin.
+                          nullable: true
+                        installments:
+                          type: integer
+                          description: Number of installments.
+                        paymentSystem:
+                          type: string
+                          description: Payment system.
+                        referenceValue:
+                          type: integer
+                          description: Reference value for calculating interest rates, in case it applies. Displayed in cents.
+                        value:
+                          type: integer
+                          description: Value including interest, in case it applies. Displayed in cents.
+                  sharedTransaction:
+                    type: boolean
+                    description: Indicates whather transaction is shared.
+        marketingData:
+          type: object
+          nullable: true
+          description: Object containing promotion data such as coupon tracking information and internal or external UTMs.
+          properties:
+            coupon:
+              type: string
+              description: Sending an existing coupon code in this field will return the corresponding discount in the purchase. Use the [cart simulation](https://developers.vtex.com/vtex-rest-api/reference/orderform#orderformsimulation) request to check which coupons might apply before placing the order.
+              example: free-shipping
+            utmSource:
+              type: string
+              description: UTM source.
+              example: Facebook
+            utmMedium:
+              type: string
+              description: UTM medium.
+              example: CPC
+            utmCampaign:
+              type: string
+              description: UTM campaign
+              example: Black friday
+            utmiPage:
+              type: string
+              description: utmi_page (internal utm).
+              example: utmi_page-example
+              nullable: true
+            utmiPart:
+              type: string
+              description: utmi_part (internal utm).
+              example: utmi_part-example
+              nullable: true
+            utmiCampaign:
+              type: string
+              description: utmi_campaign (internal utm).
+              example: utmi_campaign-example
+              nullable: true
+        sellers:
+          type: array
+          description: Information on each seller.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Seller ID.
+              name:
+                type: string
+                description: Seller name.
+              logo:
+                type: string
+                description: Seller logo.
+                nullable: true
+        clientPreferencesData:
+          type: object
+          description: Object containing preferences from the client who placed the order.
+          properties:
+            locale:
+              type: string
+              description: 'Client''s locale. Examples: `pt-BR` and `en-US`.'
+            optinNewsLetter:
+              type: boolean
+              description: '`true` if the client opted to receive newsletter from the store.'
+              example: false
+              nullable: true
+        commercialConditionData:
+          type: object
+          description: Object containing commercial condition information.
+          nullable: true
+        storePreferencesData:
+          type: object
+          description: Object containing data from the store's configuration (stored in VTEX's License Manager).
+        giftRegistryData:
+          type: object
+          description: Gift registry list information.
+          nullable: true
+        openTextField:
+          type: string
+          description: Optional field meant to hold additional information about the order. We recommend using this field for text, not data formats such as `JSON` even if escaped. For that purpose, see [Creating customizable fields](https://developers.vtex.com/vtex-rest-api/docs/creating-customizable-fields-in-the-cart-with-checkout-api-1).
+          example: open-text-example
+          nullable: true
+        invoiceData:
+          type: object
+          description: Object containing information pertinent to the order's invoice.
+          nullable: true
+        customData:
+          type: object
+          description: Customer additional information.
+          nullable: true
+        itemMetadata:
+          type: object
+          description: Item metadata.
+          properties:
+            items:
+              type: array
+              description: List of objects containing metadata on each item in the order.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Item ID.
+                  seller:
+                    type: string
+                    description: Seller.
+                  name:
+                    type: string
+                    description: Product name.
+                  skuName:
+                    type: string
+                    description: SKU name.
+                  productId:
+                    type: string
+                    description: Product ID.
+                  refId:
+                    type: string
+                    description: Ref ID.
+                  ean:
+                    type: string
+                    description: European Article Number.
+                    nullable: true
+                  imageUrl:
+                    type: string
+                    description: Image URL.
+                  detailUrl:
+                    type: string
+                    description: Detail URL.
+        hooksData:
+          type: object
+          description: Hooks information.
+          nullable: true
+        ratesAndBenefitsData:
+          type: object
+          description: Information on rates and benefits that apply to the order.
+          properties:
+            rateAndBenefitsIdentifiers:
+              type: array
+              description: List with rates and benefits identifiers.
+              items:
+                type: string
+                description: Benefit identifier.
+            teaser:
+              type: array
+              description: List with rates and benefits teasers.
+              items:
+                type: string
+                description: Benefit teaser.
+        subscriptionData:
+          type: object
+          description: Subscription information.
+          nullable: true
+        itemsOrdination:
+          type: object
+          description: Object containing information about the ordering of items within the `orderForm`.
+          properties:
+            criteria:
+              type: string
+              description: Criteria adopted to order the items in the list.
+            ascending:
+              type: boolean
+              description: Indicates whether the ordering is ascending.
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

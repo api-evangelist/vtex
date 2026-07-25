@@ -1,0 +1,965 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Docks API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Docks
+paths:
+  /api/logistics/pvt/configuration/docks:
+    post:
+      tags:
+      - Docks
+      summary: VTex Create/update dock
+      description: Creates or updates docks to be used in your logistic operation.
+      operationId: Create/UpdateDock
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      requestBody:
+        content:
+          application/json; charset=utf-8:
+            schema:
+              title: Create/UpdateDockRequest
+              required:
+              - id
+              - name
+              - priority
+              - dockTimeFake
+              - timeFakeOverhead
+              - salesChannels
+              - salesChannel
+              - freightTableIds
+              - wmsEndPoint
+              - address
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                priority:
+                  type: integer
+                  format: int32
+                dockTimeFake:
+                  type: string
+                timeFakeOverhead:
+                  type: string
+                salesChannels:
+                  type: array
+                  items:
+                    type: string
+                  description: Which sales channels ([trade policies](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) will be associated with the loading dock.
+                salesChannel:
+                  type: string
+                  nullable: true
+                freightTableIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Freight table IDs.
+                wmsEndPoint:
+                  type: string
+                address:
+                  title: Address1
+                  required:
+                  - postalCode
+                  - country
+                  - city
+                  - state
+                  - neighborhood
+                  - street
+                  - number
+                  - complement
+                  - coordinates
+                  type: object
+                  properties:
+                    postalCode:
+                      type: string
+                    country:
+                      title: Country
+                      required:
+                      - acronym
+                      - name
+                      type: object
+                      properties:
+                        acronym:
+                          type: string
+                        name:
+                          type: string
+                      example:
+                        acronym: BRA
+                        name: Brazil
+                    city:
+                      type: string
+                    state:
+                      type: string
+                    neighborhood:
+                      type: string
+                    street:
+                      type: string
+                    number:
+                      type: string
+                    complement:
+                      type: string
+                    coordinates:
+                      type: array
+                      items:
+                        type: array
+                        items:
+                          type: number
+                  example:
+                    postalCode: '22220070'
+                    country:
+                      acronym: BRA
+                      name: Brazil
+                    city: Rio de Janeiro
+                    state: RJ
+                    neighborhood: Catete
+                    street: Artur Bernardes Street
+                    number: '100'
+                    complement: ''
+                    coordinates:
+                    - - -43.18228090000002
+                      - -22.9460398
+              example:
+                id: catete
+                name: Loja Catete
+                priority: 0
+                dockTimeFake: 00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                salesChannel: null
+                freightTableIds: []
+                wmsEndPoint: ''
+                address:
+                  postalCode: '22220070'
+                  country:
+                    acronym: BRA
+                    name: Brazil
+                  city: Rio de Janeiro
+                  state: RJ
+                  neighborhood: Catete
+                  street: Artur Bernardes Street
+                  number: '100'
+                  complement: ''
+                  coordinates:
+                  - - -43.18228090000002
+                    - -22.9460398
+            example:
+              id: catete
+              name: Loja Catete
+              priority: 0
+              dockTimeFake: 00:00:00
+              timeFakeOverhead: 00:00:00
+              salesChannels:
+              - '1'
+              salesChannel: null
+              freightTableIds: []
+              wmsEndPoint: ''
+              address:
+                postalCode: '22220070'
+                country:
+                  acronym: BRA
+                  name: Brazil
+                city: Rio de Janeiro
+                state: RJ
+                neighborhood: Catete
+                street: Artur Bernardes Street
+                number: '100'
+                complement: ''
+                coordinates:
+                - - -43.18228090000002
+                  - -22.9460398
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Docks
+      summary: VTex List all docks
+      description: Informs a list of all docks.
+      operationId: AllDocks
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Encoding:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: gzip
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '469'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 15 Apr 2016 19:58:37 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            Vary:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Accept-Encoding
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx5
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.8
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.26.4
+            X-Powered-by-VTEX-Janus-Router:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 2.1.155
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Cache-Status-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: MISS
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.2.96-stable+863
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 4dc9fc80-722a-468f-8f7d-aabe2b804b18
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  required:
+                  - id
+                  - name
+                  - priority
+                  - dockTimeFake
+                  - timeFakeOverhead
+                  - salesChannels
+                  - salesChannel
+                  - freightTableIds
+                  - wmsEndPoint
+                  - pickupStoreInfo
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    priority:
+                      type: integer
+                      format: int32
+                    dockTimeFake:
+                      type: string
+                    timeFakeOverhead:
+                      type: string
+                    salesChannels:
+                      type: array
+                      items:
+                        type: string
+                      description: Which sales channels ([trade policies](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) are associated with the loading docks.
+                    salesChannel:
+                      type: string
+                      nullable: true
+                    freightTableIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Freight table IDs.
+                    wmsEndPoint:
+                      type: string
+                    pickupStoreInfo:
+                      title: PickupStoreInfo1
+                      required:
+                      - isPickupStore
+                      - storeId
+                      - friendlyName
+                      - address
+                      - additionalInfo
+                      - dockId
+                      type: object
+                      properties:
+                        isPickupStore:
+                          type: boolean
+                        storeId:
+                          type: string
+                          nullable: true
+                        friendlyName:
+                          type: string
+                          nullable: true
+                        address:
+                          type: string
+                          nullable: true
+                        additionalInfo:
+                          type: string
+                          nullable: true
+                        dockId:
+                          type: string
+                          nullable: true
+                      example:
+                        isPickupStore: false
+                        storeId: null
+                        friendlyName: null
+                        address: null
+                        additionalInfo: null
+                        dockId: null
+                  example:
+                    id: 1a8bce3
+                    name: Centro de Distribui├º├úo Principal
+                    priority: 0
+                    dockTimeFake: 1.00:00:00
+                    timeFakeOverhead: 00:00:00
+                    salesChannels:
+                    - '1'
+                    - '2'
+                    salesChannel: null
+                    freightTableIds:
+                    - 11cc4b6
+                    - teste1
+                    - 186a2a6
+                    - '1962962'
+                    - 173a63f
+                    wmsEndPoint: ''
+                    pickupStoreInfo:
+                      isPickupStore: false
+                      storeId: null
+                      friendlyName: null
+                      address: null
+                      additionalInfo: null
+                      dockId: null
+              example:
+              - id: 1a8bce3
+                name: Centro de Distribuição Principal
+                priority: 0
+                dockTimeFake: 1.00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                - '2'
+                salesChannel: null
+                freightTableIds:
+                - 11cc4b6
+                - teste1
+                - 186a2a6
+                - '1962962'
+                - 173a63f
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+              - id: '1_1_1'
+                name: Doca A
+                priority: 1
+                dockTimeFake: 00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                - '11'
+                - '4'
+                - '2'
+                - '12'
+                - '13'
+                - '14'
+                - '7'
+                - '16'
+                salesChannel: null
+                freightTableIds:
+                - '1962962'
+                - teste1
+                - 11cc4b6
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+              - id: 139270d
+                name: Doca B
+                priority: 0
+                dockTimeFake: 1.00:00:00
+                timeFakeOverhead: 1.00:00:00
+                salesChannels:
+                - '1'
+                salesChannel: null
+                freightTableIds: []
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+              - id: 18dd839
+                name: Doca C
+                priority: 0
+                dockTimeFake: 00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                salesChannel: null
+                freightTableIds: []
+                wmsEndPoint: http://recurrent-env-beta.elasticbeanstalk.com/recorrenciawms
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+              - id: avl
+                name: Doca InStore
+                priority: 0
+                dockTimeFake: 1.00:00:00
+                timeFakeOverhead: 1.00:00:00
+                salesChannels:
+                - '18'
+                salesChannel: null
+                freightTableIds: []
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+              - id: pickup_1
+                name: Pickup Point 1
+                priority: 0
+                dockTimeFake: 1.00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                salesChannel: null
+                freightTableIds: []
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+              - id: pickup_2
+                name: Pickup Point 2
+                priority: 0
+                dockTimeFake: 1.00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                salesChannel: null
+                freightTableIds: []
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+              - id: pickup_3
+                name: Pickup Point 3
+                priority: 0
+                dockTimeFake: 1.00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                salesChannel: null
+                freightTableIds: []
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+      deprecated: false
+  /api/logistics/pvt/configuration/docks/{dockId}:
+    get:
+      tags:
+      - Docks
+      summary: VTex List dock by ID
+      description: Informs a given dock's information, searching by dock ID.
+      operationId: DockById
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: dockId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: keep-alive
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '391'
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: Fri, 15 Apr 2016 19:58:51 GMT
+            Expires:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '-1'
+            Pragma:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: no-cache
+            Server:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: nginx
+            X-CDNIgnore:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '1'
+            X-CacheServer:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: janus-apicache-nginx2
+            X-Powered-by-VTEX-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.3.8
+            X-Powered-by-VTEX-Janus-Edge:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: v1.26.4
+            X-Powered-by-VTEX-Janus-Router:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 2.1.155
+            X-Track:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: stable
+            X-VTEX-Cache-Status-Janus-ApiCache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: MISS
+            X-VTEX-Janus-Router-Backend-App:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: logist-v6.2.96-stable+863
+            x-vtex-operation-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: 7df9de37-d013-4823-bbd7-5726aa8d7f7a
+          content:
+            application/json; charset=utf-8:
+              schema:
+                required:
+                - id
+                - name
+                - priority
+                - dockTimeFake
+                - timeFakeOverhead
+                - salesChannels
+                - salesChannel
+                - freightTableIds
+                - wmsEndPoint
+                - pickupStoreInfo
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  priority:
+                    type: integer
+                    format: int32
+                  dockTimeFake:
+                    type: string
+                  timeFakeOverhead:
+                    type: string
+                  salesChannels:
+                    type: array
+                    items:
+                      type: string
+                    description: Which sales channels ([trade policies](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) are associated with the loading dock.
+                  salesChannel:
+                    type: string
+                    nullable: true
+                  freightTableIds:
+                    type: array
+                    items:
+                      type: string
+                    description: Freight table IDs.
+                  wmsEndPoint:
+                    type: string
+                  pickupStoreInfo:
+                    title: PickupStoreInfo1
+                    required:
+                    - isPickupStore
+                    - storeId
+                    - friendlyName
+                    - address
+                    - additionalInfo
+                    - dockId
+                    type: object
+                    properties:
+                      isPickupStore:
+                        type: boolean
+                      storeId:
+                        type: string
+                        nullable: true
+                      friendlyName:
+                        type: string
+                        nullable: true
+                      address:
+                        type: string
+                        nullable: true
+                      additionalInfo:
+                        type: string
+                        nullable: true
+                      dockId:
+                        type: string
+                        nullable: true
+                    example:
+                      isPickupStore: false
+                      storeId: null
+                      friendlyName: null
+                      address: null
+                      additionalInfo: null
+                      dockId: null
+                example:
+                  id: 1a8bce3
+                  name: Centro de Distribui├º├úo Principal
+                  priority: 0
+                  dockTimeFake: 1.00:00:00
+                  timeFakeOverhead: 00:00:00
+                  salesChannels:
+                  - '1'
+                  - '2'
+                  salesChannel: null
+                  freightTableIds:
+                  - 11cc4b6
+                  - teste1
+                  - 186a2a6
+                  - '1962962'
+                  - 173a63f
+                  wmsEndPoint: ''
+                  pickupStoreInfo:
+                    isPickupStore: false
+                    storeId: null
+                    friendlyName: null
+                    address: null
+                    additionalInfo: null
+                    dockId: null
+              example:
+                id: 1a8bce3
+                name: Centro de Distribui├º├úo Principal
+                priority: 0
+                dockTimeFake: 1.00:00:00
+                timeFakeOverhead: 00:00:00
+                salesChannels:
+                - '1'
+                - '2'
+                salesChannel: null
+                freightTableIds:
+                - 11cc4b6
+                - teste1
+                - 186a2a6
+                - '1962962'
+                - 173a63f
+                wmsEndPoint: ''
+                pickupStoreInfo:
+                  isPickupStore: false
+                  storeId: null
+                  friendlyName: null
+                  address: null
+                  additionalInfo: null
+                  dockId: null
+      deprecated: false
+    delete:
+      tags:
+      - Docks
+      summary: VTex Delete dock
+      description: Deletes dock by dock ID.
+      operationId: Dock
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json; charset=utf-8
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: dockId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/configuration/docks/{dockId}/activation:
+    post:
+      tags:
+      - Docks
+      summary: VTex Activate dock
+      description: Activates dock through dock ID.
+      operationId: ActivateDock
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: dockId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /api/logistics/pvt/configuration/docks/{dockId}/deactivation:
+    post:
+      tags:
+      - Docks
+      summary: VTex Deactivate dock
+      description: Deactivate dock by dock ID
+      operationId: DeactivateDock
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Type of the content being sent.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: Accept
+        in: header
+        description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+        required: true
+        style: simple
+        schema:
+          type: string
+          default: application/json
+      - name: dockId
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+components:
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

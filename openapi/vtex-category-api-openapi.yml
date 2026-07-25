@@ -1,0 +1,1124 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Category API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Category
+paths:
+  /api/catalog-seller-portal/category-tree:
+    get:
+      tags:
+      - Category
+      summary: VTex Get Category Tree
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about the category tree from the store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Category Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: GetCategoryTree
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: depth
+        in: query
+        description: Category tree level.
+        required: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                roots:
+                - value:
+                    id: '2'
+                    name: Departamento Artesanato
+                    isActive: true
+                  children:
+                  - value:
+                      id: '3'
+                      name: Artesanato de Barro
+                      isActive: false
+                    children:
+                    - value:
+                        id: '4'
+                        name: Artesanato de Barro Vermelho
+                        isActive: false
+                      children: []
+                - value:
+                    id: '5'
+                    name: Perfumes
+                    isActive: false
+                  children:
+                  - value:
+                      id: '6'
+                      name: Perfume Feminino
+                      isActive: false
+                    children: []
+                  - value:
+                      id: '7'
+                      name: Perfume Masculino
+                      isActive: false
+                      displayOnMenu: false
+                      score: 0
+                      filterByBrand: false
+                      isClickable: false
+                    children: []
+                createdAt: '2021-08-16T20:57:13.070813Z'
+                updatedAt: '2022-07-07T14:24:56.416337Z'
+              schema:
+                type: object
+                required:
+                - roots
+                properties:
+                  roots:
+                    type: array
+                    description: List of all categories of the store.
+                    items:
+                      type: object
+                      description: Category information.
+                      required:
+                      - value
+                      - children
+                      properties:
+                        value:
+                          type: object
+                          description: Object with values of a category.
+                          required:
+                          - id
+                          - name
+                          - isActive
+                          properties:
+                            id:
+                              type: string
+                              description: Category unique identifier number.
+                            name:
+                              type: string
+                              description: Category name.
+                            isActive:
+                              type: boolean
+                              description: The condition defines if the category is active (`true`) or inactive (`false`).
+                        children:
+                          type: array
+                          description: List of all children categories of the parent category.
+                          items:
+                            type: object
+                            description: Child category information.
+                            required:
+                            - value
+                            properties:
+                              value:
+                                type: object
+                                description: Object with values of a child category.
+                                example:
+                                  id: '2'
+                                  name: Perfumes
+                                  isActive: false
+                                required:
+                                - id
+                                - name
+                                - isActive
+                                properties:
+                                  id:
+                                    type: string
+                                    description: Child category unique identifier number.
+                                  name:
+                                    type: string
+                                    description: Child category name.
+                                  isActive:
+                                    type: boolean
+                                    description: The condition defines if the child category is active (`true`) or inactive (`false`).
+                  createdAt:
+                    type: string
+                    description: Date when the category tree was created.
+                  updatedAt:
+                    type: string
+                    description: Last date when the category tree was updated.
+    put:
+      tags:
+      - Category
+      summary: VTex Update Category Tree
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Updates the existing categories in the category tree.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Category Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: UpdateCategoryTree
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - roots
+              properties:
+                roots:
+                  type: array
+                  description: List of all categories of the store.
+                  example:
+                  - value:
+                      id: '1'
+                      name: sandboxintegracao
+                      isActive: false
+                    children:
+                    - value:
+                        id: '2'
+                        name: Perfumes
+                        isActive: false
+                  items:
+                    type: object
+                    description: Category information.
+                    required:
+                    - value
+                    - children
+                    properties:
+                      value:
+                        type: object
+                        description: Object with values of a category.
+                        example:
+                          id: '1'
+                          name: sandboxintegracao
+                          isActive: false
+                        required:
+                        - id
+                        - name
+                        - isActive
+                        properties:
+                          id:
+                            type: string
+                            description: Category unique identifier number.
+                            example: '1'
+                          name:
+                            type: string
+                            description: Category name.
+                            example: sandboxintegracao
+                          isActive:
+                            type: boolean
+                            description: The condition defines if the category is active (`true`) or inactive (`false`).
+                            example: false
+                      children:
+                        type: array
+                        description: List of all children categories of the parent category.
+                        example:
+                        - value:
+                            id: '2'
+                            name: Perfumes
+                            isActive: false
+                        items:
+                          type: object
+                          description: Child category information.
+                          example:
+                            value:
+                              id: '2'
+                              name: Perfumes
+                              isActive: false
+                          required:
+                          - value
+                          properties:
+                            value:
+                              type: object
+                              description: Object with values of a child category.
+                              example:
+                                id: '2'
+                                name: Perfumes
+                                isActive: false
+                              required:
+                              - id
+                              - name
+                              - isActive
+                              properties:
+                                id:
+                                  type: string
+                                  description: Child category unique identifier number.
+                                name:
+                                  type: string
+                                  description: Child category name.
+                                  example: Perfumes
+                                isActive:
+                                  type: boolean
+                                  description: The condition defines if the child category is active (`true`) or inactive (`false`).
+                                  example: false
+        required: true
+      responses:
+        '204':
+          description: No Content
+      deprecated: false
+  /api/catalog-seller-portal/category-tree/categories/{categoryId}:
+    get:
+      tags:
+      - Category
+      summary: VTex Get Category by ID
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about a category by its ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Category Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: Getbyid
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      - name: categoryId
+        in: path
+        required: true
+        description: Category unique identifier number.
+        schema:
+          type: string
+          example: '1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                value:
+                  id: '1'
+                  name: sandboxintegracao
+                  isActive: false
+                children:
+                - value:
+                    id: '2'
+                    name: Perfumes
+                    isActive: false
+              schema:
+                type: object
+                required:
+                - value
+                - children
+                properties:
+                  value:
+                    type: object
+                    description: Object with values of a category.
+                    required:
+                    - id
+                    - name
+                    - isActive
+                    properties:
+                      id:
+                        type: string
+                        description: Category unique identifier number.
+                      name:
+                        type: string
+                        description: Category name.
+                      isActive:
+                        type: boolean
+                        description: The condition defines if the category is active (`true`) or inactive (`false`).
+                  children:
+                    type: array
+                    description: List of all children categories of the parent category.
+                    items:
+                      type: object
+                      required:
+                      - value
+                      properties:
+                        value:
+                          type: object
+                          description: Object with values of a child category.
+                          required:
+                          - id
+                          - name
+                          - isActive
+                          properties:
+                            id:
+                              type: string
+                              description: Child category unique identifier number.
+                            name:
+                              type: string
+                              description: Child category name.
+                            isActive:
+                              type: boolean
+                              description: The condition defines if the child category is active (`true`) or inactive (`false`).
+  /api/catalog-seller-portal/category-tree/categories:
+    post:
+      tags:
+      - Category
+      summary: VTex Create Category
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Creates a new category.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Category Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: CreateCategory
+      parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - parentId
+              - Name
+              properties:
+                parentId:
+                  type: string
+                  description: Parent category unique identifier number.
+                  example: '567'
+                Name:
+                  type: string
+                  description: Category name.
+                  example: Beauty
+            example:
+              parentId: '567'
+              Name: Beauty
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                value:
+                  id: '1'
+                  name: Beauty
+                  isActive: false
+                children:
+                - value:
+                    id: '2'
+                    name: Perfumes
+                    isActive: false
+              schema:
+                type: object
+                required:
+                - value
+                - children
+                properties:
+                  value:
+                    type: object
+                    description: Object with values of a category.
+                    required:
+                    - id
+                    - name
+                    - isActive
+                    properties:
+                      id:
+                        type: string
+                        description: Category unique identifier number.
+                      name:
+                        type: string
+                        description: Category name.
+                      isActive:
+                        type: boolean
+                        description: The condition defines if the category is active (`true`) or inactive (`false`).
+                  children:
+                    type: array
+                    description: List of all children categories of the parent category.
+                    items:
+                      type: object
+                      description: Category information.
+                      required:
+                      - value
+                      properties:
+                        value:
+                          type: object
+                          description: Object with values of a child category.
+                          required:
+                          - id
+                          - name
+                          - isActive
+                          properties:
+                            id:
+                              type: string
+                              description: Child category unique identifier number.
+                            name:
+                              type: string
+                              description: Child category name.
+                              example: Perfumes
+                            isActive:
+                              type: boolean
+                              description: The condition defines if the child category is active (`true`) or inactive (`false`).
+                              example: false
+      deprecated: false
+  /api/catalog_system/pub/category/tree/{categoryLevels}:
+    get:
+      tags:
+      - Category
+      summary: VTex Get category tree
+      description: "Retrieves the category tree of your store. Get all the category levels registered in the Catalog or define the level up to which you want to get.  \r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Category** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      operationId: CategoryTree
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: categoryLevels
+        in: path
+        required: true
+        description: Value of the category level you need to retrieve.
+        schema:
+          type: string
+          example: '1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetCategoryTree'
+              example:
+              - id: 1
+                name: Alimentação
+                hasChildren: true
+                url: https://lojadobreno.vtexcommercestable.com.br/alimentacao
+                children:
+                - id: 6
+                  name: Bebedouro
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/bebedouro
+                  children: []
+                  Title: Bebedouro para Gatos
+                  MetaTagDescription: ''
+                - id: 7
+                  name: Comedouro
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/comedouro
+                  children: []
+                  Title: Comedouro para Gatos
+                  MetaTagDescription: ''
+                - id: 8
+                  name: Biscoitos
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/biscoitos
+                  children: []
+                  Title: Biscoitos para Gatos
+                  MetaTagDescription: ''
+                - id: 9
+                  name: Petiscos
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/petiscos
+                  children: []
+                  Title: Petiscos para Gatos
+                  MetaTagDescription: ''
+                - id: 10
+                  name: Ração Seca
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/racao-seca
+                  children: []
+                  Title: Ração Seca para Gatos
+                  MetaTagDescription: ''
+                - id: 11
+                  name: Ração Úmida
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/racao-umida
+                  children: []
+                  Title: Ração Úmida para Gatos
+                  MetaTagDescription: ''
+                Title: Alimentação para Gatos
+                MetaTagDescription: ''
+              - id: 2
+                name: Brinquedos
+                hasChildren: true
+                url: https://lojadobreno.vtexcommercestable.com.br/brinquedos
+                children:
+                - id: 12
+                  name: Bolinhas
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/brinquedos/bolinhas
+                  children: []
+                  Title: Bolinhas para Gatos
+                  MetaTagDescription: ''
+                - id: 13
+                  name: Ratinhos
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/brinquedos/ratinhos
+                  children: []
+                  Title: Ratinhos
+                  MetaTagDescription: ''
+                - id: 19
+                  name: Arranhador para gato
+                  hasChildren: false
+                  url: https://lojadobreno.vtexcommercestable.com.br/brinquedos/arranhador-para-gato
+                  children: []
+                  Title: Brinquedo Arranhador para gatos
+                  MetaTagDescription: Arranhador gatos é indispensável no lar com felinos. Ideais para afiar as unhas e garantir a diversão
+                Title: Brinquedos para Gatos
+                MetaTagDescription: ''
+      deprecated: false
+  /api/catalog/pvt/category/{categoryId}:
+    get:
+      tags:
+      - Category
+      summary: VTex Get category by ID
+      description: "Retrieves general information about a category.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Categories Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: categoryId
+        in: path
+        required: true
+        description: Category's unique numerical identifier.
+        schema:
+          type: integer
+          example: 9289
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 1
+                Name: Home Appliances
+                FatherCategoryId: null
+                Title: Home Appliances
+                Description: Discover our range of home appliances. Find smart vacuums, kitchen and laundry appliances to suit your needs. Order online now.
+                Keywords: Kitchen, Laundry, Appliances
+                IsActive: true
+                LomadeeCampaignCode: ''
+                AdWordsRemarketingCode: ''
+                ShowInStoreFront: true
+                ShowBrandFilter: true
+                ActiveStoreFrontLink: true
+                GlobalCategoryId: 3367
+                StockKeepingUnitSelectionMode: LIST
+                Score: null
+                LinkId: Alimentacao
+                HasChildren: true
+              schema:
+                $ref: '#/components/schemas/Category'
+    put:
+      tags:
+      - Category
+      summary: VTex Update category
+      description: "Updates a previously existing category.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Categories Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      - name: categoryId
+        in: path
+        required: true
+        description: Category's unique numerical identifier.
+        schema:
+          type: integer
+          example: 9289
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - Name
+              - Keywords
+              - Title
+              - Description
+              - AdWordsRemarketingCode
+              - LomadeeCampaignCode
+              - FatherCategoryId
+              - GlobalCategoryId
+              - ShowInStoreFront
+              - IsActive
+              - ActiveStoreFrontLink
+              - ShowBrandFilter
+              - Score
+              - StockKeepingUnitSelectionMode
+              properties:
+                Name:
+                  type: string
+                  description: Category name.
+                  example: Home Appliances
+                Keywords:
+                  type: string
+                  description: Substitute words for the category.
+                  example: Kitchen, Laundry, Appliances
+                Title:
+                  type: string
+                  description: Text used in title tag for category page.
+                  example: Home Appliances
+                Description:
+                  type: string
+                  description: Text used in meta description tag for category page.
+                  example: Discover our range of home appliances. Find smart vacuums, kitchen and laundry appliances to suit your needs. Order online now.
+                AdWordsRemarketingCode:
+                  type: string
+                  description: This is a legacy field. Do not take this information into consideration.
+                  example: Sale
+                  nullable: true
+                  deprecated: true
+                LomadeeCampaignCode:
+                  type: string
+                  description: This is a legacy field. Do not take this information into consideration.
+                  example: Sale
+                  nullable: true
+                  deprecated: true
+                FatherCategoryId:
+                  type: integer
+                  description: ID of the parent category, apply in case of category and subcategory.
+                  example: 2
+                  nullable: true
+                GlobalCategoryId:
+                  type: integer
+                  description: Google global category ID.
+                  example: 222
+                ShowInStoreFront:
+                  type: boolean
+                  description: If true, the category is shown in the top and side menu.
+                  example: true
+                IsActive:
+                  type: boolean
+                  description: If true, the category page becomes available in store.
+                  example: true
+                ActiveStoreFrontLink:
+                  type: boolean
+                  description: If true, the category link becomes active in store.
+                  example: true
+                ShowBrandFilter:
+                  type: boolean
+                  description: If true, the category page displays a brand filter.
+                  example: true
+                Score:
+                  type: integer
+                  description: Score for search sorting order.
+                  example: 3
+                StockKeepingUnitSelectionMode:
+                  type: string
+                  description: Defines how the SKU will be exhibited
+                  example: SPECIFICATION
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 1
+                Name: Home Appliances
+                FatherCategoryId: null
+                Title: Home Appliances
+                Description: Discover our range of home appliances. Find smart vacuums, kitchen and laundry appliances to suit your needs. Order online now.
+                Keywords: Kitchen, Laundry, Appliances
+                IsActive: true
+                LomadeeCampaignCode: ''
+                AdWordsRemarketingCode: ''
+                ShowInStoreFront: true
+                ShowBrandFilter: true
+                ActiveStoreFrontLink: true
+                GlobalCategoryId: 3367
+                StockKeepingUnitSelectionMode: LIST
+                Score: null
+                LinkId: Alimentacao
+                HasChildren: true
+              schema:
+                $ref: '#/components/schemas/Category'
+  /api/catalog/pvt/category:
+    post:
+      tags:
+      - Category
+      summary: VTex Create category
+      description: "Creates a new category.\r\n\r\nIf there is a need to create a new category with a specific custom ID, specify the `Id` (integer) in the request. Otherwise, VTEX will generate the ID automatically.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Categories Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      parameters:
+      - $ref: '#/components/parameters/Content-Type_2'
+      - $ref: '#/components/parameters/Accept_2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Id: 1
+                Name: Home Appliances
+                FatherCategoryId: null
+                Title: Home Appliances
+                Description: Discover our range of home appliances. Find smart vacuums, kitchen and laundry appliances to suit your needs. Order online now.
+                Keywords: Kitchen, Laundry, Appliances
+                IsActive: true
+                LomadeeCampaignCode: ''
+                AdWordsRemarketingCode: ''
+                ShowInStoreFront: true
+                ShowBrandFilter: true
+                ActiveStoreFrontLink: true
+                GlobalCategoryId: 3367
+                StockKeepingUnitSelectionMode: LIST
+                Score: null
+                LinkId: Alimentacao
+                HasChildren: true
+              schema:
+                $ref: '#/components/schemas/Category'
+components:
+  schemas:
+    GetCategoryTree:
+      required:
+      - id
+      - name
+      - hasChildren
+      - url
+      - children
+      - Title
+      - MetaTagDescription
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Category ID.
+          example: 1
+        name:
+          type: string
+          description: Category name.
+          example: Toys
+        hasChildren:
+          type: boolean
+          description: If the category has a category child (`true`) or not (`false`).
+          example: true
+        url:
+          type: string
+          description: Category URL.
+          example: https://lojadobreno.vtexcommercestable.com.br/toys
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetCategoryTreeChild'
+          description: Array with information about the category's children.
+        Title:
+          type: string
+          description: Category page title.
+          example: Toys
+        MetaTagDescription:
+          type: string
+          description: Category page Meta tag description.
+          example: New and used toys for sale.
+      example:
+        id: 1
+        name: Alimentação
+        hasChildren: true
+        url: https://lojadobreno.vtexcommercestable.com.br/alimentacao
+        children:
+        - id: 6
+          name: Bebedouro
+          hasChildren: false
+          url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/bebedouro
+          children: []
+          Title: Bebedouro para Gatos
+          MetaTagDescription: ''
+        - id: 7
+          name: Comedouro
+          hasChildren: false
+          url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/comedouro
+          children: []
+          Title: Comedouro para Gatos
+          MetaTagDescription: ''
+        - id: 8
+          name: Biscoitos
+          hasChildren: false
+          url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/biscoitos
+          children: []
+          Title: Biscoitos para Gatos
+          MetaTagDescription: ''
+        - id: 9
+          name: Petiscos
+          hasChildren: false
+          url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/petiscos
+          children: []
+          Title: Petiscos para Gatos
+          MetaTagDescription: ''
+        - id: 10
+          name: Ração Seca
+          hasChildren: false
+          url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/racao-seca
+          children: []
+          Title: Ração Seca para Gatos
+          MetaTagDescription: ''
+        - id: 11
+          name: Ração Úmida
+          hasChildren: false
+          url: https://lojadobreno.vtexcommercestable.com.br/alimentacao/racao-umida
+          children: []
+          Title: Ração Úmida para Gatos
+          MetaTagDescription: ''
+        Title: Alimentação para Gatos
+        MetaTagDescription: ''
+    GetCategoryTreeChild:
+      required:
+      - id
+      - name
+      - hasChildren
+      - url
+      - children
+      - Title
+      - MetaTagDescription
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Category ID.
+          example: 1
+        name:
+          type: string
+          description: Category name.
+          example: Dolls
+        hasChildren:
+          type: boolean
+          description: If the category has a category child (`true`) or not (`false`).
+          example: true
+        url:
+          type: string
+          description: Category URL.
+          example: https://lojadobreno.vtexcommercestable.com.br/dolls
+        children:
+          type: array
+          description: Array with information about the category's children.
+          items: {}
+        Title:
+          type: string
+          description: Category page title.
+          example: Dolls
+        MetaTagDescription:
+          type: string
+          description: Category page Meta tag description.
+          example: New and used dolls for sale.
+      example:
+        id: 78
+        name: Xbox 360
+        hasChildren: false
+        url: https://ambienteqa.vtexcommercestable.com.br/games/xbox-360
+        children:
+        - id: 79
+          name: Consoles
+          hasChildren: false
+          url: https://ambienteqa.vtexcommercestable.com.br/games/xbox-360/consoles
+          children: []
+        - id: 126
+          name: Acessorio
+          hasChildren: false
+          url: https://ambienteqa.vtexcommercestable.com.br/games/xbox-360/acessorio
+          children: []
+        Title: Games
+        MetaTagDescription: Video games.
+    CreateCategoryRequest:
+      type: object
+      required:
+      - Name
+      - Keywords
+      - Title
+      - Description
+      - AdWordsRemarketingCode
+      - LomadeeCampaignCode
+      - FatherCategoryId
+      - GlobalCategoryId
+      - ShowInStoreFront
+      - IsActive
+      - ActiveStoreFrontLink
+      - ShowBrandFilter
+      - Score
+      - StockKeepingUnitSelectionMode
+      properties:
+        Id:
+          type: integer
+          description: Category unique identifier. If not informed, it will be automatically generated by VTEX.
+          example: 1
+        Name:
+          type: string
+          description: Category name.
+          example: Home Appliances
+        Keywords:
+          type: string
+          description: Substitute words for the category.
+          example: Kitchen, Laundry, Appliances
+        Title:
+          type: string
+          description: Text used in title tag for category page.
+          example: Home Appliances
+        Description:
+          type: string
+          description: Text used in meta description tag for category page.
+          example: Discover our range of home appliances. Find smart vacuums, kitchen and laundry appliances to suit your needs. Order online now.
+        AdWordsRemarketingCode:
+          type: string
+          description: This is a legacy field. Do not take this information into consideration.
+          example: Sale
+          nullable: true
+          deprecated: true
+        LomadeeCampaignCode:
+          type: string
+          description: This is a legacy field. Do not take this information into consideration.
+          example: Sale
+          nullable: true
+          deprecated: true
+        FatherCategoryId:
+          type: integer
+          description: ID of the parent category, apply in case of category and subcategory.
+          example: 2
+          nullable: true
+        GlobalCategoryId:
+          type: integer
+          description: Google global category ID.
+          example: 222
+        ShowInStoreFront:
+          type: boolean
+          description: If `true`, the category is shown in the top and side menu.
+          example: true
+        IsActive:
+          type: boolean
+          description: If `true`, the category page becomes available in store.
+          example: true
+        ActiveStoreFrontLink:
+          type: boolean
+          description: If `true`, the category link becomes active in store.
+          example: true
+        ShowBrandFilter:
+          type: boolean
+          description: If `true`, the category page displays a brand filter.
+          example: true
+        Score:
+          type: integer
+          description: Score for search sorting order.
+          nullable: true
+          example: 3
+        StockKeepingUnitSelectionMode:
+          type: string
+          description: Defines how the SKU will be exhibited
+          example: SPECIFICATION
+      example:
+        Name: Home Appliances
+        FatherCategoryId: null
+        Title: Home Appliances
+        Description: Discover our range of home appliances. Find smart vacuums, kitchen and laundry appliances to suit your needs. Order online now.
+        Keywords: Kitchen, Laundry, Appliances
+        IsActive: true
+        LomadeeCampaignCode: null
+        AdWordsRemarketingCode: null
+        ShowInStoreFront: true
+        ShowBrandFilter: true
+        ActiveStoreFrontLink: true
+        GlobalCategoryId: 800
+        StockKeepingUnitSelectionMode: SPECIFICATION
+        Score: null
+    Category:
+      required:
+      - Id
+      - Name
+      - FatherCategoryId
+      - Title
+      - Description
+      - Keywords
+      - IsActive
+      - LomadeeCampaignCode
+      - AdWordsRemarketingCode
+      - ShowInStoreFront
+      - ShowBrandFilter
+      - ActiveStoreFrontLink
+      - GlobalCategoryId
+      - StockKeepingUnitSelectionMode
+      - Score
+      - LinkId
+      - HasChildren
+      type: object
+      properties:
+        Id:
+          type: integer
+          description: Category ID.
+        Name:
+          type: string
+          description: Category name.
+        FatherCategoryId:
+          type: integer
+          description: ID of the father category, apply in case of category and subcategory.
+          nullable: true
+        Title:
+          type: string
+          description: Category page title.
+        Description:
+          type: string
+          description: Describes details about the category.
+        Keywords:
+          type: string
+          description: Substitutes words for the category.
+        IsActive:
+          type: boolean
+          description: Shows if the category is active (`true`) or not (`false`).
+        LomadeeCampaignCode:
+          type: string
+          description: This is a legacy field. Do not take this information into consideration.
+          deprecated: true
+        AdWordsRemarketingCode:
+          type: string
+          description: This is a legacy field. Do not take this information into consideration.
+          deprecated: true
+        ShowInStoreFront:
+          type: boolean
+          description: Defines if the category is shown on side and upper menu (`true`) or not (`false`).
+        ShowBrandFilter:
+          type: boolean
+          description: Defines if the category has brand filter (`true`) or not (`false`).
+        ActiveStoreFrontLink:
+          type: boolean
+          description: Defines if the category has an active link on the website (`true`) or not (`false`).
+        GlobalCategoryId:
+          type: integer
+          description: Google global category ID.
+        StockKeepingUnitSelectionMode:
+          type: string
+          description: Defines how the SKU will be exhibited.
+        Score:
+          type: integer
+          description: Score for search ordination.
+          nullable: true
+        LinkId:
+          type: string
+          description: Text link.
+          nullable: true
+        HasChildren:
+          type: boolean
+          description: Defines if the category has child categories (`true`) or not (`false`).
+      example:
+        Id: 1
+        Name: Home Appliances
+        FatherCategoryId: null
+        Title: Home Appliances
+        Description: Discover our range of home appliances. Find smart vacuums, kitchen and laundry appliances to suit your needs. Order online now.
+        Keywords: Kitchen, Laundry, Appliances
+        IsActive: true
+        LomadeeCampaignCode: ''
+        AdWordsRemarketingCode: ''
+        ShowInStoreFront: true
+        ShowBrandFilter: true
+        ActiveStoreFrontLink: true
+        GlobalCategoryId: 3367
+        StockKeepingUnitSelectionMode: LIST
+        Score: null
+        LinkId: Alimentacao
+        HasChildren: true
+  parameters:
+    Accept_2:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type_2:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

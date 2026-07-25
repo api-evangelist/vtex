@@ -1,0 +1,539 @@
+openapi: 3.0.0
+info:
+  title: VTex Anti-fraud Provider Account Sellers API
+  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  version: '1.0'
+servers:
+- url: https://{providerApiEndpoint}
+  description: Anti-fraud provider endpoint URL.
+  variables:
+    providerApiEndpoint:
+      description: Anti-fraud provider endpoint URL.
+      default: '{providerApiEndpoint}'
+tags:
+- name: Sellers
+paths:
+  /seller-register/pvt/sellers:
+    post:
+      tags:
+      - Sellers
+      summary: VTex Configure Seller Account
+      description: "This endpoint is used by marketplace operators to configure the accounts of sellers that have already accepted the invitation to join their marketplaces. \n\nFor marketplaces to [add sellers](https://help.vtex.com/en/tutorial/adding-a-seller--tutorials_392) without the [Seller Invite](https://help.vtex.com/en/tutorial/marketplace-invited-sellers--6rb2FkcslmDueJ689Ulb9A) feature, call this endpoint directly. \n\nThis call includes all the information a seller needs to activate their account."
+      operationId: UpsertSellerRequest
+      parameters:
+      - $ref: '#/components/parameters/accountName'
+      - $ref: '#/components/parameters/environment'
+      - $ref: '#/components/parameters/accept'
+      - $ref: '#/components/parameters/contentType'
+      requestBody:
+        description: Request to upsert seller information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertSellerRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Sellers
+      summary: VTex List Sellers
+      description: This endpoint lists all Sellers. This call's results can be filtered by [trade policies](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data) through the `sc` query param.
+      operationId: GetListSellers
+      parameters:
+      - $ref: '#/components/parameters/accountName'
+      - $ref: '#/components/parameters/environment'
+      - $ref: '#/components/parameters/from'
+      - $ref: '#/components/parameters/to'
+      - $ref: '#/components/parameters/keyword'
+      - $ref: '#/components/parameters/integration'
+      - $ref: '#/components/parameters/group'
+      - $ref: '#/components/parameters/isActive'
+      - $ref: '#/components/parameters/isBetterScope'
+      - $ref: '#/components/parameters/isVtex'
+      - $ref: '#/components/parameters/sc'
+      - $ref: '#/components/parameters/sellerType'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/accept'
+      - $ref: '#/components/parameters/contentType'
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+  /seller-register/pvt/sellers/{sellerId}:
+    patch:
+      tags:
+      - Sellers
+      summary: VTex Update Seller by Seller ID
+      description: This endpoint allows marketplace operators to update the information of sellers connected to their account. You can replace a path's value with another value in order to update that single information. There is no need to fill all the body params available, only the one you wish to update.
+      operationId: UpdateSeller
+      parameters:
+      - $ref: '#/components/parameters/accountName'
+      - $ref: '#/components/parameters/environment'
+      - $ref: '#/components/parameters/accept'
+      - $ref: '#/components/parameters/contentType'
+      - $ref: '#/components/parameters/sellerId'
+      requestBody:
+        description: array of objects
+        content:
+          application/json:
+            schema:
+              type: array
+              description: array of objects
+              title: Request body
+              items:
+                type: object
+                required:
+                - operation
+                - path
+                - value
+                properties:
+                  operation:
+                    type: string
+                    description: The action being performed, which is always going to be `replace`.
+                    default: replace
+                  path:
+                    type: string
+                    default: /field
+                    description: The path in which the value is being updated. It follows the standardized format `/{field}`, where `{field}` is the path's name.
+                  value:
+                    type: boolean
+                    default: false
+                    description: The value that is being updated. Notice that the type will depend on the path that is being updated.
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Sellers
+      summary: VTex Get Seller data by ID
+      operationId: GetRetrieveSeller
+      description: Marketplace operator may call this endpoint to retrieve information about a specific seller by filtering by ID. It is also possible to filter results by sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) through the `sc` query param.
+      parameters:
+      - $ref: '#/components/parameters/accountName'
+      - $ref: '#/components/parameters/environment'
+      - $ref: '#/components/parameters/sc'
+      - $ref: '#/components/parameters/sellerId'
+      - $ref: '#/components/parameters/accept'
+      - $ref: '#/components/parameters/contentType'
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      deprecated: false
+components:
+  parameters:
+    isVtex:
+      name: isVtex
+      in: query
+      description: When set as `true`, the list returned will be of sellers who have a VTEX store configured. When set as `false`, the list will be of sellers who do not have a VTEX store configured.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    to:
+      name: to
+      in: query
+      description: The end number of pagination, being `100` the default value.
+      required: false
+      schema:
+        type: number
+        default: 100
+    from:
+      name: from
+      in: query
+      description: The start number of pagination, being `0` the default value.
+      required: false
+      schema:
+        type: number
+        default: 0
+    sellerType:
+      name: sellerType
+      in: query
+      description: Filters sellers by their type, which can be regular seller (`1`) or whitelabel seller (`2`).
+      required: false
+      schema:
+        type: integer
+        default: 1
+    integration:
+      name: integration
+      in: query
+      description: 'Filters sellers by the name of who made the integration, if VTEX or an external hub. The possible values for VTEX integrations are: `vtex-sellerportal`, `vtex-seller` and `vtex-franchise`.'
+      required: false
+      schema:
+        type: string
+        default: vtex-seller
+    accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    sort:
+      name: sort
+      in: query
+      description: "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: availability,desc
+    group:
+      name: 'group '
+      in: query
+      description: Groups are defined by keywords that group sellers into categories defined by the marketplace.
+      required: false
+      schema:
+        type: string
+        default: Group
+    sellerId:
+      name: sellerId
+      in: path
+      description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: seller123
+    sc:
+      name: sc
+      in: query
+      description: Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) associated to the seller account created.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        default: '1'
+    contentType:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    isActive:
+      name: isActive
+      in: query
+      description: Enables to filter sellers that are active (`true`) or unactive (`false`) in the marketplace.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    accountName:
+      name: accountName
+      in: path
+      required: true
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
+      schema:
+        type: string
+        example: apiexamples
+    isBetterScope:
+      name: isBetterScope
+      in: query
+      description: The flag `isBetterScope` is used by the VTEX Checkout to simulate shopping carts, products, and shipping only in sellers with the field set as `true`, avoiding performance issues. When used as a query param, `isBetterScope` filters sellers that have the flag set as `true` or `false`.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    environment:
+      name: environment
+      in: path
+      required: true
+      description: Environment to use. Used as part of the URL.
+      schema:
+        type: string
+        default: vtexcommercestable
+    keyword:
+      name: keyword
+      in: query
+      description: Search sellers by a keyword in `sellerId` or `sellerName`.
+      required: false
+      schema:
+        type: string
+        default: keyword
+  schemas:
+    Groups:
+      title: groups
+      description: Array of groups attached to the seller. Groups are defined by key-words that group sellers into categories defined by the marketplace when adding a new seller through the [Configure Seller Account](https://developers.vtex.com/vtex-rest-api/reference/sellers#putupsertseller) endpoint. It is possible to filter sellers by group in the Seller Management page in your VTEX Admin. Know more about groups through our [Seller Management](https://help.vtex.com/en/tutorial/gerenciamento-de-sellers-beta--6eEiOISwxuAWJ8w6MtK7iv#groups) documentation.
+      required:
+      - groups
+      type: object
+      properties:
+        id:
+          type: string
+          description: Group's unique identifier code.
+          default: 8d845239bf1448dc8bc3ed3121837511
+        name:
+          type: string
+          description: Name of the tag chosen to identify the group.
+          default: franchise Accounts
+      example:
+        groups:
+        - id: 8d845239bf1448dc8bc3ed3121837511
+          name: long tail
+        - id: b9bcd348ab9c4cec8285ff9485c27a72
+          name: franchise accounts
+    UpsertSellerRequest:
+      title: Configure Seller Account
+      required:
+      - id
+      - name
+      - isActive
+      - fulfillmentEndpoint
+      - allowHybridPayments
+      - taxCode
+      - email
+      - description
+      - sellerCommissionConfiguration
+      - isBetterScope
+      - sellerType
+      - availableSalesChannels
+      - CSCIdentification
+      - account
+      - channel
+      - salesChannel
+      - isVtex
+      - score
+      - exchangeReturnPolicy
+      - deliveryPolicy
+      - securityPrivacyPolicy
+      - fulfillmentSellerId
+      - user
+      - password
+      - catalogSystemEndpoint
+      - trustPolicy
+      type: object
+      properties:
+        id:
+          type: string
+          description: Seller ID assigned by the marketplace. We recommend filling it in with the seller's account name.
+          default: seller123
+        name:
+          type: string
+          description: Name of the seller's store, configured in the seller's environment.
+          default: Seller Name
+        isActive:
+          type: boolean
+          description: Whether the seller is active on the marketplace or not.
+          default: true
+        fulfillmentEndpoint:
+          type: string
+          description: "URL of the endpoint for fulfillment of seller's orders, which the marketplace will use to communicate with the seller. \n\nFor **external sellers**, please include the URL of the seller's endpoint. External sellers have different endpoint standards. The seller must inform this endpoint to the marketplace so that the marketplace can complete the configuration process. \n\nFor **VTEX Stores**, the field format will be as follows: `https://{SellerName}.vtexcommercestable.com.br/api/fulfillment?&sc={TradePolicyID}`. \n\nThe value `SellerName` corresponds to the store name if the seller is a VTEX store. \n\nThe value `TradePolicyID` corresponds to the [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV#master-data) created by the seller in their own VTEX environment. The seller must inform this ID to the marketplace so that the marketplace can complete the configuration process. \n\nThe value `AffiliateID` corresponds to the 3-digit affiliate identification code created by the seller. The seller must inform this ID to the marketplace so that the marketplace can complete the configuration process. \n\nTo configure the [Multilevel Omnichannel Inventory](https://developers.vtex.com/vtex-rest-api/docs/multilevel-omnichannel-inventory) feature, fill in this field with the checkout endpoint following this example: `https://{{sellerAccount}}.vtexcommercestable.com.br/api/checkout?affiliateid={{affiliateId}}&sc={{salesChannel`"
+          default: http://{SellerName}.vtexcommercestable.com.br/api/fulfillment?&sc={TradePolicyID}
+        allowHybridPayments:
+          type: boolean
+          description: Flag that allows customers to use gift cards from the seller to buy their products on the marketplace. It identifies purchases made with a gift card so that only the final price (with discounts applied) is paid to the seller.
+          default: false
+        taxCode:
+          type: string
+          description: This code is the Identity Number for the legal entity and is linked to information in its base country.
+          default: '34444'
+        email:
+          type: string
+          description: email of the admin responsible for the seller.
+          default: seller@email.com
+        description:
+          type: string
+          description: String describing the seller
+          default: Seller A, from the B industry.
+        sellerCommissionConfiguration:
+          type: object
+          items:
+            $ref: '#/components/schemas/SellerCommissionConfiguration'
+        isBetterScope:
+          type: boolean
+          description: Flag used by the VTEX Checkout to simmulate shopping carts, products and shipping only in sellers with the boolean set as `true`, avoiding performance issues.
+          default: true
+        sellerType:
+          type: integer
+          description: "Type of seller, including: \n\n`1`: regular seller \n\n`2`: whitelabel seller"
+          default: 1
+        availableSalesChannels:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailableSalesChannel'
+          description: Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) available.
+          default: []
+        CSCIdentification:
+          type: string
+          description: SKU Seller Identification
+          default: cscidentification 123
+        account:
+          type: string
+          description: Seller's account name
+          default: partner01
+        channel:
+          type: string
+          description: Channel's name.
+          default: channel name
+        salesChannel:
+          type: string
+          description: Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) associated to the seller account created. If no value is specified, the system will automatically use the sales channel configured in the seller's [affiliate](https://help.vtex.com/en/tutorial/configuring-affiliates--tutorials_187) ID.
+          default: '1'
+        isVtex:
+          type: boolean
+          description: Flag determining whether the seller configured is a VTEX store or not.
+          default: true
+        exchangeReturnPolicy:
+          type: string
+          description: Text describing the exchange and return policy previously agreed between the marketplace and the seller.
+          default: Describe exchange and returns policy
+        deliveryPolicy:
+          type: string
+          description: Text describing the delivery policy previously agreed between the marketplace and the seller.
+          default: Describe delivery policy
+        securityPrivacyPolicy:
+          type: string
+          nullable: true
+          description: ' Text describing the security policy previously agreed between the marketplace and the seller.'
+          default: Describe privacy and security policy
+        fulfillmentSellerId:
+          type: string
+          description: ' Identification code of the seller responsible for fulfilling the order. This is an optional field used when a seller sells SKUs from another seller. If the seller sells their own SKUs, it must be nulled.'
+          default: seller1
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Groups'
+          description: Array of groups attached to the seller. Groups are defined by key-words that group sellers into categories defined by the marketplace when adding a new seller through the [Configure Seller Account](https://developers.vtex.com/vtex-rest-api/reference/sellers#putupsertseller) endpoint. It is possible to filter sellers by group in the Seller Management page in your VTEX Admin. Know more about groups through our [Seller Management](https://help.vtex.com/en/tutorial/gerenciamento-de-sellers-beta--6eEiOISwxuAWJ8w6MtK7iv#groups) documentation.
+        user:
+          type: string
+          title: user
+          description: Username, if you are using a hub to integrate with the external seller.
+          default: integrationHubUserName
+          nullable: true
+        password:
+          type: string
+          title: password
+          description: User password, if you are using a hub to integrate with the external seller.
+          default: integrationHubPassword
+          nullable: true
+        catalogSystemEndpoint:
+          type: string
+          title: Catalog System Endpoint schema
+          description: 'URL of the endpoint of the seller''s catalog. This field will only be displayed if the seller type is VTEX Store. The field format will be as follows: `https://{sellerName}.vtexcommercestable.com.br/api/catalog_system/.`'
+          default: https://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+        trustPolicy:
+          type: string
+          title: Trust Policy
+          description: ' the marketplace must first allow VTEX to share clients’ email addresses with the seller. To do so, it is necessary to set ''AllowEmailSharing'' as the value for the TrustPolicy field'
+          default: AllowEmailSharing
+        score:
+          type: number
+          title: Score
+          description: Score attributed to this seller.
+          default: 0
+      example:
+        id: testeMARCUS123
+        name: qamarketplace
+        isActive: true
+        fulfillmentEndpoint: http://fulfillment.vtexcommerce.com.br/api/fulfillment?an=parceiro01
+        allowHybridPayments: false
+        trustPolicy: AllowEmailSharing
+        user: integrationHubUserName
+        password: integrationHubPassword
+        taxCode: '34444'
+        email: vtexqa1@vtex.com.br
+        description: Seller A, from the B industry.
+        sellerCommissionConfiguration:
+          productCommissionPercentage: 3
+          freightCommissionPercentage: 4
+          categoriesCommissionConfiguration: []
+        isBetterScope: false
+        sellerType: 1
+        availableSalesChannels:
+        - isSelected: true
+          id: 1
+          name: Loja Principal
+        - isSelected: true
+          id: 2
+          name: Terceira
+        - isSelected: true
+          id: 3
+          name: Marketplaces
+        CSCIdentification: SampleCSCIdentification123
+        account: parceiro01
+        channel: SampleChannel
+        salesChannel: SampleSalesChannel
+        isVtex: true
+        score: 0
+        exchangeReturnPolicy: '1'
+        deliveryPolicy: '3'
+        securityPrivacyPolicy: null
+        catalogSystemEndpoint: https://pedrostore.vtexcommercestable.com.br/api/catalog_system/
+        fulfillmentSellerId: seller1
+        groups:
+        - groups:
+          - id: 8d845239bf1448dc8bc3ed3121837511
+            name: long tail
+          - id: b9bcd348ab9c4cec8285ff9485c27a72
+            name: franchise accounts
+    AvailableSalesChannel:
+      title: Available Sales Channel
+      required:
+      - isSelected
+      - id
+      - name
+      type: object
+      properties:
+        isSelected:
+          type: boolean
+          description: Flag defining if the sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) is selected or not.
+          default: true
+        id:
+          type: integer
+          description: Sales Channel's ID.
+          default: 1
+        name:
+          type: string
+          description: Name of the Sales Channel.
+          default: Main Store
+      example:
+        isSelected: true
+        id: 1
+        name: Loja Principal
+    SellerCommissionConfiguration:
+      title: Seller Commission Configuration
+      required:
+      - productCommissionPercentage
+      - freightCommissionPercentage
+      - categoriesCommissionConfiguration
+      type: object
+      properties:
+        productCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the product in decimals.
+          default: 9.85
+        freightCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the freight in decimals.
+          default: 2.43
+        categoriesCommissionConfiguration:
+          type: array
+          items:
+            type: string
+          description: Array with percentage of the comission applied to categories in decimals.
+          default: []
+      example:
+        productCommissionPercentage: 3
+        freightCommissionPercentage: 4
+        categoriesCommissionConfiguration: []
+  securitySchemes:
+    VtexIdclientAutCookie:
+      type: apiKey
+      in: header
+      name: VtexIdclientAutCookie
+      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
