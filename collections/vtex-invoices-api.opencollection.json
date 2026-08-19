@@ -1,0 +1,325 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Invoices API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Search all invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/creditcontrol/invoices",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the starting position of the invoice to be searched in the invoice list. For example, the value `1` indicates that the first invoice in the list will be returned."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the final position of the invoice to be searched in the invoice list. For example, if the value of `from` is equal to `1` and `to` is `300`, information from 300 invoices will be displayed in the response body of the request."
+              },
+              {
+                "name": "createdDateFrom",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the initial creation date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+              },
+              {
+                "name": "createdDateTo",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the final creation date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+              },
+              {
+                "name": "dueDateFrom",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the initial due date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+              },
+              {
+                "name": "dueDateTo",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the final due date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+              },
+              {
+                "name": "value",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the value of the invoices to be searched for. It must be completed with a decimal value."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the status of the invoices to be searched for."
+              },
+              {
+                "name": "friendlyId",
+                "value": "",
+                "type": "query",
+                "description": "Simplified identification of an invoice. This code is created automatically, always associated with an existing invoice. It consists of an 8-digit random ID (of numbers and letters) and the installment."
+              },
+              {
+                "name": "observation",
+                "value": "",
+                "type": "query",
+                "description": "Observation notes about the invoice."
+              },
+              {
+                "name": "creditAccountId",
+                "value": "",
+                "type": "query",
+                "description": "Credit account identification."
+              }
+            ]
+          },
+          "docs": "Returns a list of invoices related to payment orders created through [customer credit accounts](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n>ℹ️ Query parameters can be used individually or combined to filter invoice results.\r\n\r\n### Queries to filter results\r\n\r\n- **By the location of the invoices in the list (quantity of invoices)**: `?from={int}&to={int}`\r\n- **By creation date**: `?createdDateFrom={dateISO8601}&createDateTo="
+        },
+        {
+          "info": {
+            "name": "VTex Retrieve invoice by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/creditcontrol/accounts/:creditAccountId/invoices/:invoiceId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "creditAccountId",
+                "value": "",
+                "type": "path",
+                "description": "Credit account identification."
+              },
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path",
+                "description": "Invoice identification."
+              }
+            ]
+          },
+          "docs": "Returns data from a specific invoice using `invoiceId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n"
+        },
+        {
+          "info": {
+            "name": "VTex Change invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/api/creditcontrol/accounts/:creditAccountId/invoices/:invoiceId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "creditAccountId",
+                "value": "",
+                "type": "path",
+                "description": "Credit account identification."
+              },
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path",
+                "description": "Invoice identification."
+              },
+              {
+                "name": "friendlyId",
+                "value": "",
+                "type": "query",
+                "description": "Simplified identification of an invoice. This code is created automatically, always associated with an existing invoice. It consists of an 8-digit random ID (of numbers and letters) and the installment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates invoice's `status`, `observation` and `paymentLink` attributes.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for "
+        },
+        {
+          "info": {
+            "name": "VTex Cancel invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{providerApiEndpoint}/api/creditcontrol/accounts/:creditAccountId/invoices/:invoiceId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "creditAccountId",
+                "value": "",
+                "type": "path",
+                "description": "Credit account identification."
+              },
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path",
+                "description": "Invoice identification."
+              }
+            ]
+          },
+          "docs": "Changes the status of a specific invoice (`invoiceId`) to `Cancelled`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for t"
+        },
+        {
+          "info": {
+            "name": "VTex Retrieve invoices by creditaccountid",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/creditcontrol/accounts/:creditAccountId/invoices",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "creditAccountId",
+                "value": "",
+                "type": "path",
+                "description": "Credit account identification."
+              }
+            ]
+          },
+          "docs": "Returns associated invoices given a specific `creditAccountId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this end"
+        },
+        {
+          "info": {
+            "name": "VTex Mark an invoice as paid",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/creditcontrol/accounts/:creditAccountId/invoices/:invoiceId/payments",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "creditAccountId",
+                "value": "",
+                "type": "path",
+                "description": "Credit account identification."
+              },
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path",
+                "description": "Invoice identification."
+              }
+            ]
+          },
+          "docs": "Records the payment of an invoice.\r\n\r\nThis operation causes a balance restore with the invoice value to the checking account.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status cod"
+        },
+        {
+          "info": {
+            "name": "VTex Postpone an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/api/creditcontrol/accounts/:creditAccountId/invoices/:invoiceId/postponement",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "creditAccountId",
+                "value": "",
+                "type": "path",
+                "description": "Credit account identification."
+              },
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path",
+                "description": "Invoice identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Postpones an invoice by the amount of time defined on the `dueDays` field (number of days for the invoice to be postponed by).\r\n\r\nThis operation updates the invoice field `dueDate`.\r\n\r\n>⚠️ Before making this request, access the endpoint [Retrieve store configuration](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-/postponement) to check whether the option to postpone invoice is enabled in the store (`invoic"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1073 @@
+{
+  "item": [
+    {
+      "id": "9a2dc94c-f4f3-48ea-ae89-1b5db0592c4f",
+      "name": "Invoices",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "64989d11-1e6a-4891-99e2-50c03494975a",
+          "name": "VTex Search all invoices",
+          "request": {
+            "name": "VTex Search all invoices",
+            "description": {
+              "content": "Returns a list of invoices related to payment orders created through [customer credit accounts](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n>ℹ️ Query parameters can be used individually or combined to filter invoice results.\r\n\r\n### Queries to filter results\r\n\r\n- **By the location of the invoices in the list (quantity of invoices)**: `?from={int}&to={int}`\r\n- **By creation date**: `?createdDateFrom={dateISO8601}&createDateTo={dateISO8601}`. The dates should be in ISO8601 format.\r\n- **By due date**: `?dueDateFrom={dateISO8601}&dueDateTo={dateISO8601}`. The dates should be in ISO8601 format.\r\n- **By value**: `?value={decimal}`\r\n- **By status**: `?status={string}`\r\n- **By Id**: `?friendlyId={string}`\r\n- **By observation**: `?observation={string}`\r\n- **By creditAccountId**: `?creditAccountId={creditAcountId}`\r\n\r\n### Combining filters\r\n\r\nYou can use the `op` query parameter to specify if filters will be evaluated as `AND` or `OR` for the query. The default behavior when there is more than one query parameter is `AND`.\r\n\r\nExample:\r\n\r\nFor the query `?value=100&status=Paid`, the criteria will build **value = 100 AND status = Paid**.\r\n\r\nFor the same query, adding the `op` parameter (`?value=100&status=Paid&op=or`), the criteria will build **value = 100 OR status = Paid**.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Read Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "creditcontrol",
+                "invoices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Indicates the starting position of the invoice to be searched in the invoice list. For example, the value `1` indicates that the first invoice in the list will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Indicates the final position of the invoice to be searched in the invoice list. For example, if the value of `from` is equal to `1` and `to` is `300`, information from 300 invoices will be displayed in the response body of the request."
+                },
+                {
+                  "disabled": false,
+                  "key": "createdDateFrom",
+                  "value": "<string>",
+                  "description": "Indicates the initial creation date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+                },
+                {
+                  "disabled": false,
+                  "key": "createdDateTo",
+                  "value": "<string>",
+                  "description": "Indicates the final creation date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+                },
+                {
+                  "disabled": false,
+                  "key": "dueDateFrom",
+                  "value": "<string>",
+                  "description": "Indicates the initial due date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+                },
+                {
+                  "disabled": false,
+                  "key": "dueDateTo",
+                  "value": "<string>",
+                  "description": "Indicates the final due date of invoices that should be searched in the invoice list based on their creation date. The dates should be in ISO8601 format."
+                },
+                {
+                  "disabled": false,
+                  "key": "value",
+                  "value": "<number>",
+                  "description": "Indicates the value of the invoices to be searched for. It must be completed with a decimal value."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Indicates the status of the invoices to be searched for."
+                },
+                {
+                  "disabled": false,
+                  "key": "friendlyId",
+                  "value": "<string>",
+                  "description": "Simplified identification of an invoice. This code is created automatically, always associated with an existing invoice. It consists of an 8-digit random ID (of numbers and letters) and the installment."
+                },
+                {
+                  "disabled": false,
+                  "key": "observation",
+                  "value": "<string>",
+                  "description": "Observation notes about the invoice."
+                },
+                {
+                  "disabled": false,
+                  "key": "creditAccountId",
+                  "value": "<string>",
+                  "description": "(Required) Credit account identification."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c7c561d4-9c89-4880-aa5b-91348fa9a769",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "creditcontrol",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1"
+                    },
+                    {
+                      "key": "to",
+                      "value": "300"
+                    },
+                    {
+                      "key": "createdDateFrom",
+                      "value": "2023-01-20"
+                    },
+                    {
+                      "key": "createdDateTo",
+                      "value": "2023-01-25"
+                    },
+                    {
+                      "key": "dueDateFrom",
+                      "value": "2023-01-20"
+                    },
+                    {
+                      "key": "dueDateTo",
+                      "value": "2023-01-25"
+                    },
+                    {
+                      "key": "value",
+                      "value": "101.22"
+                    },
+                    {
+                      "key": "status",
+                      "value": "Paid"
+                    },
+                    {
+                      "key": "friendlyId",
+                      "value": "u8KFsGDk-1"
+                    },
+                    {
+                      "key": "observation",
+                      "value": "Some observation about the invoice"
+                    },
+                    {
+                      "key": "creditAccountId",
+                      "value": "01bce461-9g03-12ds-8217-b3d39271e15b"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"A424887D0F2D45028FE5C96E9B0E1A2D-01\",\n      \"friendlyId\": \"u8KFsGDk-1\",\n      \"status\": \"Paid\",\n      \"value\": 5.01,\n      \"accountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\",\n      \"creditValue\": 0,\n      \"createdAt\": \"2023-11-09T18:26:43.2112234Z\",\n      \"resolvedAt\": \"2023-11-13T19:12:17.2778233Z\",\n      \"updatedAt\": \"2023-11-13T19:12:17.3403115Z\",\n      \"paymentLink\": \"https://www.teste.com.br\",\n      \"originalDueDate\": \"2023-12-09T18:26:43.2112234Z\",\n      \"dueDate\": \"2023-12-09T18:26:43.2112234Z\",\n      \"installment\": 1,\n      \"orderId\": \"1375060513100-01\",\n      \"observation\": \"Open test\",\n      \"transactionId\": \"A424887D0F2D45028FE5C96E9B0E1A2D\",\n      \"numberOfInstallments\": 1,\n      \"creditAccountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\"\n    },\n    {\n      \"id\": \"742F1758D81F4E93BC2A3F8A382D44A8-01\",\n      \"friendlyId\": \"8UfrLSCc-1\",\n      \"status\": \"Opened\",\n      \"value\": 0.91,\n      \"accountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\",\n      \"creditValue\": 0,\n      \"createdAt\": \"2023-11-10T19:46:50.551354Z\",\n      \"updatedAt\": \"2023-11-14T12:07:21.9823956Z\",\n      \"originalDueDate\": \"2023-12-10T19:46:50.551354Z\",\n      \"dueDate\": \"2023-12-18T19:46:50.551354Z\",\n      \"installment\": 1,\n      \"orderId\": \"1375070513102-01\",\n      \"transactionId\": \"742F1758D81F4E93BC2A3F8A382D44A8\",\n      \"numberOfInstallments\": 1,\n      \"creditAccountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\"\n    },\n    {\n      \"id\": \"742235D7E5E840798EC28A02EBA9E855-01\",\n      \"friendlyId\": \"mvOEfmdk-1\",\n      \"status\": \"Cancelled\",\n      \"value\": 1.21,\n      \"accountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\",\n      \"creditValue\": 0,\n      \"createdAt\": \"2023-11-13T18:05:39.1334296Z\",\n      \"resolvedAt\": \"2023-11-13T19:25:22.1919688Z\",\n      \"updatedAt\": \"2023-11-13T19:25:22.3326219Z\",\n      \"originalDueDate\": \"2023-12-13T18:05:39.1334296Z\",\n      \"dueDate\": \"2023-12-13T18:05:39.1334296Z\",\n      \"installment\": 1,\n      \"orderId\": \"1376020513104-01\",\n      \"transactionId\": \"742235D7E5E840798EC28A02EBA9E855\",\n      \"numberOfInstallments\": 1,\n      \"creditAccountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\"\n    }\n  ],\n  \"summary\": {\n    \"total\": 0.91,\n    \"count\": 3,\n    \"totalPaid\": 5.01,\n    \"totalCancelled\": 1.21\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8641141e-61f9-4ebd-b5ba-f458eb371cda",
+          "name": "VTex Retrieve invoice by ID",
+          "request": {
+            "name": "VTex Retrieve invoice by ID",
+            "description": {
+              "content": "Returns data from a specific invoice using `invoiceId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Read Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "creditcontrol",
+                "accounts",
+                ":creditAccountId",
+                "invoices",
+                ":invoiceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "creditAccountId",
+                  "description": "(Required) Credit account identification."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) Invoice identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7b5b04ec-da9f-4174-9c0b-25d57ad42d14",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "creditcontrol",
+                    "accounts",
+                    ":creditAccountId",
+                    "invoices",
+                    ":invoiceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "creditAccountId",
+                      "description": "(Required) Credit account identification."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) Invoice identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"A424887D0F2D45028FE5C96E9B0E1A2D-01\",\n  \"friendlyId\": \"u8KFsGDk-1\",\n  \"status\": \"Opened\",\n  \"value\": 50.01,\n  \"accountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\",\n  \"creditValue\": 0,\n  \"createdAt\": \"2023-11-09T18:26:43.2112234Z\",\n  \"updatedAt\": \"2023-11-09T18:26:43.289316Z\",\n  \"originalDueDate\": \"2023-12-09T18:26:43.2112234Z\",\n  \"dueDate\": \"2023-12-09T18:26:43.2112234Z\",\n  \"installment\": 1,\n  \"orderId\": \"1375060513100-01\",\n  \"transactionId\": \"A424887D0F2D45028FE5C96E9B0E1A2D\",\n  \"numberOfInstallments\": 1,\n  \"creditAccountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "55f32052-6c7c-4ff7-b576-2fdc95f25d6b",
+          "name": "VTex Change invoice",
+          "request": {
+            "name": "VTex Change invoice",
+            "description": {
+              "content": "Updates invoice's `status`, `observation` and `paymentLink` attributes.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Create Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "creditcontrol",
+                "accounts",
+                ":creditAccountId",
+                "invoices",
+                ":invoiceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "friendlyId",
+                  "value": "<string>",
+                  "description": "Simplified identification of an invoice. This code is created automatically, always associated with an existing invoice. It consists of an 8-digit random ID (of numbers and letters) and the installment."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "creditAccountId",
+                  "description": "(Required) Credit account identification."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) Invoice identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"observation\": \"<string>\",\n  \"paymentLink\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5189cc62-e09f-4640-b45b-51b5a6ab154c",
+              "name": "OK. This endpoint does not return any data in the response body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "creditcontrol",
+                    "accounts",
+                    ":creditAccountId",
+                    "invoices",
+                    ":invoiceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "friendlyId",
+                      "value": "u8KFsGDk-1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "creditAccountId",
+                      "description": "(Required) Credit account identification."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) Invoice identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"Paid\",\n  \"observation\": \"BF 2023 customer invoice.\",\n  \"paymentLink\": \"https://paymentlink.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6ddd552b-51e9-42c0-acf8-80d2a4da3f40",
+          "name": "VTex Cancel invoice",
+          "request": {
+            "name": "VTex Cancel invoice",
+            "description": {
+              "content": "Changes the status of a specific invoice (`invoiceId`) to `Cancelled`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Create Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "creditcontrol",
+                "accounts",
+                ":creditAccountId",
+                "invoices",
+                ":invoiceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "creditAccountId",
+                  "description": "(Required) Credit account identification."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) Invoice identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6f5986d6-8009-401c-8b79-9e8ef864b9cc",
+              "name": "OK. This endpoint does not return any data in the response body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "creditcontrol",
+                    "accounts",
+                    ":creditAccountId",
+                    "invoices",
+                    ":invoiceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "creditAccountId",
+                      "description": "(Required) Credit account identification."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) Invoice identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06c4a2fc-74b2-4f96-b77d-22a1aa697af2",
+          "name": "VTex Retrieve invoices by creditaccountid",
+          "request": {
+            "name": "VTex Retrieve invoices by creditaccountid",
+            "description": {
+              "content": "Returns associated invoices given a specific `creditAccountId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Read Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "creditcontrol",
+                "accounts",
+                ":creditAccountId",
+                "invoices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "creditAccountId",
+                  "description": "(Required) Credit account identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bbe9af55-a4f1-42a2-b4c3-16e8e9937b14",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "creditcontrol",
+                    "accounts",
+                    ":creditAccountId",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "creditAccountId",
+                      "description": "(Required) Credit account identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"A424887D0F2D45028FE5C96E9B0E1A2D-01\",\n      \"friendlyId\": \"u8KFsGDk-1\",\n      \"status\": \"Opened\",\n      \"value\": 5.01,\n      \"accountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\",\n      \"creditValue\": 0,\n      \"createdAt\": \"2023-11-09T18:26:43.2112234Z\",\n      \"updatedAt\": \"2023-11-09T18:26:43.289316Z\",\n      \"originalDueDate\": \"2023-12-09T18:26:43.2112234Z\",\n      \"dueDate\": \"2023-12-09T18:26:43.2112234Z\",\n      \"installment\": 1,\n      \"orderId\": \"1375060513100-01\",\n      \"transactionId\": \"A424887D0F2D45028FE5C96E9B0E1A2D\",\n      \"numberOfInstallments\": 1,\n      \"creditAccountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\"\n    },\n    {\n      \"id\": \"742F1758D81F4E93BC2A3F8A382D44A8-01\",\n      \"friendlyId\": \"8UfrLSCc-1\",\n      \"status\": \"Opened\",\n      \"value\": 0.91,\n      \"accountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\",\n      \"creditValue\": 0,\n      \"createdAt\": \"2023-11-10T19:46:50.551354Z\",\n      \"updatedAt\": \"2023-11-10T19:46:50.6295313Z\",\n      \"originalDueDate\": \"2023-12-10T19:46:50.551354Z\",\n      \"dueDate\": \"2023-12-10T19:46:50.551354Z\",\n      \"installment\": 1,\n      \"orderId\": \"1375070513102-01\",\n      \"transactionId\": \"742F1758D81F4E93BC2A3F8A382D44A8\",\n      \"numberOfInstallments\": 1,\n      \"creditAccountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\"\n    }\n  ],\n  \"summary\": {\n    \"total\": 5.92,\n    \"count\": 2,\n    \"totalPaid\": 0,\n    \"totalCancelled\": 0\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6e8e01b-f5ac-46f1-973a-a4dc2a008447",
+          "name": "VTex Mark an invoice as paid",
+          "request": {
+            "name": "VTex Mark an invoice as paid",
+            "description": {
+              "content": "Records the payment of an invoice.\r\n\r\nThis operation causes a balance restore with the invoice value to the checking account.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Pay Invoice** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "creditcontrol",
+                "accounts",
+                ":creditAccountId",
+                "invoices",
+                ":invoiceId",
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "creditAccountId",
+                  "description": "(Required) Credit account identification."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) Invoice identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7a11e8e2-31ce-43b0-b349-4db75412a67f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "creditcontrol",
+                    "accounts",
+                    ":creditAccountId",
+                    "invoices",
+                    ":invoiceId",
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "creditAccountId",
+                      "description": "(Required) Credit account identification."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) Invoice identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"A424887D0F2D45028FE5C96E9B0E1A2D-01\",\n  \"friendlyId\": \"u8KFsGDk-1\",\n  \"status\": \"Paid\",\n  \"value\": 5.01,\n  \"accountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\",\n  \"creditValue\": 0,\n  \"createdAt\": \"2023-11-09T18:26:43.2112234Z\",\n  \"updatedAt\": \"2023-11-09T18:26:43.289316Z\",\n  \"originalDueDate\": \"2023-12-09T18:26:43.2112234Z\",\n  \"dueDate\": \"2023-12-09T18:26:43.2112234Z\",\n  \"installment\": 1,\n  \"orderId\": \"1375060513100-01\",\n  \"transactionId\": \"A424887D0F2D45028FE5C96E9B0E1A2D\",\n  \"numberOfInstallments\": 1,\n  \"creditAccountId\": \"fcba59e0-7f26-11ee-ba3c-511336e1518b\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d84d86a7-6eeb-4bad-8f52-aec7f89c8872",
+          "name": "VTex Postpone an invoice",
+          "request": {
+            "name": "VTex Postpone an invoice",
+            "description": {
+              "content": "Postpones an invoice by the amount of time defined on the `dueDays` field (number of days for the invoice to be postponed by).\r\n\r\nThis operation updates the invoice field `dueDate`.\r\n\r\n>⚠️ Before making this request, access the endpoint [Retrieve store configuration](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-/postponement) to check whether the option to postpone invoice is enabled in the store (`invoicePostponementLimit: value greater than 0`  and `postponementEnabled: true`).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Create Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "creditcontrol",
+                "accounts",
+                ":creditAccountId",
+                "invoices",
+                ":invoiceId",
+                "postponement"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "creditAccountId",
+                  "description": "(Required) Credit account identification."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) Invoice identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dueDays\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "03af7a94-3c92-4326-994e-4dce4e37b3b6",
+              "name": "OK. This endpoint does not return any data in the response body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "creditcontrol",
+                    "accounts",
+                    ":creditAccountId",
+                    "invoices",
+                    ":invoiceId",
+                    "postponement"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "creditAccountId",
+                      "description": "(Required) Credit account identification."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) Invoice identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dueDays\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Anti-fraud provider endpoint URL.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "{providerApiEndpoint}",
+      "key": "providerApiEndpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{providerApiEndpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c6b1b9c2-95e0-4ad9-aeb2-01b2fdc15250",
+    "name": "VTex Anti-fraud Provider Account Invoices API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)",
+      "type": "text/plain"
+    }
+  }
+}

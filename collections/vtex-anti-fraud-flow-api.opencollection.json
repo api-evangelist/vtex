@@ -1,0 +1,250 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Anti-Fraud Flow API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Anti-Fraud Flow",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Send Anti-fraud Pre-Analysis Data (optional)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pre-analysis",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Receives a new transaction anti-fraud data for (synchronous) pre-analysis. This step is performed before payments authorization.\r\n\r\n>⚠️ This endpoint can only be used if your anti-fraud provider already has the pre-analysis function configured within VTEX. To check if it is already configured, in the VTEX Admin, go to **Store Settings > Payments > Settings> Gateway affiliations tab > {your anti-fraud provider option}** and verify if the **Enable risk Pre-Analysis** field is available to be selec"
+        },
+        {
+          "info": {
+            "name": "VTex Send Anti-fraud Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/transactions",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Receives a new transaction anti-fraud data. This step is performed only if all payments are authorized.\r\n\r\nVTEX expects that your anti-fraud provider process this request and retrieves the process result. After that, the VTEX order flow will check the response status to cancel or approve the transaction.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        },
+        {
+          "info": {
+            "name": "VTex Update Anti-fraud Transactions (optional)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/transactions/:transactionId",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactions.Id",
+                "value": "",
+                "type": "path",
+                "description": "VTEX transaction ID. This parameter is the same `id` sent in the request body of the [Send Anti-fraud Data endpoint](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Receives a new transaction anti-fraud data. This step is performed only if all payments are authorized.\r\n\r\nVTEX expects that your anti-fraud provider process this request and retrieves the process result. After that, the VTEX order flow will check the response status to cancel or approve the transaction.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        },
+        {
+          "info": {
+            "name": "VTex List Anti-fraud Provider Manifest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/manifest",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Returns the custom fields of the anti-fraud provider manifest.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [authentication](https://developers.vtex.com/docs/guides/authentication) or [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        },
+        {
+          "info": {
+            "name": "VTex Get Anti-fraud Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/transactions/:transactions.id",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactions.Id",
+                "value": "",
+                "type": "path",
+                "description": "VTEX transaction ID. This parameter is the same `id` sent in the request body of the [Send Anti-fraud Data endpoint](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves the anti-fraud analysis status. This request is performed every two hours up to 5 days. After 5 days in `undefined` status, the order will expire and be cancelled.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        },
+        {
+          "info": {
+            "name": "VTex Stop Anti-fraud Analysis (optional)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{providerApiEndpoint}/transactions/:transactions.Id",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactions.Id",
+                "value": "",
+                "type": "path",
+                "description": "VTEX transaction ID. This parameter is the same `id` sent in the request body of the [Send Anti-fraud Data endpoint](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Notifies whether the order has been canceled by the store or the buyer before completing the anti-fraud analysis status.\r\n\r\n This endpoint is not mandatory for the antifraud flow to work. Check this [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works) for more details.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

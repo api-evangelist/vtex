@@ -1,0 +1,270 @@
+{
+  "item": [
+    {
+      "id": "a8c3fa7c-ea2f-4db6-8280-096b7f6601b1",
+      "name": "Installments",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "de86d094-ea25-4a92-b2a3-3b60debb56c9",
+          "name": "VTex Get installments options",
+          "request": {
+            "name": "VTex Get installments options",
+            "description": {
+              "content": "Returns the best installment options according to the parameters informed in the request.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "installments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "request.value",
+                  "value": "<integer>",
+                  "description": "(Required) Value to be divided into installments."
+                },
+                {
+                  "disabled": false,
+                  "key": "request.salesChannel",
+                  "value": "<integer>",
+                  "description": "Sales channel identification. Attribute created by the seller in their VTEX store configuration."
+                },
+                {
+                  "disabled": false,
+                  "key": "request.paymentDetails[0].id",
+                  "value": "<integer>",
+                  "description": "Payment system identification."
+                },
+                {
+                  "disabled": false,
+                  "key": "request.paymentDetails[0].value",
+                  "value": "<integer>",
+                  "description": "Total value paid in installments. If applied in the search, it must be equal to the `request.value` field."
+                },
+                {
+                  "disabled": false,
+                  "key": "request.paymentDetails[0].bin",
+                  "value": "<integer>",
+                  "description": "First six digits of the card number."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a29ef63b-9fef-42fa-96c2-0cc045405156",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "installments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "request.value",
+                      "value": "10"
+                    },
+                    {
+                      "key": "request.salesChannel",
+                      "value": "1"
+                    },
+                    {
+                      "key": "request.paymentDetails[0].id",
+                      "value": "2"
+                    },
+                    {
+                      "key": "request.paymentDetails[0].value",
+                      "value": "10"
+                    },
+                    {
+                      "key": "request.paymentDetails[0].bin",
+                      "value": "411111"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"value\": 250,\n  \"installments\": [\n    {\n      \"payment\": {\n        \"id\": 72,\n        \"name\": null,\n        \"bin\": null,\n        \"value\": 250,\n        \"isDefault\": false,\n        \"self\": {\n          \"href\": \"/api/pvt/payment-systems/72\"\n        }\n      },\n      \"options\": [\n        {\n          \"ruleId\": \"01a8d68b-9116-4655-83f8-3380f658ec04\",\n          \"quantity\": 1,\n          \"value\": 250,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        },\n        {\n          \"ruleId\": \"01a8d68b-9116-4655-83f8-3380f658ec04\",\n          \"quantity\": 2,\n          \"value\": 125,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        },\n        {\n          \"ruleId\": \"01a8d68b-9116-4655-83f8-3380f658ec04\",\n          \"quantity\": 3,\n          \"value\": 83.33,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        },\n        {\n          \"ruleId\": \"01a8d68b-9116-4655-83f8-3380f658ec04\",\n          \"quantity\": 4,\n          \"value\": 62.5,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        }\n      ]\n    },\n    {\n      \"payment\": {\n        \"id\": 5,\n        \"name\": \"ERedeV2 - Visa\",\n        \"bin\": null,\n        \"value\": 10,\n        \"isDefault\": false,\n        \"self\": {\n          \"href\": \"/api/pvt/payment-systems/2\"\n        }\n      },\n      \"options\": [\n        {\n          \"ruleId\": \"993d4d35-b64d-454d-8108-c560580160e0\",\n          \"quantity\": 1,\n          \"value\": 250,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": null\n        }\n      ]\n    },\n    {\n      \"payment\": {\n        \"id\": 12,\n        \"name\": \"PayPal - 6U0DTI3M3OKO6R\",\n        \"bin\": null,\n        \"value\": 10,\n        \"isDefault\": false,\n        \"self\": {\n          \"href\": \"/api/pvt/payment-systems/12\"\n        }\n      },\n      \"options\": [\n        {\n          \"ruleId\": \"9ac0fa1b-dd9d-4549-abb8-e73bbb63c280\",\n          \"quantity\": 1,\n          \"value\": 250,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": null\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b28a8b7-063d-4c86-8254-f0d374d32e6b",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "installments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "request.value",
+                      "value": "10"
+                    },
+                    {
+                      "key": "request.salesChannel",
+                      "value": "1"
+                    },
+                    {
+                      "key": "request.paymentDetails[0].id",
+                      "value": "2"
+                    },
+                    {
+                      "key": "request.paymentDetails[0].value",
+                      "value": "10"
+                    },
+                    {
+                      "key": "request.paymentDetails[0].bin",
+                      "value": "411111"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"1\",\n    \"message\": \"Value must be greater than Zero\",\n    \"exception\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Anti-fraud provider endpoint URL.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "{providerApiEndpoint}",
+      "key": "providerApiEndpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{providerApiEndpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "29fd78aa-2a72-4741-8e56-5d3195ffd89a",
+    "name": "VTex Anti-fraud Provider Account Installments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)",
+      "type": "text/plain"
+    }
+  }
+}

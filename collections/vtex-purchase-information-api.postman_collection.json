@@ -1,0 +1,735 @@
+{
+  "item": [
+    {
+      "id": "86fed668-6b07-471e-851d-e34390fe4e8e",
+      "name": "Purchase Information",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ba738ed1-d71e-45bb-ae3f-9a657740b67e",
+          "name": "VTex Create purchase information",
+          "request": {
+            "name": "VTex Create purchase information",
+            "description": {
+              "content": "Creates purchase information for a given client profile.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "storage",
+                "profile-system",
+                "profiles",
+                ":profileId",
+                "purchase-info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "alternativeKey",
+                  "value": "<string>",
+                  "description": "The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.\n\r\n\r> Currently, there are two possible values for this parameter: `email` and `document`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profileId",
+                  "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentData\": {\n    \"availableAccounts\": [\n      {\n        \"accountId\": \"<string>\",\n        \"paymentSystem\": \"<string>\",\n        \"paymentSystemName\": \"<string>\",\n        \"cardNumber\": \"<string>\",\n        \"bin\": \"<string>\",\n        \"availableAddresses\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"expirationDate\": \"<string>\",\n        \"isExpired\": \"<boolean>\",\n        \"accountStatus\": \"<string>\"\n      },\n      {\n        \"accountId\": \"<string>\",\n        \"paymentSystem\": \"<string>\",\n        \"paymentSystemName\": \"<string>\",\n        \"cardNumber\": \"<string>\",\n        \"bin\": \"<string>\",\n        \"availableAddresses\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"expirationDate\": \"<string>\",\n        \"isExpired\": \"<boolean>\",\n        \"accountStatus\": \"<string>\"\n      }\n    ],\n    \"availableTokens\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"transactions\": [\n      {\n        \"isActive\": \"<boolean>\",\n        \"transactionId\": \"<string>\",\n        \"merchantName\": \"<string>\",\n        \"payments\": [\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          }\n        ]\n      },\n      {\n        \"isActive\": \"<boolean>\",\n        \"transactionId\": \"<string>\",\n        \"merchantName\": \"<string>\",\n        \"payments\": [\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          }\n        ]\n      }\n    ],\n    \"giftCards\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"giftCardMessages\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"numberOfPaymentErrors\": \"<number>\",\n    \"numberOfDeniedTransactions\": \"<number>\",\n    \"lastDeniedTransaction\": \"<string>\"\n  },\n  \"clientPreferences\": {},\n  \"isToSavePersonalData\": \"<boolean>\",\n  \"lastUserPurchases\": [\n    {\n      \"creationDate\": \"<string>\",\n      \"orderId\": \"<string>\",\n      \"orderGroup\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"creationDate\": \"<string>\",\n      \"orderId\": \"<string>\",\n      \"orderGroup\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"lastPurchasesAddressId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a4e4c634-e518-4c1c-9735-66ea838a00ae",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "storage",
+                    "profile-system",
+                    "profiles",
+                    ":profileId",
+                    "purchase-info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alternativeKey",
+                      "value": "email"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profileId",
+                      "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentData\": {\n    \"availableAccounts\": [\n      {\n        \"accountId\": \"D09F5E3F01054C959CFC4CB357961ADE\",\n        \"paymentSystem\": \"2\",\n        \"paymentSystemName\": \"Visa\",\n        \"cardNumber\": \"************1111\",\n        \"bin\": \"44443334\",\n        \"availableAddresses\": [\n          \"db267dcc53c14fb2b9a985532dd287bc\"\n        ],\n        \"expirationDate\": \"01/2032\",\n        \"isExpired\": false,\n        \"accountStatus\": null\n      }\n    ],\n    \"availableTokens\": [],\n    \"transactions\": null,\n    \"giftCards\": [],\n    \"giftCardMessages\": [],\n    \"numberOfPaymentErrors\": 0,\n    \"numberOfDeniedTransactions\": 0,\n    \"lastDeniedTransaction\": null\n  },\n  \"clientPreferences\": {\n    \"userId\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n    \"localeDefault\": \"pt-BR\",\n    \"isNewsletterOptIn\": true\n  },\n  \"isToSavePersonalData\": true,\n  \"lastUserPurchases\": [\n    {\n      \"creationDate\": \"2023-10-23T19:22:12.8989883Z\",\n      \"orderId\": \"1370990595750-01\",\n      \"orderGroup\": \"1370990595750\",\n      \"value\": 3498\n    }\n  ],\n  \"lastPurchasesAddressId\": \"db267dcc53c14fb2b9a985532dd287bc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n  \"document\": {\n    \"paymentData\": {\n      \"availableAccounts\": [\n        {\n          \"accountId\": \"D09F5E3F01054C959CFC4CB357961ADE\",\n          \"paymentSystem\": \"2\",\n          \"paymentSystemName\": \"Visa\",\n          \"cardNumber\": \"************1111\",\n          \"bin\": \"44443334\",\n          \"availableAddresses\": [\n            \"db267dcc53c14fb2b9a985532dd287bc\"\n          ],\n          \"expirationDate\": \"01/2032\",\n          \"isExpired\": false,\n          \"accountStatus\": null\n        }\n      ],\n      \"availableTokens\": [],\n      \"transactions\": null,\n      \"giftCards\": [],\n      \"giftCardMessages\": [],\n      \"numberOfPaymentErrors\": 0,\n      \"numberOfDeniedTransactions\": 0,\n      \"lastDeniedTransaction\": null\n    },\n    \"clientPreferences\": {\n      \"userId\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n      \"localeDefault\": \"pt-BR\",\n      \"isNewsletterOptIn\": true\n    },\n    \"isToSavePersonalData\": true,\n    \"lastUserPurchases\": [\n      {\n        \"creationDate\": \"2023-10-23T19:22:12.8989883Z\",\n        \"orderId\": \"1370990595750-01\",\n        \"orderGroup\": \"1370990595750\",\n        \"value\": 3498\n      }\n    ],\n    \"lastPurchasesAddressId\": \"db267dcc53c14fb2b9a985532dd287bc\"\n  },\n  \"meta\": {\n    \"version\": \"6f693feb-7354-4a44-af96-3693ed282a2e\",\n    \"author\": \"7b95bb3d-b567-48b2-b6fa-48b0b6c7f112\",\n    \"creationDate\": \"2023-10-23T19:22:23.6716469+00:00\",\n    \"lastUpdateDate\": \"2023-10-24T16:18:25.7338837+00:00\",\n    \"expirationDate\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c82593a-5632-479b-95be-0a317e00e977",
+          "name": "VTex Get purchase information",
+          "request": {
+            "name": "VTex Get purchase information",
+            "description": {
+              "content": "Retrieves purchase information of a given client, by its `profileId`.\n\r\n\r> For security and privacy reasons, this request returns masked data. For unmasked information, see [Get unmasked purchase information](https://developers.vtex.com/docs/api-reference/profile-system#get-/api/storage/profile-system/profiles/-profileId-/purchase-info/unmask).\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "storage",
+                "profile-system",
+                "profiles",
+                ":profileId",
+                "purchase-info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "alternativeKey",
+                  "value": "<string>",
+                  "description": "The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.\n\r\n\r> Currently, there are two possible values for this parameter: `email` and `document`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profileId",
+                  "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4aa48189-2def-4a22-b6c0-ec2331d3b783",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "storage",
+                    "profile-system",
+                    "profiles",
+                    ":profileId",
+                    "purchase-info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alternativeKey",
+                      "value": "email"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profileId",
+                      "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n    \"document\": {\n      \"paymentData\": {\n        \"availableAccounts\": [\n          {\n            \"accountId\": \"D09F5E3F01054C959CFC4CB357961ADE\",\n            \"paymentSystem\": \"2\",\n            \"paymentSystemName\": \"Visa\",\n            \"cardNumber\": \"************1111\",\n            \"bin\": \"44443333\",\n            \"availableAddresses\": [\n              \"db267dcc53c14fb2b9a985532dd287bc\"\n            ],\n            \"expirationDate\": \"01/2032\",\n            \"isExpired\": false,\n            \"accountStatus\": null\n          }\n        ],\n        \"availableTokens\": [],\n        \"transactions\": null,\n        \"giftCards\": [],\n        \"giftCardMessages\": [],\n        \"numberOfPaymentErrors\": 0,\n        \"numberOfDeniedTransactions\": 0,\n        \"lastDeniedTransaction\": null\n      },\n      \"clientPreferences\": {\n        \"userId\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n        \"localeDefault\": \"pt-BR\",\n        \"isNewsletterOptIn\": true\n      },\n      \"isToSavePersonalData\": true,\n      \"lastUserPurchases\": [\n        {\n          \"creationDate\": \"2023-10-23T19:22:12.8989883Z\",\n          \"orderId\": \"1370990595750-01\",\n          \"orderGroup\": \"1370990595750\",\n          \"value\": 3498\n        }\n      ],\n      \"lastPurchasesAddressId\": \"db267dcc53c14fb2b9a985532dd287bc\"\n    },\n    \"meta\": {\n      \"version\": \"3117771f-8ea6-4297-a487-07e9b5497bc5\",\n      \"author\": \"6fd337ba-1e6c-4d3e-aceb-1d8993432193\",\n      \"creationDate\": \"2023-10-23T19:22:23.6716469+00:00\",\n      \"lastUpdateDate\": \"2023-10-23T19:22:25.5466348+00:00\",\n      \"expirationDate\": null\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2aa9c925-0f8a-494f-8581-f9943f9e85b5",
+          "name": "VTex Update purchase information",
+          "request": {
+            "name": "VTex Update purchase information",
+            "description": {
+              "content": "Updates one or more fields of existing purchase information for a given client profile.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "storage",
+                "profile-system",
+                "profiles",
+                ":profileId",
+                "purchase-info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "alternativeKey",
+                  "value": "<string>",
+                  "description": "The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.\n\r\n\r> Currently, there are two possible values for this parameter: `email` and `document`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profileId",
+                  "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentData\": {\n    \"availableAccounts\": [\n      {\n        \"accountId\": \"<string>\",\n        \"paymentSystem\": \"<string>\",\n        \"paymentSystemName\": \"<string>\",\n        \"cardNumber\": \"<string>\",\n        \"bin\": \"<string>\",\n        \"availableAddresses\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"expirationDate\": \"<string>\",\n        \"isExpired\": \"<boolean>\",\n        \"accountStatus\": \"<string>\"\n      },\n      {\n        \"accountId\": \"<string>\",\n        \"paymentSystem\": \"<string>\",\n        \"paymentSystemName\": \"<string>\",\n        \"cardNumber\": \"<string>\",\n        \"bin\": \"<string>\",\n        \"availableAddresses\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"expirationDate\": \"<string>\",\n        \"isExpired\": \"<boolean>\",\n        \"accountStatus\": \"<string>\"\n      }\n    ],\n    \"availableTokens\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"transactions\": [\n      {\n        \"isActive\": \"<boolean>\",\n        \"transactionId\": \"<string>\",\n        \"merchantName\": \"<string>\",\n        \"payments\": [\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          }\n        ]\n      },\n      {\n        \"isActive\": \"<boolean>\",\n        \"transactionId\": \"<string>\",\n        \"merchantName\": \"<string>\",\n        \"payments\": [\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"paymentSystem\": \"<string>\",\n            \"paymentSystemName\": \"<string>\",\n            \"value\": \"<integer>\",\n            \"installments\": \"<integer>\",\n            \"referenceValue\": \"<integer>\",\n            \"cardHolder\": \"<string>\",\n            \"cardNumber\": \"<string>\",\n            \"firstDigits\": \"<string>\",\n            \"lastDigits\": \"<string>\",\n            \"cvv2\": \"<string>\",\n            \"expireMonth\": \"<string>\",\n            \"expireYear\": \"<string>\",\n            \"url\": \"<string>\",\n            \"giftCardId\": \"<string>\",\n            \"giftCardName\": \"<string>\",\n            \"giftCardCaption\": \"<string>\",\n            \"redemptionCode\": \"<string>\",\n            \"group\": \"<string>\",\n            \"tid\": \"<string>\",\n            \"dueDate\": \"<string>\",\n            \"connectorResponses\": \"<object>\"\n          }\n        ]\n      }\n    ],\n    \"giftCards\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"giftCardMessages\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"numberOfPaymentErrors\": \"<number>\",\n    \"numberOfDeniedTransactions\": \"<number>\",\n    \"lastDeniedTransaction\": \"<string>\"\n  },\n  \"clientPreferences\": {},\n  \"isToSavePersonalData\": \"<boolean>\",\n  \"lastUserPurchases\": [\n    {\n      \"creationDate\": \"<string>\",\n      \"orderId\": \"<string>\",\n      \"orderGroup\": \"<string>\",\n      \"value\": \"<number>\"\n    },\n    {\n      \"creationDate\": \"<string>\",\n      \"orderId\": \"<string>\",\n      \"orderGroup\": \"<string>\",\n      \"value\": \"<number>\"\n    }\n  ],\n  \"lastPurchasesAddressId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e9af69ce-f699-47c2-a22f-5c251f397486",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "storage",
+                    "profile-system",
+                    "profiles",
+                    ":profileId",
+                    "purchase-info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alternativeKey",
+                      "value": "email"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profileId",
+                      "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentData\": {\n    \"availableAccounts\": [\n      {\n        \"accountId\": \"D09F5E3F01054C959CFC4CB357961ADE\",\n        \"paymentSystem\": \"2\",\n        \"paymentSystemName\": \"Visa\",\n        \"cardNumber\": \"************1111\",\n        \"bin\": \"44443334\",\n        \"availableAddresses\": [\n          \"db267dcc53c14fb2b9a985532dd287bc\"\n        ],\n        \"expirationDate\": \"01/2032\",\n        \"isExpired\": false,\n        \"accountStatus\": null\n      }\n    ],\n    \"availableTokens\": [],\n    \"transactions\": null,\n    \"giftCards\": [],\n    \"giftCardMessages\": [],\n    \"numberOfPaymentErrors\": 0,\n    \"numberOfDeniedTransactions\": 0,\n    \"lastDeniedTransaction\": null\n  },\n  \"clientPreferences\": {\n    \"userId\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n    \"localeDefault\": \"pt-BR\",\n    \"isNewsletterOptIn\": true\n  },\n  \"isToSavePersonalData\": true,\n  \"lastUserPurchases\": [\n    {\n      \"creationDate\": \"2023-10-23T19:22:12.8989883Z\",\n      \"orderId\": \"1370990595750-01\",\n      \"orderGroup\": \"1370990595750\",\n      \"value\": 3498\n    }\n  ],\n  \"lastPurchasesAddressId\": \"db267dcc53c14fb2b9a985532dd287bc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n  \"document\": {\n    \"paymentData\": {\n      \"availableAccounts\": [\n        {\n          \"accountId\": \"D09F5E3F01054C959CFC4CB357961ADE\",\n          \"paymentSystem\": \"2\",\n          \"paymentSystemName\": \"Visa\",\n          \"cardNumber\": \"************1111\",\n          \"bin\": \"44443334\",\n          \"availableAddresses\": [\n            \"db267dcc53c14fb2b9a985532dd287bc\"\n          ],\n          \"expirationDate\": \"01/2032\",\n          \"isExpired\": false,\n          \"accountStatus\": null\n        }\n      ],\n      \"availableTokens\": [],\n      \"transactions\": null,\n      \"giftCards\": [],\n      \"giftCardMessages\": [],\n      \"numberOfPaymentErrors\": 0,\n      \"numberOfDeniedTransactions\": 0,\n      \"lastDeniedTransaction\": null\n    },\n    \"clientPreferences\": {\n      \"userId\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n      \"localeDefault\": \"pt-BR\",\n      \"isNewsletterOptIn\": true\n    },\n    \"isToSavePersonalData\": true,\n    \"lastUserPurchases\": [\n      {\n        \"creationDate\": \"2023-10-23T19:22:12.8989883Z\",\n        \"orderId\": \"1370990595750-01\",\n        \"orderGroup\": \"1370990595750\",\n        \"value\": 3498\n      }\n    ],\n    \"lastPurchasesAddressId\": \"db267dcc53c14fb2b9a985532dd287bc\"\n  },\n  \"meta\": {\n    \"version\": \"6f693feb-7354-4a44-af96-3693ed282a2e\",\n    \"author\": \"7b95bb3d-b567-48b2-b6fa-48b0b6c7f112\",\n    \"creationDate\": \"2023-10-23T19:22:23.6716469+00:00\",\n    \"lastUpdateDate\": \"2023-10-24T16:18:25.7338837+00:00\",\n    \"expirationDate\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a619c84-2036-4c82-ac41-5acbb79d5b06",
+          "name": "VTex Delete purchase information",
+          "request": {
+            "name": "VTex Delete purchase information",
+            "description": {
+              "content": "Deletes purchase informaiton by `profileId`.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "storage",
+                "profile-system",
+                "profiles",
+                ":profileId",
+                "purchase-info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "alternativeKey",
+                  "value": "<string>",
+                  "description": "The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.\n\r\n\r> Currently, there are two possible values for this parameter: `email` and `document`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profileId",
+                  "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "74182566-8c2c-4915-b7e9-5d6a6b7e0121",
+              "name": "No content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "storage",
+                    "profile-system",
+                    "profiles",
+                    ":profileId",
+                    "purchase-info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alternativeKey",
+                      "value": "email"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profileId",
+                      "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "482424be-c863-42fc-ae11-3d3203a44c33",
+          "name": "VTex Get unmasked purchase information",
+          "request": {
+            "name": "VTex Get unmasked purchase information",
+            "description": {
+              "content": "Retrieves unmasked purchase information of a given client, by its `profileId`.\n\r\n\rLearn more about the [Profile System](https://developers.vtex.com/vtex-rest-api/docs/profile-system) and its other API endpoints.\r\n\r\n>⚠️ The Profile System is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Profile System | Documents | **Get Item** |\r\n| Profile System | Documents | **Save and Update Item** |\r\n| Profile System | Documents | **Delete Item** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "storage",
+                "profile-system",
+                "profiles",
+                ":profileId",
+                "purchase-info",
+                "unmask"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "reason",
+                  "value": "<string>",
+                  "description": "(Required) Reason for requesting unmasked data."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "profileId",
+                  "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dbea5f06-5535-4651-80ec-557555d6b961",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "storage",
+                    "profile-system",
+                    "profiles",
+                    ":profileId",
+                    "purchase-info",
+                    "unmask"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "reason",
+                      "value": "data-validation"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "profileId",
+                      "description": "(Required) ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n    \"document\": {\n      \"paymentData\": {\n        \"availableAccounts\": [\n          {\n            \"accountId\": \"D09F5E3F01054C959CFC4CB357961ADE\",\n            \"paymentSystem\": \"2\",\n            \"paymentSystemName\": \"Visa\",\n            \"cardNumber\": \"************1111\",\n            \"bin\": \"44443333\",\n            \"availableAddresses\": [\n              \"db267dcc53c14fb2b9a985532dd287bc\"\n            ],\n            \"expirationDate\": \"01/2032\",\n            \"isExpired\": false,\n            \"accountStatus\": null\n          }\n        ],\n        \"availableTokens\": [],\n        \"transactions\": null,\n        \"giftCards\": [],\n        \"giftCardMessages\": [],\n        \"numberOfPaymentErrors\": 0,\n        \"numberOfDeniedTransactions\": 0,\n        \"lastDeniedTransaction\": null\n      },\n      \"clientPreferences\": {\n        \"userId\": \"d9b946b8-9524-4b2d-96ec-b35d0625c0a7\",\n        \"localeDefault\": \"pt-BR\",\n        \"isNewsletterOptIn\": true\n      },\n      \"isToSavePersonalData\": true,\n      \"lastUserPurchases\": [\n        {\n          \"creationDate\": \"2023-10-23T19:22:12.8989883Z\",\n          \"orderId\": \"1370990595750-01\",\n          \"orderGroup\": \"1370990595750\",\n          \"value\": 3498\n        }\n      ],\n      \"lastPurchasesAddressId\": \"db267dcc53c14fb2b9a985532dd287bc\"\n    },\n    \"meta\": {\n      \"version\": \"cea5fcd2-7444-492d-9d63-1c05713e6776\",\n      \"author\": \"7b95bb3d-b567-48b2-b6fa-48b0b6c7f112\",\n      \"creationDate\": \"2023-10-24T16:22:55.0252384+00:00\",\n      \"lastUpdateDate\": \"2023-10-24T16:22:55.0252384+00:00\",\n      \"expirationDate\": null\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Anti-fraud provider endpoint URL.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "{providerApiEndpoint}",
+      "key": "providerApiEndpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{providerApiEndpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b9940ad8-5539-4076-9c3e-0abab3b6336f",
+    "name": "VTex Anti-fraud Provider Account Purchase Information API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)",
+      "type": "text/plain"
+    }
+  }
+}

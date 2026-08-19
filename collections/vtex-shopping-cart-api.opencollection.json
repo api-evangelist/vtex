@@ -1,0 +1,434 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Shopping Cart API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Shopping Cart",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Cart simulation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForms/simulation",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "RnbBehavior",
+                "value": "",
+                "type": "query",
+                "description": "This parameter defines which promotions apply to the simulation. Use `0` for simulations at cart stage, which means all promotions apply. In case of window simulation use `1`, which indicates promotions that apply nominal discounts over the total purchase value shouldn't be considered on the simulation.\n\r\n\rNote that if this not sent, the parameter is `1`."
+              },
+              {
+                "name": "sc",
+                "value": "",
+                "type": "query",
+                "description": "Trade Policy (Sales Channel) identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint is used to simulate a cart in VTEX Checkout.\r\n\r\nIt receives an SKU ID, the quantity of items in the cart and the seller ID.\r\n\r\nIt returns all information about the cart, such as the selling price of each item, pricing and promotion data, payment and logistics info.\r\n\r\nThis request is useful whenever you need to know the availability of fulfilling an order for a specific cart setting, since the API response will let you know the updated price, inventory and shipping data.\r\n\r\n>⚠️ The"
+        },
+        {
+          "info": {
+            "name": "VTex Get current or create a new cart",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "forceNewCart",
+                "value": "",
+                "type": "query",
+                "description": "Use this query parameter to create a new empty shopping cart."
+              }
+            ]
+          },
+          "docs": "You can use this request to get your current shopping cart information (`orderFormId`) or to create a new cart.\r\n\r\n**Important**: To create a new empty shopping cart you need to send this request with the query param `forceNewCart=true`.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` obtained in response is the identification code of the new"
+        },
+        {
+          "info": {
+            "name": "VTex Get cart information by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm corresponding to the cart whose information you want to retrieve."
+              },
+              {
+                "name": "refreshOutdatedData",
+                "value": "",
+                "type": "query",
+                "description": "It is possible to use the [Update cart items request](https://developers.vtex.com/vtex-rest-api/reference/cart-update#itemsupdate) so as to allow outdated information in the `orderForm`, which may improve performance in some cases. To guarantee that all cart information is updated, send this request with this parameter as `true`. We recommend doing this in the final stages of the shopping experience, starting from the checkout page."
+              }
+            ]
+          },
+          "docs": "Retrieves all information associated to a given shopping  cart.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\n\r\n\r> This request has a time out of 45 seconds.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must h"
+        },
+        {
+          "info": {
+            "name": "VTex Remove all items from shopping cart",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/items/removeAll",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm corresponding to the cart whose items you want to remove."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request removes all items from a given cart, leaving it empty.\r\n\r\nYou must send an empty JSON in the body of the request.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\r\n\r\n>ℹ️ Request body must always be sent with empty value \"{ }\" in this endpoint.\r\n\r\n## Permissions\r\n\r\nAny user or [applicatio"
+        },
+        {
+          "info": {
+            "name": "VTex Remove all personal data from shopping cart",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/checkout/changeToAnonymousUser/:orderFormId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm corresponding to the cart whose user's personal data you want to remove."
+              }
+            ]
+          },
+          "docs": "This call removes all user information, making a cart anonymous while leaving the items.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure that represents a shopping cart and contains all information about it. Hence, the `orderFormId` is the identification code of a given cart.\r\n\r\nThis call works by creating a new orderForm, setting a new cookie, and returning a redirect 302 to the cart URL (`/checkout/#/orderform`).\r\n\r\n## Permissions\r\n\r\nAny user "
+        },
+        {
+          "info": {
+            "name": "VTex Update cart items",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/items/update",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the `orderForm` corresponding to the cart whose items you want to update."
+              },
+              {
+                "name": "allowedOutdatedData",
+                "value": "",
+                "type": "query",
+                "description": "In order to optimize performance, this parameter allows some information to not be updated when there are changes in the minicart. For instance, if a shopper adds another unit of a given SKU to the cart, it may not be necessary to recalculate payment information, which could impact performance.\n\r\n\rThis array accepts strings and currently the only possible value is `”paymentData”`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "You can use this request to:\n\r\n\r1. Change the quantity of one or more items in a specific cart.\n\r2. Remove an item from the cart (by sending the `quantity` value = `0` in the request body).\r\n\r\n>ℹ️ To remove all items from the cart at the same time, use the [Remove all items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/removeAll?endpoint=post-/api/checkout/pub/orderForm/-orderFormId-/items/removeAll) endpoint.\r\n\r\nThe [orderForm]"
+        },
+        {
+          "info": {
+            "name": "VTex Add cart items",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/items",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm corresponding to the cart in which the new item will be added."
+              },
+              {
+                "name": "allowedOutdatedData",
+                "value": "",
+                "type": "query",
+                "description": "In order to optimize performance, this parameter allows some information to not be updated when there are changes in the minicart. For instance, if a shopper adds another unit of a given SKU to the cart, it may not be necessary to recalculate payment information, which could impact performance.\n\r\n\rThis array accepts strings and currently the only possible value is `”paymentData”`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this request to add a new item to the shopping cart.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\n\r\n\r> This request has a time out of 45 seconds.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at "
+        },
+        {
+          "info": {
+            "name": "VTex Handle cart items",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/items",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm corresponding to the cart in which items will be handled."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "You can use this request to:\n\r\n\r1. Change the quantity or price of one or more items to the shopping cart.\n\r2. Add a new item to the shopping cart.\r\n\r\n**Important**: To add a new item to the shopping cart, do not send the string `index` in the request body.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure that represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given c"
+        },
+        {
+          "info": {
+            "name": "VTex Change price of an SKU in a cart",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/items/:itemIndex/price",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm corresponding to the cart whose items will have the price changed."
+              },
+              {
+                "name": "itemIndex",
+                "value": "",
+                "type": "path",
+                "description": "The index of the item in the cart. Each cart item is identified by an index, starting in 0."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request changes the price of an SKU in a cart.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\n\r\n\rYou need to inform which cart you are referring to, by sending its `orderFormId` and what is the item whose price you want to change, by sending its `itemIndex`.\n\r\n\rYou also need to pass the new pr"
+        },
+        {
+          "info": {
+            "name": "VTex Ignore profile data on checkout",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/profile",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm corresponding to the cart whose items will have the price changed."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "When a shopper provides an email address at Checkout, the platform tries to retrieve existing profile information for that email and add it to the shopping cart information. Use this request if you want to change this behavior for a given cart, meaning profile information will not be included in the order automatically.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it."
+        },
+        {
+          "info": {
+            "name": "VTex Cart installments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/installments",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the `orderForm` to be consulted for installments."
+              },
+              {
+                "name": "paymentSystem",
+                "value": "",
+                "type": "query",
+                "description": "ID of the payment method to be consulted for installments."
+              }
+            ]
+          },
+          "docs": "Retrieves possible amount of installments and respective values for a given cart with a given payment method.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\n\r\n\rThis endpoint can be used to get the installment options for only one payment method at a time.\n\r\n\rThis endpoint should be called only afte"
+        },
+        {
+          "info": {
+            "name": "VTex Add coupons to the cart",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/coupons",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the orderForm that will receive coupon information."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this request to add coupons to a given shopping cart.\n\r\n\rTo add multiple coupons to the same cart, you need to:\n\r\n\r1. Request the activation of this feature through the [Support VTEX](https://help.vtex.com/support) if this is the first time you perform this action on your store.\n\r2. Submit all coupon codes in the same requisition separated by commas. E.g.: {\"text\": \"freeshipping, discount10, holiday30\"}.\r\n\r\nFor more information on multiple coupons, access the [coupons tutorial](https://help."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

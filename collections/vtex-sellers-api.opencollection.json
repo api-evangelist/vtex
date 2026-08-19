@@ -1,0 +1,250 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Sellers API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sellers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex List Sellers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/sellers",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "The start number of pagination, being `0` the default value."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "The end number of pagination, being `100` the default value."
+              },
+              {
+                "name": "keyword",
+                "value": "",
+                "type": "query",
+                "description": "Search sellers by a keyword in `sellerId` or `sellerName`."
+              },
+              {
+                "name": "integration",
+                "value": "",
+                "type": "query",
+                "description": "Filters sellers by the name of who made the integration, if VTEX or an external hub. The possible values for VTEX integrations are: `vtex-sellerportal`, `vtex-seller` and `vtex-franchise`."
+              },
+              {
+                "name": "group ",
+                "value": "",
+                "type": "query",
+                "description": "Groups are defined by keywords that group sellers into categories defined by the marketplace."
+              },
+              {
+                "name": "isActive",
+                "value": "",
+                "type": "query",
+                "description": "Enables to filter sellers that are active (`true`) or unactive (`false`) in the marketplace."
+              },
+              {
+                "name": "isBetterScope",
+                "value": "",
+                "type": "query",
+                "description": "The flag `isBetterScope` is used by the VTEX Checkout to simulate shopping carts, products, and shipping only in sellers with the field set as `true`, avoiding performance issues. When used as a query param, `isBetterScope` filters sellers that have the flag set as `true` or `false`."
+              },
+              {
+                "name": "isVtex",
+                "value": "",
+                "type": "query",
+                "description": "When set as `true`, the list returned will be of sellers who have a VTEX store configured. When set as `false`, the list will be of sellers who do not have a VTEX store configured."
+              },
+              {
+                "name": "sc",
+                "value": "",
+                "type": "query",
+                "description": "Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) associated to the seller account created."
+              },
+              {
+                "name": "sellerType",
+                "value": "",
+                "type": "query",
+                "description": "Filters sellers by their type, which can be regular seller (`1`) or whitelabel seller (`2`)."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
+              }
+            ]
+          },
+          "docs": "This endpoint lists all Sellers. This call's results can be filtered by [trade policies](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data) through the `sc` query param."
+        },
+        {
+          "info": {
+            "name": "VTex Configure Seller Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/sellers",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint is used by marketplace operators to configure the accounts of sellers that have already accepted the invitation to join their marketplaces. \n\nFor marketplaces to [add sellers](https://help.vtex.com/en/tutorial/adding-a-seller--tutorials_392) without the [Seller Invite](https://help.vtex.com/en/tutorial/marketplace-invited-sellers--6rb2FkcslmDueJ689Ulb9A) feature, call this endpoint directly. \n\nThis call includes all the information a seller needs to activate their account."
+        },
+        {
+          "info": {
+            "name": "VTex Get Seller data by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/sellers/:sellerId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "sc",
+                "value": "",
+                "type": "query",
+                "description": "Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) associated to the seller account created."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built."
+              }
+            ]
+          },
+          "docs": "Marketplace operator may call this endpoint to retrieve information about a specific seller by filtering by ID. It is also possible to filter results by sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) through the `sc` query param."
+        },
+        {
+          "info": {
+            "name": "VTex Update Seller by Seller ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/sellers/:sellerId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint allows marketplace operators to update the information of sellers connected to their account. You can replace a path's value with another value in order to update that single information. There is no need to fill all the body params available, only the one you wish to update."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

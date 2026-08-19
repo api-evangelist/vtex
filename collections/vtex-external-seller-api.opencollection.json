@@ -1,0 +1,362 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account External Seller API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "External Seller",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Fulfillment simulation - External Seller",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orderForms/simulation",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fulfillmentEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is the fulfillment endpoint registered for each specific external seller in the **seller management** section of VTEX's admin panel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint may be called upon by VTEX for fulfillment simulation in the external seller different contexts. See examples below.\n\nWhen a [price](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/price) or [inventory](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/inventory) notification request returns a response with status `200 OK`, it means that the "
+        },
+        {
+          "info": {
+            "name": "VTex Order placement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orders",
+            "headers": [
+              {
+                "name": "content-length",
+                "value": ""
+              },
+              {
+                "name": "authorization",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "accept-enconding",
+                "value": ""
+              },
+              {
+                "name": "x-vtex-operation-id",
+                "value": ""
+              },
+              {
+                "name": "x-forwarded-proto",
+                "value": ""
+              },
+              {
+                "name": "x-forwarded-for",
+                "value": ""
+              },
+              {
+                "name": "x-vtex-cache-client-bypass",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "traceparent",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fulfillmentEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is the fulfillment endpoint registered for each specific external seller in the **seller management** section of VTEX's admin panel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is sent by VTEX to the external seller once the customer finishes their checkout, to let the seller know there is a newly placed order. It does that by calling the **Order Placement** endpoint, which needs to be implemented by the seller.\n\nThe marketplace will send information such as the items contained in the cart, the client’s profile data, the shipping data, and the payment data. With all that, the seller will be able to create the order in their store.\r\n\r\n## Permissions\r\n\r\nAny "
+        },
+        {
+          "info": {
+            "name": "VTex Authorize fulfillment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orders/:sellerOrderId/fulfill",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fulfillmentEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is the fulfillment endpoint registered for each specific external seller in the **seller management** section of VTEX's admin panel."
+              },
+              {
+                "name": "sellerOrderId",
+                "value": "00-1268540501456-01",
+                "type": "path",
+                "description": "Seller's order ID of the order ready for fulfillment. The seller can be a VTEX seller or an external one."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is sent from VTEX to the seller after the payment is approved, to notify them that the fulfillment process can start.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+        },
+        {
+          "info": {
+            "name": "VTex Marketplace order cancellation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orders/:orderId/cancel",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fulfillmentEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is the fulfillment endpoint registered for each specific external seller in the **seller management** section of VTEX's admin panel."
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the order being fulfilled."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request may be sent from VTEX to the external seller in case of order cancelation. For that, the seller will need to implement the Marketplace order cancellation endpoint. Whenever this request is received by the seller, the order should be canceled and the fulfillment flow should not proceed. \n\nFor the seller to: \n\n- **Evaluate a cancellation request:** it is possible to send an empty body as a response to the cancellation request, meaning that the seller is evaluating whether to proceed w"
+        },
+        {
+          "info": {
+            "name": "VTex Send invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orders/:marketplaceOrderId/invoice",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "marketplaceOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Identifies the order in the marketplace."
+              },
+              {
+                "name": "marketplaceServicesEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is an endpoint sent from VTEX to the external seller in the [Order placement request](https://developers.vtex.com/vtex-rest-api/reference/external-seller#order-placement)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is sent by the external seller to the VTEX marketplace to send invoice information.\n\nThis can be necessary in a regular order or in the case of a return. The `type` field is used to indicate which of these is the case.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+        },
+        {
+          "info": {
+            "name": "VTex Send tracking information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orders/:marketplaceOrderId/invoice/:invoiceNumber",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "marketplaceServicesEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is an endpoint sent from VTEX to the external seller in the [Order placement request](https://developers.vtex.com/vtex-rest-api/reference/external-seller#order-placement)."
+              },
+              {
+                "name": "marketplaceOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Identifies the order in the marketplace."
+              },
+              {
+                "name": "invoiceNumber",
+                "value": "",
+                "type": "path",
+                "description": "Invoice number."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is sent by the external seller to the VTEX marketplace to add tracking information to a given order's invoice, in case it is necessary to do so after the invoice has been sent.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to success"
+        },
+        {
+          "info": {
+            "name": "VTex Update tracking status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orders/:marketplaceOrderId/invoice/:invoiceNumber/tracking",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "marketplaceServicesEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is an endpoint sent from VTEX to the external seller in the [Order placement request](https://developers.vtex.com/vtex-rest-api/reference/external-seller#order-placement)."
+              },
+              {
+                "name": "marketplaceOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Identifies the order in the marketplace."
+              },
+              {
+                "name": "invoiceNumber",
+                "value": "",
+                "type": "path",
+                "description": "Invoice number."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is sent by the external seller to the VTEX marketplace to update a given order's tracking status.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. "
+        },
+        {
+          "info": {
+            "name": "VTex Cancel order in marketplace",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/pvt/orders/:marketplaceOrderId/cancel",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "marketplaceServicesEndpoint",
+                "value": "",
+                "type": "path",
+                "description": "This is an endpoint sent from VTEX to the external seller in the [Order placement request](https://developers.vtex.com/vtex-rest-api/reference/external-seller#order-placement)."
+              },
+              {
+                "name": "marketplaceOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Identifies the order in the marketplace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is sent by the external seller to the VTEX marketplace to cancel an order.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise, they will receive a status code `403` error. These are the applicab"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

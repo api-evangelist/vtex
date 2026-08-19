@@ -1,0 +1,114 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Match Received SKUs API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Match Received SKUs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Match Received SKUs individually",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/suggestions/:sellerId/:sellerskuid/versions/:version/matches/:matchid",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account. Used as part of the URL"
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built."
+              },
+              {
+                "name": "sellerskuid",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the SKU in the marketplace. This is the ID that the marketplace will use for future references to this SKU, such as price and inventory notifications."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Whenever an SKU Suggestion is updated or changed, a new version of the original one is created. All versions are logged, so you can search for previous our current states of SKU suggestions. This field is the versionId associated to the version you choose to search for. You can get this field's value through the[Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). through the `latestVersionId` field."
+              },
+              {
+                "name": "matchid",
+                "value": "",
+                "type": "path",
+                "description": "Whenever an SKU suggestion is matched, it is associated to a unique ID. Fill in this field with the matchId you wish to filter by. The `matchId`'s value can be obtained through the *[Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "All SKUs sent from a seller to a marketplace must be reviewed and matched. Actions in the matching process are added in the request body through the [matchType] object. Match type actions include: \n\n1. `newproduct`: match the SKU as a new product. \n\n2. `itemMatch`: associate the received SKU to an existing SKU. \n\n3. `productMatch`: associate the received SKU to an existing product. \n\n4. `deny`: deny the received SKU. \n\n5. `pending`: the received SKU requires attention. \n\n6. `incomplete`: the rec"
+        },
+        {
+          "info": {
+            "name": "VTex Match Multiple Received SKUs",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/suggestions/matches/action/:actionName",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account. Used as part of the URL"
+              },
+              {
+                "name": "actionName",
+                "value": "",
+                "type": "path",
+                "description": "Operation to apply to received SKUs. Possible values include: \n\n* `newproduct`: match the SKU as a new product. \n\n* `skuassociation`: associate the received SKU to an existing SKU. \n\n* `productassociation`: associate the received SKU to an existing product. \n\n* `deny`: deny the received SKU."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Allows a marketplace to bulk approve, deny, or associate up to 25 received SKUs from sellers.\n\nThrough the `actionName` attribute, you can select the operation you want to apply to the received SKU. Actions include: \n\n* `newproduct`: match the SKU as a new product. \n\n* `skuassociation`: associate the received SKU to an existing SKU. \n\n* `productassociation`: associate the received SKU to an existing product. \n\n* `deny`: deny the received SKU."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

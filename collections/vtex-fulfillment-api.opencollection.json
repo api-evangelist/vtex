@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Fulfillment API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fulfillment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex List pickup points by location",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/pickup-points",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "geoCoordinates",
+                "value": "",
+                "type": "query",
+                "description": "Geocoordinates (first longitude, then latitude) around which to search for pickup points. If you use this type of search, do not pass postal and country codes."
+              },
+              {
+                "name": "postalCode",
+                "value": "",
+                "type": "query",
+                "description": "Postal code around which to search for pickup points. If you use this type of search, make sure to pass a `countryCode` and do not pass `geoCoordinates`."
+              },
+              {
+                "name": "countryCode",
+                "value": "",
+                "type": "query",
+                "description": "Three letter country code refering to the `postalCode` field. Pass the country code only if you are searching pickup points by postal code."
+              }
+            ]
+          },
+          "docs": "Retrieves information on pickup points close to a given location determined by geocoordinates or postal code.\n\r\n\rThe pickup points returned are not necessarily all active ones. Make sure to validate the information consumed by integrations.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        },
+        {
+          "info": {
+            "name": "VTex Get address by postal code",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/postal-code/:countryCode/:postalCode",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "countryCode",
+                "value": "",
+                "type": "path",
+                "description": "Three letter country code refering to the `postalCode` field."
+              },
+              {
+                "name": "postalCode",
+                "value": "",
+                "type": "path",
+                "description": "Postal code."
+              }
+            ]
+          },
+          "docs": "Retrieves address information for a given postal code and country.\r\n\r\nThis request can be used to implement auto complete functionality when a customer needs to fill in an address.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

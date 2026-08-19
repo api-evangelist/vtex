@@ -1,0 +1,748 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account External Marketplace API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "External Marketplace",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex List all channels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/channel/all",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "enviroment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of the URL."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "VTEX's account name owned by the connector/partner."
+              }
+            ]
+          },
+          "docs": "This request returns a list of channels available channels with their respective IDs for partners external to VTEX."
+        },
+        {
+          "info": {
+            "name": "VTex Retrieve channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/channel/:channelId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "enviroment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of the URL."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "VTEX's account name owned by the connector/partner."
+              },
+              {
+                "name": "channelId",
+                "value": "",
+                "type": "path",
+                "description": "Channel's ID in Channel Manager, available through the List All Channels endpoint."
+              }
+            ]
+          },
+          "docs": "Retrieves a specific channel that already exists in Channel Manager."
+        },
+        {
+          "info": {
+            "name": "VTEX Mapper Registration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/mkp-category-mapper/connector/register",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Name of the VTEX account. Used as part of the URL."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Mappes categories guarantees that the VTEX category tree has a correct association with the marketplace’s category tree. \n\nTo perform this association, VTEX made VTEX Mapper available. It is a tool integrated into the VTEX platform that allows the user to relate categories created in VTEX to categories from the marketplace. \n\nThis endpoint allows connectors to register the external marketplace integration in VTEX Mapper. \n\nIn case VTEX Mapper detects an error and the call fails, the connector sh"
+        },
+        {
+          "info": {
+            "name": "Send Category Mapping to VTEX Mapper",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/mkp-category-mapper/categories/marketplace/:id",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Code identifying returned in the *VTEX Mapper Registration* endpoint."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Mappes categories guarantees that the VTEX category tree has a correct association with the marketplace’s category tree. \n\nTo perform this association, VTEX made VTEX Mapper available. It is a tool integrated into the VTEX platform that allows the user to relate categories created in VTEX to categories from the marketplace. \n\nThis endpoint allows connectors to send the marketplace's category tree mapped in the integration. \n\nConnectors should send the payload compacted in `.gzip` format. \n\nFor a"
+        },
+        {
+          "info": {
+            "name": "VTex Register connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/connector",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of URL."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "VTEX's account name owned by the connector/partner, ex. `apiexemple`"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers a new connector in our platform. The account name informed in the request should be the one owned by the partner since it is the only account that will have permission to update or delete the connector.\r\n\r\nPossible values for field `type`:\r\n\r\n- `APP`, if using our App Template.\r\n- `EXTERNAL`, if not using App Template.\r\n\r\nPossible values for field `segment`:\r\n\r\n- `ADS`\r\n- `APPAREL_ACCESSORIES`\r\n- `BEAUTY_HEALTH`\r\n- `BOOKS_EDUCATION`\r\n- `CARS_AUTOPARTS`\r\n- `DEPARTMENT_STORES`\r\n- `ELETRO"
+        },
+        {
+          "info": {
+            "name": "VTex List all connectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/connector/all",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              },
+              {
+                "name": "content-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of URL."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Merchant's account name in VTEX, ex. `apiexemple`."
+              },
+              {
+                "name": "segment",
+                "value": "",
+                "type": "query",
+                "description": "Filter data by connector's segment."
+              },
+              {
+                "name": "orderByConnectorType",
+                "value": "",
+                "type": "query",
+                "description": "Order data using a custom logic by connector's' type, and not alphabetically."
+              },
+              {
+                "name": "active",
+                "value": "",
+                "type": "query",
+                "description": "Filter data by the connector's status."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter data by the connector's name."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Current page to load data from."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size to define number of results returned."
+              },
+              {
+                "name": "country",
+                "value": "",
+                "type": "query",
+                "description": "Filter by connector's country."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by connector's type."
+              },
+              {
+                "name": "account",
+                "value": "",
+                "type": "query",
+                "description": "Filter by connector's owner account."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all connectors' registered in Channel Manager, taking into consideration the filters informed in the query string of the request."
+        },
+        {
+          "info": {
+            "name": "VTex Retrieve connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/connector/:connectorId",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              },
+              {
+                "name": "content-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of URL."
+              },
+              {
+                "name": "connectorId",
+                "value": "",
+                "type": "path",
+                "description": "Connector's ID in Channel Manager, available through the List all connectors, or in the response of the registration."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "VTEX's account name owned by the connector/partner."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific connector registered in VTEX platform."
+        },
+        {
+          "info": {
+            "name": "VTex Upsert merchant connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/connector/:connectorId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of URL."
+              },
+              {
+                "name": "connectorId",
+                "value": "",
+                "type": "path",
+                "description": "Connector's ID in Channel Manager, available through the list all connectors route, or in the response of the registration."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Merchant's account name in VTEX, ex. `apiexemple`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Receives an event describing a connection update between the connector with the specified ID and the merchant specified in the query string. /n/r This information is used in the list all connectors route: the account name will be used to return the `isConnectionActive` and `affiliateId` fields."
+        },
+        {
+          "info": {
+            "name": "VTex Full update connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/connector/:connectorId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of URL."
+              },
+              {
+                "name": "connectorId",
+                "value": "",
+                "type": "path",
+                "description": "Connector's ID in Channel Manager, available through the list all connectors route, or in the response of the registration."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "VTEX's account name owned by the connector or partner, ex. `apiexemple`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fully updates the connector's information. All required fields must be sent in the body of the request./n/nThis action can only be executed by the account name that owns the connector's registration."
+        },
+        {
+          "info": {
+            "name": "VTex Partial update connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/connector/:connectorId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of URL."
+              },
+              {
+                "name": "connectorId",
+                "value": "",
+                "type": "path",
+                "description": "Connector's ID in Channel Manager, available through the list all connectors route, or in the response of the registration."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "VTEX's account name owned by the connector/partner, ex. `apiexemple`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially updates the connector's information. The payload follows the format defined by RFC 6902, where a list of operations is informed, including the path of the field inside the object and its value./n/nThis action can only be executed by the account name that owns the connector's registration."
+        },
+        {
+          "info": {
+            "name": "VTex Remove connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{providerApiEndpoint}/api/channel-manager/connector/:connectorId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment used as part of URL."
+              },
+              {
+                "name": "connectorId",
+                "value": "",
+                "type": "path",
+                "description": "Connector's ID in Channel Manager, available through the List all connectors route, or in the response of the registration."
+              },
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Merchant's account name in VTEX, ex. `apiexemple`."
+              }
+            ]
+          },
+          "docs": "Removes a connector from VTEX platform. This action can only be executed by the account name that owns the connector's registration."
+        },
+        {
+          "info": {
+            "name": "VTex Place fulfillment order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/fulfillment/pvt/orders",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account. Used as part of the URL."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to be used. It is passed as part of the URL."
+              },
+              {
+                "name": "sc",
+                "value": "",
+                "type": "query",
+                "description": "Sales channel."
+              },
+              {
+                "name": "affiliateId",
+                "value": "",
+                "type": "query",
+                "description": "ID identifying the marketplace where the order originates. This ID is configured in the seller's VTEX account, and should be informed to the marketplace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates fulfillment order, meaning that it is an order for the seller's side in a sale made through a marketplace. This order assumes the transaction itself has already happened on the marketplace's side and, therfore, cares only about the fulfillment side.\n\r\n\r> If you plan to integrate external orders with possible [Price divergence](https://help.vtex.com/en/tutorial/price-divergence-rule--6RlFLhD1rIRRshl83KnCjW#) be mindful of the `isCreatedAsync` request body field. \n\nFor a detailed explanati"
+        },
+        {
+          "info": {
+            "name": "VTex Authorize dispatch for fulfillment order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/fulfillment/pvt/orders/:orderId/fulfill",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account. Used as part of the URL."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to be used. It is passed as part of the URL."
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the order that is to be authorized. It is composed of the `afilliateId` and the `marketplaceOrderId` joined with a `-`. For instance, an order with an ID `\"123\"` coming from the marketplace `\"MKP\"` has an `orderId` of `\"MKP-123\"`."
+              },
+              {
+                "name": "sc",
+                "value": "",
+                "type": "query",
+                "description": "Sales channel."
+              },
+              {
+                "name": "affiliateId",
+                "value": "",
+                "type": "query",
+                "description": "ID identifying the marketplace where the order originates. This ID is configured in the seller's VTEX account, and should be informed to the marketplace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates fulfillment order, meaning that it is an order for the seller's side in a sale made through a marketplace. This order assumes the transaction itself has already happened on the marketplace's side and, therfore, cares only about the fulfillment side. \n\nFor a detailed explanation of the steps required to develop a custom connector to become an external marketplace for VTEX sellers, check out our complete [External Marketplace Integration Guide](https://developers.vtex.com/vtex-rest-api/doc"
+        },
+        {
+          "info": {
+            "name": "VTex New Order Integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/order-integration/orders",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Parameter should indicate the name of the VTEX account where the order is being integrated or updated, meaning the seller responsible for the order."
+              },
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Parameter should indicate the name of the VTEX account where the order is being integrated or updated, meaning the seller responsible for the order."
+              },
+              {
+                "name": "affiliateId",
+                "value": "",
+                "type": "query",
+                "description": "ID identifying the marketplace where the order originates. This ID is configured in the seller's VTEX account, and should be informed to the marketplace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "API to integrate an external channel's order into the VTEX plataform.\n\nThis process is asynchronous and a notification with the order's integration results will be sent to the endpoint specified in the **connectorEndpoint** field in [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template), if the connector uses our App template. The field **connectorName** is also optional for connectors that use our App Template and authenticate using the app'"
+        },
+        {
+          "info": {
+            "name": "VTex Update Order Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/api/order-integration/orders/status",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Parameter should indicate the name of the VTEX account where the order is being integrated or updated, meaning the seller responsible for the order."
+              },
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Parameter should indicate the name of the VTEX account where the order is being integrated or updated, meaning the seller responsible for the order."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "API request used to update an order status in VTEX.\n\nThis process is asynchronous and a notification with the order's integration results will be sent to the endpoint specified in the **connectiorEndpoint** field or the **connectiorEndpoint** [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template), if the connector uses our App template. The field **connectorName** is also optional for connectors that use our App Template and authenticate usin"
+        },
+        {
+          "info": {
+            "name": "VTex Fulfillment simulation - External Marketplace",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForms/simulation",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account. Used as part of the URL."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to be used. It is passed as part of the URL."
+              },
+              {
+                "name": "affiliateId",
+                "value": "",
+                "type": "query",
+                "description": "The affiliate ID code created by the seller."
+              },
+              {
+                "name": "sc",
+                "value": "",
+                "type": "query",
+                "description": "Trade Policy (Sales Channel) identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint can be triggered by marketplaces to simulate the fulfillment of an item in the cart.\r\n\r\nThe fulfillment information is useful whenever you need to know the availability of fulfilling an order for a specific cart setting, since the API response will let you know the updated price, inventory and shipping data."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

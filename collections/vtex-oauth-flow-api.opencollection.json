@@ -1,0 +1,182 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account OAuth Flow API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OAuth Flow",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex 1. Retrieve Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/authorization/token",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint is used to retrieve a payment provider token.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        },
+        {
+          "info": {
+            "name": "VTex 2. Redirect",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/redirect",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "Token information."
+              },
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "query",
+                "description": "VTEX application identifier."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Through this endpoint, VTEX will redirect the store administrator to the Payment provider website using the `token` retrieved in the [previous request](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token).\r\n\r\nAt this point in the flow, the provider shows the login site to the store admin and authorizes VTEX to use its integration as a valid Payment Provider Processor. After that, your server generates an `authorizationCode`.\r\n\r\n## Permissions\r\n\r\nT"
+        },
+        {
+          "info": {
+            "name": "3. Return to VTEX",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/authorizationCode",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "providerAuthorizationCode",
+                "value": "",
+                "type": "query",
+                "description": "Provider authorization code information."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Through this endpoint, the provider will redirect the store administrator to the VTEX website using the `returnUrl` passed from VTEX to create token.\r\n\r\nThe `returnUrl` must be filled with your query string **authorizationCode**.\r\n\r\nExample:\r\n\r\nIf you receive the following URL:\r\n\r\n`https://store.vtex.com/return?authorizationCode=&otherparams...`\r\n\r\nand your **authorizationCode** is `pro2018`. Then, you redirect the store administrator to: `https://store.vtex.com/return?authorizationCode=pro2018&"
+        },
+        {
+          "info": {
+            "name": "VTex 4. Get Credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/authorization/credentials",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "authorizationCode",
+                "value": "",
+                "type": "query",
+                "description": "Code generate by affiliation that will be used to identify the merchant authorization."
+              },
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "query",
+                "description": "VTEX application identifier."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "VtexIdclientAutCookie",
+              "value": "{{VtexIdclientAutCookie}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves merchant credentials.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

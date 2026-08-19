@@ -1,0 +1,1782 @@
+{
+  "item": [
+    {
+      "id": "8d8acbe4-2532-4e10-aafb-17c69928b295",
+      "name": "Configuration",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9d38e4b8-a5c1-4d9e-95cf-969fe8d26d15",
+          "name": "VTex Get orderForm configuration",
+          "request": {
+            "name": "VTex Get orderForm configuration",
+            "description": {
+              "content": "Retrieves the settings that are currently applied to every orderForm in the account.\n\r\n\rThese settings are defined by the request [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm).\n\r\n\rAlways use this request to retrieve the current configuration before performing an update. By doing so you ensure that you are modifying only the properties you want.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Save OrderForm Configuration** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "checkout",
+                "pvt",
+                "configuration",
+                "orderForm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f8ce1949-1bd5-4faf-9575-a89cd6484374",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "checkout",
+                    "pvt",
+                    "configuration",
+                    "orderForm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentConfiguration\": {\n    \"requiresAuthenticationForPreAuthorizedPaymentOption\": false,\n    \"allowInstallmentsMerge\": false,\n    \"blockPaymentSession\": null\n  },\n  \"taxConfiguration\": null,\n  \"minimumQuantityAccumulatedForItems\": 1,\n  \"decimalDigitsPrecision\": 2,\n  \"minimumValueAccumulated\": null,\n  \"apps\": [\n    {\n      \"fields\": [\n        \"name\",\n        \"age\"\n      ],\n      \"id\": \"abcd\",\n      \"major\": 1\n    }\n  ],\n  \"allowMultipleDeliveries\": false,\n  \"allowManualPrice\": true,\n  \"savePersonalDataAsOptIn\": false,\n  \"maxNumberOfWhiteLabelSellers\": null,\n  \"maskFirstPurchaseData\": null,\n  \"recaptchaValidation\": \"vtexCriteria\",\n  \"requiresLoginToPlaceOrder\": true,\n  \"minimumPurchaseDowntimeSeconds\": 90,\n  \"cartAgeToUseNewCardSeconds\": 30\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "04b0b6cf-3d7a-4fef-b247-952b7ad218e4",
+          "name": "VTex Update orderForm configuration",
+          "request": {
+            "name": "VTex Update orderForm configuration",
+            "description": {
+              "content": "Determines settings that will apply to every orderForm in the account.\n\r\n\rFor example, if you create an app using this request, every orderForm of this account will have the custom fields created though it.\n\r\n\r>ℹ️ Always retrieve the current configuration before performing an update to ensure that you are modifying only the properties you want. Otherwise, old values can be overwritten. To retrieve the current configuration, use the request [Get orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/orderForm).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Save OrderForm Configuration** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "checkout",
+                "pvt",
+                "configuration",
+                "orderForm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentConfiguration\": {\n    \"requiresAuthenticationForPreAuthorizedPaymentOption\": \"<boolean>\",\n    \"allowInstallmentsMerge\": \"<boolean>\",\n    \"blockPaymentSession\": \"<boolean>\"\n  },\n  \"taxConfiguration\": {\n    \"url\": \"<string>\",\n    \"authorizationHeader\": \"<string>\",\n    \"appId\": \"<string>\",\n    \"isMarketplaceResponsibleForTaxes\": {}\n  },\n  \"minimumQuantityAccumulatedForItems\": \"<integer>\",\n  \"decimalDigitsPrecision\": \"<integer>\",\n  \"minimumValueAccumulated\": \"<integer>\",\n  \"apps\": [\n    {\n      \"id\": \"<string>\",\n      \"fields\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"major\": \"<integer>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"fields\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"major\": \"<integer>\"\n    }\n  ],\n  \"allowMultipleDeliveries\": \"<boolean>\",\n  \"allowManualPrice\": \"<boolean>\",\n  \"maxNumberOfWhiteLabelSellers\": \"<integer>\",\n  \"maskFirstPurchaseData\": \"<boolean>\",\n  \"maskStateOnAddress\": true,\n  \"recaptchaValidation\": \"<string>\",\n  \"requiresLoginToPlaceOrder\": \"<boolean>\",\n  \"minimumPurchaseDowntimeSeconds\": \"<integer>\",\n  \"cartAgeToUseNewCardSeconds\": \"<integer>\",\n  \"paymentSystemToCheckFirstInstallment\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a230e7ff-e50d-47b9-8dde-bba5f668a93d",
+              "name": "No Content. The request has succeeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "checkout",
+                    "pvt",
+                    "configuration",
+                    "orderForm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentConfiguration\": {\n    \"requiresAuthenticationForPreAuthorizedPaymentOption\": false\n  },\n  \"taxConfiguration\": null,\n  \"minimumQuantityAccumulatedForItems\": 1,\n  \"decimalDigitsPrecision\": 2,\n  \"minimumValueAccumulated\": null,\n  \"apps\": null,\n  \"allowMultipleDeliveries\": null,\n  \"allowManualPrice\": null,\n  \"requiresLoginToPlaceOrder\": true,\n  \"minimumPurchaseDowntimeSeconds\": 90,\n  \"cartAgeToUseNewCardSeconds\": 30\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40667122-f2ee-41cb-baba-4910c897e40f",
+          "name": "VTex Get window to change seller",
+          "request": {
+            "name": "VTex Get window to change seller",
+            "description": {
+              "content": "Retrieves a marketplace's window to change seller, that is, the period when it is possible to choose another seller to fulfill a given order after the original seller has canceled it.\n\r\n\r> The default period for this window is of 2 days, but it can be configured by the request Update window to change seller.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Save OrderForm Configuration** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "checkout",
+                "pvt",
+                "configuration",
+                "window-to-change-seller"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "064162ec-7774-454a-88c9-b753a7908451",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "checkout",
+                    "pvt",
+                    "configuration",
+                    "window-to-change-seller"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "2",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "39356ebd-943c-4625-b97c-fb1c4ac2a808",
+          "name": "VTex Update window to change seller",
+          "request": {
+            "name": "VTex Update window to change seller",
+            "description": {
+              "content": "Updates a marketplace's window to change seller, that is, the period when it is possible to choose another seller to fulfill a given order after the original seller has canceled it.\n\r\n\r> It is possible to check the current window using the request Get window to change seller.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Save OrderForm Configuration** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "checkout",
+                "pvt",
+                "configuration",
+                "window-to-change-seller"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"waitingTime\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "23408b08-7b09-46bd-ab67-61a058bce50e",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "checkout",
+                    "pvt",
+                    "configuration",
+                    "window-to-change-seller"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"waitingTime\": 4\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cd484f4-d230-455c-b511-3c093a3eb9f0",
+          "name": "VTex Clear orderForm messages",
+          "request": {
+            "name": "VTex Clear orderForm messages",
+            "description": {
+              "content": "This request removes all messages from the `messages` field of the orderForm , leaving it empty.\r\n\r\nYou must send an empty JSON in the body of the request.\r\n\r\nThe [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.\r\n\r\n**Important**: **Request Body** must always be sent with empty value \"{ }\" in this endpoint.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Read Shopping Cart** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "checkout",
+                "pub",
+                "orderForm",
+                ":orderFormId",
+                "messages",
+                "clear"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderFormId",
+                  "description": "(Required) ID of the orderForm corresponding to the cart whose messages you want to remove."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "32b79ea2-6eaf-473c-9293-5c205106984d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "checkout",
+                    "pub",
+                    "orderForm",
+                    ":orderFormId",
+                    "messages",
+                    "clear"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderFormId",
+                      "description": "(Required) ID of the orderForm corresponding to the cart whose messages you want to remove."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orderFormId\": \"ede846222cd44046ba6c638442c3505a\",\n  \"salesChannel\": \"1\",\n  \"loggedIn\": false,\n  \"isCheckedIn\": false,\n  \"storeId\": \"1\",\n  \"allowManualPrice\": false,\n  \"canEditData\": true,\n  \"userProfileId\": \"fb542e51-5488-4c34-8d17-ed8fcf597a94\",\n  \"profileProvider\": \"VTEX\",\n  \"availableAccounts\": [],\n  \"availableAddresses\": [\n    {\n      \"addressType\": \"residential\",\n      \"receiverName\": \"Clark Kent\",\n      \"addressId\": \"666c2e830bd9474ab6f6cc53fb6dd2d2\",\n      \"isDisposable\": true,\n      \"postalCode\": \"70386000\",\n      \"city\": \"Brasília\",\n      \"state\": \"DF\",\n      \"country\": \"BRA\",\n      \"street\": \"Rua da minha casa\",\n      \"number\": \"123\",\n      \"neighborhood\": \"Copacabana\",\n      \"complement\": \"15º andar\",\n      \"reference\": null,\n      \"geoCoordinates\": [\n        -47.924747467041016,\n        -15.832582473754883\n      ]\n    }\n  ],\n  \"userType\": \"User type\",\n  \"ignoreProfileData\": false,\n  \"value\": 34390,\n  \"messages\": [],\n  \"items\": [\n    {\n      \"uniqueId\": \"9D6E447B3FF64CEDA33B17C01379C119\",\n      \"id\": \"2\",\n      \"productId\": \"2\",\n      \"productRefId\": \"1\",\n      \"refId\": \"CBC30L\",\n      \"ean\": null,\n      \"name\": \"Chopp Brahma Claro 30L\",\n      \"skuName\": \"Chopp Brahma Claro 30L\",\n      \"modalType\": null,\n      \"parentItemIndex\": null,\n      \"parentAssemblyBinding\": null,\n      \"assemblies\": [],\n      \"priceValidUntil\": \"2022-07-13T18:30:46Z\",\n      \"tax\": 0,\n      \"price\": 32890,\n      \"listPrice\": 49900,\n      \"manualPrice\": null,\n      \"manualPriceAppliedBy\": null,\n      \"sellingPrice\": 32890,\n      \"rewardValue\": 0,\n      \"isGift\": false,\n      \"additionalInfo\": {\n        \"dimension\": null,\n        \"brandName\": \"Brahma\",\n        \"brandId\": \"2000000\",\n        \"offeringInfo\": null,\n        \"offeringType\": null,\n        \"offeringTypeId\": null\n      },\n      \"preSaleDate\": null,\n      \"productCategoryIds\": \"/1/\",\n      \"productCategories\": {\n        \"1\": \"Bebidas\"\n      },\n      \"quantity\": 1,\n      \"seller\": \"1\",\n      \"sellerChain\": [\n        \"1\"\n      ],\n      \"imageUrl\": \"http://mystore.vteximg.com.br/arquivos/ids/155400-55-55/30l_v2.png?v=637303412106100000\",\n      \"detailUrl\": \"/chopp-brahma-claro-30l/p\",\n      \"components\": [],\n      \"bundleItems\": [],\n      \"attachments\": [],\n      \"attachmentOfferings\": [],\n      \"offerings\": [],\n      \"priceTags\": [],\n      \"availability\": \"available\",\n      \"measurementUnit\": \"un\",\n      \"unitMultiplier\": 1,\n      \"manufacturerCode\": null,\n      \"priceDefinition\": {\n        \"calculatedSellingPrice\": 32890,\n        \"total\": 32890,\n        \"sellingPrices\": [\n          {\n            \"value\": 32890,\n            \"quantity\": 1\n          }\n        ]\n      }\n    }\n  ],\n  \"selectableGifts\": [],\n  \"totalizers\": [\n    {\n      \"id\": \"Items\",\n      \"name\": \"Total Items\",\n      \"value\": 32890\n    }\n  ],\n  \"shippingData\": {\n    \"address\": {\n      \"addressType\": \"residential\",\n      \"receiverName\": \"Clark Kent\",\n      \"addressId\": \"teste\",\n      \"isDisposable\": true,\n      \"postalCode\": \"70386000\",\n      \"city\": \"Brasília\",\n      \"state\": \"DF\",\n      \"country\": \"BRA\",\n      \"street\": \"Rua da minha casa\",\n      \"number\": \"123\",\n      \"neighborhood\": \"Copacabana\",\n      \"complement\": \"15º andar\",\n      \"reference\": null,\n      \"geoCoordinates\": [\n        -47.924747467041016,\n        -15.832582473754883\n      ]\n    },\n    \"logisticsInfo\": [\n      {\n        \"itemIndex\": 0,\n        \"selectedSla\": \"Normal\",\n        \"selectedDeliveryChannel\": \"delivery\",\n        \"addressId\": \"teste\",\n        \"slas\": [\n          {\n            \"id\": \"Normal\",\n            \"deliveryChannel\": \"delivery\",\n            \"name\": \"Normal\",\n            \"deliveryIds\": [\n              {\n                \"courierId\": \"1\",\n                \"warehouseId\": \"1_1\",\n                \"dockId\": \"1\",\n                \"courierName\": \"Transportadora\",\n                \"quantity\": 1,\n                \"kitItemDetails\": []\n              }\n            ],\n            \"shippingEstimate\": \"3bd\",\n            \"shippingEstimateDate\": null,\n            \"lockTTL\": \"10d\",\n            \"availableDeliveryWindows\": [],\n            \"deliveryWindow\": null,\n            \"price\": 1500,\n            \"listPrice\": 1500,\n            \"tax\": 0,\n            \"pickupStoreInfo\": {\n              \"isPickupStore\": false,\n              \"friendlyName\": null,\n              \"address\": null,\n              \"additionalInfo\": null,\n              \"dockId\": null\n            },\n            \"pickupPointId\": null,\n            \"pickupDistance\": 0,\n            \"polygonName\": null,\n            \"transitTime\": \"3bd\"\n          }\n        ],\n        \"shipsTo\": [\n          \"BRA\",\n          \"COL\",\n          \"USA\"\n        ],\n        \"itemId\": \"2\",\n        \"deliveryChannels\": [\n          {\n            \"id\": \"delivery\"\n          },\n          {\n            \"id\": \"pickup-in-point\"\n          }\n        ]\n      }\n    ],\n    \"selectedAddresses\": [\n      {\n        \"addressType\": \"residential\",\n        \"receiverName\": \"Clark Kent\",\n        \"addressId\": \"teste\",\n        \"isDisposable\": true,\n        \"postalCode\": \"12345000\",\n        \"city\": \"Rio de Janeiro\",\n        \"state\": \"RJ\",\n        \"country\": \"BRA\",\n        \"street\": \"Rua da minha casa\",\n        \"number\": \"123\",\n        \"neighborhood\": \"Copacabana\",\n        \"complement\": \"15º andar\",\n        \"reference\": null,\n        \"geoCoordinates\": [\n          -47.924747467041016,\n          -15.832582473754883\n        ]\n      }\n    ],\n    \"availableAddresses\": [\n      {\n        \"addressType\": \"residential\",\n        \"receiverName\": \"Clark Kent\",\n        \"addressId\": \"teste\",\n        \"isDisposable\": true,\n        \"postalCode\": \"12345000\",\n        \"city\": \"Rio de Janeiro\",\n        \"state\": \"RJ\",\n        \"country\": \"BRA\",\n        \"street\": \"Rua da minha casa\",\n        \"number\": \"123\",\n        \"neighborhood\": \"Copacabana\",\n        \"complement\": \"15º andar\",\n        \"reference\": null,\n        \"geoCoordinates\": [\n          -47.924747467041016,\n          -15.832582473754883\n        ]\n      }\n    ],\n    \"pickupPoints\": []\n  },\n  \"clientProfileData\": {\n    \"email\": \"clark.kent@example.com\",\n    \"firstName\": \"Clark\",\n    \"lastName\": \"Kent\",\n    \"document\": \"12345678900\",\n    \"documentType\": \"cpf\",\n    \"phone\": \"+5521998765432\",\n    \"corporateName\": \"company-name\",\n    \"tradeName\": \"trade-name\",\n    \"corporateDocument\": \"12345678000100\",\n    \"stateInscription\": \"12345678\",\n    \"corporatePhone\": \"551100988887777\",\n    \"isCorporate\": false,\n    \"profileCompleteOnLoading\": false,\n    \"profileErrorOnLoading\": false,\n    \"customerClass\": null\n  },\n  \"paymentData\": {\n    \"giftCards\": [],\n    \"transactions\": [\n      {\n        \"isActive\": true,\n        \"transactionId\": \"296D6D245C17437E823EB77E403FC88D\",\n        \"merchantName\": \"MYSTORE\",\n        \"payments\": [\n          {\n            \"paymentSystem\": 6,\n            \"bin\": null,\n            \"accountId\": \"12\",\n            \"tokenId\": null,\n            \"value\": 34390,\n            \"referenceValue\": 34390,\n            \"giftCardRedemptionCode\": null,\n            \"giftCardProvider\": null,\n            \"giftCardId\": null\n          }\n        ],\n        \"sharedTransaction\": false\n      }\n    ]\n  },\n  \"marketingData\": {\n    \"coupon\": \"free-shipping\",\n    \"utmSource\": \"app\",\n    \"utmMedium\": \"CPC\",\n    \"utmCampaign\": \"Black friday\",\n    \"utmipage\": null,\n    \"utmiPart\": null,\n    \"utmiCampaign\": null\n  },\n  \"sellers\": [\n    {\n      \"id\": \"1\",\n      \"name\": \"lojadobreno\",\n      \"logo\": \"Logo\"\n    }\n  ],\n  \"clientPreferencesData\": {\n    \"locale\": \"pt-BR\",\n    \"optinNewsLetter\": false\n  },\n  \"commercialConditionData\": null,\n  \"storePreferencesData\": {},\n  \"giftRegistryData\": null,\n  \"openTextField\": null,\n  \"invoiceData\": null,\n  \"customData\": null,\n  \"itemMetadata\": {\n    \"items\": [\n      {\n        \"id\": \"2\",\n        \"seller\": \"1\",\n        \"name\": \"Chopp Brahma Claro 30L\",\n        \"skuName\": \"Chopp Brahma Claro 30L\",\n        \"productId\": \"2\",\n        \"refId\": \"CBC30L\",\n        \"ean\": null,\n        \"imageUrl\": \"http://mystore.vteximg.com.br/arquivos/ids/155400-55-55/30l_v2.png?v=637303412106100000\",\n        \"detailUrl\": \"/chopp-brahma-claro-30l/p\",\n        \"assemblyOptions\": []\n      }\n    ]\n  },\n  \"hooksData\": null,\n  \"ratesAndBenefitsData\": {\n    \"rateAndBenefitsIdentifiers\": [],\n    \"teaser\": []\n  },\n  \"subscriptionData\": null,\n  \"itemsOrdination\": {\n    \"criteria\": \"NAME\",\n    \"ascending\": true\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "691d0139-c6fd-49ec-a6a5-7599ec88e072",
+          "name": "VTex List all affiliations",
+          "request": {
+            "name": "VTex List all affiliations",
+            "description": {
+              "content": "Returns all affiliations (payment and anti-fraud providers) that are already configured in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "affiliations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2b9226f9-2427-489e-8389-0191311b6474",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "affiliations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"c4c0d24d-b9b8-468d-af98-916b4ada930d\",\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n    \"name\": \"CieloV3 - 3ds2 prod\",\n    \"configuration\": [\n      {\n        \"name\": \"HowTo\",\n        \"value\": \"https://developercielo.github.io/payment-method-enablement/\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"MerchantId\",\n        \"value\": \"56b93f46-2b3a-480f-8f9e-ec8e1fde97c0\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"MerchantKey\",\n        \"value\": \"**********\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"softDescriptor\",\n        \"value\": \"vtex test\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"bankInvoiceProvider\",\n        \"value\": \"BancoDoBrasil2\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"bankDebitProvider\",\n        \"value\": \"BancoDoBrasil\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Registered\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"use3ds\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"EstablishmentCode\",\n        \"value\": \"1119338171\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"MerchantName\",\n        \"value\": \"VTEX\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"MCC\",\n        \"value\": \"7372\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"ClientId\",\n        \"value\": \"6b4853d7-44f8-4c58-8d48-811d4cb49e1a\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"ClientSecret\",\n        \"value\": \"**********\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"BpmpiAuth\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"BpmpiAuthNotifyOnly\",\n        \"value\": \"false\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"BpmpiAuthSuppresschallenge\",\n        \"value\": \"false\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"useEarlySecurityCapture\",\n        \"value\": \"0\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"autoSettleDelay\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"isProduction\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      }\n    ],\n    \"isdelivered\": true,\n    \"isConfigured\": true\n  },\n  {\n    \"id\": \"42bc3c4c-f8ca-4be0-870c-edfe263546b6\",\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.VtexGiftCardHub.VtexGiftCardHubConnector\",\n    \"name\": \"Gift Card\",\n    \"configuration\": [\n      {\n        \"name\": \"usesOnlineRefund\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"useEarlySecurityCapture\",\n        \"value\": \"1\",\n        \"valueKey\": null\n      }\n    ],\n    \"isdelivered\": true,\n    \"isConfigured\": true\n  },\n  {\n    \"id\": \"1bd6e98e-6986-4ff3-ab58-78a37bd2a2ef\",\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.AdyenConnector\",\n    \"name\": \"Adyen\",\n    \"configuration\": [\n      {\n        \"name\": \"username\",\n        \"value\": \"ws_399958@Company.VtexBR\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"password\",\n        \"value\": \"**********\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"account\",\n        \"value\": \"VTEXPubliEventos\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"liveEndpointPrefix\",\n        \"value\": \"99e86b1244882cda-VtexBR\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"marketPayAccount\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"marketPayCommission\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"subMerchantId\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Currency\",\n        \"value\": \"BRL\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Brand\",\n        \"value\": \"boletobancario_bradesco\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"ShopperStatement\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"SoftDescriptor\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"SkinCode\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"LanguageCode\",\n        \"value\": \"pt\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"expirationDays\",\n        \"value\": \"7\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"HmacKey\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"useMultipleRefund\",\n        \"value\": \"false\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"use3DS\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"threeDSecureMode\",\n        \"value\": \"3ds2-auth\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"requireLiabilityShift\",\n        \"value\": \"false\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"applePay_MerchantId\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"applePay_MerchantCertificate\",\n        \"value\": null,\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"applePay_MerchantPassword\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"autoSettle\",\n        \"value\": \"4\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"countryCode\",\n        \"value\": \"AT\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"useEarlySecurityCapture\",\n        \"value\": \"0\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"useAntifraud\",\n        \"value\": \"false\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"isProduction\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"LinkHelp\",\n        \"value\": \"\",\n        \"valueKey\": null\n      }\n    ],\n    \"isdelivered\": true,\n    \"isConfigured\": true\n  },\n  {\n    \"id\": \"400b66d3-bc9a-4eb8-afc0-f32fe63c7121\",\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.BankIssuedInvoiceItauConnector\",\n    \"name\": \"BankInvoice Itau\",\n    \"configuration\": [\n      {\n        \"name\": \"CompanyName\",\n        \"value\": \"TESTE\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Document\",\n        \"value\": \"1111111111111111\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"BranchCode\",\n        \"value\": \"1158\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Account\",\n        \"value\": \"1160\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"ExpiryDays\",\n        \"value\": \"5\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Instructions\",\n        \"value\": \"xpto\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Portfolio\",\n        \"value\": \"11\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"BankAgreement\",\n        \"value\": \"000111\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"TransferorCode\",\n        \"value\": \"a\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"companyAddress\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"Registered\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"configurationTemplate\",\n        \"value\": \"{\\\"name\\\":\\\"Registered\\\",\\\"template\\\":[{\\\"value\\\":\\\"true\\\",\\\"configuration\\\":[{\\\"name\\\":\\\"AuthEnvironment\\\",\\\"hidden\\\":false},{\\\"name\\\":\\\"EnvironmentType\\\",\\\"hidden\\\":false},{\\\"name\\\":\\\"ClientId\\\",\\\"hidden\\\":false},{\\\"name\\\":\\\"ClientSecret\\\",\\\"hidden\\\":false},{\\\"name\\\":\\\"ItauKey\\\",\\\"hidden\\\":false}]}]}\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"AuthEnvironment\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"EnvironmentType\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"ClientId\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"ClientSecret\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"ItauKey\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"TransactionExpirationDays\",\n        \"value\": \"20\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"isProduction\",\n        \"value\": \"true\",\n        \"valueKey\": null\n      }\n    ],\n    \"isdelivered\": true,\n    \"isConfigured\": true\n  },\n  {\n    \"id\": \"1d884ffd-13d7-419e-a487-da55a2205792\",\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.TestConnector\",\n    \"name\": \"Test Connector\",\n    \"configuration\": [\n      {\n        \"name\": \"OperationTime\",\n        \"value\": \"1000\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"applePay_MerchantId\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"applePay_MerchantCertificate\",\n        \"value\": null,\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"applePay_MerchantPassword\",\n        \"value\": \"\",\n        \"valueKey\": null\n      },\n      {\n        \"name\": \"SamsungPayServiceId\",\n        \"value\": \"\",\n        \"valueKey\": null\n      }\n    ],\n    \"isdelivered\": false,\n    \"isConfigured\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "048529aa-f69c-437d-b914-262eb5aa381b",
+          "name": "VTex Insert new affiliation",
+          "request": {
+            "name": "VTex Insert new affiliation",
+            "description": {
+              "content": "Registers a new affiliation (payment or anti-fraud provider) in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-ManageStore | **Manage Store** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "affiliations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"implementation\": \"<string>\",\n  \"name\": \"<string>\",\n  \"configuration\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"isdelivered\": \"<boolean>\",\n  \"isConfigured\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "17bee8b8-27d6-4776-b521-cf9c0e47d8e4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "affiliations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n  \"name\": \"CieloV3 - Test\",\n  \"configuration\": [\n    {\n      \"name\": \"MerchantId\",\n      \"value\": \"sampleData\"\n    },\n    {\n      \"name\": \"MerchantId\",\n      \"value\": \"sampleData\"\n    }\n  ],\n  \"isdelivered\": true,\n  \"isConfigured\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fg8b4ea5-0b24-47dc-971e-2f6635ea1f14\",\n  \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n  \"name\": \"CieloV3 - Test\",\n  \"configuration\": [\n    {\n      \"name\": \"HowTo\",\n      \"value\": \"https://developercielo.github.io/payment-method-enablement/\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"MerchantId\",\n      \"value\": \"sampleData\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"MerchantKey\",\n      \"value\": \"**********\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"softDescriptor\",\n      \"value\": \"teste\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankInvoiceProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankIDebitProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"useEarlySecurityCapture\",\n      \"value\": \"0\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"isProduction\",\n      \"value\": \"false\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankDebitProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"Registered\",\n      \"value\": \"false\",\n      \"valueKey\": null\n    }\n  ],\n  \"isdelivered\": true,\n  \"isConfigured\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a0908c31-ff9d-453e-ab68-291ead3684a0",
+          "name": "VTex Update affiliation by ID",
+          "request": {
+            "name": "VTex Update affiliation by ID",
+            "description": {
+              "content": "Updates information about an affiliation (payment or anti-fraud provider) configured in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-ManageStore | **Manage Store** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "affiliations",
+                ":affiliationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "affiliationId",
+                  "description": "(Required) Affiliation (payment or anti-fraud provider) identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"implementation\": \"<string>\",\n  \"name\": \"<string>\",\n  \"configuration\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"valueKey\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"valueKey\": \"<string>\"\n    }\n  ],\n  \"isdelivered\": \"<boolean>\",\n  \"isConfigured\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "889b3cd5-e30c-4158-8cf0-cf762b7e7eec",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "affiliations",
+                    ":affiliationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "affiliationId",
+                      "description": "(Required) Affiliation (payment or anti-fraud provider) identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"fg8b4ea5-0b24-47dc-971e-2f6635ea1f14\",\n  \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n  \"name\": \"CieloV3 - Test\",\n  \"configuration\": [\n    {\n      \"name\": \"MerchantId\",\n      \"value\": \"sampleData\",\n      \"valueKey\": \"valuekey_1\"\n    },\n    {\n      \"name\": \"MerchantId\",\n      \"value\": \"sampleData\",\n      \"valueKey\": \"valuekey_1\"\n    }\n  ],\n  \"isdelivered\": true,\n  \"isConfigured\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fg8b4ea5-0b24-47dc-971e-2f6635ea1f14\",\n  \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n  \"name\": \"CieloV3 - Test\",\n  \"configuration\": [\n    {\n      \"name\": \"HowTo\",\n      \"value\": \"https://developercielo.github.io/payment-method-enablement/\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"MerchantId\",\n      \"value\": \"sampleData_2\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"MerchantKey\",\n      \"value\": \"**********\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"softDescriptor\",\n      \"value\": \"teste_update\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankInvoiceProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankIDebitProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"useEarlySecurityCapture\",\n      \"value\": \"0\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"isProduction\",\n      \"value\": \"false\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankDebitProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"Registered\",\n      \"value\": \"false\",\n      \"valueKey\": null\n    }\n  ],\n  \"isdelivered\": true,\n  \"isConfigured\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06dfcc79-6f1a-41ca-ada9-fa7726283c1b",
+          "name": "VTex Get affiliation by ID",
+          "request": {
+            "name": "VTex Get affiliation by ID",
+            "description": {
+              "content": "Returns data for a specific affiliation (payment or anti-fraud provider).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "affiliations",
+                ":affiliationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "affiliationId",
+                  "description": "(Required) Affiliation (payment or anti-fraud provider) identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8a0831a5-3bd5-4792-ba74-83257ccccc13",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "affiliations",
+                    ":affiliationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "affiliationId",
+                      "description": "(Required) Affiliation (payment or anti-fraud provider) identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fg8b4ea5-0b24-47dc-971e-2f6635ea1f14\",\n  \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n  \"name\": \"CieloV3 - Test\",\n  \"configuration\": [\n    {\n      \"name\": \"HowTo\",\n      \"value\": \"https://developercielo.github.io/payment-method-enablement/\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"MerchantId\",\n      \"value\": \"sampleData_2\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"MerchantKey\",\n      \"value\": \"**********\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"softDescriptor\",\n      \"value\": \"teste_update\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankInvoiceProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankIDebitProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"useEarlySecurityCapture\",\n      \"value\": \"0\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"isProduction\",\n      \"value\": \"false\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"bankDebitProvider\",\n      \"value\": \"Disabled\",\n      \"valueKey\": null\n    },\n    {\n      \"name\": \"Registered\",\n      \"value\": \"false\",\n      \"valueKey\": null\n    }\n  ],\n  \"isdelivered\": true,\n  \"isConfigured\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dda41b28-3646-49ab-a722-36ddf8423cfa",
+          "name": "VTex List all payment rules",
+          "request": {
+            "name": "VTex List all payment rules",
+            "description": {
+              "content": "Returns all payment rules applied to the payment providers configured in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e3d81330-60c8-468d-be9c-04da5ed7ac61",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"9e11ed95-4b7f-4445-a53e-2512f260ff1c\",\n    \"name\": \"American Express - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 1,\n      \"name\": \"American Express\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.AuthorizeDotNet.AuthorizeDotNetConnector\",\n      \"affiliationId\": \"08a0844b-4aab-4f1b-beed-b3889649534b\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": {\n      \"dueDateType\": 0,\n      \"interestRateMethod\": 0,\n      \"minimumInstallmentValue\": 1,\n      \"installments\": [\n        {\n          \"ruleId\": null,\n          \"quantity\": 12,\n          \"value\": 0,\n          \"interestRate\": 1.86,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        },\n        {\n          \"ruleId\": null,\n          \"quantity\": 18,\n          \"value\": 0,\n          \"interestRate\": 1.9,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        }\n      ]\n    },\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": true,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": \"2023-12-10T17:00:00Z\",\n    \"endDate\": \"2023-12-22T01:00:00Z\",\n    \"condition\": {\n      \"id\": \"1\",\n      \"pullRate\": 0,\n      \"name\": null\n    },\n    \"multiMerchantList\": [\n      \"test_store_1\",\n      \"test_store_2\"\n    ],\n    \"country\": {\n      \"name\": null,\n      \"isoCode\": \"us\"\n    },\n    \"dateIntervals\": [\n      {\n        \"start\": \"* * 11 * * 1,3,4 * -0300\",\n        \"end\": \"* * 18 * * 1,3,4 * -0300\"\n      },\n      {\n        \"start\": \"* * 05 * * * * -0300\",\n        \"end\": \"* * 23 * * * * -0300\"\n      }\n    ],\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": \"Premium\"\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"01a8d68b-9116-4655-83f8-3380f658ec04\",\n    \"name\": \"QR Code\",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 72,\n      \"name\": \"PicPay\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_PicPay\",\n      \"affiliationId\": \"9c4e7bb1-0356-4449-b59f-2e1bbac606f8\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": {\n      \"dueDateType\": 1,\n      \"interestRateMethod\": 0,\n      \"minimumInstallmentValue\": 10,\n      \"installments\": [\n        {\n          \"ruleId\": null,\n          \"quantity\": 1,\n          \"value\": 0,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        },\n        {\n          \"ruleId\": null,\n          \"quantity\": 2,\n          \"value\": 0,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        },\n        {\n          \"ruleId\": null,\n          \"quantity\": 3,\n          \"value\": 0,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        },\n        {\n          \"ruleId\": null,\n          \"quantity\": 4,\n          \"value\": 0,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": 0\n        }\n      ]\n    },\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": true,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"38426c64-fb35-412c-9900-c3fc0e812109\",\n    \"name\": \"Customer Credit - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 64,\n      \"name\": \"Customer Credit\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_CreditControlV2\",\n      \"affiliationId\": \"7f95a993-4a8c-4d08-a1ae-94625ff1bfb4\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": {\n      \"dueDateType\": 0,\n      \"interestRateMethod\": 0,\n      \"minimumInstallmentValue\": 0,\n      \"installments\": [\n        {\n          \"ruleId\": null,\n          \"quantity\": 1,\n          \"value\": 0,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": null\n        },\n        {\n          \"ruleId\": null,\n          \"quantity\": 2,\n          \"value\": 0,\n          \"interestRate\": 0,\n          \"isExternalInstallmentService\": null,\n          \"interestTax\": null\n        }\n      ]\n    },\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": true,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": [\n      {\n        \"start\": \"* * 11 * * 1,3,4 * -0300\",\n        \"end\": \"* * 18 * * 1,3,4 * -0300\"\n      },\n      {\n        \"start\": \"* * 05 * * * * -0300\",\n        \"end\": \"* * 23 * * * * -0300\"\n      }\n    ],\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [\n      {\n        \"paymentOptions\": [\n          {\n            \"days\": 30,\n            \"interestRate\": 0\n          }\n        ]\n      },\n      {\n        \"paymentOptions\": [\n          {\n            \"days\": 30,\n            \"interestRate\": 0\n          },\n          {\n            \"days\": 60,\n            \"interestRate\": 0\n          }\n        ]\n      },\n      {\n        \"paymentOptions\": [\n          {\n            \"days\": 15,\n            \"interestRate\": 0\n          },\n          {\n            \"days\": 30,\n            \"interestRate\": 0\n          }\n        ]\n      }\n    ],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"b7137b64-5b45-4c03-8d75-5ebc320fe537\",\n    \"name\": \"Cash on Delivery\",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 17,\n      \"name\": \"Promissory\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.PromissoryConnector\",\n      \"affiliationId\": \"914a05f6-f48f-4dc1-a41d-ffe3f682b405\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": true,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": {\n      \"id\": \"1\",\n      \"pullRate\": 1,\n      \"name\": null\n    },\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"46a75262-6666-43d8-bff5-b6b439a5e074\",\n    \"name\": \"Maestro - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 39,\n      \"name\": \"Maestro\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.AdyenConnector\",\n      \"affiliationId\": \"1bd6e98e-6986-4ff3-ab58-78a37bd2a2ef\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": true,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"453cb507-294c-40c4-84d3-49ecb02acbbb\",\n    \"name\": \"Visa - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 2,\n      \"name\": \"Visa\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.MercadoPagoV1.MercadoPagoV1Connector\",\n      \"affiliationId\": \"37806301-73da-4c3f-96e8-7b00fde5fbf2\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": false,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"c6a4675f-a3eb-441a-9de0-75e3b784af7b\",\n    \"name\": \"Mastercard - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 4,\n      \"name\": \"Mastercard\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.AuthorizeDotNet.AuthorizeDotNetConnector\",\n      \"affiliationId\": \"08a0844b-4aab-4f1b-beed-b3889649534b\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": false,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"df391a06-e6de-4fbf-ae8f-fd40fecba88f\",\n    \"name\": \"Bank Invoice - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 6,\n      \"name\": \"Bank Invoice\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.TestConnector\",\n      \"affiliationId\": \"1d884ffd-13d7-419e-a487-da55a2205792\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": false,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"220c353e-a298-4f87-ace8-fb4909d34248\",\n    \"name\": \"Google Pay - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 169,\n      \"name\": \"Google Pay\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_stripe-payment-provider-connector-v3\",\n      \"affiliationId\": \"d983efd2-93ee-46ad-857f-39f933ffdf03\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": true,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"f1442584-f627-4766-a878-dd9427c2cd4b\",\n    \"name\": \"Invoice Payment App\",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 6,\n      \"name\": \"Boleto Bancário\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.BankIssuedInvoiceItauConnector\",\n      \"affiliationId\": \"400b66d3-bc9a-4eb8-afc0-f32fe63c7121\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": false,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  },\n  {\n    \"id\": \"16641c21-d94a-4c0c-9bfa-fb7d646b495f\",\n    \"name\": \"Pix - \",\n    \"salesChannels\": [\n      {\n        \"id\": \":ALL:\"\n      }\n    ],\n    \"paymentSystem\": {\n      \"id\": 125,\n      \"name\": \"Pix\",\n      \"implementation\": null\n    },\n    \"connector\": {\n      \"implementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_SpinPay\",\n      \"affiliationId\": \"268d2e68-169a-4a85-a670-39409a2a24b6\"\n    },\n    \"issuer\": {\n      \"name\": null\n    },\n    \"antifraud\": {\n      \"implementation\": null,\n      \"affiliationId\": null\n    },\n    \"installmentOptions\": null,\n    \"isSelfAuthorized\": null,\n    \"requiresAuthentication\": null,\n    \"enabled\": false,\n    \"installmentsService\": false,\n    \"isDefault\": null,\n    \"beginDate\": null,\n    \"endDate\": null,\n    \"condition\": null,\n    \"multiMerchantList\": null,\n    \"country\": null,\n    \"dateIntervals\": null,\n    \"externalInterest\": false,\n    \"minimumValue\": null,\n    \"deadlines\": [],\n    \"cobrand\": {\n      \"name\": null\n    },\n    \"cardLevel\": {\n      \"name\": null\n    },\n    \"excludedBinsRanges\": null\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aa2eb769-8b1d-43bf-9f21-80c22137a16a",
+          "name": "VTex Insert a new payment rule",
+          "request": {
+            "name": "VTex Insert a new payment rule",
+            "description": {
+              "content": "Creates a new payment rule to be applied to the payment providers configured in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-ManageStore | **Manage Store** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"salesChannels\": [\n    {\n      \"id\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\"\n    }\n  ],\n  \"paymentSystem\": {\n    \"id\": \"<number>\",\n    \"name\": \"<string>\",\n    \"implementation\": \"<string>\"\n  },\n  \"connector\": {\n    \"implementation\": \"<string>\",\n    \"affiliationId\": \"<string>\"\n  },\n  \"issuer\": {\n    \"name\": \"<string>\"\n  },\n  \"antifraud\": {\n    \"implementation\": \"<string>\",\n    \"affiliationId\": \"<string>\"\n  },\n  \"installmentOptions\": {\n    \"dueDateType\": \"<number>\",\n    \"interestRateMethod\": \"<number>\",\n    \"minimumInstallmentValue\": \"<number>\",\n    \"installments\": [\n      {\n        \"ruleId\": \"<string>\",\n        \"quantity\": \"<integer>\",\n        \"value\": \"<number>\",\n        \"interestRate\": \"<number>\",\n        \"isExternalInstallmentService\": \"<number>\",\n        \"interestTax\": \"<number>\"\n      },\n      {\n        \"ruleId\": \"<string>\",\n        \"quantity\": \"<integer>\",\n        \"value\": \"<number>\",\n        \"interestRate\": \"<number>\",\n        \"isExternalInstallmentService\": \"<number>\",\n        \"interestTax\": \"<number>\"\n      }\n    ]\n  },\n  \"isSelfAuthorized\": \"<boolean>\",\n  \"requiresAuthentication\": \"<boolean>\",\n  \"enabled\": \"<boolean>\",\n  \"installmentsService\": \"<boolean>\",\n  \"isDefault\": \"<boolean>\",\n  \"beginDate\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"condition\": {\n    \"id\": \"<string>\",\n    \"pullRate\": \"<number>\",\n    \"name\": \"<string>\"\n  },\n  \"multiMerchantList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"country\": {\n    \"name\": \"<string>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"dateIntervals\": [\n    {\n      \"start\": \"<string>\",\n      \"end\": \"<string>\"\n    },\n    {\n      \"start\": \"<string>\",\n      \"end\": \"<string>\"\n    }\n  ],\n  \"externalInterest\": \"<boolean>\",\n  \"minimumValue\": \"<number>\",\n  \"deadlines\": [\n    {\n      \"paymentOptions\": [\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        },\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        }\n      ]\n    },\n    {\n      \"paymentOptions\": [\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        },\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        }\n      ]\n    }\n  ],\n  \"cobrand\": {\n    \"name\": \"<string>\"\n  },\n  \"cardLevel\": {\n    \"name\": \"<string>\"\n  },\n  \"excludedBinsRanges\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1995a52c-7e3d-467e-8b40-3ecc74d24ced",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test_API_2\",\n  \"salesChannels\": [\n    {\n      \"id\": \"1\"\n    }\n  ],\n  \"paymentSystem\": {\n    \"id\": 8,\n    \"name\": \"Hipercard\",\n    \"implementation\": null\n  },\n  \"connector\": {\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n    \"affiliationId\": \"0a8488e6-0c30-4150-be96-b0dcaaa6a0cd\"\n  },\n  \"issuer\": {\n    \"name\": \"barclays\"\n  },\n  \"antifraud\": {\n    \"implementation\": null,\n    \"affiliationId\": null\n  },\n  \"installmentOptions\": {\n    \"dueDateType\": 1,\n    \"interestRateMethod\": 2,\n    \"minimumInstallmentValue\": 50,\n    \"installments\": [\n      {\n        \"ruleId\": null,\n        \"quantity\": 6,\n        \"value\": 0,\n        \"interestRate\": 15,\n        \"isExternalInstallmentService\": null,\n        \"interestTax\": 0\n      }\n    ]\n  },\n  \"isSelfAuthorized\": null,\n  \"requiresAuthentication\": null,\n  \"enabled\": false,\n  \"installmentsService\": false,\n  \"isDefault\": null,\n  \"beginDate\": \"2023-12-10T17:00:00Z\",\n  \"endDate\": \"2023-12-22T01:00:00Z\",\n  \"condition\": {\n    \"id\": \"1\",\n    \"pullRate\": 0,\n    \"name\": null\n  },\n  \"multiMerchantList\": [\n    \"cosmetics2\"\n  ],\n  \"country\": {\n    \"name\": null,\n    \"isoCode\": \"us\"\n  },\n  \"dateIntervals\": [\n    {\n      \"start\": \"* * 11 * * 1,3,4 * -0300\",\n      \"end\": \"* * 18 * * 1,3,4 * -0300\"\n    },\n    {\n      \"start\": \"* * 05 * * * * -0300\",\n      \"end\": \"* * 23 * * * * -0300\"\n    }\n  ],\n  \"externalInterest\": false,\n  \"minimumValue\": null,\n  \"deadlines\": [],\n  \"cobrand\": {\n    \"name\": null\n  },\n  \"cardLevel\": {\n    \"name\": \"business\"\n  },\n  \"excludedBinsRanges\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"c997267e-39bf-4217-a890-a503f6a7dc47\",\n  \"name\": \"Test_API_2\",\n  \"salesChannels\": [\n    {\n      \"id\": \"1\"\n    }\n  ],\n  \"paymentSystem\": {\n    \"id\": 8,\n    \"name\": \"Hipercard\",\n    \"implementation\": null\n  },\n  \"connector\": {\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n    \"affiliationId\": \"0a8488e6-0c30-4150-be96-b0dcaaa6a0cd\"\n  },\n  \"issuer\": {\n    \"name\": \"barclays\"\n  },\n  \"antifraud\": null,\n  \"installmentOptions\": {\n    \"dueDateType\": 1,\n    \"interestRateMethod\": 2,\n    \"minimumInstallmentValue\": 50,\n    \"installments\": [\n      {\n        \"ruleId\": null,\n        \"quantity\": 6,\n        \"value\": 0,\n        \"interestRate\": 15,\n        \"isExternalInstallmentService\": null,\n        \"interestTax\": 0\n      }\n    ]\n  },\n  \"isSelfAuthorized\": null,\n  \"requiresAuthentication\": null,\n  \"enabled\": false,\n  \"installmentsService\": false,\n  \"isDefault\": null,\n  \"beginDate\": \"2023-12-10T17:00:00Z\",\n  \"endDate\": \"2023-12-22T01:00:00Z\",\n  \"condition\": {\n    \"id\": \"1\",\n    \"pullRate\": 0,\n    \"name\": null\n  },\n  \"multiMerchantList\": [\n    \"cosmetics2\"\n  ],\n  \"country\": {\n    \"name\": null,\n    \"isoCode\": \"us\"\n  },\n  \"dateIntervals\": [\n    {\n      \"start\": \"* * 11 * * 1,3,4 * -0300\",\n      \"end\": \"* * 18 * * 1,3,4 * -0300\"\n    },\n    {\n      \"start\": \"* * 05 * * * * -0300\",\n      \"end\": \"* * 23 * * * * -0300\"\n    }\n  ],\n  \"externalInterest\": false,\n  \"minimumValue\": null,\n  \"deadlines\": [],\n  \"cobrand\": {\n    \"name\": null\n  },\n  \"cardLevel\": {\n    \"name\": \"business\"\n  },\n  \"excludedBinsRanges\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4245c878-bd49-47a6-a717-9c03ee4d918d",
+          "name": "VTex Get payment rule by ID",
+          "request": {
+            "name": "VTex Get payment rule by ID",
+            "description": {
+              "content": "Returns data for a specific payment rule applied to the payment providers configured in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "rules",
+                ":ruleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ruleId",
+                  "description": "(Required) Rule identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "54c35612-d919-48a1-879f-801ad39366f0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "rules",
+                    ":ruleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ruleId",
+                      "description": "(Required) Rule identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e11ed95-4b7f-4445-a53e-2512f260ff1c\",\n  \"name\": \"American Express - \",\n  \"salesChannels\": [\n    {\n      \"id\": \":ALL:\"\n    }\n  ],\n  \"paymentSystem\": {\n    \"id\": 1,\n    \"name\": \"American Express\",\n    \"implementation\": null\n  },\n  \"connector\": {\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.AuthorizeDotNet.AuthorizeDotNetConnector\",\n    \"affiliationId\": \"08a0844b-4aab-4f1b-beed-b3889649534b\"\n  },\n  \"issuer\": {\n    \"name\": null\n  },\n  \"antifraud\": {\n    \"implementation\": null,\n    \"affiliationId\": null\n  },\n  \"installmentOptions\": {\n    \"dueDateType\": 0,\n    \"interestRateMethod\": 0,\n    \"minimumInstallmentValue\": 1,\n    \"installments\": [\n      {\n        \"ruleId\": null,\n        \"quantity\": 12,\n        \"value\": 0,\n        \"interestRate\": 1.86,\n        \"isExternalInstallmentService\": null,\n        \"interestTax\": 0\n      },\n      {\n        \"ruleId\": null,\n        \"quantity\": 18,\n        \"value\": 0,\n        \"interestRate\": 1.9,\n        \"isExternalInstallmentService\": null,\n        \"interestTax\": 0\n      }\n    ]\n  },\n  \"isSelfAuthorized\": null,\n  \"requiresAuthentication\": null,\n  \"enabled\": true,\n  \"installmentsService\": false,\n  \"isDefault\": null,\n  \"beginDate\": \"2023-12-10T17:00:00Z\",\n  \"endDate\": \"2023-12-22T01:00:00Z\",\n  \"condition\": {\n    \"id\": \"1\",\n    \"pullRate\": 0,\n    \"name\": null\n  },\n  \"multiMerchantList\": [\n    \"test_store_1\",\n    \"test_store_2\"\n  ],\n  \"country\": {\n    \"name\": null,\n    \"isoCode\": \"us\"\n  },\n  \"dateIntervals\": [\n    {\n      \"start\": \"* * 11 * * 1,3,4 * -0300\",\n      \"end\": \"* * 18 * * 1,3,4 * -0300\"\n    },\n    {\n      \"start\": \"* * 05 * * * * -0300\",\n      \"end\": \"* * 23 * * * * -0300\"\n    }\n  ],\n  \"externalInterest\": false,\n  \"minimumValue\": null,\n  \"deadlines\": [],\n  \"cobrand\": {\n    \"name\": null\n  },\n  \"cardLevel\": {\n    \"name\": \"Premium\"\n  },\n  \"excludedBinsRanges\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2bb073d-b51c-4805-94cc-eb1433c31f18",
+          "name": "VTex Update payment rule by ID",
+          "request": {
+            "name": "VTex Update payment rule by ID",
+            "description": {
+              "content": "Updates information about a specific payment rule applied to the payment providers configured in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-ManageStore | **Manage Store** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "rules",
+                ":ruleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ruleId",
+                  "description": "(Required) Rule identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"salesChannels\": [\n    {\n      \"id\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\"\n    }\n  ],\n  \"paymentSystem\": {\n    \"id\": \"<number>\",\n    \"name\": \"<string>\",\n    \"implementation\": \"<string>\"\n  },\n  \"connector\": {\n    \"implementation\": \"<string>\",\n    \"affiliationId\": \"<string>\"\n  },\n  \"issuer\": {\n    \"name\": \"<string>\"\n  },\n  \"antifraud\": {\n    \"implementation\": \"<string>\",\n    \"affiliationId\": \"<string>\"\n  },\n  \"installmentOptions\": {\n    \"dueDateType\": \"<number>\",\n    \"interestRateMethod\": \"<number>\",\n    \"minimumInstallmentValue\": \"<number>\",\n    \"installments\": [\n      {\n        \"ruleId\": \"<string>\",\n        \"quantity\": \"<integer>\",\n        \"value\": \"<number>\",\n        \"interestRate\": \"<number>\",\n        \"isExternalInstallmentService\": \"<number>\",\n        \"interestTax\": \"<number>\"\n      },\n      {\n        \"ruleId\": \"<string>\",\n        \"quantity\": \"<integer>\",\n        \"value\": \"<number>\",\n        \"interestRate\": \"<number>\",\n        \"isExternalInstallmentService\": \"<number>\",\n        \"interestTax\": \"<number>\"\n      }\n    ]\n  },\n  \"isSelfAuthorized\": \"<boolean>\",\n  \"requiresAuthentication\": \"<boolean>\",\n  \"enabled\": \"<boolean>\",\n  \"installmentsService\": \"<boolean>\",\n  \"isDefault\": \"<boolean>\",\n  \"beginDate\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"condition\": {\n    \"id\": \"<string>\",\n    \"pullRate\": \"<number>\",\n    \"name\": \"<string>\"\n  },\n  \"multiMerchantList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"country\": {\n    \"name\": \"<string>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"dateIntervals\": [\n    {\n      \"start\": \"<string>\",\n      \"end\": \"<string>\"\n    },\n    {\n      \"start\": \"<string>\",\n      \"end\": \"<string>\"\n    }\n  ],\n  \"externalInterest\": \"<boolean>\",\n  \"minimumValue\": \"<number>\",\n  \"deadlines\": [\n    {\n      \"paymentOptions\": [\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        },\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        }\n      ]\n    },\n    {\n      \"paymentOptions\": [\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        },\n        {\n          \"days\": \"<number>\",\n          \"interestRate\": \"<number>\"\n        }\n      ]\n    }\n  ],\n  \"cobrand\": {\n    \"name\": \"<string>\"\n  },\n  \"cardLevel\": {\n    \"name\": \"<string>\"\n  },\n  \"excludedBinsRanges\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e1ce37fc-9eb9-42ec-a619-d17a7778e79d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "rules",
+                    ":ruleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ruleId",
+                      "description": "(Required) Rule identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"c997267e-39bf-4217-a890-a503f6a7dc47\",\n  \"name\": \"Test_API_2_Updated\",\n  \"salesChannels\": [\n    {\n      \"id\": \"1\"\n    }\n  ],\n  \"paymentSystem\": {\n    \"id\": 8,\n    \"name\": \"Hipercard\",\n    \"implementation\": null\n  },\n  \"connector\": {\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n    \"affiliationId\": \"0a8488e6-0c30-4150-be96-b0dcaaa6a0cd\"\n  },\n  \"issuer\": {\n    \"name\": \"barclays\"\n  },\n  \"antifraud\": null,\n  \"installmentOptions\": {\n    \"dueDateType\": 0,\n    \"interestRateMethod\": 1,\n    \"minimumInstallmentValue\": 400,\n    \"installments\": [\n      {\n        \"ruleId\": null,\n        \"quantity\": 12,\n        \"value\": 0,\n        \"interestRate\": 25,\n        \"isExternalInstallmentService\": null,\n        \"interestTax\": 0\n      }\n    ]\n  },\n  \"isSelfAuthorized\": null,\n  \"requiresAuthentication\": null,\n  \"enabled\": false,\n  \"installmentsService\": false,\n  \"isDefault\": null,\n  \"beginDate\": \"2023-12-15T17:00:00Z\",\n  \"endDate\": \"2023-12-30T01:00:00Z\",\n  \"condition\": {\n    \"id\": \"1\",\n    \"pullRate\": 15,\n    \"name\": null\n  },\n  \"multiMerchantList\": [],\n  \"country\": {\n    \"name\": null,\n    \"isoCode\": \"br\"\n  },\n  \"dateIntervals\": [\n    {\n      \"start\": \"* * 12 * * 1,3,4 * -0300\",\n      \"end\": \"* * 19 * * 1,3,4 * -0300\"\n    },\n    {\n      \"start\": \"* * 09 * * * * -0300\",\n      \"end\": \"* * 21 * * * * -0300\"\n    }\n  ],\n  \"externalInterest\": false,\n  \"minimumValue\": null,\n  \"deadlines\": [],\n  \"cobrand\": {\n    \"name\": null\n  },\n  \"cardLevel\": {\n    \"name\": \"gold\"\n  },\n  \"excludedBinsRanges\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"c997267e-39bf-4217-a890-a503f6a7dc47\",\n  \"name\": \"Test_API_2_Updated\",\n  \"salesChannels\": [\n    {\n      \"id\": \"1\"\n    }\n  ],\n  \"paymentSystem\": {\n    \"id\": 8,\n    \"name\": \"Hipercard\",\n    \"implementation\": null\n  },\n  \"connector\": {\n    \"implementation\": \"Vtex.PaymentGateway.Connectors.CieloV3Connector\",\n    \"affiliationId\": \"0a8488e6-0c30-4150-be96-b0dcaaa6a0cd\"\n  },\n  \"issuer\": {\n    \"name\": \"barclays\"\n  },\n  \"antifraud\": null,\n  \"installmentOptions\": {\n    \"dueDateType\": 0,\n    \"interestRateMethod\": 1,\n    \"minimumInstallmentValue\": 400,\n    \"installments\": [\n      {\n        \"ruleId\": null,\n        \"quantity\": 12,\n        \"value\": 0,\n        \"interestRate\": 25,\n        \"isExternalInstallmentService\": null,\n        \"interestTax\": 0\n      }\n    ]\n  },\n  \"isSelfAuthorized\": null,\n  \"requiresAuthentication\": null,\n  \"enabled\": false,\n  \"installmentsService\": false,\n  \"isDefault\": null,\n  \"beginDate\": \"2023-12-15T17:00:00Z\",\n  \"endDate\": \"2023-12-30T01:00:00Z\",\n  \"condition\": {\n    \"id\": \"1\",\n    \"pullRate\": 15,\n    \"name\": null\n  },\n  \"multiMerchantList\": [],\n  \"country\": {\n    \"name\": null,\n    \"isoCode\": \"br\"\n  },\n  \"dateIntervals\": [\n    {\n      \"start\": \"* * 12 * * 1,3,4 * -0300\",\n      \"end\": \"* * 19 * * 1,3,4 * -0300\"\n    },\n    {\n      \"start\": \"* * 09 * * * * -0300\",\n      \"end\": \"* * 21 * * * * -0300\"\n    }\n  ],\n  \"externalInterest\": false,\n  \"minimumValue\": null,\n  \"deadlines\": [],\n  \"cobrand\": {\n    \"name\": null\n  },\n  \"cardLevel\": {\n    \"name\": \"gold\"\n  },\n  \"excludedBinsRanges\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "281423e4-01dc-4bcb-b173-31567847f80d",
+          "name": "VTex Delete payment rule by ID",
+          "request": {
+            "name": "VTex Delete payment rule by ID",
+            "description": {
+              "content": "Deletes a specific payment rule applied to the payment providers configured in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-ManageStore | **Manage Store** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "rules",
+                ":ruleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ruleId",
+                  "description": "(Required) Rule identification."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "686d7fd4-ad7a-4b67-93a8-9ebaabfb850d",
+              "name": "OK. This endpoint does not return any data in the response body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "rules",
+                    ":ruleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ruleId",
+                      "description": "(Required) Rule identification."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "308fa222-88b8-4a28-9b45-a4dec9b176c0",
+          "name": "VTex List all available payment methods",
+          "request": {
+            "name": "VTex List all available payment methods",
+            "description": {
+              "content": "Returns all payment methods (such as Visa, Master, among others) that can be used in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pvt",
+                "merchants",
+                "payment-systems"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d17e4a23-621f-4014-892e-aa3979d735c4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pvt",
+                    "merchants",
+                    "payment-systems"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 1,\n    \"name\": \"American Express\",\n    \"requiresDocument\": false,\n    \"implementation\": \"Vtex.PaymentGateway.CreditCard.Amex\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.AuthorizeDotNet.AuthorizeDotNetConnector\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"creditCard\",\n    \"redirect\": false,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": true,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": true,\n    \"allowCountry\": false,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": true,\n    \"validator\": {\n      \"regex\": \"^3[47][0-9]{13}$\",\n      \"mask\": \"9999 999999 99999\",\n      \"cardCodeMask\": \"9999\",\n      \"cardCodeRegex\": \"^[0-9]{4}$\",\n      \"weights\": [\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1\n      ],\n      \"useCvv\": true,\n      \"useExpirationDate\": true,\n      \"useCardHolderName\": true,\n      \"useBillingAddress\": true,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": false,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  },\n  {\n    \"id\": 72,\n    \"name\": \"PicPay\",\n    \"requiresDocument\": false,\n    \"implementation\": \"Vtex.PaymentGateway.RedirectPayments.PicPayPayment\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_PicPay\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"picPay\",\n    \"redirect\": true,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": true,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": false,\n    \"allowCountry\": true,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": false,\n    \"validator\": {\n      \"regex\": null,\n      \"mask\": null,\n      \"cardCodeMask\": null,\n      \"cardCodeRegex\": null,\n      \"weights\": null,\n      \"useCvv\": false,\n      \"useExpirationDate\": false,\n      \"useCardHolderName\": false,\n      \"useBillingAddress\": false,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": false,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  },\n  {\n    \"id\": 64,\n    \"name\": \"Customer Credit\",\n    \"requiresDocument\": false,\n    \"implementation\": \"Vtex.PaymentGateway.Promissory.CreditControlPayment\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_CreditControlV2\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"creditControl\",\n    \"redirect\": false,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": true,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": false,\n    \"allowCountry\": false,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": false,\n    \"validator\": {\n      \"regex\": null,\n      \"mask\": null,\n      \"cardCodeMask\": null,\n      \"cardCodeRegex\": null,\n      \"weights\": null,\n      \"useCvv\": false,\n      \"useExpirationDate\": false,\n      \"useCardHolderName\": false,\n      \"useBillingAddress\": false,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": false,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  },\n  {\n    \"id\": 16,\n    \"name\": \"Vale\",\n    \"requiresDocument\": true,\n    \"implementation\": \"Vtex.PaymentGateway.GiftCard.VtexGiftCard\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.VtexGiftCardHub.VtexGiftCardHubConnector\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"giftCard\",\n    \"redirect\": false,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": false,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": false,\n    \"allowCountry\": false,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": false,\n    \"validator\": {\n      \"regex\": null,\n      \"mask\": null,\n      \"cardCodeMask\": null,\n      \"cardCodeRegex\": null,\n      \"weights\": null,\n      \"useCvv\": false,\n      \"useExpirationDate\": false,\n      \"useCardHolderName\": false,\n      \"useBillingAddress\": false,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": true,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  },\n  {\n    \"id\": 39,\n    \"name\": \"Maestro\",\n    \"requiresDocument\": false,\n    \"implementation\": \"Vtex.PaymentGateway.Card.Maestro\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.AdyenConnector\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"debitCard\",\n    \"redirect\": false,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": false,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": false,\n    \"allowIssuer\": true,\n    \"allowCountry\": false,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": false,\n    \"validator\": {\n      \"regex\": \"^((5(([1-2]|[4-5])[0-9]{8}|0((1|6)([0-9]{7}))|3(0(4((0|[2-9])[0-9]{5})|([0-3]|[5-9])[0-9]{6})|[1-9][0-9]{7})))|((508116)\\\\d{4,10})|((502121)\\\\d{4,10})|((589916)\\\\d{4,10})|(2[0-9]{15})|(67[0-9]{14})|(506387)\\\\d{4,10})\",\n      \"mask\": \"9999 9999 9999 9999\",\n      \"cardCodeMask\": \"999\",\n      \"cardCodeRegex\": \"^[0-9]{3}$\",\n      \"weights\": [\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2\n      ],\n      \"useCvv\": true,\n      \"useExpirationDate\": true,\n      \"useCardHolderName\": true,\n      \"useBillingAddress\": true,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": false,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  },\n  {\n    \"id\": 169,\n    \"name\": \"Google Pay\",\n    \"requiresDocument\": false,\n    \"implementation\": \"Vtex.PaymentGateway.RedirectPayments.GooglePayPayment\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_stripe-payment-provider-connector-v3\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"Google Pay\",\n    \"redirect\": true,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": false,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": false,\n    \"allowCountry\": true,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": false,\n    \"validator\": {\n      \"regex\": null,\n      \"mask\": null,\n      \"cardCodeMask\": null,\n      \"cardCodeRegex\": null,\n      \"weights\": null,\n      \"useCvv\": false,\n      \"useExpirationDate\": false,\n      \"useCardHolderName\": false,\n      \"useBillingAddress\": false,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": false,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  },\n  {\n    \"id\": 4,\n    \"name\": \"Mastercard\",\n    \"requiresDocument\": true,\n    \"implementation\": \"Vtex.PaymentGateway.CreditCard.Mastercard\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_cosmetics2-payment-provider-v0\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"creditCard\",\n    \"redirect\": false,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": true,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": true,\n    \"allowCountry\": false,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": true,\n    \"validator\": {\n      \"regex\": \"^((5(([1-2]|[4-5])[0-9]{8}|0((1|6)([0-9]{7}))|3(0(4((0|[2-9])[0-9]{5})|([0-3]|[5-9])[0-9]{6})|[1-9][0-9]{7})))|((508116)\\\\d{4,10})|((502121)\\\\d{4,10})|((589916)\\\\d{4,10})|(2[0-9]{15})|(67[0-9]{14})|(506387)\\\\d{4,10})\",\n      \"mask\": \"9999 9999 9999 9999\",\n      \"cardCodeMask\": \"999\",\n      \"cardCodeRegex\": \"^[0-9]{3}$\",\n      \"weights\": [\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2\n      ],\n      \"useCvv\": true,\n      \"useExpirationDate\": true,\n      \"useCardHolderName\": true,\n      \"useBillingAddress\": true,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": true,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  },\n  {\n    \"id\": 401,\n    \"name\": \"PaymentApp\",\n    \"requiresDocument\": false,\n    \"implementation\": \"Vtex.PaymentGateway.CreditCard.PrivateLabelPayment\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_cosmetics2-payment-provider-v0\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"customPrivate_401\",\n    \"redirect\": false,\n    \"isCustom\": true,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": true,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": true,\n    \"allowCountry\": false,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": \"\",\n    \"supportRecurrence\": true,\n    \"validator\": {\n      \"regex\": \"1(0(0(0(0([0-9])|[1-9][0-9]{11})|[1-9][0-9]{12})|[1-9][0-9]{13})|[1-9][0-9]{14})|9(9(9(9(9([0-9])|[0-8][0-9]{11})|[0-8][0-9]{12})|[0-8][0-9]{13})|[0-8][0-9]{14})|[2-8][0-9]{15}\",\n      \"mask\": \"9999 9999 9999 9999\",\n      \"cardCodeMask\": \"999\",\n      \"cardCodeRegex\": \"^[0-9]{3}$\",\n      \"weights\": [],\n      \"useCvv\": true,\n      \"useExpirationDate\": true,\n      \"useCardHolderName\": true,\n      \"useBillingAddress\": false,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": false,\n    \"dueDate\": \"2023-12-23T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 14399\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Visa\",\n    \"requiresDocument\": false,\n    \"implementation\": \"Vtex.PaymentGateway.CreditCard.Visa\",\n    \"connectorImplementation\": \"Vtex.PaymentGateway.Connectors.PaymentProvider.PaymentProviderConnector_cosmetics2-payment-provider-v0\",\n    \"antifraudConnectorImplementation\": null,\n    \"groupName\": \"creditCard\",\n    \"redirect\": false,\n    \"isCustom\": false,\n    \"isSelfAuthorized\": false,\n    \"requiresAuthentication\": false,\n    \"allowInstallments\": true,\n    \"allowBinExclusion\": false,\n    \"allowMultiple\": true,\n    \"allowIssuer\": true,\n    \"allowCountry\": false,\n    \"allowCommercialPolicy\": true,\n    \"allowCommercialCondition\": true,\n    \"allowPeriod\": true,\n    \"isAvailable\": true,\n    \"description\": null,\n    \"supportRecurrence\": true,\n    \"validator\": {\n      \"regex\": \"^4[0-9]{15}$\",\n      \"mask\": \"9999 9999 9999 9999\",\n      \"cardCodeMask\": \"999\",\n      \"cardCodeRegex\": \"^[0-9]{3}$\",\n      \"weights\": [\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2,\n        1,\n        2\n      ],\n      \"useCvv\": true,\n      \"useExpirationDate\": true,\n      \"useCardHolderName\": true,\n      \"useBillingAddress\": true,\n      \"validCardLengths\": null\n    },\n    \"appDependencies\": null,\n    \"displayDocument\": false,\n    \"dueDate\": \"2023-12-20T11:46:27.2993428Z\",\n    \"allowNotification\": false,\n    \"affiliationId\": null,\n    \"availablePayments\": null,\n    \"dueDateMinutes\": 10079\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Anti-fraud provider endpoint URL.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "{providerApiEndpoint}",
+      "key": "providerApiEndpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{providerApiEndpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "88b17ae5-e529-45be-b6a5-8d3df5bfd13c",
+    "name": "VTex Anti-fraud Provider Account Configuration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)",
+      "type": "text/plain"
+    }
+  }
+}

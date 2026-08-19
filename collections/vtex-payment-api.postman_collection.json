@@ -1,0 +1,985 @@
+{
+  "item": [
+    {
+      "id": "aaf622a6-fdf7-4f02-aef3-d8f907cd43f1",
+      "name": "Payment",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1cbf691b-0ed0-4e63-9139-9d9602f2db66",
+          "name": "VTex Retrieve payment transaction",
+          "request": {
+            "name": "VTex Retrieve payment transaction",
+            "description": {
+              "content": "Retrieves transaction details by order ID. All events in the transaction will be registered in this call's response body. \n\nIn scenarios of [order changes](https://developers.vtex.com/vtex-rest-api/reference/registerchange), it is possible to insert a [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe). The total value of the order will be updated after the insertion of the invoice, even when there is a [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe) scenario. The updated value is settled by VTEX's Payment Gateway. The reimbursement for the shopper is automatic.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "oms",
+                "pvt",
+                "orders",
+                ":orderId",
+                "payment-transaction"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderId",
+                  "description": "(Required) Order ID is a unique code that identifies an order."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b808343c-c87f-488f-a7a8-6603882d2273",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "oms",
+                    "pvt",
+                    "orders",
+                    ":orderId",
+                    "payment-transaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Order ID is a unique code that identifies an order."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"Finished\",\n  \"isActive\": true,\n  \"transactionId\": \"CB452D77E7D04099A4DB0479087B1D2C\",\n  \"merchantName\": \"LUXSTORE\",\n  \"payments\": [\n    {\n      \"id\": \"721CBE1090324D12ABE301FE33DE775A\",\n      \"paymentSystem\": \"4\",\n      \"paymentSystemName\": \"Mastercard\",\n      \"value\": 10150,\n      \"installments\": 1,\n      \"referenceValue\": 10150,\n      \"cardHolder\": null,\n      \"cardNumber\": null,\n      \"firstDigits\": \"412341\",\n      \"lastDigits\": \"4123\",\n      \"url\": null,\n      \"giftCardId\": null,\n      \"giftCardName\": null,\n      \"cvv2\": null,\n      \"expireMonth\": null,\n      \"expireYear\": null,\n      \"giftCardCaption\": null,\n      \"redemptionCode\": null,\n      \"group\": \"creditCard\",\n      \"tid\": \"101770752\",\n      \"dueDate\": null,\n      \"connectorResponses\": {\n        \"Tid\": \"101770752\",\n        \"ReturnCode\": \"200\",\n        \"Message\": \"logMessage\",\n        \"authId\": \"170852\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a115c88-234c-4c7d-8106-01cd12dd9e0c",
+          "name": "VTex Send payment notification",
+          "request": {
+            "name": "VTex Send payment notification",
+            "description": {
+              "content": "Send a payment notification of a given order, by order ID.\n\r\n\r> The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "oms",
+                "pvt",
+                "orders",
+                ":orderId",
+                "payments",
+                ":paymentId",
+                "payment-notification"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderId",
+                  "description": "(Required) Order ID is a unique code that identifies an order."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) VTEX payment identifier."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1e8d21ea-73d6-4873-b9cc-a23946a57ac4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "oms",
+                    "pvt",
+                    "orders",
+                    ":orderId",
+                    "payments",
+                    ":paymentId",
+                    "payment-notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Order ID is a unique code that identifies an order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) VTEX payment identifier."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b821a4f0-906f-4cc1-afcc-ae084f0636c8",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "oms",
+                    "pvt",
+                    "orders",
+                    ":orderId",
+                    "payments",
+                    ":paymentId",
+                    "payment-notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Order ID is a unique code that identifies an order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) VTEX payment identifier."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ca7b70d4-2bf1-433b-b094-5659326981f9",
+              "name": "The credentials are not enabled to access the service.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "oms",
+                    "pvt",
+                    "orders",
+                    ":orderId",
+                    "payments",
+                    ":paymentId",
+                    "payment-notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Order ID is a unique code that identifies an order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) VTEX payment identifier."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ecf71d32-c4be-4b8f-9dba-0ef6940a17ec",
+              "name": "Value not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "oms",
+                    "pvt",
+                    "orders",
+                    ":orderId",
+                    "payments",
+                    ":paymentId",
+                    "payment-notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Order ID is a unique code that identifies an order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) VTEX payment identifier."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bc483e98-0ebe-4529-af40-0ee02a52f4a0",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "oms",
+                    "pvt",
+                    "orders",
+                    ":orderId",
+                    "payments",
+                    ":paymentId",
+                    "payment-notification"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Order ID is a unique code that identifies an order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) VTEX payment identifier."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1803394f-a7c0-473d-afbf-b2b053925011",
+          "name": "VTex Send payment notification",
+          "request": {
+            "name": "VTex Send payment notification",
+            "description": {
+              "content": "Send a payment notification of a given order, by order ID and payment ID.\n\r\n\r> The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#).\n\r\n\r> Learn more about [Transaction Details](https://help.vtex.com/en/tutorial/how-to-view-the-orders-details).\r\n\r\n\r\n## Request body properties\r\n\r\n| Attribute    | Type        | Description |\r\n| --------------- |:---------:| --------------------------------------:|\r\n| `orderId` | string | Order Id |\r\n| `paymentId` | string | Payment ID |",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "orders",
+                "pvt",
+                "document",
+                ":orderId",
+                "payment",
+                ":paymentId",
+                "notify-payment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderId",
+                  "description": "(Required) ID of the order."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) ID of the payment."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "81b4f763-61e6-49af-a5df-2ced715cead2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "orders",
+                    "pvt",
+                    "document",
+                    ":orderId",
+                    "payment",
+                    ":paymentId",
+                    "notify-payment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) ID of the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) ID of the payment."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "da9be21c-6b93-4a00-9a7d-01280f4c14f1",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "orders",
+                    "pvt",
+                    "document",
+                    ":orderId",
+                    "payment",
+                    ":paymentId",
+                    "notify-payment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) ID of the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) ID of the payment."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fb6b801c-76b7-444c-98c2-e97463e36193",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "orders",
+                    "pvt",
+                    "document",
+                    ":orderId",
+                    "payment",
+                    ":paymentId",
+                    "notify-payment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) ID of the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) ID of the payment."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0295443f-1f26-425d-9bbf-a72a449d4a43",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "orders",
+                    "pvt",
+                    "document",
+                    ":orderId",
+                    "payment",
+                    ":paymentId",
+                    "notify-payment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) ID of the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) ID of the payment."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ba9884cb-cc05-4297-b923-70ee2c572fe9",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "orders",
+                    "pvt",
+                    "document",
+                    ":orderId",
+                    "payment",
+                    ":paymentId",
+                    "notify-payment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) ID of the order."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) ID of the payment."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Anti-fraud provider endpoint URL.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "{providerApiEndpoint}",
+      "key": "providerApiEndpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{providerApiEndpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3e9de413-3209-474d-a690-95e14aea1d4a",
+    "name": "VTex Anti-fraud Provider Account Payment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)",
+      "type": "text/plain"
+    }
+  }
+}

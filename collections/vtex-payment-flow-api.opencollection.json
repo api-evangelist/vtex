@@ -1,0 +1,242 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Payment Flow API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Flow",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex List Payment Provider Manifest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/manifest",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Exposes the provider manifest, including metadata settings such as payment methods, split configuration, and custom fields.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Available payment methods\r\n\r\n<table>\r\n    <tr>\r\n        <th>Payment Method</th>\r\n        <th>Type</th>\r\n        <th>Country</th>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Visa</code></td>\r\n        <td>Credit Card</td>\r\n        <td>Global</td>\r\n    </tr>\r\n    <tr>\r\n        <td><code>Mastercard</code></td>\r\n "
+        },
+        {
+          "info": {
+            "name": "VTex Create payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/payments",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new payment and initiates the payment flow.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\nPayment providers must:\r\n\r\n- Execute authorization on payments made through credit/debit card or any synchronized payments;\r\n\r\n- Return the required information to the customer on payments made through bank-issued invoice, redirect, or any async payments.\r\n\r\n >ℹ️ This endpoint has to meet the principle of [idempotence](https://en.wikipedia.org/wiki/Idempotence). When calling t"
+        },
+        {
+          "info": {
+            "name": "VTex Cancel payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/payments/:paymentId/cancellations",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "VTEX payment identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancels a payment that was not yet approved or settled.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+        },
+        {
+          "info": {
+            "name": "VTex Settle payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/payments/:paymentId/settlements",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "VTEX payment identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Settles a payment that was previously approved.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+        },
+        {
+          "info": {
+            "name": "VTex Refund payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/payments/:paymentId/refunds",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "VTEX payment identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Refunds a payment (in full or in part) that was previously settled.\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what permissions are needed."
+        },
+        {
+          "info": {
+            "name": "VTex Inbound request (BETA)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/payments/:paymentId/inbound/:action",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "VTEX payment identifier."
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "path",
+                "description": "Describes the type of action that will be performed on the route (e.g. hook, enrollment, among others). It is the same `:action` information used in the `inboundRequestsUrl` provided in the [Create Payment](https://developers.vtex.com/docs/api-reference/payment-provider-protocol#post-/payments?endpoint=post-/payments) endpoint payload."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The Inbound request (BETA) implements an URL that facilitates a direct connection between VTEX Gateway service and the Payment Provider. This functionality allows the payment provider to create other types of specific routes, in addition to those described in the other PPP endpoints, according to their type of operation (e.g. hook or enrollment routes, among others). \r\n\r\nThis endpoint forwards a request back to your endpoint using the `inboundRequestsUrl` provided in the [Create Payment](https:/"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

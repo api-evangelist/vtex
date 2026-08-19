@@ -1,0 +1,165 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Matched Offers API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Matched Offers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Get Matched Offers List",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/offer-manager/pvt/offers",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
+              },
+              {
+                "name": "rows",
+                "value": "",
+                "type": "query",
+                "description": "Number of rows included in the response. Each row corresponds to a single offer. The default amount of rows in the response is 1, and the maximum amount is 50. To have more than one offer listed in the response, please add the `rows` parameter with a number greater than 1."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Number corresponding to the row from which the offer list will begin, used for pagination. Filters the list of offers by retrieving the offers starting from the row defined. The default value is 0, if the param is not included in the call."
+              },
+              {
+                "name": "fq",
+                "value": "",
+                "type": "query",
+                "description": "This filter query can be used to filter offers by the criteria described below. It should be filled in by following the format: `fq={{criteriaName}}:{{criteriaValue}}`. \n\n- **productId:** integer of the product ID \n\n- **productName:** string of the product's name \n\n- **skuId:** integer of the SKU ID \n\n- **eanId:** string of the EAN ID \n\n- **refId:** string of the Ref ID \n\n- **categoryId:** integer of the category ID \n\n- **brandId:** integer of the brand ID \n\n- **sellerId:** string of the seller ID \n\n- **sc:** integer of the sales channel's ID (trade policy in VTEX) \n\nEx: skuId:172 \n\nEx: categoryId:13 \n\nEx. productName:Product example-123"
+              },
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              }
+            ]
+          },
+          "docs": "Offers are seller's products and SKUs that were sent to the marketplace, and already have their price and inventory level configured. \n\n This endpoint retrieves the available offers in a marketplace. It differs from the Get Suggestions endpoints, since it retrieves products that were already matched by the marketplace, and are currently in its catalog. \n\nIt is possible to filter the search through the following parameters: \n\n- rows \n- sort \n\n- start \n\n- fq\r\n\r\n## Permissions\r\n\r\nThis endpoint does"
+        },
+        {
+          "info": {
+            "name": "VTex Get Matched Offer's Data by SKU ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/offer-manager/pvt/product/:productId/sku/:skuId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "productId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product, such as price and inventory notifications."
+              },
+              {
+                "name": "skuId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications."
+              }
+            ]
+          },
+          "docs": "Offers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured. \n\nThis endpoint retrieves the available offers for a speciic SKU ID in the marketplace's catalog. It differs from the Get Suggestions endpoints, since it retrieves products that were already matched by the marketplace operator, and are currently active in its catalog. \n\nThe call returns a list of offers for that ID, that contain the following data: \n\n- Seller that s"
+        },
+        {
+          "info": {
+            "name": "VTex Get Matched Offer's Data by Product ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/offer-manager/pvt/product/:productId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "productId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product, such as price and inventory notifications."
+              }
+            ]
+          },
+          "docs": "Offers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured. \n\nThis endpoint retrieves the available offers for a speciic Product ID in the marketplace's catalog. It differs from the Get Suggestions endpoints, since it retrieves products that were already matched by the marketplace operator, and are currently active in its catalog. \n\nThe call returns a list of offers for that ID, that contain the following data: \n\n- Seller th"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

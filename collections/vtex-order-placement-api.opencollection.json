@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Order Placement API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Order Placement",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Place order from an existing cart",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orderForm/:orderFormId/transaction",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderFormId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the `orderForm` corresponding to the cart from which to place the order."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint places an order from an existing `orderForm` object, meaning an existing cart.\n\r\n\rAfter the creation of an order with this request, you have five minutes to send payment information and then request payment processing.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q"
+        },
+        {
+          "info": {
+            "name": "VTex Place order",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/orders",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sc",
+                "value": "",
+                "type": "query",
+                "description": "Trade Policy (Sales Channel) identification. This query can be used to create an order for a specific sales channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Places order without having any prior cart information. This means all information on items, client, payment and shipping must be sent in the body.\r\n\r\n>⚠️ The authentication of this endpoint is required if you are creating an order with an item that has an attachment that creates a Subscription. For more information, access [Subscriptions API](https://developers.vtex.com/docs/api-reference/subscriptions-api-v3).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/"
+        },
+        {
+          "info": {
+            "name": "VTex Process order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/checkout/pub/gatewayCallback/:orderGroup",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Cookie",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderGroup",
+                "value": "",
+                "type": "path",
+                "description": "Order group. It is the part of the `orderId` that comes before the `-`. For example, the `orderGroup` of the order `123456789-01` is `123456789`."
+              }
+            ]
+          },
+          "docs": "Order processing callback request, which is made after an order's payment is approved.\n\r\n\r> This request has to be made within five minutes after the [Place order](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orders) or [Place order from existing cart](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/transaction) request has been made, or else, the order will not be processed.\r\n\r\n## Permissions\r\n\r\nAny "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

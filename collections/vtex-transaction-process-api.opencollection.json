@@ -1,0 +1,307 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Transaction Process API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transaction Process",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex 1. Start a new transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is the first step to create a new transaction.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoin"
+        },
+        {
+          "info": {
+            "name": "VTex 2.1 Send payments information public",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/pub/transactions/:transactionId/payments",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "Order identification."
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step to create a new transaction. This request is used to send the payment data through a public request.\r\n>\r\n>ℹ️ If you want to send payment data containing sensitive information, such as credit card data, use the [Send payments with saved credit card](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/payments) endpoint.## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-"
+        },
+        {
+          "info": {
+            "name": "VTex 2.2 Send payments with saved credit card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions/:transactionId/payments",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step to create a new transaction. This request is used to send the payment data through a private request.\r\n>\r\n>ℹ️ If you want to send payment data that does not contain sensitive information, you can use the [Send payments information public](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pub/transactions/-transactionId-/payments) endpoint.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-usin"
+        },
+        {
+          "info": {
+            "name": "VTex 3. Send additional data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions/:transactionId/additional-data",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The third step to create a new transaction. This request sends additional data related to the transaction, such as profile information, shopping cart, shipping data, among others.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run "
+        },
+        {
+          "info": {
+            "name": "VTex 3.1 Update additional data (optional)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions/:transactionId/additional-data",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this request to update any information that has previously been sent on endpoint [3. Send additional data](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/additional-data).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resour"
+        },
+        {
+          "info": {
+            "name": "VTex 4. Authorize new transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions/:transactionId/authorization-request",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The fourth and last step to create a new transaction. It will authorized the new transaction creation according to the data previously informed in the latests requests.\r\n\r\nThis step is the trigger to process each of payments that were received in step 2.\r\n\r\nEach payment will be sent to acquirer. If all payments are authorized, the transaction will be authorized. If one of the payments is denied, all payments in transaction will be cancelled.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](htt"
+        },
+        {
+          "info": {
+            "name": "VTex Get transaction details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions/:transactionId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              }
+            ]
+          },
+          "docs": "Returns data about a specific transaction made in your store.\r\n\r\n>⚠️ Do not use the `interactions.href` route which is part of this endpoint's response. This is an internal-only route not meant to be used by external developers.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztr"
+        },
+        {
+          "info": {
+            "name": "VTex Get payment details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions/:transactionId/payments/:paymentId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              },
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Payment identification."
+              }
+            ]
+          },
+          "docs": "Returns data about a specific payment made in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:"
+        },
+        {
+          "info": {
+            "name": "VTex Get transaction settlement details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/pvt/transactions/:transactionId/settlements",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction identification."
+              }
+            ]
+          },
+          "docs": "Returns settlement data associated with a specific transaction.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this end"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

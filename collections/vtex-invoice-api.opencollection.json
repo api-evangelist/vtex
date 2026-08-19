@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Invoice API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoice",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Order invoice notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/oms/pvt/orders/:orderId/invoice",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderId",
+                "value": "1172452900788-01",
+                "type": "path",
+                "description": "Unique code that identifies the order whose invoice is being sent."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request is used for [invoicing an order](https://help.vtex.com/en/tracks/orders--2xkTisx4SXOWXQel8Jg8sa/2WgQrlHTyVo4hLjhUs1LMT). Entering the order's invoice means it was successfully completed, and the order status can be changed to the `invoiced` in the [order flow](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196). Once an order is `invoiced`, its status cannot be changed. \r\n\r\nAfter the insertion of the invoice, the order's total value will be updated, even in [part"
+        },
+        {
+          "info": {
+            "name": "VTex Update order's partial invoice (send tracking number)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{providerApiEndpoint}/api/oms/pvt/orders/:orderId/invoice/:invoiceNumber",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderId",
+                "value": "1172452900788-01",
+                "type": "path",
+                "description": "Unique code that identifies the order whose invoice is being sent."
+              },
+              {
+                "name": "invoiceNumber",
+                "value": "000030711",
+                "type": "path",
+                "description": "Number that identifies the invoice."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a given order, adding its tracking number to its [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe).\n\r\n\rAfter using this call to add a tracking number to an order, you can use the [Update order tracking status](https://developers.vtex.com/docs/api-reference/orders-api#put-/api/oms/pvt/orders/-orderId-/invoice/-invoiceNumber-/tracking) API request to add tracking events.\n\r\n\r> The `Notify invoice` resource is needed to use this API reque"
+        },
+        {
+          "info": {
+            "name": "VTex Order invoice notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/orders/pvt/document/:orderId/invoices",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the order."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Once the order is invoiced, the seller should use this request to send the invoice information to the marketplace.\n\nWe strongly recommend that you always send the object of the invoiced items. With this practice, rounding errors will be avoided.\n\nIt is not allowed to use the same `invoiceNumber` in more than one request to the Order Invoice Notification endpoint.\n\nBe aware that this endpoint is also used by the seller to send the order tracking information. This, however, should be done in a sep"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

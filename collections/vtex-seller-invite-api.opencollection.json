@@ -1,0 +1,343 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Seller Invite API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Seller Invite",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex List Seller Leads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/seller-leads",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "This field determines the limit used to retrieve the list of sellers. The response includes objects starting `from` the value inputted here."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This field determines the limit used to retrieve the list of sellers. The response includes objects until the value inputted here.            "
+              },
+              {
+                "name": "isConnected",
+                "value": "",
+                "type": "query",
+                "description": "Query param that enables results to be filter by whether the seller lead is already connected to the marketplace or not."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Custom search field, that filters sellers invited by specific marketplace operator's  email."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Seller Lead's status. Includes `accepted`, `connected` or `invited`."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Query param determining how data will be ordered in the response, ordering by name or ID in descending our ascending order. Includes the following values: \n\n`namesort` = desc/asc \n\n`idsort` = desc/asc"
+              }
+            ]
+          },
+          "docs": "This call's response includes a list of all sellers invited by the marketplace operator to join them. Retrieved results can be filtered by adding optional query fields to the request. Each seller listed includes the following information: \n\n- `id` \n\n- `createdAt` \n\n- `status` \n\n- `isConnected` \n\n- `sellerEmail` \n\n- `sellerName` \n\n- `salesChannel` \n\n- `email`\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must "
+        },
+        {
+          "info": {
+            "name": "VTex Invite Seller Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/seller-leads",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This API is used by marketplace operators to invite sellers to join their marketplace. The request sends an email to the seller, inviting sellers to activate their store. The invitation's link in the email is unique per user, and available for only seven days for the seller to click and begin activating their store. \n\nThe email template is completely customizable. All email templates that VTEX sends to seller leads can be found and edited in the marketplace's VTEX Admin, on the Message Center se"
+        },
+        {
+          "info": {
+            "name": "VTex Get Seller Lead's Data by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/seller-leads/:sellerLeadId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built."
+              }
+            ]
+          },
+          "docs": "Marketplace operators may call this endpoint to retrieve information about a specific seller invited to the Seller Portal, by searching through their `Seller Lead Id`. To know the chosen seller's `sellerLeadId`, marketplace operators can count on the *List Sellers* endpoint's response as well. Each seller listed includes the following information: \n\n- `id` \n\n- `createdAt` \n\n- `status` \n\n- `isConnected` \n\n- `sellerEmail` \n\n- `sellerName` \n\n- `salesChannel` \n\n- `email`"
+        },
+        {
+          "info": {
+            "name": "VTex Accept Seller Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/seller-leads/:sellerLeadId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint is triggered by the seller onboarding wizard, once the seller confirms their invitation. It can be used by marketplace operators to manually accept seller leads, and carry on with their onboarding process. \n\nNote that there's no specific API call that allows status changes. The operations only allow the seller lead to move forward: \n\n From `invite` > to `Accept` > closing on `Create Seller`.  \n\nIf you want to change the status, you can start the process again, by deleting that lead"
+        },
+        {
+          "info": {
+            "name": "VTex Delete Seller Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/seller-leads/:sellerLeadId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "sellerLeadId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Seller Lead invited to the marketplace."
+              }
+            ]
+          },
+          "docs": "This endpoint permanently deletes a seller previously invited to the marketplace, if the seller has not already accepted the invitation."
+        },
+        {
+          "info": {
+            "name": "VTex Create Seller From Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/seller-leads/:sellerLeadId/seller",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "isActive",
+                "value": "",
+                "type": "query",
+                "description": "Enables to filter sellers that are active (`true`) or unactive (`false`) in the marketplace."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built."
+              }
+            ]
+          },
+          "docs": "This endpoint is used by marketplace operators to create seller accounts. The request will only accept Seller Leads whose status is `accepted`. If they are already `connected` or `invited`, the call will not be fulfilled. \n\nThe creation of the account at VTEX is done by an internal Billing service. There is no seller account and marketplace affiliation if you do not go through this step. \n\nNote that there's no specific API call that allows status changes. The operations only allow the seller lea"
+        },
+        {
+          "info": {
+            "name": "VTex Resend Seller Lead Invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/seller-register/pvt/seller-leads/:sellerLeadId/status",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account."
+              },
+              {
+                "name": "environment",
+                "value": "",
+                "type": "path",
+                "description": "Environment to use. Used as part of the URL."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint allows marketplace operators to resend an invitation to a seller lead, previously invited to join their marketplace. The request will only accept Seller Leads whose status is `invited`. If they are already `connected` or `accepted`, the call will not be fulfilled."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Facets API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Facets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Get Category Facets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/catalog_system/pub/facets/category/:categoryId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "categoryId",
+                "value": "",
+                "type": "path",
+                "description": "Category unique number identifier."
+              },
+              {
+                "name": "_from",
+                "value": "",
+                "type": "query",
+                "description": "Starter page range. These parameters allow the API to be paginated. Take into account that the initial and final pages cannot have a separation superior to 50 pages. Thus, it will be displayed 50 items per page."
+              },
+              {
+                "name": "_to",
+                "value": "",
+                "type": "query",
+                "description": "Finisher page range. These parameters allow the API to be paginated. Take into account that the initial and final pages cannot have a separation superior to 50 pages. Thus, it will be displayed 50 items per page."
+              }
+            ]
+          },
+          "docs": "Retrieves the names and IDs of the categories facets. \r\n>⚠️ This endpoint returns a maximum of 50 items per response, so the difference between `_from` and `_to` should not exceed this number. The result order is descending, from the highest product ID to the lowest.\r\n\r\n## Response body example:\r\n\r\n```json\r\n[\r\n\t[\r\n    {\r\n      \"Name\":\"Tamanho Global\",\r\n      \"Id\":45\r\n\t\t},\r\n\t\t{\r\n      \"Name\":\"Percentuals\",\r\n      \"Id\":25\r\n\t\t}\r\n\t]\r\n]\r\n```"
+        },
+        {
+          "info": {
+            "name": "VTex Search by Store Facets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/catalog_system/pub/facets/search/:term",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "map",
+                "value": "",
+                "type": "query",
+                "description": "Mapping of the term. It can be `c` for a category, `b` for a brand, or `specificationFilter_{specificationId}` for a specification. You need to include a map for each term you are searching for in the same term's order."
+              },
+              {
+                "name": "term",
+                "value": "",
+                "type": "path",
+                "description": "Term used for the facet's search. You can search for as much term as you want. The term can be: `categoryId`, `brandId`, `specificationId`."
+              }
+            ]
+          },
+          "docs": "Retrieves products by store facets. The result order is descending, from the highest product ID to the lowest."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

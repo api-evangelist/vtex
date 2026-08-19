@@ -1,0 +1,943 @@
+{
+  "item": [
+    {
+      "id": "9077e5aa-57b5-48fa-a8a2-238f00e5f9c4",
+      "name": "Change Order (Beta)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "59916b7c-fc90-4a68-8aa9-282359674804",
+          "name": "VTex Create order change",
+          "request": {
+            "name": "VTex Create order change",
+            "description": {
+              "content": "[Change order](https://help.vtex.com/en/tutorial/how-change-order-works-beta--56TO0bOFXsfmpc7YZ3wIUZ) feature allows you to modify an order, whether the change is motivated by customer mistakes, product unavailability, or others. Both sellers and marketplaces can use this endpoint and change orders in multiple scenarios, and it is possible to make a single change or combine multiple ones in the same request. \r\nThe possible change order operations you can perform are the following:\r\n- **Add:** Adding items, quantity, or product weight.\r\n- **Remove:** Removing a part of items or the total quantity.\r\n- **Replace:** Changing items' quantity, weight, or price. You can also replace one or more items with different ones, including weighable products.\r\n\r\n>❗ When removing or adding items to an order, your [inventory](https://help.vtex.com/en/tutorial/inventory-management--tutorials_139) is not automatically updated. You can use the [Update inventory by SKU and warehouse](https://developers.vtex.com/docs/api-reference/logistics-api#put-/api/logistics/pvt/inventory/skus/-skuId-/warehouses/-warehouseId-) endpoint.\r\n\r\nThe next sections are listed below:\r\n- Number of changes per order \r\n- Acceptable order status for changes \r\n- Order change and price \r\n- Combining multiples operations \r\n\r\n## Number of changes per order\r\nBesides being able to combine multiple change operations - add, remove, and replace - in a single request, you can make different change requests, and there is no limit to how many times an order can be changed.\r\n\r\nEach order has its change history, you can retrieve it using the [Get order change history](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/order-system/orders/-changeOrderId-/changes) endpoint.\r\n\r\n## Acceptable order status for changes\r\nYou can only change an order when it is one of the following [order flow](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196) status:\r\n- `handling`\r\n- `waiting-for-fulfillment` \r\n- `ready for invoicing` \r\n\r\nIt is not possible to change an order when the payment transaction is complete.\r\n\r\n## Order change and price\r\nWhen you add, remove or replace items using this endpoint, the order and payment transaction values are automatically updated. Change order calculates the update of the following values:\r\n- Item value\r\n- Total value \r\n\r\n**Example:** If you send the request body for replacing items without the unit multiplier (`unitMultiplier`) or measurement (`measurementUnit`), Change order will get this information on your store's Catalog, Pricing and Payment systems. \r\n>⚠️ Increasing the price of an order is allowed only when the order was paid by credit card, [payable notes](https:/help.vtex.com/en/tutorial/setting-up-payments-with-promissory--5pW7avTwtyQcMu4uiW8quQ), cash, or [credit control](https:/help.vtex.com/en/tutorial/customer-credit-overview--1uIqTjWxIIIEW0COMg4uE0). In addition, the [acquirer](https:/help.vtex.com/en/tutorial/what-is-an-acquirer--7N1oRTG8dGmOiIugC0cs4E) must allow transactions without the CVV code and two charging transactions in the same order. \r\n\r\nFor order changes with discounts, Order Management System (OMS) considers that you still can change the order's transactional value, as long as its status in Transaction Details is not `Finished`. \r\n\r\n## Order change and payment transaction flow \r\n\r\nAn order's [transaction flow](https://help.vtex.com/tracks/payments--6GAS7ZzGAm7AGoEAwDbwJG/1xjzgJZvqwaI1rfxLMCC3Y) goes through various payment statuses before its conclusion. Within certain conditions, it is possible to change settled orders. The requirements are the following:\r\n\r\n- The order's [payment method](https://help.vtex.com/en/tutorial/difference-between-payment-methods-and-payment-conditions--3azJenhGFyUy2gsocms42Q) is a credit card.\r\n- The settlement occurs before the order is invoiced.\r\n- The payment connector is configured to allow partial refunds.\r\n\r\n> Currently, [Adyen](https://help.vtex.com/en/tutorial/configuring-payment-with-adyenv3--7xAz67E2Eg63LWCQNjVdwv) is the only payment connector that supports that operation.\r\n\r\nIf the order change increases or decreases the cost for the customer, the platform has the following behavior:\r\n\r\n- **Smaller price after order change:** An automatic notification is sent to the payment [gateway](https://help.vtex.com/tracks/payments--6GAS7ZzGAm7AGoEAwDbwJG/kdPbEIWf8Xq8tESQvViMB#gateway) to reimburse the customer for the difference.\r\n- **Higher price after order change:** An automatic notification is sent to the payment gateway to require the customer to pay for the additional cost.\r\n\r\n## Combining multiples operations\r\nYou can use this endpoint to make a single change operation or combine them in the same request. See some examples below.\r\n\r\n### Add request body example:\r\n\r\n```json\r\n{\r\n   \"add\": {\r\n      \"items\": [\r\n          {\r\n              \"id\": \"8\",\r\n              \"quantity\": 1,\r\n              \"measurementUnit\": \"un\",\r\n              \"unitMultiplier\": 1\r\n          }\r\n      ]\r\n    }\r\n}\r\n```\r\n\r\n### Remove request body example:\r\n\r\n```json\r\n{\r\n    \"reason\": \"The client wants to remove a product.\",\r\n    \"remove\": {\r\n        \"items\": [\r\n            {\r\n                \"id\": \"8\",\r\n                \"quantity\": 2,\r\n                \"measurementUnit\": \"un\",\r\n                \"unitMultiplier\": 1\r\n            }\r\n        ]\r\n    }\r\n}\r\n```\r\n\r\n### Replace request body example:\r\n```json\r\n{\r\n    \"reason\": \"The client wants to increase the product weight.\",\r\n    \"replace\": [\r\n        {\r\n            \"from\": {\r\n                \"items\": [\r\n                    {\r\n                        \"id\": \"1\",\r\n                        \"quantity\": 1\r\n                    }\r\n                ]\r\n            },\r\n            \"to\": {\r\n                \"items\": [\r\n                    {\r\n                        \"id\": \"1\",\r\n                        \"quantity\": 1,\r\n                        \"measurementUnit\": \"kg\",\r\n                        \"unitMultiplier\": 1.0\r\n                    }\r\n                ],\r\n                \"shippingData\": {\r\n                    \"logisticsInfo\": [\r\n                        {\r\n                            \"itemIndex\": 0,\r\n                            \"slaId\": \"Normal\",\r\n                            \"deliveryChannel\": \"delivery\",\r\n                            \"addressId\": \"12334048475146857\",\r\n                            \"price\": 1000\r\n                        }\r\n                    ]\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}\r\n```\r\n\r\n\r\n### Add, remove and replace request body example:\r\n\r\n\r\n```json\r\n{\r\n  \"reason\": \"The client wants to add, remove and replace a weighable product.\",\r\n  \"manualDiscountValue\": 0,\r\n  \"add\": {\r\n      \"items\": [\r\n          {\r\n              \"id\": \"8\",\r\n              \"quantity\": 1,\r\n              \"measurementUnit\": \"un\",\r\n              \"unitMultiplier\": 1\r\n          }\r\n      ]\r\n  },\r\n  \"remove\": {\r\n      \"items\": [\r\n          {\r\n              \"id\": \"31\",\r\n              \"quantity\": 1,\r\n              \"measurementUnit\": \"un\",\r\n              \"unitMultiplier\": 1\r\n          }\r\n      ]\r\n  },\r\n  \"replace\": [\r\n                        {\r\n                          \"from\": {\r\n                            \"items\": [\r\n                              {\r\n                                \"id\": \"1\",\r\n                                \"quantity\": 1\r\n                              }\r\n                            ]\r\n                          },\r\n                          \"to\": {\r\n                            \"items\": [\r\n                              {\r\n                                \"id\": \"1\",\r\n                                \"quantity\": 1,\r\n                                \"measurementUnit\": \"kg\",\r\n                                \"unitMultiplier\": 1.0\r\n                              }\r\n                            ],\r\n                            \"shippingData\": {\r\n                              \"logisticsInfo\": [\r\n                                {\r\n                                  \"itemIndex\": 0,\r\n                                  \"slaId\": \"Normal\",\r\n                                  \"deliveryChannel\": \"delivery\",\r\n                                  \"addressId\": \"12334048475146857\",\r\n                                  \"price\": 1000\r\n                                }\r\n                           ]\r\n                       }\r\n                  }\r\n            }\r\n     ]\r\n}\r\n```\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Orders Full Access** |\r\n| OMS | OMS access | **Cancel order** |\r\n| OMS | OMS access | **Change order** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| Checkout Admin | Orders Full Access |\r\n| OMS - Full access | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Oms | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Gateway | Cancel order |\r\n| IntegrationProfile - Fulfillment Gateway Oms | <p>Cancel order</p><p>Change order</p> |\r\n| inStore Sales Person | <p>Cancel order</p><p>Change order</p> |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "order-system",
+                "orders",
+                ":changeOrderId",
+                "changes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "an",
+                  "value": "<string>",
+                  "description": "(Required) Name of the VTEX account that created the order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeOrderId",
+                  "description": "(Required) Order ID of the order you wish to change."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\",\n  \"replace\": [\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bffe014d-6a96-4b21-8801-7f30daba1a23",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-system",
+                    "orders",
+                    ":changeOrderId",
+                    "changes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "an",
+                      "value": "storeName"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeOrderId",
+                      "description": "(Required) Order ID of the order you wish to change."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"The client wants to change a weighable product.\",\n  \"replace\": [\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"id\": \"1\",\n            \"quantity\": 1\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"id\": \"1\",\n            \"quantity\": 1,\n            \"measurementUnit\": \"kg\",\n            \"unitMultiplier\": 1\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": [\n            {\n              \"itemIndex\": 0,\n              \"slaId\": \"Normal\",\n              \"deliveryChannel\": \"delivery\",\n              \"addressId\": \"12334048475146857\",\n              \"price\": 1000\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"e8532a32-7f7e-434a-88ec-29609f0ede46\",\n  \"workflowId\": \"74f40e7a-68c6-4699-b874-a8a297fb3f6a\",\n  \"reason\": \"The client did not like the size.\",\n  \"manualDiscountValue\": 0,\n  \"manualIncrementValue\": 0,\n  \"totalChangeValue\": 0,\n  \"totals\": [],\n  \"add\": null,\n  \"remove\": null,\n  \"replace\": [\n    {\n      \"from\": {\n        \"paymentData\": {\n          \"transactions\": []\n        },\n        \"items\": [\n          {\n            \"id\": \"31\",\n            \"quantity\": 1,\n            \"price\": null,\n            \"measurementUnit\": null,\n            \"unitMultiplier\": 0,\n            \"sellingPrice\": null,\n            \"name\": null,\n            \"detailUrl\": null,\n            \"imageUrl\": null\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": []\n        }\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"uniqueId\": \"40E763F4378E4F40AD1FE915FE1078E1\",\n            \"id\": \"1\",\n            \"productId\": null,\n            \"productRefId\": null,\n            \"refId\": null,\n            \"ean\": null,\n            \"name\": null,\n            \"skuName\": null,\n            \"modalType\": null,\n            \"parentItemIndex\": null,\n            \"parentAssemblyBinding\": null,\n            \"assemblies\": [],\n            \"priceValidUntil\": null,\n            \"tax\": 0,\n            \"price\": null,\n            \"listPrice\": null,\n            \"manualPrice\": null,\n            \"manualPriceAppliedBy\": null,\n            \"sellingPrice\": null,\n            \"rewardValue\": 0,\n            \"isGift\": false,\n            \"additionalInfo\": {\n              \"dimension\": null,\n              \"brandName\": null,\n              \"brandId\": null,\n              \"offeringInfo\": null,\n              \"offeringType\": null,\n              \"offeringTypeId\": null,\n              \"categoriesIds\": null,\n              \"productClusterId\": null,\n              \"commercialConditionId\": null\n            },\n            \"preSaleDate\": null,\n            \"productCategoryIds\": null,\n            \"productCategories\": {},\n            \"quantity\": 1,\n            \"seller\": null,\n            \"sellerChain\": [\n              null\n            ],\n            \"imageUrl\": null,\n            \"detailUrl\": null,\n            \"components\": [],\n            \"bundleItems\": [],\n            \"attachments\": [],\n            \"attachmentOfferings\": [],\n            \"offerings\": [],\n            \"priceTags\": [],\n            \"availability\": null,\n            \"measurementUnit\": \"un\",\n            \"unitMultiplier\": 1,\n            \"manufacturerCode\": null,\n            \"priceDefinition\": null\n          }\n        ],\n        \"paymentData\": {\n          \"transactions\": []\n        },\n        \"receiptData\": null,\n        \"shippingData\": {\n          \"logisticsInfo\": [\n            {\n              \"itemIndex\": 0,\n              \"selectedSla\": \"Lenta\",\n              \"selectedDeliveryChannel\": \"delivery\",\n              \"addressId\": \"9ec276fd3a604eb1aa151b5333ca5db6\",\n              \"slas\": [\n                {\n                  \"id\": \"Lenta\",\n                  \"deliveryChannel\": \"delivery\",\n                  \"name\": \"Lenta\",\n                  \"deliveryIds\": [],\n                  \"shippingEstimate\": null,\n                  \"shippingEstimateDate\": null,\n                  \"lockTTL\": null,\n                  \"availableDeliveryWindows\": [],\n                  \"deliveryWindow\": null,\n                  \"price\": 600,\n                  \"listPrice\": 600,\n                  \"tax\": 0,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupPointId\": null,\n                  \"pickupDistance\": null,\n                  \"polygonName\": null,\n                  \"transitTime\": null\n                }\n              ],\n              \"shipsTo\": [],\n              \"itemId\": \"1\",\n              \"deliveryChannels\": [],\n              \"price\": 600,\n              \"listPrice\": 600,\n              \"shippingEstimate\": null,\n              \"dockEstimate\": null,\n              \"shippingEstimateDate\": null,\n              \"lockTTL\": null,\n              \"deliveryCompany\": null,\n              \"polygonName\": null,\n              \"transitTime\": null,\n              \"sellingPrice\": 600,\n              \"deliveryIds\": [],\n              \"deliveryWindow\": null,\n              \"pickupPointId\": null,\n              \"pickupStoreInfo\": {\n                \"isPickupStore\": false,\n                \"friendlyName\": null,\n                \"address\": null,\n                \"additionalInfo\": null,\n                \"dockId\": null\n              },\n              \"pickupDistance\": null\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"date\": \"2023-07-27T17:52:18.6483116Z\",\n  \"origin\": {\n    \"account\": \"qastore\",\n    \"orderId\": \"v12772213qst-02\",\n    \"component\": \"MarketplaceComponent\"\n  },\n  \"settings\": {\n    \"customPaymentSystemsAllowed\": []\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a6278fe-9d32-4979-9b93-0193fecda218",
+          "name": "VTex Get order change history",
+          "request": {
+            "name": "VTex Get order change history",
+            "description": {
+              "content": "This endpoint retrieves a history of every successful [Change order request](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) made to an order and provides detailed information about each request.\r\n\r\nYou can access an order's history using the `changeOrderId`, which corresponds to its `orderId`.\r\n\r\n> If you want detailed information about a single change request, you can use the endpoint [Get order change details](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/order-system/orders/-changeOrderId-/changes/-changeRequestId-).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https:/developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https:/help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Orders Full Access** |\r\n| OMS | OMS access | **Cancel order** |\r\n| OMS | OMS access | **Change order** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| Checkout Admin | Orders Full Access |\r\n| OMS - Full access | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Oms | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Gateway | Cancel order |\r\n| IntegrationProfile - Fulfillment Gateway Oms | <p>Cancel order</p><p>Change order</p> |\r\n| inStore Sales Person | <p>Cancel order</p><p>Change order</p> |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "order-system",
+                "orders",
+                ":changeOrderId",
+                "changes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "an",
+                  "value": "<string>",
+                  "description": "(Required) Name of the VTEX account that created the order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeOrderId",
+                  "description": "(Required) Order ID of the order you wish to get the change history."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0387c596-c85c-4507-b6ec-a993ead72e33",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-system",
+                    "orders",
+                    ":changeOrderId",
+                    "changes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "an",
+                      "value": "storeName"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeOrderId",
+                      "description": "(Required) Order ID of the order you wish to get the change history."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requests\": [\n    {\n      \"requestId\": \"e8532a32-7f7e-434a-88ec-29609f0ede46\",\n      \"workflowId\": \"74f40e7a-68c6-4699-b874-a8a297fb3f6a\",\n      \"reason\": \"The client did not like the size.\",\n      \"manualDiscountValue\": 0,\n      \"manualIncrementValue\": 0,\n      \"totalChangeValue\": 0,\n      \"totals\": [],\n      \"add\": null,\n      \"remove\": null,\n      \"replace\": [\n        {\n          \"from\": {\n            \"paymentData\": {\n              \"transactions\": []\n            },\n            \"items\": [\n              {\n                \"id\": \"31\",\n                \"quantity\": 1,\n                \"price\": 5000,\n                \"measurementUnit\": \"un\",\n                \"unitMultiplier\": 1,\n                \"sellingPrice\": 5000,\n                \"name\": \"Fusca miniatura Fusca preto\",\n                \"detailUrl\": \"/fusca-miniatura-24/p\",\n                \"imageUrl\": \"http://qastore.vteximg.com.br/arquivos/ids/155431-55-55/image-bdab69af1e5c41cdbc498d02e370b376.jpg?v=636579391945870000\"\n              }\n            ],\n            \"shippingData\": {\n              \"logisticsInfo\": [\n                {\n                  \"itemIndex\": 0,\n                  \"selectedSla\": \"Lenta\",\n                  \"selectedDeliveryChannel\": \"delivery\",\n                  \"addressId\": \"9ec276fd3a604eb1aa151b5333ca5db6\",\n                  \"slas\": [\n                    {\n                      \"id\": \"Lenta\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Lenta\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1c083bf\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Donkey\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 180,\n                      \"listPrice\": 180,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    },\n                    {\n                      \"id\": \"Normal\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Normal\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Transportadora\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"3bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 500,\n                      \"listPrice\": 500,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"3bd\"\n                    },\n                    {\n                      \"id\": \"Pickup\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Pickup\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"ech018654\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Retirada\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 700,\n                      \"listPrice\": 700,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    }\n                  ],\n                  \"shipsTo\": [\n                    \"BRA\"\n                  ],\n                  \"itemId\": \"31\",\n                  \"deliveryChannels\": [\n                    {\n                      \"id\": \"delivery\"\n                    }\n                  ],\n                  \"price\": 180,\n                  \"listPrice\": 180,\n                  \"shippingEstimate\": \"25bd\",\n                  \"dockEstimate\": null,\n                  \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                  \"lockTTL\": \"12d\",\n                  \"deliveryCompany\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\",\n                  \"sellingPrice\": 180,\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1c083bf\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Donkey\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": null,\n                      \"accountCarrierName\": \"qastoreecho\"\n                    }\n                  ],\n                  \"deliveryWindow\": null,\n                  \"pickupPointId\": null,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupDistance\": null\n                }\n              ]\n            }\n          },\n          \"to\": {\n            \"items\": [\n              {\n                \"uniqueId\": \"40E763F4378E4F40AD1FE915FE1078E1\",\n                \"id\": \"1\",\n                \"productId\": \"1\",\n                \"productRefId\": \"\",\n                \"refId\": \"codrefxicaraazul\",\n                \"ean\": \"8745121641\",\n                \"name\": \"xícara azul\",\n                \"skuName\": \"azul\",\n                \"modalType\": null,\n                \"parentItemIndex\": null,\n                \"parentAssemblyBinding\": null,\n                \"assemblies\": [],\n                \"priceValidUntil\": null,\n                \"tax\": 0,\n                \"price\": 5000,\n                \"listPrice\": null,\n                \"manualPrice\": null,\n                \"manualPriceAppliedBy\": null,\n                \"sellingPrice\": 5000,\n                \"rewardValue\": 0,\n                \"isGift\": false,\n                \"additionalInfo\": {\n                  \"dimension\": null,\n                  \"brandName\": null,\n                  \"brandId\": null,\n                  \"offeringInfo\": null,\n                  \"offeringType\": null,\n                  \"offeringTypeId\": null,\n                  \"categoriesIds\": null,\n                  \"productClusterId\": null,\n                  \"commercialConditionId\": null\n                },\n                \"preSaleDate\": null,\n                \"productCategoryIds\": \"/1/\",\n                \"productCategories\": {\n                  \"1\": \"Category\"\n                },\n                \"quantity\": 1,\n                \"seller\": \"1\",\n                \"sellerChain\": [\n                  \"1\"\n                ],\n                \"imageUrl\": \"http://qastore.vteximg.com.br/arquivos/ids/155394-55-55/xicara.jpg?v=636565506415770000\",\n                \"detailUrl\": \"/xicara/p\",\n                \"components\": [],\n                \"bundleItems\": [],\n                \"attachments\": [],\n                \"attachmentOfferings\": [],\n                \"offerings\": [],\n                \"priceTags\": [],\n                \"availability\": null,\n                \"measurementUnit\": \"un\",\n                \"unitMultiplier\": 1,\n                \"manufacturerCode\": null,\n                \"priceDefinition\": {\n                  \"calculatedSellingPrice\": 5000,\n                  \"total\": 5000,\n                  \"sellingPrices\": [\n                    {\n                      \"value\": 5000,\n                      \"quantity\": 1\n                    }\n                  ]\n                }\n              }\n            ],\n            \"paymentData\": {\n              \"transactions\": []\n            },\n            \"receiptData\": null,\n            \"shippingData\": {\n              \"logisticsInfo\": [\n                {\n                  \"itemIndex\": 0,\n                  \"selectedSla\": \"Lenta\",\n                  \"selectedDeliveryChannel\": \"delivery\",\n                  \"addressId\": \"9ec276fd3a604eb1aa151b5333ca5db6\",\n                  \"slas\": [\n                    {\n                      \"id\": \"Lenta\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Lenta\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1c083bf\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Donkey\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 600,\n                      \"listPrice\": 180,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    },\n                    {\n                      \"id\": \"Normal\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Normal\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Transportadora\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"3bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 500,\n                      \"listPrice\": 500,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"3bd\"\n                    },\n                    {\n                      \"id\": \"Pickup\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Pickup\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"ech018654\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Retirada\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 700,\n                      \"listPrice\": 700,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    }\n                  ],\n                  \"shipsTo\": [\n                    \"BRA\"\n                  ],\n                  \"itemId\": \"1\",\n                  \"deliveryChannels\": [\n                    {\n                      \"id\": \"delivery\"\n                    }\n                  ],\n                  \"price\": 600,\n                  \"listPrice\": 180,\n                  \"shippingEstimate\": \"25bd\",\n                  \"dockEstimate\": null,\n                  \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                  \"lockTTL\": \"12d\",\n                  \"deliveryCompany\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\",\n                  \"sellingPrice\": 600,\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1c083bf\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Donkey\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": null,\n                      \"accountCarrierName\": \"qastoreecho\"\n                    }\n                  ],\n                  \"deliveryWindow\": null,\n                  \"pickupPointId\": null,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupDistance\": null\n                }\n              ]\n            }\n          }\n        }\n      ],\n      \"date\": \"2023-07-27T17:52:18.6483116Z\",\n      \"origin\": {\n        \"account\": \"qastore\",\n        \"orderId\": \"v12772213qst-02\",\n        \"component\": \"MarketplaceComponent\"\n      },\n      \"settings\": {\n        \"customPaymentSystemsAllowed\": []\n      }\n    }\n  ],\n  \"actions\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81ba3aaa-e9ca-4ef7-b27f-e2737037ac98",
+          "name": "VTex Get order change details",
+          "request": {
+            "name": "VTex Get order change details",
+            "description": {
+              "content": "This endpoint retrieves detailed information about a specific order change. So after creating multiple changes, you can get information on each one of them by its `changeRequestId`, the unique identification code generated by the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint.\r\n\r\nThe successful status code is `200 OK`, and its response body schema is very similar to the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint, with some additional fields:\r\n\r\n- `status`: The change request status in the workflow, which progresses in the following order:\r\n  - `waiting-acknowledgement`\r\n  - `waiting-confirmation`\r\n  - `done`\r\n  - `canceled`\r\n\r\n- `inProgress`: When set as `true`, the order is still progressing in the order flow, when set as `false`, it is complete, whether by cancellation or because the customer received it.\r\n\r\n- `logs`: Lists the workflow processing logs.\r\n\r\n> If you want information about all the changes made to an order, use the [Get order change history](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/order-system/orders/-changeOrderId-/changes) endpoint.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Orders Full Access** |\r\n| OMS | OMS access | **Cancel order** |\r\n| OMS | OMS access | **Change order** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| Checkout Admin | Orders Full Access |\r\n| OMS - Full access | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Oms | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Gateway | Cancel order |\r\n| IntegrationProfile - Fulfillment Gateway Oms | <p>Cancel order</p><p>Change order</p> |\r\n| inStore Sales Person | <p>Cancel order</p><p>Change order</p> |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "order-system",
+                "orders",
+                ":changeOrderId",
+                "changes",
+                ":changeRequestId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "an",
+                  "value": "<string>",
+                  "description": "(Required) Name of the VTEX account that created the order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeOrderId",
+                  "description": "(Required) Order ID of the order you wish to get the change detail."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeRequestId",
+                  "description": "(Required) Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code. There are no limits to changes you can perform using the same `changeRequestId`, and we recommend keeping all changes of a given order grouped by the same `changeRequestId`, so you will have a unified change history."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b4f82a5a-5a8f-4c33-9aa2-385fb76cd96d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-system",
+                    "orders",
+                    ":changeOrderId",
+                    "changes",
+                    ":changeRequestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "an",
+                      "value": "storeName"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeOrderId",
+                      "description": "(Required) Order ID of the order you wish to get the change detail."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeRequestId",
+                      "description": "(Required) Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code. There are no limits to changes you can perform using the same `changeRequestId`, and we recommend keeping all changes of a given order grouped by the same `changeRequestId`, so you will have a unified change history."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requests\": [\n    {\n      \"requestId\": \"e8532a32-7f7e-434a-88ec-29609f0ede46\",\n      \"workflowId\": \"74f40e7a-68c6-4699-b874-a8a297fb3f6a\",\n      \"reason\": \"The client did not like the size.\",\n      \"manualDiscountValue\": 0,\n      \"manualIncrementValue\": 0,\n      \"totalChangeValue\": 0,\n      \"totals\": [],\n      \"add\": null,\n      \"remove\": null,\n      \"replace\": [\n        {\n          \"from\": {\n            \"paymentData\": {\n              \"transactions\": []\n            },\n            \"items\": [\n              {\n                \"id\": \"31\",\n                \"quantity\": 1,\n                \"price\": 5000,\n                \"measurementUnit\": \"un\",\n                \"unitMultiplier\": 1,\n                \"sellingPrice\": 5000,\n                \"name\": \"Fusca miniatura Fusca preto\",\n                \"detailUrl\": \"/fusca-miniatura-24/p\",\n                \"imageUrl\": \"http://qastore.vteximg.com.br/arquivos/ids/155431-55-55/image-bdab69af1e5c41cdbc498d02e370b376.jpg?v=636579391945870000\"\n              }\n            ],\n            \"shippingData\": {\n              \"logisticsInfo\": [\n                {\n                  \"itemIndex\": 0,\n                  \"selectedSla\": \"Lenta\",\n                  \"selectedDeliveryChannel\": \"delivery\",\n                  \"addressId\": \"9ec276fd3a604eb1aa151b5333ca5db6\",\n                  \"slas\": [\n                    {\n                      \"id\": \"Lenta\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Lenta\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1c083bf\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Donkey\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 180,\n                      \"listPrice\": 180,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    },\n                    {\n                      \"id\": \"Normal\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Normal\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Transportadora\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"3bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 500,\n                      \"listPrice\": 500,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"3bd\"\n                    },\n                    {\n                      \"id\": \"Pickup\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Pickup\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"ech018654\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Retirada\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 700,\n                      \"listPrice\": 700,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    }\n                  ],\n                  \"shipsTo\": [\n                    \"BRA\"\n                  ],\n                  \"itemId\": \"31\",\n                  \"deliveryChannels\": [\n                    {\n                      \"id\": \"delivery\"\n                    }\n                  ],\n                  \"price\": 180,\n                  \"listPrice\": 180,\n                  \"shippingEstimate\": \"25bd\",\n                  \"dockEstimate\": null,\n                  \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                  \"lockTTL\": \"12d\",\n                  \"deliveryCompany\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\",\n                  \"sellingPrice\": 180,\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1c083bf\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Donkey\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": null,\n                      \"accountCarrierName\": \"qastoreecho\"\n                    }\n                  ],\n                  \"deliveryWindow\": null,\n                  \"pickupPointId\": null,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupDistance\": null\n                }\n              ]\n            }\n          },\n          \"to\": {\n            \"items\": [\n              {\n                \"uniqueId\": \"40E763F4378E4F40AD1FE915FE1078E1\",\n                \"id\": \"1\",\n                \"productId\": \"1\",\n                \"productRefId\": \"\",\n                \"refId\": \"codrefxicaraazul\",\n                \"ean\": \"8745121641\",\n                \"name\": \"xícara azul\",\n                \"skuName\": \"azul\",\n                \"modalType\": null,\n                \"parentItemIndex\": null,\n                \"parentAssemblyBinding\": null,\n                \"assemblies\": [],\n                \"priceValidUntil\": null,\n                \"tax\": 0,\n                \"price\": 5000,\n                \"listPrice\": null,\n                \"manualPrice\": null,\n                \"manualPriceAppliedBy\": null,\n                \"sellingPrice\": 5000,\n                \"rewardValue\": 0,\n                \"isGift\": false,\n                \"additionalInfo\": {\n                  \"dimension\": null,\n                  \"brandName\": null,\n                  \"brandId\": null,\n                  \"offeringInfo\": null,\n                  \"offeringType\": null,\n                  \"offeringTypeId\": null,\n                  \"categoriesIds\": null,\n                  \"productClusterId\": null,\n                  \"commercialConditionId\": null\n                },\n                \"preSaleDate\": null,\n                \"productCategoryIds\": \"/1/\",\n                \"productCategories\": {\n                  \"1\": \"Category\"\n                },\n                \"quantity\": 1,\n                \"seller\": \"1\",\n                \"sellerChain\": [\n                  \"1\"\n                ],\n                \"imageUrl\": \"http://qastore.vteximg.com.br/arquivos/ids/155394-55-55/xicara.jpg?v=636565506415770000\",\n                \"detailUrl\": \"/xicara/p\",\n                \"components\": [],\n                \"bundleItems\": [],\n                \"attachments\": [],\n                \"attachmentOfferings\": [],\n                \"offerings\": [],\n                \"priceTags\": [],\n                \"availability\": null,\n                \"measurementUnit\": \"un\",\n                \"unitMultiplier\": 1,\n                \"manufacturerCode\": null,\n                \"priceDefinition\": {\n                  \"calculatedSellingPrice\": 5000,\n                  \"total\": 5000,\n                  \"sellingPrices\": [\n                    {\n                      \"value\": 5000,\n                      \"quantity\": 1\n                    }\n                  ]\n                }\n              }\n            ],\n            \"paymentData\": {\n              \"transactions\": []\n            },\n            \"receiptData\": null,\n            \"shippingData\": {\n              \"logisticsInfo\": [\n                {\n                  \"itemIndex\": 0,\n                  \"selectedSla\": \"Lenta\",\n                  \"selectedDeliveryChannel\": \"delivery\",\n                  \"addressId\": \"9ec276fd3a604eb1aa151b5333ca5db6\",\n                  \"slas\": [\n                    {\n                      \"id\": \"Lenta\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Lenta\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1c083bf\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Donkey\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 600,\n                      \"listPrice\": 180,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    },\n                    {\n                      \"id\": \"Normal\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Normal\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"1\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Transportadora\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"3bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 500,\n                      \"listPrice\": 500,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"3bd\"\n                    },\n                    {\n                      \"id\": \"Pickup\",\n                      \"deliveryChannel\": \"delivery\",\n                      \"name\": \"Pickup\",\n                      \"deliveryIds\": [\n                        {\n                          \"courierId\": \"ech018654\",\n                          \"warehouseId\": \"1_1\",\n                          \"dockId\": \"1\",\n                          \"courierName\": \"Retirada\",\n                          \"quantity\": 1,\n                          \"kitItemDetails\": [],\n                          \"accountCarrierName\": null\n                        }\n                      ],\n                      \"shippingEstimate\": \"25bd\",\n                      \"shippingEstimateDate\": null,\n                      \"lockTTL\": \"12d\",\n                      \"availableDeliveryWindows\": [],\n                      \"deliveryWindow\": null,\n                      \"price\": 700,\n                      \"listPrice\": 700,\n                      \"tax\": 0,\n                      \"pickupStoreInfo\": {\n                        \"isPickupStore\": false,\n                        \"friendlyName\": null,\n                        \"address\": null,\n                        \"additionalInfo\": null,\n                        \"dockId\": null\n                      },\n                      \"pickupPointId\": null,\n                      \"pickupDistance\": null,\n                      \"polygonName\": \"\",\n                      \"transitTime\": \"25bd\"\n                    }\n                  ],\n                  \"shipsTo\": [\n                    \"BRA\"\n                  ],\n                  \"itemId\": \"1\",\n                  \"deliveryChannels\": [\n                    {\n                      \"id\": \"delivery\"\n                    }\n                  ],\n                  \"price\": 600,\n                  \"listPrice\": 180,\n                  \"shippingEstimate\": \"25bd\",\n                  \"dockEstimate\": null,\n                  \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                  \"lockTTL\": \"12d\",\n                  \"deliveryCompany\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\",\n                  \"sellingPrice\": 600,\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1c083bf\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Donkey\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": null,\n                      \"accountCarrierName\": \"qastoreecho\"\n                    }\n                  ],\n                  \"deliveryWindow\": null,\n                  \"pickupPointId\": null,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupDistance\": null\n                }\n              ]\n            }\n          }\n        }\n      ],\n      \"date\": \"2023-07-27T17:52:18.6483116Z\",\n      \"origin\": {\n        \"account\": \"qastore\",\n        \"orderId\": \"v12772213qst-02\",\n        \"component\": \"MarketplaceComponent\"\n      },\n      \"settings\": {\n        \"customPaymentSystemsAllowed\": []\n      }\n    }\n  ],\n  \"actions\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "97d6abdc-a35c-4229-a708-0258a441be42",
+          "name": "VTex Preview order change",
+          "request": {
+            "name": "VTex Preview order change",
+            "description": {
+              "content": "This endpoint allows you to simulate an order change and preview what the real change will look like if you use the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint. A preview is especially useful for more complex scenarios, such as orders with multiple items and combinations of change operations — add, remove, and replace. Ensuring you get the desired results before making the actual change helps prevent mistakes.\r\n\r\nThe request body is the same one to be used in the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint, and the response body of a successful request provides a preview of the change order effect.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Orders Full Access** |\r\n| OMS | OMS access | **Cancel order** |\r\n| OMS | OMS access | **Change order** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| Checkout Admin | Orders Full Access |\r\n| OMS - Full access | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Oms | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Gateway | Cancel order |\r\n| IntegrationProfile - Fulfillment Gateway Oms | <p>Cancel order</p><p>Change order</p> |\r\n| inStore Sales Person | <p>Cancel order</p><p>Change order</p> |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "order-system",
+                "orders",
+                ":changeOrderId",
+                "changes",
+                "preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "an",
+                  "value": "<string>",
+                  "description": "(Required) Name of the VTEX account that created the order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeOrderId",
+                  "description": "(Required) Order ID of the order you wish to preview change."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\",\n  \"replace\": [\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "92d7e8f0-f6a1-4ed7-82f4-4eccaa8db89f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-system",
+                    "orders",
+                    ":changeOrderId",
+                    "changes",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "an",
+                      "value": "storeName"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeOrderId",
+                      "description": "(Required) Order ID of the order you wish to preview change."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"The client wants to change a weighable product.\",\n  \"replace\": [\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"id\": \"1\",\n            \"quantity\": 1\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"id\": \"1\",\n            \"quantity\": 1,\n            \"measurementUnit\": \"kg\",\n            \"unitMultiplier\": 1\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": [\n            {\n              \"itemIndex\": 0,\n              \"slaId\": \"Normal\",\n              \"deliveryChannel\": \"delivery\",\n              \"addressId\": \"12334048475146857\",\n              \"price\": 1000\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"I would like to receive a preview.\",\n  \"manualDiscountValue\": 0,\n  \"manualIncrementValue\": 0,\n  \"totalChangeValue\": 420,\n  \"totals\": [\n    {\n      \"id\": \"ManualValues\",\n      \"name\": \"Manual Values Total\",\n      \"value\": 0\n    },\n    {\n      \"id\": \"Shipping\",\n      \"name\": \"Shipping Total\",\n      \"value\": 420\n    }\n  ],\n  \"add\": null,\n  \"remove\": null,\n  \"replace\": [\n    {\n      \"from\": {\n        \"paymentData\": {\n          \"transactions\": []\n        },\n        \"items\": [\n          {\n            \"id\": \"31\",\n            \"quantity\": 1,\n            \"price\": 5000,\n            \"measurementUnit\": \"un\",\n            \"unitMultiplier\": 1,\n            \"sellingPrice\": 5000,\n            \"name\": \"Fusca miniatura Fusca preto\",\n            \"detailUrl\": \"/fusca-miniatura-24/p\",\n            \"imageUrl\": \"http://qastore.vteximg.com.br/arquivos/ids/155431-55-55/image-bdab69af1e5c41cdbc498d02e370b376.jpg?v=636579391945870000\"\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": [\n            {\n              \"itemIndex\": 0,\n              \"selectedSla\": \"Lenta\",\n              \"selectedDeliveryChannel\": \"delivery\",\n              \"addressId\": \"9ec276fd3a604eb1aa151b5333ca5db6\",\n              \"slas\": [\n                {\n                  \"id\": \"Lenta\",\n                  \"deliveryChannel\": \"delivery\",\n                  \"name\": \"Lenta\",\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1c083bf\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Donkey\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": [],\n                      \"accountCarrierName\": null\n                    }\n                  ],\n                  \"shippingEstimate\": \"25bd\",\n                  \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                  \"lockTTL\": \"12d\",\n                  \"availableDeliveryWindows\": [],\n                  \"deliveryWindow\": null,\n                  \"price\": 180,\n                  \"listPrice\": 180,\n                  \"tax\": 0,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupPointId\": null,\n                  \"pickupDistance\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\"\n                },\n                {\n                  \"id\": \"Normal\",\n                  \"deliveryChannel\": \"delivery\",\n                  \"name\": \"Normal\",\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Transportadora\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": [],\n                      \"accountCarrierName\": null\n                    }\n                  ],\n                  \"shippingEstimate\": \"3bd\",\n                  \"shippingEstimateDate\": null,\n                  \"lockTTL\": \"12d\",\n                  \"availableDeliveryWindows\": [],\n                  \"deliveryWindow\": null,\n                  \"price\": 500,\n                  \"listPrice\": 500,\n                  \"tax\": 0,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupPointId\": null,\n                  \"pickupDistance\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"3bd\"\n                },\n                {\n                  \"id\": \"Pickup\",\n                  \"deliveryChannel\": \"delivery\",\n                  \"name\": \"Pickup\",\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"ech018654\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Retirada\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": [],\n                      \"accountCarrierName\": null\n                    }\n                  ],\n                  \"shippingEstimate\": \"25bd\",\n                  \"shippingEstimateDate\": null,\n                  \"lockTTL\": \"12d\",\n                  \"availableDeliveryWindows\": [],\n                  \"deliveryWindow\": null,\n                  \"price\": 700,\n                  \"listPrice\": 700,\n                  \"tax\": 0,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupPointId\": null,\n                  \"pickupDistance\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\"\n                }\n              ],\n              \"shipsTo\": [\n                \"BRA\"\n              ],\n              \"itemId\": \"31\",\n              \"deliveryChannels\": [\n                {\n                  \"id\": \"delivery\"\n                }\n              ],\n              \"price\": 180,\n              \"listPrice\": 180,\n              \"shippingEstimate\": \"25bd\",\n              \"dockEstimate\": null,\n              \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n              \"lockTTL\": \"12d\",\n              \"deliveryCompany\": null,\n              \"polygonName\": \"\",\n              \"transitTime\": \"25bd\",\n              \"sellingPrice\": 180,\n              \"deliveryIds\": [\n                {\n                  \"courierId\": \"1c083bf\",\n                  \"warehouseId\": \"1_1\",\n                  \"dockId\": \"1\",\n                  \"courierName\": \"Donkey\",\n                  \"quantity\": 1,\n                  \"kitItemDetails\": null,\n                  \"accountCarrierName\": \"qastoreecho\"\n                }\n              ],\n              \"deliveryWindow\": null,\n              \"pickupPointId\": null,\n              \"pickupStoreInfo\": {\n                \"isPickupStore\": false,\n                \"friendlyName\": null,\n                \"address\": null,\n                \"additionalInfo\": null,\n                \"dockId\": null\n              },\n              \"pickupDistance\": null\n            }\n          ]\n        }\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"uniqueId\": \"303A1E4534984FF295BA571BF08C8297\",\n            \"id\": \"1\",\n            \"productId\": \"1\",\n            \"productRefId\": \"\",\n            \"refId\": \"codrefxicaraazul\",\n            \"ean\": \"8745121641\",\n            \"name\": \"xícara azul\",\n            \"skuName\": \"azul\",\n            \"modalType\": null,\n            \"parentItemIndex\": null,\n            \"parentAssemblyBinding\": null,\n            \"assemblies\": [],\n            \"priceValidUntil\": null,\n            \"tax\": 0,\n            \"price\": 5000,\n            \"listPrice\": null,\n            \"manualPrice\": null,\n            \"manualPriceAppliedBy\": null,\n            \"sellingPrice\": 5000,\n            \"rewardValue\": 0,\n            \"isGift\": false,\n            \"additionalInfo\": {\n              \"dimension\": null,\n              \"brandName\": null,\n              \"brandId\": null,\n              \"offeringInfo\": null,\n              \"offeringType\": null,\n              \"offeringTypeId\": null,\n              \"categoriesIds\": null,\n              \"productClusterId\": null,\n              \"commercialConditionId\": null\n            },\n            \"preSaleDate\": null,\n            \"productCategoryIds\": \"/1/\",\n            \"productCategories\": {\n              \"1\": \"Category\"\n            },\n            \"quantity\": 1,\n            \"seller\": \"1\",\n            \"sellerChain\": [\n              \"1\"\n            ],\n            \"imageUrl\": \"http://qastore.vteximg.com.br/arquivos/ids/155394-55-55/xicara.jpg?v=636565506415770000\",\n            \"detailUrl\": \"/xicara/p\",\n            \"components\": [],\n            \"bundleItems\": [],\n            \"attachments\": [],\n            \"attachmentOfferings\": [],\n            \"offerings\": [],\n            \"priceTags\": [],\n            \"availability\": null,\n            \"measurementUnit\": \"un\",\n            \"unitMultiplier\": 1,\n            \"manufacturerCode\": null,\n            \"priceDefinition\": {\n              \"calculatedSellingPrice\": 5000,\n              \"total\": 5000,\n              \"sellingPrices\": [\n                {\n                  \"value\": 5000,\n                  \"quantity\": 1\n                }\n              ]\n            }\n          }\n        ],\n        \"paymentData\": {\n          \"transactions\": []\n        },\n        \"receiptData\": null,\n        \"shippingData\": {\n          \"logisticsInfo\": [\n            {\n              \"itemIndex\": 0,\n              \"selectedSla\": \"Lenta\",\n              \"selectedDeliveryChannel\": \"delivery\",\n              \"addressId\": \"9ec276fd3a604eb1aa151b5333ca5db6\",\n              \"slas\": [\n                {\n                  \"id\": \"Lenta\",\n                  \"deliveryChannel\": \"delivery\",\n                  \"name\": \"Lenta\",\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1c083bf\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Donkey\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": [],\n                      \"accountCarrierName\": null\n                    }\n                  ],\n                  \"shippingEstimate\": \"25bd\",\n                  \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n                  \"lockTTL\": \"12d\",\n                  \"availableDeliveryWindows\": [],\n                  \"deliveryWindow\": null,\n                  \"price\": 600,\n                  \"listPrice\": 180,\n                  \"tax\": 0,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupPointId\": null,\n                  \"pickupDistance\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\"\n                },\n                {\n                  \"id\": \"Normal\",\n                  \"deliveryChannel\": \"delivery\",\n                  \"name\": \"Normal\",\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"1\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Transportadora\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": [],\n                      \"accountCarrierName\": null\n                    }\n                  ],\n                  \"shippingEstimate\": \"3bd\",\n                  \"shippingEstimateDate\": null,\n                  \"lockTTL\": \"12d\",\n                  \"availableDeliveryWindows\": [],\n                  \"deliveryWindow\": null,\n                  \"price\": 500,\n                  \"listPrice\": 500,\n                  \"tax\": 0,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupPointId\": null,\n                  \"pickupDistance\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"3bd\"\n                },\n                {\n                  \"id\": \"Pickup\",\n                  \"deliveryChannel\": \"delivery\",\n                  \"name\": \"Pickup\",\n                  \"deliveryIds\": [\n                    {\n                      \"courierId\": \"ech018654\",\n                      \"warehouseId\": \"1_1\",\n                      \"dockId\": \"1\",\n                      \"courierName\": \"Retirada\",\n                      \"quantity\": 1,\n                      \"kitItemDetails\": [],\n                      \"accountCarrierName\": null\n                    }\n                  ],\n                  \"shippingEstimate\": \"25bd\",\n                  \"shippingEstimateDate\": null,\n                  \"lockTTL\": \"12d\",\n                  \"availableDeliveryWindows\": [],\n                  \"deliveryWindow\": null,\n                  \"price\": 700,\n                  \"listPrice\": 700,\n                  \"tax\": 0,\n                  \"pickupStoreInfo\": {\n                    \"isPickupStore\": false,\n                    \"friendlyName\": null,\n                    \"address\": null,\n                    \"additionalInfo\": null,\n                    \"dockId\": null\n                  },\n                  \"pickupPointId\": null,\n                  \"pickupDistance\": null,\n                  \"polygonName\": \"\",\n                  \"transitTime\": \"25bd\"\n                }\n              ],\n              \"shipsTo\": [\n                \"BRA\"\n              ],\n              \"itemId\": \"1\",\n              \"deliveryChannels\": [\n                {\n                  \"id\": \"delivery\"\n                }\n              ],\n              \"price\": 600,\n              \"listPrice\": 180,\n              \"shippingEstimate\": \"25bd\",\n              \"dockEstimate\": null,\n              \"shippingEstimateDate\": \"2023-08-30T10:17:24.6436519Z\",\n              \"lockTTL\": \"12d\",\n              \"deliveryCompany\": null,\n              \"polygonName\": \"\",\n              \"transitTime\": \"25bd\",\n              \"sellingPrice\": 600,\n              \"deliveryIds\": [\n                {\n                  \"courierId\": \"1c083bf\",\n                  \"warehouseId\": \"1_1\",\n                  \"dockId\": \"1\",\n                  \"courierName\": \"Donkey\",\n                  \"quantity\": 1,\n                  \"kitItemDetails\": null,\n                  \"accountCarrierName\": \"qastoreecho\"\n                }\n              ],\n              \"deliveryWindow\": null,\n              \"pickupPointId\": null,\n              \"pickupStoreInfo\": {\n                \"isPickupStore\": false,\n                \"friendlyName\": null,\n                \"address\": null,\n                \"additionalInfo\": null,\n                \"dockId\": null\n              },\n              \"pickupDistance\": null\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"date\": \"2023-07-27T18:01:26.4743309Z\",\n  \"origin\": {\n    \"account\": \"qastore\",\n    \"orderId\": \"v12772213qst-02\",\n    \"component\": \"MarketplaceComponent\"\n  },\n  \"settings\": {\n    \"customPaymentSystemsAllowed\": []\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "93de534a-ef9e-4552-9554-0026810b65cb",
+          "name": "VTex Retry order change",
+          "request": {
+            "name": "VTex Retry order change",
+            "description": {
+              "content": "This endpoint makes a new attempt to perform an order change previously made using the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint that, for some reason, was not completely processed.\r\n\r\nTo make this request, you need the `changeRequestId`, a unique change identification code that you get when you make a [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) request. When you retry to change an order using the `changeRequestId`, instead of creating a new change, you avoid duplications.\r\n\r\nThis endpoint's successful response status code is `204 No Content`, therefore with no response body.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Orders Full Access** |\r\n| OMS | OMS access | **Cancel order** |\r\n| OMS | OMS access | **Change order** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| Checkout Admin | Orders Full Access |\r\n| OMS - Full access | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Oms | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Gateway | Cancel order |\r\n| IntegrationProfile - Fulfillment Gateway Oms | <p>Cancel order</p><p>Change order</p> |\r\n| inStore Sales Person | <p>Cancel order</p><p>Change order</p> |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "order-system",
+                "orders",
+                ":changeOrderId",
+                "changes",
+                ":changeRequestId",
+                "retry"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "an",
+                  "value": "<string>",
+                  "description": "(Required) Name of the VTEX account that created the order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeOrderId",
+                  "description": "(Required) Order ID of the order you wish to retry change."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeRequestId",
+                  "description": "(Required) Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code.\r\n\r\nThere are no limits to changes you can perform using the same `changeRequestId`, and we recommend keeping all changes of a given order grouped by the same `changeRequestId`, so you will have a unified change history."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\",\n  \"replace\": [\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4b6371dd-ebe4-4c84-83ab-99b9c639a0d9",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-system",
+                    "orders",
+                    ":changeOrderId",
+                    "changes",
+                    ":changeRequestId",
+                    "retry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "an",
+                      "value": "storeName"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeOrderId",
+                      "description": "(Required) Order ID of the order you wish to retry change."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeRequestId",
+                      "description": "(Required) Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code.\r\n\r\nThere are no limits to changes you can perform using the same `changeRequestId`, and we recommend keeping all changes of a given order grouped by the same `changeRequestId`, so you will have a unified change history."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"The client wants to change a weighable product.\",\n  \"replace\": [\n    {\n      \"from\": {\n        \"items\": [\n          {\n            \"id\": \"1\",\n            \"quantity\": 1\n          }\n        ]\n      },\n      \"to\": {\n        \"items\": [\n          {\n            \"id\": \"1\",\n            \"quantity\": 1,\n            \"measurementUnit\": \"kg\",\n            \"unitMultiplier\": 1\n          }\n        ],\n        \"shippingData\": {\n          \"logisticsInfo\": [\n            {\n              \"itemIndex\": 0,\n              \"slaId\": \"Normal\",\n              \"deliveryChannel\": \"delivery\",\n              \"addressId\": \"12334048475146857\",\n              \"price\": 1000\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "25efbaee-4897-4576-9d75-c33d117ed132",
+          "name": "VTex Cancel order change",
+          "request": {
+            "name": "VTex Cancel order change",
+            "description": {
+              "content": "This endpoint cancels an [order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes). It is meant for when, due to an error, a change was not completely processed, and you do not wish to [retry](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/order-system/orders/-changeOrderId-/changes/-changeRequestId-/retry) it. For this request, you need the order's `changeRequestId`, the unique identification code generated by the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint.\r\n\r\n>⚠️ Once an order change has been successfully processed, canceling it is no longer possible. If you wish to revert the changes made to an order, you will have to [create a new order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Orders Full Access** |\r\n| OMS | OMS access | **Cancel order** |\r\n| OMS | OMS access | **Change order** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| Checkout Admin | Orders Full Access |\r\n| OMS - Full access | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Oms | <p>Cancel order</p><p>Change order</p> |\r\n| IntegrationProfile - Fulfillment Gateway | Cancel order |\r\n| IntegrationProfile - Fulfillment Gateway Oms | <p>Cancel order</p><p>Change order</p> |\r\n| inStore Sales Person | <p>Cancel order</p><p>Change order</p> |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "order-system",
+                "orders",
+                ":changeOrderId",
+                "changes",
+                ":changeRequestId",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "an",
+                  "value": "<string>",
+                  "description": "(Required) Name of the VTEX account that created the order."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeOrderId",
+                  "description": "(Required) Order ID of the order with the changes you wish to cancel."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "changeRequestId",
+                  "description": "(Required) Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code. After cancelling an order change, the `changeRequestId` will no longer be valid."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed46b423-4d25-4097-ad45-1927a6cd855c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-system",
+                    "orders",
+                    ":changeOrderId",
+                    "changes",
+                    ":changeRequestId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "an",
+                      "value": "storeName"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeOrderId",
+                      "description": "(Required) Order ID of the order with the changes you wish to cancel."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "changeRequestId",
+                      "description": "(Required) Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code. After cancelling an order change, the `changeRequestId` will no longer be valid."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"I want to cancel this change order request because it's stopped on a blocking error.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Anti-fraud provider endpoint URL.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "{providerApiEndpoint}",
+      "key": "providerApiEndpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{providerApiEndpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "997b195d-6c94-45c5-b9e0-997dc30002a5",
+    "name": "VTex Anti-fraud Provider Account Change Order (Beta) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)",
+      "type": "text/plain"
+    }
+  }
+}

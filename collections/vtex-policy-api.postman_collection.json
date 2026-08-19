@@ -1,0 +1,758 @@
+{
+  "item": [
+    {
+      "id": "359fb48d-8ebb-4f51-af83-f55becc49bc2",
+      "name": "Policy",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "81329878-18cd-41f0-8817-28ca565baa89",
+          "name": "VTex Get policy list",
+          "request": {
+            "name": "VTex Get policy list",
+            "description": {
+              "content": "Retrieves a list of all policies in the account and general information of each policy.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Promotions Policy Engine | Policies | **List Policies** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "policy-engine",
+                "policies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cc4d7d07-a29e-4327-aed2-47e060106068",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "policy-engine",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"pa_test_001\",\n    \"name\": \"TestAlarmBerenice\",\n    \"description\": \"TesteMarcosPromotionsAlert\",\n    \"statements\": [\n      {\n        \"effect\": \"Allow\",\n        \"actions\": [\n          {\n            \"id\": \"SendSlackMessage\",\n            \"metadata\": {\n              \"channel\": \"C01NJFF35R6\",\n              \"relatedUsers\": [\n                \"URUNDC2NB\"\n              ],\n              \"alertDescription\": \"Avoid selling products from Berenice with a discount greater than 70%.\"\n            }\n          }\n        ],\n        \"resource\": \"vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert\",\n        \"condition\": {\n          \"conditions\": [\n            {\n              \"conditions\": [],\n              \"operation\": \"stringEquals\",\n              \"key\": \"brandId\",\n              \"values\": [\n                \"2000001\"\n              ]\n            },\n            {\n              \"conditions\": [],\n              \"operation\": \"numericGreaterThan\",\n              \"key\": \"discountPercentage\",\n              \"values\": [\n                \"70.00\"\n              ]\n            }\n          ],\n          \"operation\": \"and\"\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2406d090-ce19-4cb5-ad4a-40673c398b17",
+          "name": "VTex Evaluate policies",
+          "request": {
+            "name": "VTex Evaluate policies",
+            "description": {
+              "content": "This endpoint consults all policies and checks the ones that satisfy the request body’s conditions.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Promotions Policy Engine | Policies | **Evaluate Policy** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "policy-engine",
+                "evaluate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource\": \"<string>\",\n  \"context\": {\n    \"key_0\": 2973.9119120020487,\n    \"key_1\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "99eaf9fe-3596-4ceb-bd89-e808e522ada4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "policy-engine",
+                    "evaluate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"resource\": \"vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert\",\n  \"context\": {\n    \"brandId\": \"2000001\",\n    \"discountPercentage\": \"91.00\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"SendSlackMessage\",\n    \"metadata\": {\n      \"channel\": \"C01NJFF35R6\",\n      \"relatedUsers\": [\n        \"URUNDC2NB\"\n      ],\n      \"alertDescription\": \"Avoid selling products from Berenice with a discount greater than 70%.\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c30c758-454c-4624-8403-b954734d0053",
+          "name": "VTex Get policy by ID",
+          "request": {
+            "name": "VTex Get policy by ID",
+            "description": {
+              "content": "Retrieves general information of a policy by its ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Promotions Policy Engine | Policies | **Get Policy** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "policy-engine",
+                "policies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Policy ID."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "19dd7273-fd5b-456a-8860-53bb8a0468f4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "policy-engine",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Policy ID."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"pa_test_001\",\n    \"name\": \"TestAlarmBerenice\",\n    \"description\": \"TesteMarcosPromotionsAlert\",\n    \"statements\": [\n      {\n        \"effect\": \"Allow\",\n        \"actions\": [\n          {\n            \"id\": \"SendSlackMessage\",\n            \"metadata\": {\n              \"channel\": \"C01NJFF35R6\",\n              \"relatedUsers\": [\n                \"URUNDC2NB\"\n              ],\n              \"alertDescription\": \"Avoid selling products from Berenice with a discount greater than 70%.\"\n            }\n          }\n        ],\n        \"resource\": \"vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert\",\n        \"condition\": {\n          \"conditions\": [\n            {\n              \"conditions\": [],\n              \"operation\": \"stringEquals\",\n              \"key\": \"brandId\",\n              \"values\": [\n                \"2000001\"\n              ]\n            },\n            {\n              \"conditions\": [],\n              \"operation\": \"numericGreaterThan\",\n              \"key\": \"discountPercentage\",\n              \"values\": [\n                \"70.00\"\n              ]\n            }\n          ],\n          \"operation\": \"and\"\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a639ee7c-d417-478b-9b44-3aa962e5ac42",
+          "name": "VTex Create policy",
+          "request": {
+            "name": "VTex Create policy",
+            "description": {
+              "content": "Creates a new policy from scratch.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Promotions Policy Engine | Policies | **Create or Update Policy** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "policy-engine",
+                "policies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Policy ID."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/octet-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"statements\": [\n    {\n      \"effect\": \"<string>\",\n      \"actions\": [\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": 28,\n            \"key_1\": 7559,\n            \"key_2\": true\n          }\n        },\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": 1331.9211216550718,\n            \"key_1\": false\n          }\n        }\n      ],\n      \"resource\": \"<string>\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"conditions\": [\n              \"stringEquals\"\n            ],\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"conditions\": [\n              \"numericGreaterThan\"\n            ],\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"<string>\"\n    },\n    {\n      \"effect\": \"<string>\",\n      \"actions\": [\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": \"string\",\n            \"key_1\": false\n          }\n        },\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": 6639.372433956089\n          }\n        }\n      ],\n      \"resource\": \"<string>\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"conditions\": [\n              \"numericGreaterThan\"\n            ],\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8f59e3d9-29f3-4128-bf72-297d13850ed7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "policy-engine",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Policy ID."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"id\",\n  \"description\": \"TesteMarcosPromotionsAlert\",\n  \"statements\": [\n    {\n      \"effect\": \"Allow\",\n      \"actions\": [\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": 4034.385488911938,\n            \"key_1\": 6992.091763297897\n          }\n        },\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": true,\n            \"key_1\": \"string\",\n            \"key_2\": false\n          }\n        }\n      ],\n      \"resource\": \"vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"conditions\": [\n              \"stringEquals\"\n            ],\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          },\n          {\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"None\"\n    },\n    {\n      \"effect\": \"Allow\",\n      \"actions\": [\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": 2573\n          }\n        },\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": 7607,\n            \"key_1\": \"string\"\n          }\n        }\n      ],\n      \"resource\": \"vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          },\n          {\n            \"conditions\": [\n              \"stringEquals\"\n            ],\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"None\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d6af0ba0-babd-4a6f-8990-12561b674754",
+          "name": "VTex Update policy",
+          "request": {
+            "name": "VTex Update policy",
+            "description": {
+              "content": "Updates an existing policy at your account.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Promotions Policy Engine | Policies | **Create or Update Policy** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "policy-engine",
+                "policies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Policy ID."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/octet-stream"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"statements\": [\n    {\n      \"effect\": \"<string>\",\n      \"actions\": [\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": 4075\n          }\n        },\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": \"string\",\n            \"key_1\": true,\n            \"key_2\": \"string\",\n            \"key_3\": \"string\"\n          }\n        }\n      ],\n      \"resource\": \"<string>\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"conditions\": [\n              \"stringEquals\"\n            ],\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"conditions\": [\n              \"numericGreaterThan\"\n            ],\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"<string>\"\n    },\n    {\n      \"effect\": \"<string>\",\n      \"actions\": [\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": false\n          }\n        },\n        {\n          \"id\": \"<string>\",\n          \"metadata\": {\n            \"key_0\": 7534.676321020492\n          }\n        }\n      ],\n      \"resource\": \"<string>\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"conditions\": [\n              \"stringEquals\"\n            ],\n            \"operation\": \"<string>\",\n            \"key\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8f8b0618-0042-4fcc-94fb-888f065bdeb4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "policy-engine",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Policy ID."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"id\",\n  \"description\": \"TesteMarcosPromotionsAlert\",\n  \"statements\": [\n    {\n      \"effect\": \"Allow\",\n      \"actions\": [\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": 4034.385488911938,\n            \"key_1\": 6992.091763297897\n          }\n        },\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": true,\n            \"key_1\": \"string\",\n            \"key_2\": false\n          }\n        }\n      ],\n      \"resource\": \"vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"conditions\": [\n              \"stringEquals\"\n            ],\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          },\n          {\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"None\"\n    },\n    {\n      \"effect\": \"Allow\",\n      \"actions\": [\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": 2573\n          }\n        },\n        {\n          \"id\": \"SendSlackMessage\",\n          \"metadata\": {\n            \"key_0\": 7607,\n            \"key_1\": \"string\"\n          }\n        }\n      ],\n      \"resource\": \"vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert\",\n      \"condition\": {\n        \"conditions\": [\n          {\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          },\n          {\n            \"conditions\": [\n              \"stringEquals\"\n            ],\n            \"operation\": \"None\",\n            \"key\": \"skuId\",\n            \"values\": [\n              \"40.00\",\n              \"40.00\"\n            ]\n          }\n        ]\n      },\n      \"operation\": \"None\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fb841266-49b1-4d18-bdb9-87b0ceca2c00",
+          "name": "VTex Delete policy by ID",
+          "request": {
+            "name": "VTex Delete policy by ID",
+            "description": {
+              "content": "Deletes a specific policy of the account by its ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Promotions Policy Engine | Policies | **Delete Policy** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "policy-engine",
+                "policies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Policy ID."
+                },
+                {
+                  "description": "Anti-fraud provider endpoint URL.",
+                  "type": "any",
+                  "value": "{{providerApiEndpoint}}",
+                  "key": "providerApiEndpoint"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "69110dc5-20a8-4bc8-aa40-bcc1e6552103",
+              "name": "200 OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "policy-engine",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Policy ID."
+                    },
+                    {
+                      "description": "Anti-fraud provider endpoint URL.",
+                      "type": "any",
+                      "value": "{{providerApiEndpoint}}",
+                      "key": "providerApiEndpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Type of the content being sent.",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Anti-fraud provider endpoint URL.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "{providerApiEndpoint}",
+      "key": "providerApiEndpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{providerApiEndpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "1d003f9a-b594-4c4b-8dab-53682353134b",
+    "name": "VTex Anti-fraud Provider Account Policy API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)",
+      "type": "text/plain"
+    }
+  }
+}

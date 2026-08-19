@@ -1,0 +1,262 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Change Order (Beta) API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Change Order (Beta)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Get order change history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/order-system/orders/:changeOrderId/changes",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Name of the VTEX account that created the order."
+              },
+              {
+                "name": "changeOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Order ID of the order you wish to get the change history."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves a history of every successful [Change order request](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) made to an order and provides detailed information about each request.\r\n\r\nYou can access an order's history using the `changeOrderId`, which corresponds to its `orderId`.\r\n\r\n> If you want detailed information about a single change request, you can use the endpoint [Get order change details](https://developer"
+        },
+        {
+          "info": {
+            "name": "VTex Create order change",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{providerApiEndpoint}/api/order-system/orders/:changeOrderId/changes",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Name of the VTEX account that created the order."
+              },
+              {
+                "name": "changeOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Order ID of the order you wish to change."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "[Change order](https://help.vtex.com/en/tutorial/how-change-order-works-beta--56TO0bOFXsfmpc7YZ3wIUZ) feature allows you to modify an order, whether the change is motivated by customer mistakes, product unavailability, or others. Both sellers and marketplaces can use this endpoint and change orders in multiple scenarios, and it is possible to make a single change or combine multiple ones in the same request. \r\nThe possible change order operations you can perform are the following:\r\n- **Add:** Ad"
+        },
+        {
+          "info": {
+            "name": "VTex Get order change details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/order-system/orders/:changeOrderId/changes/:changeRequestId",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Name of the VTEX account that created the order."
+              },
+              {
+                "name": "changeOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Order ID of the order you wish to get the change detail."
+              },
+              {
+                "name": "changeRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code. There are no limits to changes you can perform using the same `changeRequestId`, and we recommend keeping all changes of a given order grouped by the same `changeRequestId`, so you will have a unified change history."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves detailed information about a specific order change. So after creating multiple changes, you can get information on each one of them by its `changeRequestId`, the unique identification code generated by the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint.\r\n\r\nThe successful status code is `200 OK`, and its response body schema is very similar to the [Create order change](https:/"
+        },
+        {
+          "info": {
+            "name": "VTex Preview order change",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/order-system/orders/:changeOrderId/changes/preview",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Name of the VTEX account that created the order."
+              },
+              {
+                "name": "changeOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Order ID of the order you wish to preview change."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint allows you to simulate an order change and preview what the real change will look like if you use the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint. A preview is especially useful for more complex scenarios, such as orders with multiple items and combinations of change operations — add, remove, and replace. Ensuring you get the desired results before making the actual change helps pre"
+        },
+        {
+          "info": {
+            "name": "VTex Retry order change",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/order-system/orders/:changeOrderId/changes/:changeRequestId/retry",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Name of the VTEX account that created the order."
+              },
+              {
+                "name": "changeOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Order ID of the order you wish to retry change."
+              },
+              {
+                "name": "changeRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code.\r\n\r\nThere are no limits to changes you can perform using the same `changeRequestId`, and we recommend keeping all changes of a given order grouped by the same `changeRequestId`, so you will have a unified change history."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint makes a new attempt to perform an order change previously made using the [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes) endpoint that, for some reason, was not completely processed.\r\n\r\nTo make this request, you need the `changeRequestId`, a unique change identification code that you get when you make a [Create order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/or"
+        },
+        {
+          "info": {
+            "name": "VTex Cancel order change",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/order-system/orders/:changeOrderId/changes/:changeRequestId/cancel",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "an",
+                "value": "",
+                "type": "query",
+                "description": "Name of the VTEX account that created the order."
+              },
+              {
+                "name": "changeOrderId",
+                "value": "",
+                "type": "path",
+                "description": "Order ID of the order with the changes you wish to cancel."
+              },
+              {
+                "name": "changeRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Once you make an order change, you generate a `requestId` code that identifies the changes made to that order. This field should be filled with that code. After cancelling an order change, the `changeRequestId` will no longer be valid."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint cancels an [order change](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/order-system/orders/-changeOrderId-/changes). It is meant for when, due to an error, a change was not completely processed, and you do not wish to [retry](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/order-system/orders/-changeOrderId-/changes/-changeRequestId-/retry) it. For this request, you need the order's `changeRequestId`, the unique identification code genera"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

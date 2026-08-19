@@ -1,0 +1,172 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Product List Page API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Product List Page",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Get attempt of correction of a misspelled term",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/correction_search",
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search term. It can contain any character."
+              },
+              {
+                "name": "locale",
+                "value": "en-US",
+                "type": "query",
+                "description": "Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language."
+              }
+            ]
+          },
+          "docs": "Tries to correct a misspelled term from the search.\r\n\r\nThis endpoint does not require authentication."
+        },
+        {
+          "info": {
+            "name": "VTex Get list of banners registered for query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/banners/:facets",
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search term. It can contain any character."
+              },
+              {
+                "name": "facets",
+                "value": "category-1/clothing/category-2/shirt/category-3/man",
+                "type": "path",
+                "description": "## Format\r\n\r\nThe `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.\r\n\r\nThe order in which the terms appear is not relevant to the search.\r\n\r\nYou can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.\r\n\r\n## General filters\r\n\r\nThe `facets` parameter also allows the following general filters:\r\n\r\n| `facetKey` | Description | Example |\r\n| - | - | - |\r\n| `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |\r\n| `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |\r\n| `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |\r\n| `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|\n"
+              },
+              {
+                "name": "locale",
+                "value": "en-US",
+                "type": "query",
+                "description": "Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language."
+              }
+            ]
+          },
+          "docs": "Lists the banners registered for a given query. Check the [configuring banners documentation](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4ViKEivLJtJsvpaW0aqIQ5) for a full explanation of the banner feature.\r\n\r\nThis endpoint does not require authentication."
+        },
+        {
+          "info": {
+            "name": "VTex Get list of products for a query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/product_search/:facets",
+            "params": [
+              {
+                "name": "facets",
+                "value": "category-1/clothing/category-2/shirt/category-3/man",
+                "type": "path",
+                "description": "## Format\r\n\r\nThe `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.\r\n\r\nThe order in which the terms appear is not relevant to the search.\r\n\r\nYou can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.\r\n\r\n## General filters\r\n\r\nThe `facets` parameter also allows the following general filters:\r\n\r\n| `facetKey` | Description | Example |\r\n| - | - | - |\r\n| `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |\r\n| `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |\r\n| `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |\r\n| `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|\n"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search term. It can contain any character."
+              },
+              {
+                "name": "simulationBehavior",
+                "value": "",
+                "type": "query",
+                "description": "Defines the simulation behavior.\n\n * `default` - Calls the simulation for every single seller.\n * `skip` - Never calls the simulation.\n * `only1P` - Only calls the simulation for first party sellers."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of products per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Current search page."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Defines the sort type. The possible values are: \r\n- `price:desc`: The results will be sorted by price in descending order, from highest to lowest.\r\n- `price:asc`: The results will be sorted by price in ascending order, from lowest to highest.\r\n- `orders:desc`: The results will be sorted by the amount of orders in the past 90 days, in descending order.\r\n- `name:desc`: The results will be sorted by name in descending alphabetical order.\r\n- `name:asc`: The results will be sorted by name in ascending alphabetical order.\r\n- `release:desc`: The results will be sorted by release date in descending order, from most recent to least recent.\r\n- `discount:desc`: The results will be sorted by discount percentage in descending order, from highest to lowest.\r\n\r\nIf `null`, the products will be sorted by relevance."
+              },
+              {
+                "name": "locale",
+                "value": "en-US",
+                "type": "query",
+                "description": "Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language."
+              },
+              {
+                "name": "hideUnavailableItems",
+                "value": "",
+                "type": "query",
+                "description": "Defines whether the result should hide unavailable items (`true`), or not (`false`)."
+              }
+            ]
+          },
+          "docs": "Lists the active products for a given query.\r\n\r\nThis endpoint does not require authentication."
+        },
+        {
+          "info": {
+            "name": "VTex Get list of the possible facets for a given query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/facets/:facets",
+            "params": [
+              {
+                "name": "facets",
+                "value": "category-1/clothing/category-2/shirt/category-3/man",
+                "type": "path",
+                "description": "## Format\r\n\r\nThe `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.\r\n\r\nThe order in which the terms appear is not relevant to the search.\r\n\r\nYou can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.\r\n\r\n## General filters\r\n\r\nThe `facets` parameter also allows the following general filters:\r\n\r\n| `facetKey` | Description | Example |\r\n| - | - | - |\r\n| `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |\r\n| `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |\r\n| `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |\r\n| `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|\n"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search term. It can contain any character."
+              },
+              {
+                "name": "locale",
+                "value": "en-US",
+                "type": "query",
+                "description": "Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language."
+              },
+              {
+                "name": "hideUnavailableItems",
+                "value": "",
+                "type": "query",
+                "description": "Defines whether the result should hide unavailable items (`true`), or not (`false`)."
+              }
+            ]
+          },
+          "docs": "Lists the possible facets for a given query.\r\n\r\nThis endpoint does not require authentication."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

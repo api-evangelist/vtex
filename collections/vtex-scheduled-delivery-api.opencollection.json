@@ -1,0 +1,210 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Scheduled Delivery API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scheduled Delivery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Retrieve blocked delivery windows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/logistics/pvt/configuration/carriers/:carrierId/getdayofweekblocked",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "carrierId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Lists all blocked delivery windows of your store's shipping policies, searching by carrier ID.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns **Scheduled Delivery** related time fields adjusted to the configured time zone of the account."
+        },
+        {
+          "info": {
+            "name": "VTex Add blocked delivery windows",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/logistics/pvt/configuration/carriers/:carrierId/adddayofweekblocked",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "carrierId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds blocked delivery windows for your store's shipping policies.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns time adjusted to the configured time zone of the account."
+        },
+        {
+          "info": {
+            "name": "VTex Remove blocked delivery windows",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/api/logistics/pvt/configuration/carriers/:carrierId/removedayofweekblocked",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "carrierId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes the blocked delivery windows set to your store's shipping policies.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns time adjusted to the configured time zone of the account."
+        },
+        {
+          "info": {
+            "name": "VTex Search capacity reservations in time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/logistics-capacity/resources/carrier@:capacityType@:shippingPolicyId/time-frames",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "capacityType",
+                "value": "",
+                "type": "path",
+                "description": "How the delivery capacity is measured as defined in the shipping policy. Capacity can be measured by maximum number of orders (`\"orders_quantity\"`) or SKUs (`\"skus_quantity\"`)."
+              },
+              {
+                "name": "shippingPolicyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of shipping policy to search."
+              },
+              {
+                "name": "rangeStart",
+                "value": "",
+                "type": "query",
+                "description": "Starting date of time range"
+              },
+              {
+                "name": "rangeEnd",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range."
+              }
+            ]
+          },
+          "docs": "Get information on all capacity reservations made to scheduled delivery windows in a given time range.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns time adjusted to the configured time zone of the account.\n\r\n\r> Note that the combined string `carrier@{capacityType}@{shippingPolicyId}` can be referred to as a \"resource\" in the API's messages."
+        },
+        {
+          "info": {
+            "name": "VTex Get capacity reservation usage by window",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/api/logistics-capacity/resources/carrier@:capacityType@:shippingPolicyId/time-frames/:windowDayF:windowStartTimeT:windowEndTime",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "capacityType",
+                "value": "",
+                "type": "path",
+                "description": "How the delivery capacity is measured as defined in the shipping policy. Capacity can be measured by maximum number of orders (`\"orders_quantity\"`) or SKUs (`\"skus_quantity\"`)."
+              },
+              {
+                "name": "shippingPolicyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of shipping policy to search."
+              },
+              {
+                "name": "windowDay",
+                "value": "",
+                "type": "path",
+                "description": "Day of the specific scheduled delivery window to be consulted for reservations."
+              },
+              {
+                "name": "windowStartTime",
+                "value": "",
+                "type": "path",
+                "description": "Start time of specific scheduled delivery window to be consulted for reservations."
+              },
+              {
+                "name": "windowEndTime",
+                "value": "",
+                "type": "path",
+                "description": "End time of specific scheduled delivery window to be consulted for reservations."
+              }
+            ]
+          },
+          "docs": "Retrieves capacity usage of a specific scheduled delivery reservation window.\n\r\n\r> Note that, while most of our API endpoints return time fields in UTC, this endpoint returns time adjusted to the configured time zone of the account.\n\r\n\r> Note that the combined string `carrier@{capacityType}@{shippingPolicyId}` can be referred to as a \"resource\" in the API's messages."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

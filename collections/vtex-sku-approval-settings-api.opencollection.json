@@ -1,0 +1,290 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account SKU Approval Settings API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SKU Approval Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Get autoApprove Status in Account Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration/autoapproval/toggle",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "query",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace."
+              },
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              }
+            ]
+          },
+          "docs": "This endpoint can be used to check whether the autoapprove setting is active or not, for a specific seller. \n\nIf the response is `true`, the autoapprove setting is active. If the response is `false`, it is inactive."
+        },
+        {
+          "info": {
+            "name": "VTex Activate autoApprove in Marketplace's Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration/autoapproval/toggle",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint enables the autoapprove rule to a marketplace's whole Received SKUs module. Once enabling the rule, received SKUs will be automatically approved on your store, regardless of the seller. \n\n For the autoapprove rule to work as expected, the approval [Matcher score](https://help.vtex.com/en/tutorial/entendendo-a-pontuacao-do-vtex-matcher--tutorials_424) should be set up as 80 (default value), but you can configure a different number through the field `Score` in [Save Account's Approva"
+        },
+        {
+          "info": {
+            "name": "VTex Get Account's Approval Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the current approval settings of a marketplace's Received SKUs module. Its response includes: \n\n- `Score`: Matcher scores for approving and rejecting SKUs received from sellers. \n\n- `Matchers`: All Matchers configured on the marketplace, and their respective details. \n\n- `SpecificationsMapping`: Mapping of product and SKU specifications, per seller. \n\n- `MatchFlux`: This field determines the type of approval configuration applied to SKUs received from a seller. \n\nThe poss"
+        },
+        {
+          "info": {
+            "name": "VTex Save Account's Approval Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Marketplaces use this endpoint to create or update approval settings on their Received SKUs module. \n\nThe request includes all the details necessary to implement the chosen approval settings."
+        },
+        {
+          "info": {
+            "name": "VTex Get Account's Matcher Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration/account/config",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              }
+            ]
+          },
+          "docs": "This endpoint will be used by the marketplace to query the matcher's current approval settings on their incoming SKUs module. If the account has no matcher configured, the response will be `404 Not Found`. \n\nFor account approval configuration information, with response including specification information, see [Get Account Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis- suggestions#get-/suggestions /configuration) terminal. \n\nThe [VTEX matcher](https://help.vte"
+        },
+        {
+          "info": {
+            "name": "VTex Get Seller's Approval Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration/seller/:sellerId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the current Received SKUs approval settings applied to a specific seller. Its response includes: \n\n- `sellerId`: A string that identifies the seller in the marketplace. \n\n- `accountId`: Marketplace’s account ID. \n\n- `accountName`: Marketplace’s account name. \n\n- `mapping`: Mapping of SKU and product Specifications. \n\n- `matchFlux`: This field determines the type of approval configuration applied to SKUs received  from a seller. \n\nThe possible values include:  \n\n-`default`"
+        },
+        {
+          "info": {
+            "name": "VTex Save Seller's Approval Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration/seller/:sellerId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Marketplaces use this endpoint to create or update approval settings to a specific seller, on the Received SKUs module. \n\nThe request includes all the details necessary to implement the chosen approval settings."
+        },
+        {
+          "info": {
+            "name": "VTex Activate autoApprove Setting for a Seller",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{providerApiEndpoint}/suggestions/configuration/autoapproval/toggle/seller/:sellerId",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the VTEX account that belongs to the marketplace. All data extracted, and changes added will be posted into this account."
+              },
+              {
+                "name": "sellerId",
+                "value": "",
+                "type": "path",
+                "description": "A string that identifies the seller in the marketplace. This ID must be created by the marketplace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint enables the auto approve setting to received SKUs from a specific seller. Be aware that once enabling the rule through this request, all received SKUs from that seller will be automatically approved on your store, regardless of the Matcher Score."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

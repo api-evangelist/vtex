@@ -1,0 +1,137 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "VTex Anti-fraud Provider Account Configuration Flow API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Configuration Flow",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "VTex Create authorization token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{providerApiEndpoint}/authorization/token",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates the authorization token that will be used for VTEX to redirect the merchant to the provider's authentication application. For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made from VTEX to the payment provider.\r\n\r\n## Permissions\r\n\r\nCheck with your service provider to know what "
+        },
+        {
+          "info": {
+            "name": "VTex Provider authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/authorization/redirect",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "query",
+                "description": "VTEX application identifier."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "You must generate a token that will be used to identify the same context when we redirect the merchant to your application."
+              }
+            ]
+          },
+          "docs": "Use the application of provider for merchant's authentication.\r\n\r\nVTEX will redirect the merchant to your application using the `token` we retrieved earlier.\r\n\r\nYou're expected to have a signup/signin process on your side in order to authenticate the merchant, either as a new or as an existent user.\r\n\r\nAt this point, you can present your terms an conditions, a contract, and ask for merchant's final agreement to use your services.\r\n\r\nFinally, you need to generate an `authorizationCode` that you m"
+        },
+        {
+          "info": {
+            "name": "VTex Get credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{providerApiEndpoint}/authorization/credentials",
+            "headers": [
+              {
+                "name": "X-PROVIDER-API-AppKey",
+                "value": ""
+              },
+              {
+                "name": "X-PROVIDER-API-AppToken",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "query",
+                "description": "VTEX application identifier."
+              },
+              {
+                "name": "authorizationCode",
+                "value": "",
+                "type": "query",
+                "description": "Code generate by affiliation that will be used to identify the merchant authorization."
+              }
+            ]
+          },
+          "docs": "Retrieves the merchant credentials (applicationId, appKey and appToken) registered with the payment provider. These credentials will be saved in the VTEX system and activated when the retailer decides to enable the connector.\r\n\r\n For more information about the Payment Provider Protocol (PPP) merchant authentication procedure, visit [Configuration Flow](https://developers.vtex.com/docs/guides/payments-integration-implementing-a-payment-provider#configuration-flow).\r\n\r\n> ℹ️ This request is made fr"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
