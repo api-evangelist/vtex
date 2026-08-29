@@ -1,15 +1,20 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Price Tables API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Pricing Price Tables API
+  description: "Check the new [Pricing onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/pricing-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Pricing and is organized by focusing on the developer's journey.\n\nPricing is the VTEX module responsible for the SKU's price list. In this module, we have the base price of each SKU, optional fixed prices by trade policy, and rules that can be applied to dynamically generate different final prices according to the purchase context and the trade policy. \n\nFind more information on how to use this module and its business logic at our [Pricing onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/pricing-overview).\n\n## Rate limits per route\nThe rate limits per route revolve around the following values:\n\n\n| Operation | Rate | Burst credits  |\n| - | - | - |\n| `GET` | No rate limits | No rate limits |\n| `POST` and `PUT` | 2000 per minute<br>33 per second | 500 |\n| `DELETE` | 1000 per minute<br>16 per second | 300 |\n\n### Burst credits\nIn case the account exceeds the limit frequency for a Rate Limiter (for instance, when one account makes 34 requests per second in any price insert/update route), we decrease from the Burst Credit count the exceeding (in this example, 1 Credit).\n\nIn the event of the Burst Credits reaching 0 (zero), the request is blocked with a Status 429 response.\n\nThe credits fill up over time when the route is not being used, at the same rate as the route's Rate Limiter. In our example, for each second not sending a PUT or POST request, we increase 40 Burst Credits to this Rate Limiter.\n\n### Response Headers for rate limits\nIn the response of any request to the Pricing API, there are headers indicating the current status of the Rate Limiting. This information may be useful to evaluate the ideal frequency to send requests to a route, and when to send a new request in the event of reaching a Rate Limit.\n\n- `Ratelimit-Limit`: Total Burst Credits offered to a route\n- `Ratelimit-Remaining`: How many Burst Credits are still available to use\n- `Ratelimit-Reset`: How long (in seconds) it will take for Burst Credits to fill up completely (it will fill up to the *Ratelimit-Limit*)\n- `Retry-After`: Indicates how many seconds you will need to wait until the Rate Limiter accepts a new request to this route again. If this header response exists, this means your current request has been rate-limited and has not been processed.\n\n\n### Integrating with Pricing v2 considering rate limits\nWhen developing an integration, consider the requests/route/account limits specified in the [Rate Limits per route](#rate-limits-per-route) section, and avoid surpassing this frequency.\n\nIf you happen to be rate limited, please await the time in seconds specified in `Retry-After` before making another request to the service, and reduce the rate of requests per second that your integration is making.\n\n\n\n## Index\n\n### Prices and Fixed Prices\n- `GET` [Get Price](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-)\n- `DELETE` [Delete Price](https://developers.vtex.com/docs/api-reference/pricing-api/#delete-/pricing/prices/-itemId-)\n- `PUT` [Create or Update Base Price or Fixed Prices](https://developers.vtex.com/docs/api-reference/pricing-api/#put-/pricing/prices/-itemId-)\n- `GET` [Get Fixed Prices](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-/fixed)\n- `POST` [Create or Update Fixed Prices on a price table or trade policy](https://developers.vtex.com/docs/api-reference/pricing-api/#post-/pricing/prices/-itemId-/fixed/-priceTableId-)\n- `GET` [Get Fixed Prices on a price table policy](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-/fixed/-priceTableId-)\n- `DELETE` [Delete Fixed Prices on a price table or trade policy](https://developers.vtex.com/docs/api-reference/pricing-api/#delete-/pricing/prices/-itemId-/fixed/-priceTableId-)\n- `GET` [GET Computed Price by price table or trade policy](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-/computed/-priceTableId-)\n\n\n### Pricing Configuration\n- `GET` [Get Pricing Configuration](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/config)\n- `GET` [Get Pricing v2 Status](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/migration)\n\n\n### Price Tables\n- `GET` [Get rules for a price table](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/pipeline/catalog/-priceTableId-)\n- `PUT` [Update rules for a price table](https://developers.vtex.com/docs/api-reference/pricing-api/#put-/pricing/pipeline/catalog/-priceTableId-)\n- `GET` [Get all price tables and their rules](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/pipeline/catalog)\n- `GET` [List price tables](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/tables)\n\n## Common parameters in the documentation\n\n| Parameter name | Description |\n| - | - |\n| `{{accountName}}` | Store account name. |\n| `{{environment}}` | The environment that will be called. |\n| `{{X-VTEX-API-AppKey}}`   | Located in the headers of the requests, user authentication key. |\n| `{{X-VTEX-API-AppToken}}` | Located in the headers of the requests, authentication password. |"
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://api.vtex.com/{accountName}
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL
+      default: apiexamples
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Price Tables
 paths:
@@ -18,7 +23,27 @@ paths:
       tags:
       - Price Tables
       summary: VTex Get rules for a price table
-      description: "Retrieves the rules of a specific price table.\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves the rules of a specific price table.
+
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Pricing | Price List | **Read prices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Getrulesforapricetable
       parameters:
       - name: Content-Type
@@ -102,17 +127,20 @@ paths:
                                   type: string
                                   description: Brand Name.
                             stockStatuses:
-                              type: object
+                              type:
+                              - object
+                              - 'null'
                               description: Stock statuses.
-                              nullable: true
                             internalCategories:
-                              type: object
+                              type:
+                              - object
+                              - 'null'
                               description: Internal Categories.
-                              nullable: true
                             markupRange:
-                              type: object
+                              type:
+                              - object
+                              - 'null'
                               description: For an item to be eligible to the rule, it's markup should be in this Markup Range.
-                              nullable: true
                               properties:
                                 from:
                                   type: integer
@@ -121,9 +149,10 @@ paths:
                                   type: integer
                                   description: Item markup should be less than or equal to this value.
                             dateRange:
-                              type: object
+                              type:
+                              - object
+                              - 'null'
                               description: The rule will be active during this time range.
-                              nullable: true
                               properties:
                                 from:
                                   type: string
@@ -150,7 +179,27 @@ paths:
       tags:
       - Price Tables
       summary: VTex Update rules for a price table
-      description: "Updates the rules of a specific price table, by deleting all the rules from the requested price table and creating new rules based on the content of the request.\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Modify prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Updates the rules of a specific price table, by deleting all the rules from the requested price table and creating new rules based on the content of the request.
+
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Pricing | Price List | **Modify prices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       parameters:
       - name: Content-Type
         in: header
@@ -250,19 +299,22 @@ paths:
                                 description: Brand Name.
                                 example: Goldman
                           stockStatuses:
-                            type: object
+                            type:
+                            - object
+                            - 'null'
                             description: Stock statuses.
-                            nullable: true
                             example: null
                           internalCategories:
-                            type: object
+                            type:
+                            - object
+                            - 'null'
                             description: Internal Categories.
-                            nullable: true
                             example: null
                           markupRange:
-                            type: object
+                            type:
+                            - object
+                            - 'null'
                             description: For an item to be eligible to the rule, it's markup should be in this Markup Range.
-                            nullable: true
                             example: null
                             required:
                             - from
@@ -300,7 +352,27 @@ paths:
       tags:
       - Price Tables
       summary: VTex Get all price tables and their rules
-      description: "Retrieves a list of all price tables and their rules.\r\n\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a list of all price tables and their rules.
+
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Pricing | Price List | **Read prices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: getallpricetablesandrules
       parameters:
       - name: Content-Type
@@ -390,17 +462,20 @@ paths:
                                     type: string
                                     description: Brand Name.
                               stockStatuses:
-                                type: object
+                                type:
+                                - object
+                                - 'null'
                                 description: Stock statuses.
-                                nullable: true
                               internalCategories:
-                                type: object
+                                type:
+                                - object
+                                - 'null'
                                 description: Internal Categories.
-                                nullable: true
                               markupRange:
-                                type: object
+                                type:
+                                - object
+                                - 'null'
                                 description: For an item to be eligible to the rule, it's markup should be in this Markup Range.
-                                nullable: true
                                 properties:
                                   from:
                                     type: integer
@@ -409,9 +484,10 @@ paths:
                                     type: integer
                                     description: Item markup should be less than or equal to this value.
                               dateRange:
-                                type: object
+                                type:
+                                - object
+                                - 'null'
                                 description: The rule will be active during this time range.
-                                nullable: true
                                 properties:
                                   from:
                                     type: string
@@ -433,7 +509,26 @@ paths:
       tags:
       - Price Tables
       summary: VTex List price tables
-      description: "Retrieves a list of all price tables.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Pricing | Price List | **Read prices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a list of all price tables.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Pricing | Price List | **Read prices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Listpricetables
       parameters:
       - name: Content-Type
@@ -478,6 +573,16 @@ paths:
             default: DefaultParameterValue
 components:
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

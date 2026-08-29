@@ -1,15 +1,167 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Region API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Checkout Region API
+  description: '>ℹ️ Check the new [Checkout onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/checkout-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about the Checkout and is organized by focusing on the developer''s journey.
+
+
+    The Checkout API allows you to obtain and configure information about the shopping cart and its attachments, personalization of custom fields, orderForm structure, fulfillment data, order management, and identification of the sellers delivery region.
+
+
+    >ℹ️ Data modification operations (`POST`, `PATCH`, `PUT` or `DELETE` endpoints) shall not be performed in parallel in the Checkout APIs. They need to be enqueued by the client/requester. Otherwise, old values ​​can be overwritten incorrectly or competition errors may occur.
+
+
+    >⚠️ All endpoints that consult or edit the orderForm can change the authentication depending on the customer context. If you are handling information from a customer with a complete profile on the store, authentication will be required. You can only access or modify the customer data for these profiles with an authenticated request.
+
+
+    ## Shopping cart
+
+
+    Allows merchants to simulate, configure and customize shopping cart information.
+
+
+    - [POST - Cart Simulation](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForms/simulation): simulate a cart in VTEX Checkout.
+
+    - [GET - Get current or create a new cart](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm): get your current shopping cart information or to create a new cart.
+
+    - [GET - Get cart information by ID](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm/-orderFormId-): get all information associated to a given shopping cart.
+
+    - [POST - Add cart items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items): add a new item to the shopping cart.
+
+    - [POST - Update cart items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/update): change the quantity of one or more items in a specific cart or remove an item from the cart.
+
+    - [PATCH - Handle cart items](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/items): change the quantity or price of one or more items to the shopping cart or add a new item to the shopping cart.
+
+    - [POST - Remove all items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/removeAll): removes all items from a given cart, leaving it empty.
+
+    - [PUT - Change price](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orderForm/-orderFormId-/items/-itemIndex-/price): changes the price of an SKU in a cart.
+
+    - [GET - Cart installments](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm/-orderFormId-/installments): retrieves possible amount of installments and respective values for a given cart with a given payment method.
+
+
+    ## Cart attachments
+
+
+    Allows merchants to obtain client profiles and add information to a given shopping cart.
+
+
+    - [GET - Get client profile by email](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/profiles): retrieve a client''s profile information by providing an email address.
+
+    - [POST - Add client profile](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/clientProfileData): include client profile information to a given shopping cart.
+
+    - [Patch - Ignore profile data](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/profile): disable the automatic inclusion of profile information in a shopping cart when a shopper provides an email address at checkout.
+
+    - [GET - Remove all personal data](https://developers.vtex.com/docs/api-reference/checkout-api#get-/checkout/changeToAnonymousUser/-orderFormId-): removes all user information, making a cart anonymous while leaving the items.
+
+    - [POST - Add client preferences](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/items): include client preferences information to a given shopping cart.
+
+    - [POST - Add shipping address and select delivery option](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/shippingData): include shipping information and/or selected delivery option to a given shopping cart.
+
+    - [POST - Add marketing data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/marketingData): include marketing information to a given shopping cart.
+
+    - [POST - Add payment data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/paymentData): include payment information to a given shopping cart.
+
+    - [POST - Add merchant context data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/merchantContextData): add to the cart any relevant information that is related to the context of a specific order.
+
+    - [POST - Add coupons to the cart](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/coupons): add coupons to a given shopping cart.
+
+
+    ## Custom data
+
+
+    Allows merchants to manage custom fields that were created by an app in their account.
+
+
+    - [PUT - Set multiple custom field values](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/coupons): allows you to update the values of custom fields created in your account''s apps.
+
+    - [PUT - Set single custom field value](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orderForm/-orderFormId-/customData/-appId-/-appFieldName-): allows you to update the value of a specific custom field created in your account''s apps.
+
+    - [DELETE - Remove single custom field value](https://developers.vtex.com/docs/api-reference/checkout-api#delete-/api/checkout/pub/orderForm/-orderFormId-/customData/-appId-/-appFieldName-): allows you to remove the value of a specific custom field created in your account''s apps.
+
+
+    ## Configuration
+
+
+    Allows merchants to configure orderForm in the account and seller exchange on a given order.
+
+
+    - [GET - Get orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/orderForm): retrieves the settings that are currently applied to every [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) in the account.
+
+    - [POST - Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm): determines settings that will apply to every [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) in the account.
+
+    - [GET - Get window to change seller](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/window-to-change-seller): retrieves a marketplace’s window to change seller.
+
+    - [POST - Update window to change seller](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/window-to-change-seller): updates a marketplace’s window to change seller.
+
+    - [POST - Clear orderForm messages](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/messages/clear): removes all messages from the `messages` field of the [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields).
+
+
+    ## Fulfillment
+
+
+    Allows merchants to obtain pickup points and address information.
+
+
+    - [GET - List pickup points by location](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/pickup-points): retrieves information on pickup points close to a given location determined by geocoordinates or postal code.
+
+    - [GET - Get address by postal code](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/postal-code/-countryCode-/-postalCode-): retrieves address information for a given postal code and country.
+
+
+    ## Order placement
+
+
+    Allows merchants to place and process orders by creating a new cart or using an existing cart.
+
+
+    - [POST - Place order from an existing cart](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/transaction): places an order from an existing [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) object, meaning an existing cart.
+
+    - [PUT - Place order](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orders): places order without having any prior cart information.
+
+    - [POST - Process order](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/gatewayCallback/-orderGroup-): order processing callback request, which is made after an order''s payment is approved.
+
+
+    ## Region
+
+
+    Allows merchants to obtain a list of sellers serving a specific delivery region.
+
+
+    - [GET - Get sellers by region or address](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/regions/-regionId-)": retrieves a list of sellers that cater to a specific region or address.
+
+
+    ## Common parameters in the documentation
+
+
+    | Parameter name            | Description                                                                             |
+
+    |---------------------------|-----------------------------------------------------------------------------------------|
+
+    | `{{accountName}}`         | Store account name                                                                      |
+
+    | `{{environment}}`         | The environment that will be called. Change for vtexcommercestable or vtexcommmercebeta |
+
+    | `{{X-VTEX-API-AppKey}}`   | Located in the headers of the requests, user authentication key                         |
+
+    | `{{X-VTEX-API-AppToken}}` | Located in the headers of the requests, authentication password                         |
+
+    '
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Region
 paths:
@@ -18,7 +170,37 @@ paths:
       tags:
       - Region
       summary: VTex Get sellers by region or address
-      description: "Retrieves a list of sellers that cater to a specific region or address, according to your setup of our [regionalization feature](https://help.vtex.com/en/tutorial/setting-up-price-and-availability-of-skus-by-region--12ne58BmvYsYuGsimmugoc#). Learn more about [Region v2](https://developers.vtex.com/docs/guides/region-v2-release).\n\r\n\rTo access the list of sellers, you must choose one of the following methods:\n\r\n\r1. Send the identification of the list of sellers (`regionId`) as a path parameter through the URL. Or;\n\r2. Send the `country` (3-digit ISO code) and at least one of the two values (`postal Code` or `geo Coordinates`) as query parameters through the URL. For this method, it is also allowed to send both values (`postalCode` or `geoCoordinates`) in the same request.\n\r\n\r> The `regionId` and `country` parameters are indicated as required in this documentation. However, only one of them should be sent in the request according to one of the methods mentioned above.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Checkout | CheckoutResources | **Shopping Cart Full Access** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a list of sellers that cater to a specific region or address, according to your setup of our [regionalization feature](https://help.vtex.com/en/tutorial/setting-up-price-and-availability-of-skus-by-region--12ne58BmvYsYuGsimmugoc#). Learn more about [Region v2](https://developers.vtex.com/docs/guides/region-v2-release).
+
+
+        To access the list of sellers, you must choose one of the following methods:
+
+
+        1. Send the identification of the list of sellers (`regionId`) as a path parameter through the URL. Or;
+
+        2. Send the `country` (3-digit ISO code) and at least one of the two values (`postal Code` or `geo Coordinates`) as query parameters through the URL. For this method, it is also allowed to send both values (`postalCode` or `geoCoordinates`) in the same request.
+
+
+        > The `regionId` and `country` parameters are indicated as required in this documentation. However, only one of them should be sent in the request according to one of the methods mentioned above.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Checkout | CheckoutResources | **Shopping Cart Full Access** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: GetSellersByRegion
       security: []
       parameters:
@@ -86,9 +268,10 @@ paths:
                           type: string
                           description: Seller name.
                         logo:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Seller logo.
-                          nullable: true
               example:
                 id: v2.1BB18CE648B5111D0933734ED83EC783
                 sellers:
@@ -122,6 +305,16 @@ components:
         type: string
         default: application/json
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

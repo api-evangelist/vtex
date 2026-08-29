@@ -1,15 +1,91 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Transaction Process API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Payments Gateway Transaction Process API
+  description: '>ℹ️ Onboarding guide
+
+    >
+
+    > Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer''s journey.
+
+
+    The Payments Gateway API allows you to get payment data and process your store''s transactions.
+
+
+    ## Payments Gateway API Index
+
+
+    ### Installments
+
+
+    - `GET` [Get installments options](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/installments)
+
+
+    ### Configuration
+
+
+    - `GET` [List all affiliations](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/affiliations)
+
+    - `POST` [Insert a new affiliation](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/affiliations)
+
+    - `PUT` [Update affiliation by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#put-/api/pvt/affiliations/-affiliationId-)
+
+    - `GET` [Get affiliation by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/affiliations/-affiliationId-)
+
+    - `GET` [List all payment rules](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/rules)
+
+    - `POST` [Insert a new payment rule](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/rules)
+
+    - `GET` [Get payment rule by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/rules/-ruleId-)
+
+    - `PUT` [Update payment rule by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#put-/api/pvt/rules/-ruleId-)
+
+    - `DELETE` [Delete payment rule by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#delete-/api/pvt/rules/-ruleId-)
+
+    - `GET` [List all available payment methods](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/merchants/payment-systems)
+
+
+    ### Transaction Process
+
+
+    - `POST` [1. Starts a new transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions)
+
+    - `POST` [2.1 Send payments information public](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pub/transactions/-transactionId-/payments)
+
+    - `POST` [2.2 Send payments with saved credit card](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/payments)
+
+    - `POST` [3. Send additional data](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/additional-data)
+
+    - `PATCH` [3.1 Update additional data (optional)](https://developers.vtex.com/docs/api-reference/payments-gateway-api#patch-/api/pvt/transactions/-transactionId-/additional-data)
+
+    - `POST` [Authorize new transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/authorization-request)
+
+    - `GET` [Get transaction details](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/transactions/-transactionId-)
+
+    - `GET` [Get payment details](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/transactions/-transactionId-/payments/-paymentId-)
+
+    - `GET` [Get transaction settlement details](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/transactions/-transactionId-/settlements)
+
+
+    ### Transaction Flow
+
+
+    - `POST` [Settle the transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/settlement-request)
+
+    - `POST` [Refund the transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/refunding-request)
+
+    - `POST` [Cancel the transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/cancellation-request)'
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.vtexpayments.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Transaction Process
 paths:
@@ -18,7 +94,26 @@ paths:
       tags:
       - Transaction Process
       summary: VTex 1. Start a new transaction
-      description: "This request is the first step to create a new transaction.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'This request is the first step to create a new transaction.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: 1.Createanewtransaction
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -102,7 +197,14 @@ paths:
       tags:
       - Transaction Process
       summary: VTex 2.1 Send payments information public
-      description: "The second step to create a new transaction. This request is used to send the payment data through a public request.\r\n>\r\n>ℹ️ If you want to send payment data containing sensitive information, such as credit card data, use the [Send payments with saved credit card](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/payments) endpoint.## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      description: 'The second step to create a new transaction. This request is used to send the payment data through a public request.
+
+        >
+
+        >ℹ️ If you want to send payment data containing sensitive information, such as credit card data, use the [Send payments with saved credit card](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/payments) endpoint.## Permissions
+
+
+        This endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).'
       operationId: 2.SendPaymentsPublic
       parameters:
       - name: orderId
@@ -134,7 +236,30 @@ paths:
       tags:
       - Transaction Process
       summary: VTex 2.2 Send payments with saved credit card
-      description: "The second step to create a new transaction. This request is used to send the payment data through a private request.\r\n>\r\n>ℹ️ If you want to send payment data that does not contain sensitive information, you can use the [Send payments information public](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pub/transactions/-transactionId-/payments) endpoint.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'The second step to create a new transaction. This request is used to send the payment data through a private request.
+
+        >
+
+        >ℹ️ If you want to send payment data that does not contain sensitive information, you can use the [Send payments information public](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pub/transactions/-transactionId-/payments) endpoint.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: 2.SendPaymentsWithSavedCreditCard
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -222,7 +347,26 @@ paths:
       tags:
       - Transaction Process
       summary: VTex 3. Send additional data
-      description: "The third step to create a new transaction. This request sends additional data related to the transaction, such as profile information, shopping cart, shipping data, among others.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'The third step to create a new transaction. This request sends additional data related to the transaction, such as profile information, shopping cart, shipping data, among others.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: 3.SendAdditionalData
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -260,7 +404,26 @@ paths:
       tags:
       - Transaction Process
       summary: VTex 3.1 Update additional data (optional)
-      description: "Use this request to update any information that has previously been sent on endpoint [3. Send additional data](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/additional-data).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Use this request to update any information that has previously been sent on endpoint [3. Send additional data](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/additional-data).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: 3.1UpdateAdditionalData
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -299,7 +462,32 @@ paths:
       tags:
       - Transaction Process
       summary: VTex 4. Authorize new transaction
-      description: "The fourth and last step to create a new transaction. It will authorized the new transaction creation according to the data previously informed in the latests requests.\r\n\r\nThis step is the trigger to process each of payments that were received in step 2.\r\n\r\nEach payment will be sent to acquirer. If all payments are authorized, the transaction will be authorized. If one of the payments is denied, all payments in transaction will be cancelled.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'The fourth and last step to create a new transaction. It will authorized the new transaction creation according to the data previously informed in the latests requests.
+
+
+        This step is the trigger to process each of payments that were received in step 2.
+
+
+        Each payment will be sent to acquirer. If all payments are authorized, the transaction will be authorized. If one of the payments is denied, all payments in transaction will be cancelled.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: 4.Doauthorization
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -335,7 +523,29 @@ paths:
       tags:
       - Transaction Process
       summary: VTex Get transaction details
-      description: "Returns data about a specific transaction made in your store.\r\n\r\n>⚠️ Do not use the `interactions.href` route which is part of this endpoint's response. This is an internal-only route not meant to be used by external developers.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns data about a specific transaction made in your store.
+
+
+        >⚠️ Do not use the `interactions.href` route which is part of this endpoint''s response. This is an internal-only route not meant to be used by external developers.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **View Payment Data** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: TransactionDetails
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -453,7 +663,26 @@ paths:
       tags:
       - Transaction Process
       summary: VTex Get payment details
-      description: "Returns data about a specific payment made in your store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns data about a specific payment made in your store.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **View Payment Data** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: PaymentDetails
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -581,7 +810,26 @@ paths:
       tags:
       - Transaction Process
       summary: VTex Get transaction settlement details
-      description: "Returns settlement data associated with a specific transaction.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **View Payment Data** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns settlement data associated with a specific transaction.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **View Payment Data** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: TransactionSettlementDetails
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -619,6 +867,30 @@ components:
         href:
           type: string
           description: Transaction reference settlement route.
+    Capabilities:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction capabilities.
+      properties:
+        href:
+          type: string
+          description: Transaction capabilities reference route.
+    Transaction:
+      required:
+      - id
+      - merchantName
+      type: object
+      description: Transaction information.
+      properties:
+        id:
+          type: string
+          description: Transaction identification.
+          example: 72E84719BDF14B2FB170B38AD12598C9
+        merchantName:
+          type: string
+          description: Merchant name.
+          example: cosmetics2
     PaymentDetailsResponse:
       required:
       - id
@@ -673,16 +945,18 @@ components:
             type: string
             description: Payment system name.
           merchantName:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Merchant name.
-            nullable: true
           group:
             type: string
             description: Payment group name.
           userProfileId:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Unique ID associated with the customer profile.
-            nullable: true
           isCustom:
             type: boolean
             description: Indicates whether it is custom.
@@ -702,42 +976,50 @@ components:
             type: boolean
             description: Indicates whether the payment method is available for use.
           description:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Description of the payment method.
-            nullable: true
           authorizationDate:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Payment authorization date.
-            nullable: true
           self:
             $ref: '#/components/schemas/Self'
           tid:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Provider's unique identifier for the transaction.
-            nullable: true
           nsu:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Provider's unique sequential number for the transaction.
-            nullable: true
           returnCode:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Connector return code.
-            nullable: true
           returnMessage:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Connector return message.
-            nullable: true
           status:
             type: string
             description: Payment status.
           connector:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Connector name.
-            nullable: true
           ConnectorResponses:
-            type: array
+            type:
+            - array
+            - 'null'
             description: Array containing connector responses information.
-            nullable: true
             items:
               type: object
               description: Connector responses information.
@@ -746,24 +1028,28 @@ components:
                   type: string
                   description: Provider's unique identifier for the transaction.
                 ReturnCode:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Connector return code.
-                  nullable: true
                 Message:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Connector return message.
-                  nullable: true
                 authId:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Authorization identification.
-                  nullable: true
                 nsu:
                   type: string
                   description: Provider's unique sequential number for the transaction.
           connectorResponse:
-            type: array
+            type:
+            - array
+            - 'null'
             description: Array containing connector response information.
-            nullable: true
             items:
               type: object
               description: Connector response information.
@@ -772,17 +1058,20 @@ components:
                   type: string
                   description: Provider's unique identifier for the transaction.
                 ReturnCode:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Connector return code.
-                  nullable: true
                 Message:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Connector return message.
-                  nullable: true
                 authId:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Authorization identification.
-                  nullable: true
                 nsu:
                   type: string
                   description: Provider's unique sequential number for the transaction.
@@ -805,38 +1094,344 @@ components:
             type: number
             description: Number of installments.
           currencyCode:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Currency Code in ISO 4217 standard.
-            nullable: true
           provider:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Provider name.
-            nullable: true
           isBillingAddressDifferent:
-            type: boolean
+            type:
+            - boolean
+            - 'null'
             description: Indicates whether the invoice address is different from the purchase delivery address.
-            nullable: true
           isRegexValid:
-            type: boolean
+            type:
+            - boolean
+            - 'null'
             description: Confirms that the [Regex](https://regexr.com/) rule is valid.
-            nullable: true
           isLuhnValid:
-            type: boolean
+            type:
+            - boolean
+            - 'null'
             description: Confirms that the [Luhn](https://en.wikipedia.org/wiki/Luhn_algorithm) rule is valid.
-            nullable: true
           fields:
             type: array
             items:
               $ref: '#/components/schemas/Fields1'
             description: Field containing information and values ​​of payment parameters.
           sheets:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Sheets information.
-            nullable: true
           originalPaymentId:
-            type: string
+            type:
+            - string
+            - 'null'
             description: Original payment identification, if applicable.
-            nullable: true
+    Fields:
+      required:
+      - holderName
+      - cardNumber
+      - validationCode
+      - dueDate
+      - document
+      - accountId
+      - address
+      - callbackUrl
+      type: object
+      description: Fields information.
+      properties:
+        holderName:
+          type:
+          - string
+          - 'null'
+          description: Card holder name.
+          example: UserTest
+        cardNumber:
+          type:
+          - number
+          - 'null'
+          description: Card number information.
+          example: 111111111111
+        validationCode:
+          type:
+          - number
+          - 'null'
+          description: CVV code.
+          example: 231
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: Due date information. The date format is `mm/yy`.
+          example: 10/19
+        document:
+          type:
+          - string
+          - 'null'
+          description: Card holder documentation.
+          example: '8041734561'
+        accountId:
+          type:
+          - string
+          - 'null'
+          description: Account identification.
+          example: 08134AF761A148B9A5DCE14A81F31DD9
+        address:
+          type: array
+          description: Array containing customer address information.
+          items:
+            type: object
+            description: Customer address information.
+            properties:
+              addressType:
+                type: string
+                description: Address type.
+                example: Residential
+              receiverName:
+                type: string
+                description: Name of the receiver.
+                example: Clark Kent
+              postalCode:
+                type: string
+                description: Postal code information.
+                example: '5555555'
+              city:
+                type: string
+                description: City of the address.
+                example: Sao Paulo
+              state:
+                type: string
+                description: State of the address.
+                example: SP
+              country:
+                type:
+                - string
+                - 'null'
+                description: Country of the address. ISO three-letter code.
+                example: BRA
+              street:
+                type: string
+                description: Street of the address.
+                example: Avenue Splendor Garden
+              number:
+                type: number
+                description: Number of the address.
+                example: 111
+              neighborhood:
+                type: string
+                description: Neighborhood of the address.
+                example: Sumare
+              complement:
+                type:
+                - string
+                - 'null'
+                description: Complement to the address.
+                example: House
+              reference:
+                type:
+                - string
+                - 'null'
+                description: Reference that may help in the location of the address.
+                example: Close to the bank.
+              geoCoordinates:
+                type: array
+                description: Array containing two floats with geocoordinates, first longitude, then latitude.
+                example:
+                - -47.924747467041016
+                - -15.832582473754883
+                items:
+                  type: number
+                  description: Geocoordinates information.
+                  example: -47.924747467041016
+        callbackUrl:
+          type: string
+          description: Callback URL information.
+          example: https://coinshop.vtexpayments.com.br/payment-provider/transactions/900BA26FEAC84332A53AE1007E740DE3/payments/E713830E32764BF99028A0A275841BFC/notification
+    SettleResponse:
+      required:
+      - id
+      - token
+      - status
+      - statusDetail
+      - processingDate
+      - refundedValue
+      - refundedToken
+      - message
+      - code
+      - connectorRefundedValue
+      - cancelledValue
+      type: object
+      description: ' Transaction response body information.'
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Settle request identification.
+        token:
+          type: string
+          description: Token identification.
+        status:
+          type: number
+          description: Status code.
+        statusDetail:
+          type: string
+          description: Status detail information.
+        processingDate:
+          type: string
+          description: Settlement processing date.
+        refundedValue:
+          type: integer
+          description: Refunded value.
+        refundedToken:
+          type:
+          - string
+          - 'null'
+          description: Refund operation token.
+        message:
+          type:
+          - string
+          - 'null'
+          description: Custom message.
+        code:
+          type:
+          - string
+          - 'null'
+          description: Custom code.
+        connectorRefundedValue:
+          type: number
+          description: Refunded value by connector (provider).
+        cancelledValue:
+          type: integer
+          description: Cancelled value.
+    Fields3:
+      required:
+      - holderName
+      - cardNumber
+      - validationCode
+      - dueDate
+      - document
+      - accountId
+      - address
+      - callbackUrl
+      type: object
+      description: Fields information.
+      properties:
+        holderName:
+          type: string
+          description: Card holder name.
+          example: UserTest
+        cardNumber:
+          type: number
+          description: Card number information.
+          example: 111111111111
+        validationCode:
+          type: number
+          description: CVV code.
+          example: 231
+        dueDate:
+          type: string
+          description: Due date information. The date format is `mm/yy`.
+          example: 10/19
+        document:
+          type: string
+          description: Card holder documentation.
+          example: '8041734561'
+        accountId:
+          type:
+          - string
+          - 'null'
+          description: Account identification.
+          example: 08134AF761A148B9A5DCE14A81F31DD9
+        address:
+          type:
+          - array
+          - 'null'
+          description: Array containing customer address information.
+          items:
+            type: string
+            description: Customer address information.
+            example: Customer address data
+        callbackUrl:
+          type:
+          - string
+          - 'null'
+          description: Callback URL information.
+          example: https://payment-test.myvtex.com/checkout/gatewayCallback/1336650505288/Success
+    Fields1:
+      required:
+      - name
+      - value
+      type: object
+      description: Payment parameters information.
+      properties:
+        name:
+          type: string
+          description: Payment parameter name.
+        value:
+          type: string
+          description: Payment parameter value.
+    2.SendPaymentsPublicRequest:
+      required:
+      - paymentSystem
+      - installments
+      - currencyCode
+      - value
+      - installmentsInterestRate
+      - installmentsValue
+      - referenceValue
+      - fields
+      - transaction
+      type: object
+      description: Send payments information public request body information.
+      properties:
+        paymentSystem:
+          type: number
+          description: Payment system identification.
+          example: 17
+        installments:
+          type: number
+          description: Number of installments.
+          example: 1
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217 standard.
+          example: BRL
+        value:
+          type: number
+          description: Payment value.
+          example: 15000
+        installmentsInterestRate:
+          type: number
+          description: The interest rate.
+          example: 0
+        installmentsValue:
+          type: number
+          description: The value of each installment.
+          example: 0
+        referenceValue:
+          type: number
+          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
+          example: 15000
+        fields:
+          $ref: '#/components/schemas/Fields'
+        transaction:
+          $ref: '#/components/schemas/Transaction'
+    Payments:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction payments.
+      properties:
+        href:
+          type: string
+          description: Transaction payment reference route.
     2.SendPaymentsWithSavedCreditCardRequest:
       required:
       - paymentSystem
@@ -883,6 +1478,327 @@ components:
           $ref: '#/components/schemas/Fields3'
         transaction:
           $ref: '#/components/schemas/Transaction'
+    StartTransactionResponse:
+      required:
+      - id
+      - transactionId
+      - referenceKey
+      - interactions
+      - settlements
+      - payments
+      - refunds
+      - cancellations
+      - capabilities
+      - timeoutStatus
+      - totalRefunds
+      - status
+      - value
+      - receiverUri
+      - startDate
+      - authorizationToken
+      - authorizationDate
+      - commitmentToken
+      - commitmentDate
+      - refundingToken
+      - refundingDate
+      - cancelationToken
+      - cancelationDate
+      - fields
+      - ipAddress
+      - sessionId
+      - macId
+      - vtexFingerprint
+      - chargeback
+      - whiteSignature
+      - owner
+      - orderId
+      - userAgent
+      - acceptHeader
+      - antifraudTid
+      - antifraudResponse
+      - antifraudReference
+      - antifraudAffiliationId
+      - channel
+      - salesChannel
+      - urn
+      - softDescriptor
+      - markedForRecurrence
+      - buyer
+      type: object
+      description: New transaction response body information.
+      properties:
+        id:
+          type: string
+          description: Transaction identification.
+        transactionId:
+          type: string
+          description: Transaction identification (same value of the `id` field).
+        referenceKey:
+          type: string
+          description: Identification number that relates the transaction to a purchase order. It can be also used for anti-fraud to identify the transaction.
+        interactions:
+          $ref: '#/components/schemas/Interactions'
+        settlements:
+          $ref: '#/components/schemas/Settlements'
+        payments:
+          $ref: '#/components/schemas/Payments'
+        refunds:
+          $ref: '#/components/schemas/Refunds'
+        cancellations:
+          $ref: '#/components/schemas/Cancellations'
+        capabilities:
+          $ref: '#/components/schemas/Capabilities'
+        timeoutStatus:
+          type: number
+          description: 'Field that represents the possible transaction timeout statuses. Possible statuses and meanings: `0` = NotStarted, `1` = CancellingOrFinishing, `2` = CancellingOrFinishingByTimeout, `3` = CancelledOrFinished and `4` = TriesExceeded.'
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+        totalRefunds:
+          type: number
+          description: Total refunded transaction amount.
+        status:
+          type: string
+          description: Transaction status.
+        value:
+          type: number
+          description: Transaction value.
+        receiverUri:
+          type:
+          - string
+          - 'null'
+          description: Receiver [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) information.
+        startDate:
+          type: string
+          description: Transaction start date.
+        authorizationToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction authorization token.
+        authorizationDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction authorization date.
+        commitmentToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction completion token.
+        commitmentDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction completion date.
+        refundingToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction refund token.
+        refundingDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction refund date.
+        cancelationToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction cancellation token.
+        cancelationDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction cancellation date.
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+          description: Field containing transaction information.
+        ipAddress:
+          type:
+          - string
+          - 'null'
+          description: IP address information.
+        sessionId:
+          type:
+          - string
+          - 'null'
+          description: Session identification.
+        macId:
+          type:
+          - string
+          - 'null'
+          description: Random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) V4 generated when the Request Capture receives a session that does not contain the macID already set. This value is set to the cookie `VtexRCMacIdv7`. The cookie has 1 year of expiration.
+        vtexFingerprint:
+          type:
+          - string
+          - 'null'
+          description: VTEX fingerprint information.
+        chargeback:
+          type:
+          - string
+          - 'null'
+          description: Chargeback information.
+        whiteSignature:
+          type:
+          - string
+          - 'null'
+          description: White signature (anti-fraud list) information.
+        owner:
+          type: string
+          description: Responsible for transaction request.
+        orderId:
+          type:
+          - string
+          - 'null'
+          description: Order identitication.
+        userAgent:
+          type:
+          - string
+          - 'null'
+          description: HTTP client used in the transaction.
+        acceptHeader:
+          type:
+          - string
+          - 'null'
+          description: Type of content accepted in the transaction request header.
+        antifraudTid:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud transaction identification.
+        antifraudResponse:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud response information.
+        antifraudReference:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud reference information.
+        antifraudAffiliationId:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud affiliation identification.
+        channel:
+          type: string
+          description: Store where the transaction was initiated.
+        salesChannel:
+          type: string
+          description: Sales channel information.
+        urn:
+          type:
+          - string
+          - 'null'
+          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
+        softDescriptor:
+          type:
+          - string
+          - 'null'
+          description: Custom field for a transaction that can be displayed on the customer's invoice.
+        markedForRecurrence:
+          type: boolean
+          description: Indicates whether the payment transaction should be recurring.
+        buyer:
+          type:
+          - object
+          - 'null'
+          description: Buyer information.
+          properties:
+            firstName:
+              type: string
+              description: Buyer first name.
+            lastName:
+              type: string
+              description: Buyer last name.
+            documentType:
+              type: string
+              description: Type of the document informed by the buyer.
+            document:
+              type: string
+              description: Document informed by the buyer.
+            email:
+              type: string
+              description: Buyer email address.
+            address:
+              type: string
+              description: Buyer address.
+            phone:
+              type: string
+              description: Buyer phone number.
+    1.CreateanewtransactionRequest:
+      required:
+      - value
+      - referenceId
+      - channel
+      - salesChannel
+      type: object
+      description: New transaction request body information.
+      properties:
+        value:
+          type: number
+          description: Transaction value. The value must be described without using separation for decimals, e.g. for a transaction with a value equal to 201.50, send 20150.
+          example: 20000
+        referenceId:
+          type: string
+          description: Identification number that relates the transaction to a purchase order.
+          example: '1234567'
+        channel:
+          type: string
+          description: Store where the transaction was initiated.
+          example: cosmetics2
+        urn:
+          type:
+          - string
+          - 'null'
+          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
+          example: urn:amazon:webservices:clientvpn
+        salesChannel:
+          type: string
+          description: Sales channel information.
+          example: '1'
+    Refunds:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction refunds.
+      properties:
+        href:
+          type: string
+          description: Transaction refund reference route.
+    Interactions:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction interactions.
+      properties:
+        href:
+          type: string
+          description: Transaction interaction reference route.
+    Request:
+      required:
+      - id
+      - date
+      - value
+      type: object
+      description: Requests information.
+      properties:
+        id:
+          type: string
+          description: Transaction identification. This is the same `transactionId` value sent in the request path.
+        date:
+          type: string
+          description: Transaction settlement date.
+        value:
+          type: number
+          description: Transaction settlement value.
     4.DoauthorizationRequest:
       required:
       - transactionId
@@ -896,38 +1812,45 @@ components:
           description: Transaction identification.
           example: 7ECE7DF3EEE14647B05DB904164923E8
         softDescriptor:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Custom field for a transaction that can be displayed on the customer's invoice.
           example: company_name_description_code
-          nullable: true
         prepareForRecurrency:
           type: boolean
           description: Indicates whether the transaction supports recurrence.
           example: false
-    Transaction:
+    Field:
       required:
-      - id
-      - merchantName
+      - name
+      - value
       type: object
-      description: Transaction information.
+      description: Transaction parameters information.
       properties:
-        id:
+        name:
           type: string
-          description: Transaction identification.
-          example: 72E84719BDF14B2FB170B38AD12598C9
-        merchantName:
+          description: Transaction parameter name.
+        value:
           type: string
-          description: Merchant name.
-          example: cosmetics2
-    Refunds:
+          description: Transaction parameter value.
+    TransactionSettlementDetails:
       required:
-      - href
+      - requests
+      - actions
       type: object
-      description: Object containing the reference route of transaction refunds.
+      description: Transaction settlement details response body information.
       properties:
-        href:
-          type: string
-          description: Transaction refund reference route.
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+          description: Array containing requests information.
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+          description: Array containing actions information.
     Self:
       required:
       - href
@@ -937,6 +1860,24 @@ components:
         href:
           type: string
           description: Payment system reference route.
+    Cancellations:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction cancellations.
+      properties:
+        href:
+          type: string
+          description: Transaction cancellation reference route.
+    Settlements:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction settlements.
+      properties:
+        href:
+          type: string
+          description: Transaction settlement reference route.
     TransactionDetailsResponse:
       required:
       - id
@@ -1027,44 +1968,53 @@ components:
           type: number
           description: Transaction value.
         receiverUri:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Receiver [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) information.
-          nullable: true
         startDate:
           type: string
           description: Transaction start date.
         authorizationToken:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction authorization token.
-          nullable: true
         authorizationDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction authorization date.
-          nullable: true
         commitmentToken:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction completion token.
-          nullable: true
         commitmentDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction completion date.
-          nullable: true
         refundingToken:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction refund token.
-          nullable: true
         refundingDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction refund date.
-          nullable: true
         cancelationToken:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction cancellation token.
-          nullable: true
         cancelationDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Transaction cancellation date.
-          nullable: true
         fields:
           type: array
           items:
@@ -1074,35 +2024,41 @@ components:
           type: string
           description: Transaction origin.
         ipAddress:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Ip address information.
-          nullable: true
         sessionId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Session identification.
-          nullable: true
         macId:
           type: string
           description: Random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) V4 generated when the Request Capture receives a session that does not contain the macID already set. This value is set to the cookie `VtexRCMacIdv7`. The cookie has 1 year of expiration.
         vtexFingerprint:
-          type: string
+          type:
+          - string
+          - 'null'
           description: VTEX fingerprint information.
-          nullable: true
         chargeback:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Chargeback information.
-          nullable: true
         whiteSignature:
-          type: string
+          type:
+          - string
+          - 'null'
           description: White signature (anti-fraud list) information.
-          nullable: true
         owner:
           type: string
           description: Responsible for transaction request.
         orderId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Order identitication.
-          nullable: true
         userAgent:
           type: string
           description: HTTP client used in the transaction.
@@ -1110,21 +2066,25 @@ components:
           type: string
           description: Type of content accepted in the transaction request header.
         antifraudTid:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Anti-fraud transaction identification.
-          nullable: true
         antifraudResponse:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Anti-fraud response information.
-          nullable: true
         antifraudReference:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Anti-fraud reference information.
-          nullable: true
         antifraudAffiliationId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Anti-fraud affiliation identification.
-          nullable: true
         channel:
           type: string
           description: Store where the transaction was initiated.
@@ -1132,20 +2092,23 @@ components:
           type: string
           description: Sales channel information.
         urn:
-          type: string
+          type:
+          - string
+          - 'null'
           description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
-          nullable: true
         softDescriptor:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Custom field for a transaction that can be displayed on the customer's invoice.
-          nullable: true
         markedForRecurrence:
           type: boolean
           description: Indicates whether the payment transaction should be recurring.
         buyer:
-          type: object
+          type:
+          - object
+          - 'null'
           description: Buyer information.
-          nullable: true
           properties:
             firstName:
               type: string
@@ -1168,139 +2131,6 @@ components:
             phone:
               type: string
               description: Buyer phone number.
-    Cancellations:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction cancellations.
-      properties:
-        href:
-          type: string
-          description: Transaction cancellation reference route.
-    Fields1:
-      required:
-      - name
-      - value
-      type: object
-      description: Payment parameters information.
-      properties:
-        name:
-          type: string
-          description: Payment parameter name.
-        value:
-          type: string
-          description: Payment parameter value.
-    Fields:
-      required:
-      - holderName
-      - cardNumber
-      - validationCode
-      - dueDate
-      - document
-      - accountId
-      - address
-      - callbackUrl
-      type: object
-      description: Fields information.
-      properties:
-        holderName:
-          type: string
-          description: Card holder name.
-          example: UserTest
-          nullable: true
-        cardNumber:
-          type: number
-          description: Card number information.
-          example: 111111111111
-          nullable: true
-        validationCode:
-          type: number
-          description: CVV code.
-          example: 231
-          nullable: true
-        dueDate:
-          type: string
-          description: Due date information. The date format is `mm/yy`.
-          example: 10/19
-          nullable: true
-        document:
-          type: string
-          description: Card holder documentation.
-          example: '8041734561'
-          nullable: true
-        accountId:
-          type: string
-          description: Account identification.
-          example: 08134AF761A148B9A5DCE14A81F31DD9
-          nullable: true
-        address:
-          type: array
-          description: Array containing customer address information.
-          items:
-            type: object
-            description: Customer address information.
-            properties:
-              addressType:
-                type: string
-                description: Address type.
-                example: Residential
-              receiverName:
-                type: string
-                description: Name of the receiver.
-                example: Clark Kent
-              postalCode:
-                type: string
-                description: Postal code information.
-                example: '5555555'
-              city:
-                type: string
-                description: City of the address.
-                example: Sao Paulo
-              state:
-                type: string
-                description: State of the address.
-                example: SP
-              country:
-                type: string
-                description: Country of the address. ISO three-letter code.
-                nullable: true
-                example: BRA
-              street:
-                type: string
-                description: Street of the address.
-                example: Avenue Splendor Garden
-              number:
-                type: number
-                description: Number of the address.
-                example: 111
-              neighborhood:
-                type: string
-                description: Neighborhood of the address.
-                example: Sumare
-              complement:
-                type: string
-                description: Complement to the address.
-                example: House
-                nullable: true
-              reference:
-                type: string
-                description: Reference that may help in the location of the address.
-                example: Close to the bank.
-                nullable: true
-              geoCoordinates:
-                type: array
-                description: Array containing two floats with geocoordinates, first longitude, then latitude.
-                example:
-                - -47.924747467041016
-                - -15.832582473754883
-                items:
-                  type: number
-                  description: Geocoordinates information.
-                  example: -47.924747467041016
-        callbackUrl:
-          type: string
-          description: Callback URL information.
-          example: https://coinshop.vtexpayments.com.br/payment-provider/transactions/900BA26FEAC84332A53AE1007E740DE3/payments/E713830E32764BF99028A0A275841BFC/notification
     Action:
       required:
       - paymentId
@@ -1327,503 +2157,20 @@ components:
           type: integer
           description: Transaction settlement value.
         connectorResponse:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Connector transaction response information. This object can return different fields according to the internal configuration of each connector (payment provider), for example, `Tid`, `ReturnCode`, `authId`, among others).
-          nullable: true
-    Request:
-      required:
-      - id
-      - date
-      - value
-      type: object
-      description: Requests information.
-      properties:
-        id:
-          type: string
-          description: Transaction identification. This is the same `transactionId` value sent in the request path.
-        date:
-          type: string
-          description: Transaction settlement date.
-        value:
-          type: number
-          description: Transaction settlement value.
-    SettleResponse:
-      required:
-      - id
-      - token
-      - status
-      - statusDetail
-      - processingDate
-      - refundedValue
-      - refundedToken
-      - message
-      - code
-      - connectorRefundedValue
-      - cancelledValue
-      type: object
-      description: ' Transaction response body information.'
-      properties:
-        id:
-          type: string
-          description: Settle request identification.
-          nullable: true
-        token:
-          type: string
-          description: Token identification.
-        status:
-          type: number
-          description: Status code.
-        statusDetail:
-          type: string
-          description: Status detail information.
-        processingDate:
-          type: string
-          description: Settlement processing date.
-        refundedValue:
-          type: integer
-          description: Refunded value.
-        refundedToken:
-          type: string
-          description: Refund operation token.
-          nullable: true
-        message:
-          type: string
-          description: Custom message.
-          nullable: true
-        code:
-          type: string
-          description: Custom code.
-          nullable: true
-        connectorRefundedValue:
-          type: number
-          description: Refunded value by connector (provider).
-        cancelledValue:
-          type: integer
-          description: Cancelled value.
-    Payments:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction payments.
-      properties:
-        href:
-          type: string
-          description: Transaction payment reference route.
-    2.SendPaymentsPublicRequest:
-      required:
-      - paymentSystem
-      - installments
-      - currencyCode
-      - value
-      - installmentsInterestRate
-      - installmentsValue
-      - referenceValue
-      - fields
-      - transaction
-      type: object
-      description: Send payments information public request body information.
-      properties:
-        paymentSystem:
-          type: number
-          description: Payment system identification.
-          example: 17
-        installments:
-          type: number
-          description: Number of installments.
-          example: 1
-        currencyCode:
-          type: string
-          description: Currency code in ISO 4217 standard.
-          example: BRL
-        value:
-          type: number
-          description: Payment value.
-          example: 15000
-        installmentsInterestRate:
-          type: number
-          description: The interest rate.
-          example: 0
-        installmentsValue:
-          type: number
-          description: The value of each installment.
-          example: 0
-        referenceValue:
-          type: number
-          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
-          example: 15000
-        fields:
-          $ref: '#/components/schemas/Fields'
-        transaction:
-          $ref: '#/components/schemas/Transaction'
-    TransactionSettlementDetails:
-      required:
-      - requests
-      - actions
-      type: object
-      description: Transaction settlement details response body information.
-      properties:
-        requests:
-          type: array
-          items:
-            $ref: '#/components/schemas/Request'
-          description: Array containing requests information.
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-          description: Array containing actions information.
-    Interactions:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction interactions.
-      properties:
-        href:
-          type: string
-          description: Transaction interaction reference route.
-    Settlements:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction settlements.
-      properties:
-        href:
-          type: string
-          description: Transaction settlement reference route.
-    Capabilities:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction capabilities.
-      properties:
-        href:
-          type: string
-          description: Transaction capabilities reference route.
-    Field:
-      required:
-      - name
-      - value
-      type: object
-      description: Transaction parameters information.
-      properties:
-        name:
-          type: string
-          description: Transaction parameter name.
-        value:
-          type: string
-          description: Transaction parameter value.
-    1.CreateanewtransactionRequest:
-      required:
-      - value
-      - referenceId
-      - channel
-      - salesChannel
-      type: object
-      description: New transaction request body information.
-      properties:
-        value:
-          type: number
-          description: Transaction value. The value must be described without using separation for decimals, e.g. for a transaction with a value equal to 201.50, send 20150.
-          example: 20000
-        referenceId:
-          type: string
-          description: Identification number that relates the transaction to a purchase order.
-          example: '1234567'
-        channel:
-          type: string
-          description: Store where the transaction was initiated.
-          example: cosmetics2
-        urn:
-          type: string
-          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
-          example: urn:amazon:webservices:clientvpn
-          nullable: true
-        salesChannel:
-          type: string
-          description: Sales channel information.
-          example: '1'
-    Fields3:
-      required:
-      - holderName
-      - cardNumber
-      - validationCode
-      - dueDate
-      - document
-      - accountId
-      - address
-      - callbackUrl
-      type: object
-      description: Fields information.
-      properties:
-        holderName:
-          type: string
-          description: Card holder name.
-          example: UserTest
-        cardNumber:
-          type: number
-          description: Card number information.
-          example: 111111111111
-        validationCode:
-          type: number
-          description: CVV code.
-          example: 231
-        dueDate:
-          type: string
-          description: Due date information. The date format is `mm/yy`.
-          example: 10/19
-        document:
-          type: string
-          description: Card holder documentation.
-          example: '8041734561'
-        accountId:
-          type: string
-          description: Account identification.
-          example: 08134AF761A148B9A5DCE14A81F31DD9
-          nullable: true
-        address:
-          type: array
-          description: Array containing customer address information.
-          items:
-            type: string
-            description: Customer address information.
-            example: Customer address data
-          nullable: true
-        callbackUrl:
-          type: string
-          description: Callback URL information.
-          example: https://payment-test.myvtex.com/checkout/gatewayCallback/1336650505288/Success
-          nullable: true
-    StartTransactionResponse:
-      required:
-      - id
-      - transactionId
-      - referenceKey
-      - interactions
-      - settlements
-      - payments
-      - refunds
-      - cancellations
-      - capabilities
-      - timeoutStatus
-      - totalRefunds
-      - status
-      - value
-      - receiverUri
-      - startDate
-      - authorizationToken
-      - authorizationDate
-      - commitmentToken
-      - commitmentDate
-      - refundingToken
-      - refundingDate
-      - cancelationToken
-      - cancelationDate
-      - fields
-      - ipAddress
-      - sessionId
-      - macId
-      - vtexFingerprint
-      - chargeback
-      - whiteSignature
-      - owner
-      - orderId
-      - userAgent
-      - acceptHeader
-      - antifraudTid
-      - antifraudResponse
-      - antifraudReference
-      - antifraudAffiliationId
-      - channel
-      - salesChannel
-      - urn
-      - softDescriptor
-      - markedForRecurrence
-      - buyer
-      type: object
-      description: New transaction response body information.
-      properties:
-        id:
-          type: string
-          description: Transaction identification.
-        transactionId:
-          type: string
-          description: Transaction identification (same value of the `id` field).
-        referenceKey:
-          type: string
-          description: Identification number that relates the transaction to a purchase order. It can be also used for anti-fraud to identify the transaction.
-        interactions:
-          $ref: '#/components/schemas/Interactions'
-        settlements:
-          $ref: '#/components/schemas/Settlements'
-        payments:
-          $ref: '#/components/schemas/Payments'
-        refunds:
-          $ref: '#/components/schemas/Refunds'
-        cancellations:
-          $ref: '#/components/schemas/Cancellations'
-        capabilities:
-          $ref: '#/components/schemas/Capabilities'
-        timeoutStatus:
-          type: number
-          description: 'Field that represents the possible transaction timeout statuses. Possible statuses and meanings: `0` = NotStarted, `1` = CancellingOrFinishing, `2` = CancellingOrFinishingByTimeout, `3` = CancelledOrFinished and `4` = TriesExceeded.'
-          enum:
-          - 0
-          - 1
-          - 2
-          - 3
-          - 4
-        totalRefunds:
-          type: number
-          description: Total refunded transaction amount.
-        status:
-          type: string
-          description: Transaction status.
-        value:
-          type: number
-          description: Transaction value.
-        receiverUri:
-          type: string
-          description: Receiver [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) information.
-          nullable: true
-        startDate:
-          type: string
-          description: Transaction start date.
-        authorizationToken:
-          type: string
-          description: Transaction authorization token.
-          nullable: true
-        authorizationDate:
-          type: string
-          description: Transaction authorization date.
-          nullable: true
-        commitmentToken:
-          type: string
-          description: Transaction completion token.
-          nullable: true
-        commitmentDate:
-          type: string
-          description: Transaction completion date.
-          nullable: true
-        refundingToken:
-          type: string
-          description: Transaction refund token.
-          nullable: true
-        refundingDate:
-          type: string
-          description: Transaction refund date.
-          nullable: true
-        cancelationToken:
-          type: string
-          description: Transaction cancellation token.
-          nullable: true
-        cancelationDate:
-          type: string
-          description: Transaction cancellation date.
-          nullable: true
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-          description: Field containing transaction information.
-        ipAddress:
-          type: string
-          description: IP address information.
-          nullable: true
-        sessionId:
-          type: string
-          description: Session identification.
-          nullable: true
-        macId:
-          type: string
-          description: Random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) V4 generated when the Request Capture receives a session that does not contain the macID already set. This value is set to the cookie `VtexRCMacIdv7`. The cookie has 1 year of expiration.
-          nullable: true
-        vtexFingerprint:
-          type: string
-          description: VTEX fingerprint information.
-          nullable: true
-        chargeback:
-          type: string
-          description: Chargeback information.
-          nullable: true
-        whiteSignature:
-          type: string
-          description: White signature (anti-fraud list) information.
-          nullable: true
-        owner:
-          type: string
-          description: Responsible for transaction request.
-        orderId:
-          type: string
-          description: Order identitication.
-          nullable: true
-        userAgent:
-          type: string
-          description: HTTP client used in the transaction.
-          nullable: true
-        acceptHeader:
-          type: string
-          description: Type of content accepted in the transaction request header.
-          nullable: true
-        antifraudTid:
-          type: string
-          description: Anti-fraud transaction identification.
-          nullable: true
-        antifraudResponse:
-          type: string
-          description: Anti-fraud response information.
-          nullable: true
-        antifraudReference:
-          type: string
-          description: Anti-fraud reference information.
-          nullable: true
-        antifraudAffiliationId:
-          type: string
-          description: Anti-fraud affiliation identification.
-          nullable: true
-        channel:
-          type: string
-          description: Store where the transaction was initiated.
-        salesChannel:
-          type: string
-          description: Sales channel information.
-        urn:
-          type: string
-          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
-          nullable: true
-        softDescriptor:
-          type: string
-          description: Custom field for a transaction that can be displayed on the customer's invoice.
-          nullable: true
-        markedForRecurrence:
-          type: boolean
-          description: Indicates whether the payment transaction should be recurring.
-        buyer:
-          type: object
-          description: Buyer information.
-          nullable: true
-          properties:
-            firstName:
-              type: string
-              description: Buyer first name.
-            lastName:
-              type: string
-              description: Buyer last name.
-            documentType:
-              type: string
-              description: Type of the document informed by the buyer.
-            document:
-              type: string
-              description: Document informed by the buyer.
-            email:
-              type: string
-              description: Buyer email address.
-            address:
-              type: string
-              description: Buyer address.
-            phone:
-              type: string
-              description: Buyer phone number.
   parameters:
+    transactionId:
+      name: transactionId
+      in: path
+      description: Transaction identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: A3BDE325F76B4B758B398D900DF06150
     Accept:
       name: Accept
       in: header
@@ -1842,16 +2189,17 @@ components:
       schema:
         type: string
         example: application/json
-    transactionId:
-      name: transactionId
-      in: path
-      description: Transaction identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: A3BDE325F76B4B758B398D900DF06150
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

@@ -1,15 +1,24 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Service Integration API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Pick and Pack Last Mile Protocol Service Integration API
+  description: "The Pick and Pack Last Mile Protocol API enables seamless integration between the [Pick and Pack](https://help.vtex.com/en/tutorial/vtex-pick-and-pack--1OOops3WrUyz7e0bnhkfXU) app and delivery services. This API allows carriers and brokers to securely and efficiently exchange shipment information with the Pick and Pack app. It streamlines the process of managing orders, updating shipping statuses, and handling various service-related tasks, ensuring timely and accurate delivery updates. \n\n>ℹ️ Blank fields are included as `null` instead of being omitted.\n## Authentication\n- [`POST` Create an access token](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/token)\n\n## Service integration\n-  [`POST` Create a service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/create-service)\n\n## Carriers\n-  [`POST` Calculate rates](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/rates)\n-  [`POST` List carriers](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/list-carriers)\n\n## Shipping updates\n-  [`GET` Get a service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#get-/-carrierId-/-serviceId-)\n-  [`PATCH` Update service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#patch-/-carrierId-/-serviceId-)\n-  [`POST` Create notes](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/notes/-carrierId-/-serviceId-)\n-  [`POST` Create evidence](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/evidences/-carrierId-/-serviceId-)\n-  [`POST` Create labels](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/labels/-carrierId-/-serviceId-)\n-  [`POST` Cancel service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/cancel-service)\n-  [`POST` Cancel ongoing service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/cancel/service/-carrierId-/-serviceId-)\n-  [`POST` Pause and resume service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/pause-service)\n-  [`POST` Create on hold service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/on-hold/-carrierId-/-serviceId-)"
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://auth.pickingnpacking.com/{environment}
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    environment:
+      default: DefaultParameterValue
+      description: Server to access the authentication necessary to make a request in the Pick and Pack Provider API.
+- url: https://{store_endpoint}
+  variables:
+    your_endpoint:
+      default: storeapi.com
+      description: Server from the store.
+- url: https://api.pickingnpacking.com/{environment}/v1/tracking/hook
+  variables:
+    environment:
+      default: DefaultParameterValue
+      description: Environment of the Pick and Pack Protocol App.
 tags:
 - name: Service Integration
   description: These endpoints must be developed to integrate with the Lastmile Pick and Pack Last Mile Protocol API.
@@ -19,7 +28,16 @@ paths:
       tags:
       - Service Integration
       summary: VTex Create service
-      description: "Creates a service with the information that VTEX will send to the carrier. To understand how to integrate with a carrier, check the [VTEX Pick and Pack Carriers Integration Protocol](https://developers.vtex.com/docs/guides/vtex-pick-and-pack) guide.\r\n\r\nThis endpoint must be developed by the carriers or brokers to integrate into the protocol.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3)."
+      description: 'Creates a service with the information that VTEX will send to the carrier. To understand how to integrate with a carrier, check the [VTEX Pick and Pack Carriers Integration Protocol](https://developers.vtex.com/docs/guides/vtex-pick-and-pack) guide.
+
+
+        This endpoint must be developed by the carriers or brokers to integrate into the protocol.
+
+
+        ## Permissions
+
+
+        This endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).'
       operationId: Createservice
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -139,26 +157,55 @@ paths:
             description: Server from the store.
 components:
   schemas:
-    Dimensions:
+    Timezone:
       required:
-      - height
-      - length
-      - width
+      - offset
+      - value
+      - label
+      type: object
+      description: Time zone information.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: Time zone offset.
+        value:
+          type: string
+          description: Time zone.
+        label:
+          type:
+          - string
+          - 'null'
+          description: Label.
+      example:
+        offset: 300
+        value: America/Bogota
+        label: null
+    Label:
+      required:
+      - id
+      - name
+      - url
+      - type
       type: object
       properties:
-        height:
+        id:
           type: string
-          description: Package height in centimeters.
-        length:
+          description: Label ID.
+        name:
           type: string
-          description: Package length in centimeters.
-        width:
+          description: Name of the label.
+        url:
           type: string
-          description: Package width in centimeters.
+          description: Label URL.
+        type:
+          type: string
+          description: Label's type of file.
       example:
-        height: '5'
-        length: '11'
-        width: '7'
+        id: 78c83922-d658-48bf-89d5-0658a6a94e27
+        name: Shipping label
+        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+        type: PDF
     ResponseService:
       type: object
       required:
@@ -208,6 +255,79 @@ components:
           items:
             $ref: '#/components/schemas/Label'
           description: Shipping labels, there may be more than one per order due to breakage in packages.
+    Package:
+      required:
+      - id
+      - orderId
+      - envelope
+      - dimensions
+      - weight
+      - totalValue
+      - items
+      - categories
+      - description
+      type: object
+      description: Package information.
+      properties:
+        id:
+          type: string
+          description: Package ID.
+        orderId:
+          type: string
+          description: Order ID.
+        envelope:
+          type: string
+          description: Name of the envelope used.
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+          description: Package dimensions.
+        weight:
+          type: string
+          description: Package weight in grams.
+        totalValue:
+          type: integer
+          format: int32
+          description: Total value of the order.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+            description: Product general information.
+          description: Array containing information about the order's products.
+        categories:
+          type: array
+          items:
+            type: string
+            description: Category name.
+          description: Array of categories.
+        description:
+          type: string
+          description: Package description.
+      example:
+        id: a46e5bc1-8959-459f-a094-b6e699f7214c
+        orderId: 46369545534253-01
+        envelope: Foam or Plastic Containers
+        dimensions:
+          height: '5'
+          length: '11'
+          width: '7'
+        weight: '48'
+        totalValue: 5352
+        items:
+        - id: '184'
+          name: Chicken
+          ean: EAN354
+          quantity: 8
+          price: 669
+          refId: '314'
+          image: https://picsum.photos/seed/YtoZ9/128/480
+          type: other
+          weight: '6'
+        categories:
+        - Movies
+        - Garden
+        - Books
+        description: Unde deserunt libero cupiditate illum.
     Item:
       title: Item
       required:
@@ -261,6 +381,26 @@ components:
         image: https://picsum.photos/seed/YtoZ9/128/480
         type: other
         weight: '6'
+    Dimensions:
+      required:
+      - height
+      - length
+      - width
+      type: object
+      properties:
+        height:
+          type: string
+          description: Package height in centimeters.
+        length:
+          type: string
+          description: Package length in centimeters.
+        width:
+          type: string
+          description: Package width in centimeters.
+      example:
+        height: '5'
+        length: '11'
+        width: '7'
     CreateServiceBody:
       type: object
       properties:
@@ -432,141 +572,11 @@ components:
                 type: string
         timezone:
           $ref: '#/components/schemas/Timezone'
-    Package:
-      required:
-      - id
-      - orderId
-      - envelope
-      - dimensions
-      - weight
-      - totalValue
-      - items
-      - categories
-      - description
-      type: object
-      description: Package information.
-      properties:
-        id:
-          type: string
-          description: Package ID.
-        orderId:
-          type: string
-          description: Order ID.
-        envelope:
-          type: string
-          description: Name of the envelope used.
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-          description: Package dimensions.
-        weight:
-          type: string
-          description: Package weight in grams.
-        totalValue:
-          type: integer
-          format: int32
-          description: Total value of the order.
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-            description: Product general information.
-          description: Array containing information about the order's products.
-        categories:
-          type: array
-          items:
-            type: string
-            description: Category name.
-          description: Array of categories.
-        description:
-          type: string
-          description: Package description.
-      example:
-        id: a46e5bc1-8959-459f-a094-b6e699f7214c
-        orderId: 46369545534253-01
-        envelope: Foam or Plastic Containers
-        dimensions:
-          height: '5'
-          length: '11'
-          width: '7'
-        weight: '48'
-        totalValue: 5352
-        items:
-        - id: '184'
-          name: Chicken
-          ean: EAN354
-          quantity: 8
-          price: 669
-          refId: '314'
-          image: https://picsum.photos/seed/YtoZ9/128/480
-          type: other
-          weight: '6'
-        categories:
-        - Movies
-        - Garden
-        - Books
-        description: Unde deserunt libero cupiditate illum.
-    Timezone:
-      required:
-      - offset
-      - value
-      - label
-      type: object
-      description: Time zone information.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: Time zone offset.
-        value:
-          type: string
-          description: Time zone.
-        label:
-          type: string
-          nullable: true
-          description: Label.
-      example:
-        offset: 300
-        value: America/Bogota
-        label: null
-    Label:
-      required:
-      - id
-      - name
-      - url
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          description: Label ID.
-        name:
-          type: string
-          description: Name of the label.
-        url:
-          type: string
-          description: Label URL.
-        type:
-          type: string
-          description: Label's type of file.
-      example:
-        id: 78c83922-d658-48bf-89d5-0658a6a94e27
-        name: Shipping label
-        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-        type: PDF
   parameters:
     Accept:
       name: Accept
       in: header
       description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
       required: true
       style: simple
       schema:
@@ -581,9 +591,12 @@ components:
       schema:
         type: string
         example: '{token}'
-  securitySchemes:
-    VtexIdclientAutCookie:
-      type: apiKey
+    Content-Type:
+      name: Content-Type
       in: header
-      name: VtexIdclientAutCookie
-      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json

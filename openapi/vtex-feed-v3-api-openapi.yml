@@ -1,15 +1,125 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Feed V3 API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Orders Feed V3 API
+  description: 'Each purchase a customer makes in your store generates an [order](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196) on VTEX. With the Orders API, you can view orders statuses and manage multiple aspects involved in order fulfillment, such as financial transactions, invoicing, shipping, and subscriptions. You can also [change orders](https://help.vtex.com/en/tutorial/changing-items-from-a-complete-order--tutorials_190) and make configurations to allow or forbid marketplaces and sellers to change or cancel orders.
+
+
+    ### Order integration
+
+
+    To automate actions related to order processing, you can [integrate orders](https://developers.vtex.com/docs/guides/erp-integration-guide) with systems like ERP (Enterprise Resource Planning) and WMS (Warehouse Management System) using [Feed and Hook](https://developers.vtex.com/docs/guides/orders-feed).
+
+
+    ## Orders API Index
+
+
+    ### Orders
+
+
+    - `GET` [Get order](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/pvt/orders/-orderId-)
+
+    - `GET` [List orders](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/pvt/orders)
+
+    - `POST` [Start handling order](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/oms/pvt/orders/-orderId-/start-handling)
+
+    - `POST` [Cancel order](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/oms/pvt/orders/-orderId-/cancel)
+
+    - `POST` [Register change on order](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/oms/pvt/orders/-orderId-/changes)
+
+
+    ### Invoice
+
+
+    - `POST` [Order invoice notification](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/oms/pvt/orders/-orderId-/invoice)
+
+    - `PATCH` [Update order''s partial invoice (send tracking number)](https://developers.vtex.com/docs/api-reference/orders-api#patch-/api/oms/pvt/orders/-orderId-/invoice/-invoiceNumber-)
+
+
+    ### Tracking
+
+
+    - `PUT` [Update order tracking status](https://developers.vtex.com/docs/api-reference/orders-api#put-/api/oms/pvt/orders/-orderId-/invoice/-invoiceNumber-/tracking)
+
+
+    ### Conversation
+
+
+    - `GET` [Retrieve order conversation](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/pvt/orders/-orderId-/conversation-message)
+
+
+    ### Payment
+
+
+    - `GET` [Retrieve payment transaction](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/pvt/orders/-orderId-/payment-transaction)
+
+    - `POST` [Send payment notification](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/oms/pvt/orders/-orderId-/payments/-paymentId-/payment-notification)
+
+
+    ### Feed v2 (deprecated)
+
+
+    - `GET` [Get feed order status](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/pvt/feed/orders/status)
+
+
+    ### Feed v3
+
+
+    - `GET` [Get feed configuration](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/orders/feed/config)
+
+    - `POST` [Create or update feed configuration](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/orders/feed/config)
+
+    - `DELETE` [Delete feed configuration](https://developers.vtex.com/docs/api-reference/orders-api#delete-/api/orders/feed/config)
+
+    - `GET` [Retrieve feed items](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/orders/feed)
+
+    - `POST` [Commit feed items](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/orders/feed)
+
+    - `POST` [Test JSONata expression](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/orders/expressions/jsonata)
+
+
+    ### Order hook
+
+
+    - `GET` [Get hook configuration](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/orders/hook/config)
+
+    - `POST` [Create or update hook configuration](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/orders/hook/config)
+
+    - `DELETE` [Delete hook configuration](https://developers.vtex.com/docs/api-reference/orders-api#delete-/api/orders/hook/config)
+
+
+    ### User orders
+
+
+    - `GET` [Retrieve user''s orders](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/user/orders)
+
+    - `GET` [Retrieve user order details](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/user/orders/-orderId-)
+
+
+    ### Change seller
+
+
+    - `GET` [Get window to change seller](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/checkout/pvt/configuration/window-to-change-seller)
+
+    - `POST` [Update window to change seller](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/checkout/pvt/configuration/window-to-change-seller)'
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey:
+  - '{{appKey}}'
+  appToken:
+  - '{{appToken}}'
 tags:
 - name: Feed V3
 paths:
@@ -18,7 +128,7 @@ paths:
       tags:
       - Feed V3
       summary: VTex Get feed configuration
-      description: "The Orders Feed v3 is the best way to create order integrations. Below you can find details on the configuration API specification, and to know more see our [Feed v3 guide](https://developers.vtex.com/vtex-rest-api/docs/orders-feed) and our [order integration guide](https://developers.vtex.com/vtex-rest-api/docs/erp-integration-set-up-order-integration).\n\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Orders onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/orders-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Orders and is organized by focusing on the developer's journey.\r\n\r\n"
+      description: "The Orders Feed v3 is the best way to create order integrations. Below you can find details on the configuration API specification, and to know more see our [Feed v3 guide](https://developers.vtex.com/vtex-rest-api/docs/orders-feed) and our [order integration guide](https://developers.vtex.com/vtex-rest-api/docs/erp-integration-set-up-order-integration).\n\n> \U0001F4D8 Onboarding guide \n>\n> Check the new [Orders onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/orders-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Orders and is organized by focusing on the developer's journey.\n\n"
       operationId: GetFeedConfiguration
       parameters:
       - name: Content-Type
@@ -93,7 +203,10 @@ paths:
       tags:
       - Feed V3
       summary: VTex Create or update feed configuration
-      description: "The Orders Feed v3 is the best way to create order integrations. Below you can find details on the configuration API specification, and to know more see our [Feed v3 guide](https://developers.vtex.com/vtex-rest-api/docs/orders-feed) and our [order integration guide](https://developers.vtex.com/vtex-rest-api/docs/erp-integration-set-up-order-integration)\n\r\n\rThere are two types of filtering that can be used. The `FromWorkflow` type filters orders by status, whereas the `FromOrders` type uses JSONata expressions to filter orders according to any property in the orders JSON document. This enables stores to filter delivered orders and orders in which products have been added or removed, for example. To learn more, access the [JSONata documentation](https://docs.jsonata.org/overview.html) and test filtering JSONata expressions with our [Test JSONata expression](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/orders/expressions/jsonata) endpoint."
+      description: 'The Orders Feed v3 is the best way to create order integrations. Below you can find details on the configuration API specification, and to know more see our [Feed v3 guide](https://developers.vtex.com/vtex-rest-api/docs/orders-feed) and our [order integration guide](https://developers.vtex.com/vtex-rest-api/docs/erp-integration-set-up-order-integration)
+
+
+        There are two types of filtering that can be used. The `FromWorkflow` type filters orders by status, whereas the `FromOrders` type uses JSONata expressions to filter orders according to any property in the orders JSON document. This enables stores to filter delivered orders and orders in which products have been added or removed, for example. To learn more, access the [JSONata documentation](https://docs.jsonata.org/overview.html) and test filtering JSONata expressions with our [Test JSONata expression](https://developers.vtex.com/docs/api-reference/orders-api#post-/api/orders/expressions/jsonata) endpoint.'
       operationId: FeedConfiguration
       parameters:
       - name: Accept
@@ -176,7 +289,7 @@ paths:
       tags:
       - Feed V3
       summary: VTex Retrieve feed items
-      description: "Retrieve items from [feed](https://developers.vtex.com/docs/guides/orders-feed) queue. \n\r\nThe event will be removed if the message `send retry` is equal to, or greater than the maximum retention period.\r\n\r\n> This API will return `404 Not Found` if there is no [Feed Configuration](https://developers.vtex.com/docs/guides/orders-feed) available for the given X-VTEX-API-AppKey."
+      description: "Retrieve items from [feed](https://developers.vtex.com/docs/guides/orders-feed) queue. \n\nThe event will be removed if the message `send retry` is equal to, or greater than the maximum retention period.\n\n> This API will return `404 Not Found` if there is no [Feed Configuration](https://developers.vtex.com/docs/guides/orders-feed) available for the given X-VTEX-API-AppKey."
       operationId: Getfeedorderstatus1
       parameters:
       - name: maxlot
@@ -268,7 +381,13 @@ paths:
       tags:
       - Feed V3
       summary: VTex Test JSONata expression
-      description: "This endpoint allows you to test a JSON document with a JSONata expression, returning `true` if the document meets the criteria posed in the expression, or `false` if it does not.\n\r\n\rSince JSONata expressions can be used to filter order updates in the [Orders API feed and hook](https://developers.vtex.com/docs/guides/orders-feed), this endpoint can be used to test an expression's results before configuring the [feed or hook](https://developers.vtex.com/docs/guides/orders-feed).\n\r\n\rLearn more about how to use JSONata expressions, in the [JSONata documentation](https://docs.jsonata.org/overview.html)."
+      description: 'This endpoint allows you to test a JSON document with a JSONata expression, returning `true` if the document meets the criteria posed in the expression, or `false` if it does not.
+
+
+        Since JSONata expressions can be used to filter order updates in the [Orders API feed and hook](https://developers.vtex.com/docs/guides/orders-feed), this endpoint can be used to test an expression''s results before configuring the [feed or hook](https://developers.vtex.com/docs/guides/orders-feed).
+
+
+        Learn more about how to use JSONata expressions, in the [JSONata documentation](https://docs.jsonata.org/overview.html).'
       operationId: TestJSONataExpression
       parameters:
       - name: Accept
@@ -306,22 +425,20 @@ paths:
       deprecated: false
 components:
   schemas:
-    Queue:
-      title: Queue
-      description: Object with information about timeout and message retention.
+    CommititemfeedorderstatusRequest:
+      title: CommititemfeedorderstatusRequest
       required:
-      - visibilityTimeoutInSeconds
-      - MessageRetentionPeriodInSeconds
+      - handles
       type: object
       properties:
-        visibilityTimeoutInSeconds:
-          type: integer
-          description: Period of time for which an item becomes invisible after it has been [retrieved](https://developers.vtex.com/vtex-rest-api/reference/feed-v3#getfeedorderstatus1). Measured in seconds.
-          example: 250
-        MessageRetentionPeriodInSeconds:
-          type: integer
-          description: Maximum life span of an order update in the feed. When a feed item is on the feed for this period of time, it is removed from the feed. Measured in seconds.
-          example: 3456000
+        handles:
+          type: array
+          items:
+            type: string
+          description: List of item handles to commit.
+      example:
+        handles:
+        - AQEBSM/bSqonHYtx+UrHdbuJ0i7M9yMbI2jtYwMIPdEc4BenuneaCTC9VEJ3dgAy1XtfQvHBvgwZTO8LvGObIKNqiKXDZiMKY25vK+pblZEqf1pWdLMugu5XoHA5ZAd4IcBcXrBcrlr1GU8uvPEBoVLOsVBP9IAxIZkkeEedIDg3K6GPyEXVuPlTEYb/0OCunEGxWF+AZ1frFdXh7ulORTcuqO5oDlBGbpD+QYzCmF4mUZtQ0VVWh9icM1QBVh6PlJ0D/lfwnJKWpBn3jf8c+DTm7sD7wb1Lcz9uWMLhDtPwvH9vue4MvKU9sCahEQe7K5jWuwwb54szGbFKdfcACsTSQ9WlyBfMdbV83c27k68G3cnaBFExkC1MLHHE9UzpQ6l4s43BT4k95ocgMXffnj/HMUYXn+OCvlvjytY59x1OCRE=
     Getfeedorderstatus:
       title: Getfeedorderstatus
       required:
@@ -360,17 +477,6 @@ components:
         orderId: 953712004126-01
         lastChange: '2019-08-12T20:54:01.134057Z'
         currentChange: '2019-08-12T20:54:23.7153839Z'
-    FeedConfigurationRequest:
-      title: FeedConfigurationRequest
-      required:
-      - filter
-      - queue
-      type: object
-      properties:
-        filter:
-          $ref: '#/components/schemas/FeedFilter'
-        queue:
-          $ref: '#/components/schemas/Queue'
     TestJSONataExpression:
       type: object
       required:
@@ -383,20 +489,33 @@ components:
         Document:
           type: string
           description: JSON document to be evaluated by the expression.
-    CommititemfeedorderstatusRequest:
-      title: CommititemfeedorderstatusRequest
+    FeedConfigurationRequest:
+      title: FeedConfigurationRequest
       required:
-      - handles
+      - filter
+      - queue
       type: object
       properties:
-        handles:
-          type: array
-          items:
-            type: string
-          description: List of item handles to commit.
-      example:
-        handles:
-        - AQEBSM/bSqonHYtx+UrHdbuJ0i7M9yMbI2jtYwMIPdEc4BenuneaCTC9VEJ3dgAy1XtfQvHBvgwZTO8LvGObIKNqiKXDZiMKY25vK+pblZEqf1pWdLMugu5XoHA5ZAd4IcBcXrBcrlr1GU8uvPEBoVLOsVBP9IAxIZkkeEedIDg3K6GPyEXVuPlTEYb/0OCunEGxWF+AZ1frFdXh7ulORTcuqO5oDlBGbpD+QYzCmF4mUZtQ0VVWh9icM1QBVh6PlJ0D/lfwnJKWpBn3jf8c+DTm7sD7wb1Lcz9uWMLhDtPwvH9vue4MvKU9sCahEQe7K5jWuwwb54szGbFKdfcACsTSQ9WlyBfMdbV83c27k68G3cnaBFExkC1MLHHE9UzpQ6l4s43BT4k95ocgMXffnj/HMUYXn+OCvlvjytY59x1OCRE=
+        filter:
+          $ref: '#/components/schemas/FeedFilter'
+        queue:
+          $ref: '#/components/schemas/Queue'
+    Queue:
+      title: Queue
+      description: Object with information about timeout and message retention.
+      required:
+      - visibilityTimeoutInSeconds
+      - MessageRetentionPeriodInSeconds
+      type: object
+      properties:
+        visibilityTimeoutInSeconds:
+          type: integer
+          description: Period of time for which an item becomes invisible after it has been [retrieved](https://developers.vtex.com/vtex-rest-api/reference/feed-v3#getfeedorderstatus1). Measured in seconds.
+          example: 250
+        MessageRetentionPeriodInSeconds:
+          type: integer
+          description: Maximum life span of an order update in the feed. When a feed item is on the feed for this period of time, it is removed from the feed. Measured in seconds.
+          example: 3456000
     FeedFilter:
       title: Filter
       description: Object with type and status that will filter feed orders.
@@ -406,13 +525,19 @@ components:
       properties:
         type:
           type: string
-          description: "Determines what orders appear in the feed and how they are filtered. There are two possible values:\n\r\n\r-`FromWorkflow`: the feed will receive order updates only when order’s statuses change and orders can be filtered by status, using the `status` field described below.\n\r\n\r-`FromOrders`: the feed gets updates whenever any change is made to an order. in this case, orders can be filtered by any property, according to JSONata expressions passed in the `expression` field described below."
+          description: 'Determines what orders appear in the feed and how they are filtered. There are two possible values:
+
+
+            -`FromWorkflow`: the feed will receive order updates only when order’s statuses change and orders can be filtered by status, using the `status` field described below.
+
+
+            -`FromOrders`: the feed gets updates whenever any change is made to an order. in this case, orders can be filtered by any property, according to JSONata expressions passed in the `expression` field described below.'
           example: FromWorkflow
         status:
           type: array
           items:
             type: string
-          description: "List of order statuses that should be included in the feed. This should only be used in case `type` is set to `FromWorkflow`. The status event will be removed, if it can't deliver a message more than 100 times, 4 days progressively. \r\n\r\n**Status available to filter** \r\n\r\n- order-created \n\r\n- on-order-completed \n\r\n- on-order-completed-ffm \n\r\n- payment-pending \n\r\n- waiting-for-order-authorization \n\r\n- approve-payment \n\r\n- payment-approved \n\r\n- request-cancel \n\r\n- waiting-for-seller-decision \n\r\n- waiting-ffmt-authorization \n\r\n- waiting-for-authorization \n\r\n- waiting-for-manual-authorization \n\r\n- authorize-fulfillment \n\r\n- order-create-error \n\r\n- order-creation-error \n\r\n- window-to-cancel \n\r\n- window-to-change-seller \n\r\n- waiting-for-mkt-authorization \n\r\n- waiting-seller-handling \n\r\n- ready-for-handling \n\r\n- start-handling \n\r\n- handling \n\r\n- invoice-after-cancellation-deny \n\r\n- order-accepted \n\r\n- invoice \n\r\n- invoiced \n\r\n- replaced \n\r\n- cancellation-requested \n\r\n- cancel \n\r\n- canceled."
+          description: "List of order statuses that should be included in the feed. This should only be used in case `type` is set to `FromWorkflow`. The status event will be removed, if it can't deliver a message more than 100 times, 4 days progressively. \n\n**Status available to filter** \n\n- order-created \n\n- on-order-completed \n\n- on-order-completed-ffm \n\n- payment-pending \n\n- waiting-for-order-authorization \n\n- approve-payment \n\n- payment-approved \n\n- request-cancel \n\n- waiting-for-seller-decision \n\n- waiting-ffmt-authorization \n\n- waiting-for-authorization \n\n- waiting-for-manual-authorization \n\n- authorize-fulfillment \n\n- order-create-error \n\n- order-creation-error \n\n- window-to-cancel \n\n- window-to-change-seller \n\n- waiting-for-mkt-authorization \n\n- waiting-seller-handling \n\n- ready-for-handling \n\n- start-handling \n\n- handling \n\n- invoice-after-cancellation-deny \n\n- order-accepted \n\n- invoice \n\n- invoiced \n\n- replaced \n\n- cancellation-requested \n\n- cancel \n\n- canceled."
         expression:
           type: string
           description: JSONata query expression that defines what conditions must be met for an order to be included in the feed. This should only be used in case `type` is set to `FromOrders`.
@@ -421,8 +546,11 @@ components:
           description: Sets a limit to how many times a specific order shows on the feed, after it first meets filtering conditions. Using the `FromOrders` type configuration with JSONata filtering expressions might cause orders to appear more than once on a feed, whenever changes are made to that order. If this field is `false` orders will appear in the feed only once.
           example: false
   securitySchemes:
-    VtexIdclientAutCookie:
+    appKey:
       type: apiKey
       in: header
-      name: VtexIdclientAutCookie
-      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+      name: X-VTEX-API-AppKey
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken

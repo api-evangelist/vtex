@@ -1,15 +1,34 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Data Subject Rights API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex API - PII data architecture Data Subject Rights API
+  description: '>❗ This API is currently in closed alpha testing stage, which means that only specific customers can access it now. Do not share this documentation with people outside of your company. If you do not have access yet, please refer to the [Erasing customer data](https://help.vtex.com/en/tutorial/erasing-customer-data--1R9Fn7A06Ifj4R9YD4JTKU) guide instead.
+
+
+    >⚠️ The **Data Subject Rights API - PII data architecture** is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.
+
+    >
+
+    > This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).
+
+
+    According to data protection policies, such as [GDPR and LGPD](https://vtex.com/us-en/privacy-and-agreements/vtex-commitment/), companies using customer personal data are required to delete collected information upon the customer''s request.
+
+
+    Data Subject Rights API allows stores using the [PII data architecture](https://developers.vtex.com/docs/guides/pii-data-architecture-specifications) from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus) to erase user data collected by Checkout, Orders, VTEX ID and Profile System, without depending on the VTEX Support flow described in the [Erasing customer data](https://help.vtex.com/en/tutorial/erasing-customer-data--1R9Fn7A06Ifj4R9YD4JTKU) guide.
+
+
+    ## Index
+
+
+    - `POST` [Erase customer data](https://developers.vtex.com/docs/api-reference/user-data-rights-api#post-/api/user-rights/createAndProcessDeleteUserData)'
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
-  variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+- url: http://api.vtex.com
+  description: VTEX server URL.
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Data Subject Rights
 paths:
@@ -18,7 +37,39 @@ paths:
       tags:
       - Data Subject Rights
       summary: VTex Erase customer data
-      description: "Deletes a given customer's data collected in your store by Checkout, Orders, VTEX ID and Profile System.\r\n\r\n> Only orders with `invoiced` or `canceled` status are erased in this request.\r\n\r\n>❗ This API is currently in closed alpha testing stage, which means that only specific customers can access it now. Do not share this documentation with people outside of your company. If you do not have access yet, please refer to the [Erasing customer data](https://help.vtex.com/en/tutorial/erasing-customer-data--1R9Fn7A06Ifj4R9YD4JTKU) guide instead.\r\n\r\n>⚠️ This endpoint is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.\r\n>\r\n> This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| User Rights | user-rights-request | **Write user rights requests** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Deletes a given customer''s data collected in your store by Checkout, Orders, VTEX ID and Profile System.
+
+
+        > Only orders with `invoiced` or `canceled` status are erased in this request.
+
+
+        >❗ This API is currently in closed alpha testing stage, which means that only specific customers can access it now. Do not share this documentation with people outside of your company. If you do not have access yet, please refer to the [Erasing customer data](https://help.vtex.com/en/tutorial/erasing-customer-data--1R9Fn7A06Ifj4R9YD4JTKU) guide instead.
+
+
+        >⚠️ This endpoint is only compatible with stores using the PII data architecture from [Data Protection Plus](https://developers.vtex.com/docs/guides/data-protection-plus), which is in closed beta phase, only available in select regions.
+
+        >
+
+        > This feature is part of [VTEX Shield](https://help.vtex.com/en/tutorial/vtex-shield--2CVk6H9eY2CBtHjtDI7BFh). If you are already a VTEX customer and want to adopt VTEX Shield for your business, please contact [Commercial Support](https://help.vtex.com/en/tracks/support-at-vtex--4AXsGdGHqExp9ZkiNq9eMy/3KQWGgkPOwbFTPfBxL7YwZ). Additional fees may apply. If you are not yet a customer but are interested in this solution, please complete our [contact form](https://vtex.com/us-en/contact/).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | User Rights | user-rights-request | **Write user rights requests** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       parameters:
       - $ref: '#/components/parameters/Content-Type'
       - $ref: '#/components/parameters/Accept'
@@ -71,7 +122,17 @@ paths:
                           description: Abbreviated name of the application, which can be `chk` (Checkout), `orders` (Order Management System), `profileSystemV2` (PII Profile System) or `vid` (VTEX ID).
                         status:
                           type: string
-                          description: "Status of client data in the given application. The possible values are:\n\r- `Completed` - Processing completed successfully.\n\r- `Error` - An unexpected error occurred during the process. You must make a new request.\n\r- `PendingCheck` - Pending validation. Unable to perform validation on one or more services.\n\r- `Blocked` - Pending validation. One or more services are unable to fulfill the deletion request. You need to wait and make a new request in the future.\n\r- `PendingDeletion` - It was not possible to delete data in one or more services. You must make a new request."
+                          description: 'Status of client data in the given application. The possible values are:
+
+                            - `Completed` - Processing completed successfully.
+
+                            - `Error` - An unexpected error occurred during the process. You must make a new request.
+
+                            - `PendingCheck` - Pending validation. Unable to perform validation on one or more services.
+
+                            - `Blocked` - Pending validation. One or more services are unable to fulfill the deletion request. You need to wait and make a new request in the future.
+
+                            - `PendingDeletion` - It was not possible to delete data in one or more services. You must make a new request.'
                         errorDetail:
                           type: string
                           description: In case of error, this field contains an explanatory error message. Otherwise, this field is an empty string.
@@ -83,7 +144,7 @@ paths:
                 requestType: Removal
                 email: pedido2@vtexchallenge.com
                 status: Completed
-                dataResponse: "{\r\n  \"VTEX  Checkout\": [],\r\n  \"orders\": {\r\n    \"dataStatus\": {\r\n      \"status\": \"anonymized\",\r\n      \"reason\": \"Sensitive information was anonymized rather than deleted to preserve the store metrics.\",\r\n      \"evidence\": \"Anonymized [0] orders\",\r\n      \"dryRun\": true\r\n    },\r\n    \"orders\": []\r\n  },\r\n  \"Profile System PII API\": {},\r\n  \"VTEX ID\": {\r\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.4\",\r\n    \"title\": \"Not Found\",\r\n    \"status\": 404,\r\n    \"traceId\": \"00-65d5abf9263b07eb185beee49e2075dc-b67b373e2e93dcf8-00\"\r\n  }\r\n}"
+                dataResponse: "{\n  \"VTEX  Checkout\": [],\n  \"orders\": {\n    \"dataStatus\": {\n      \"status\": \"anonymized\",\n      \"reason\": \"Sensitive information was anonymized rather than deleted to preserve the store metrics.\",\n      \"evidence\": \"Anonymized [0] orders\",\n      \"dryRun\": true\n    },\n    \"orders\": []\n  },\n  \"Profile System PII API\": {},\n  \"VTEX ID\": {\n    \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.4\",\n    \"title\": \"Not Found\",\n    \"status\": 404,\n    \"traceId\": \"00-65d5abf9263b07eb185beee49e2075dc-b67b373e2e93dcf8-00\"\n  }\n}"
                 requestTime: '2023-09-05T17:19:33.1969022-03:00'
                 applications:
                 - application: chk
@@ -132,6 +193,16 @@ components:
         type: string
         example: application/json
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

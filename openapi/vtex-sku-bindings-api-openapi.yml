@@ -1,15 +1,23 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account SKU Bindings API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex SKU Bindings API
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br/api
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
 tags:
 - name: SKU Bindings
 paths:
@@ -18,7 +26,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Get SKU Bindings by SKU ID
-      description: "Retrieves SKU Bindings details by SKU ID.\r\n\r\n## Response body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"Id\": 48,\r\n        \"SellerId\": \"cosmetics1\",\r\n        \"StockKeepingUnitId\": 1,\r\n        \"SellerSkuId\": \"42\",\r\n        \"IsActive\": true,\r\n        \"LastUpdateDate\": \"2020-10-21T19:13:00.657\",\r\n        \"SalesPolicy\": 0\r\n    }\r\n]\r\n```"
+      description: "Retrieves SKU Bindings details by SKU ID.\n\n## Response body example\n\n```json\n[\n    {\n        \"Id\": 48,\n        \"SellerId\": \"cosmetics1\",\n        \"StockKeepingUnitId\": 1,\n        \"SellerSkuId\": \"42\",\n        \"IsActive\": true,\n        \"LastUpdateDate\": \"2020-10-21T19:13:00.657\",\n        \"SalesPolicy\": 0\n    }\n]\n```"
       operationId: GetbySkuId
       parameters:
       - name: Content-Type
@@ -95,7 +103,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Get SKU Bindings information
-      description: "Retrieves SKU Bindings administrative information using optional query params `sellerId`, `skuId`, `sellerSkuId` and `IsActive` to filter results and `size` to restrict the amount of results. \r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/admin`.\r\n\r\n## Response body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"IsPersisted\": true,\r\n        \"IsRemoved\": false,\r\n        \"SkuSellerId\": 1,\r\n        \"UpdateDate\": \"2019-12-04T01:56:00.673Z\",\r\n        \"RequestedUpdateDate\": null,\r\n        \"SellerStockKeepingUnitId\": \"12\",\r\n        \"SellerId\": \"cosmetics1\",\r\n        \"StockKeepingUnitId\": 25,\r\n        \"IsActive\": true\r\n    }\r\n]\r\n```"
+      description: "Retrieves SKU Bindings administrative information using optional query params `sellerId`, `skuId`, `sellerSkuId` and `IsActive` to filter results and `size` to restrict the amount of results. \n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/admin`.\n\n## Response body example\n\n```json\n[\n    {\n        \"IsPersisted\": true,\n        \"IsRemoved\": false,\n        \"SkuSellerId\": 1,\n        \"UpdateDate\": \"2019-12-04T01:56:00.673Z\",\n        \"RequestedUpdateDate\": null,\n        \"SellerStockKeepingUnitId\": \"12\",\n        \"SellerId\": \"cosmetics1\",\n        \"StockKeepingUnitId\": 25,\n        \"IsActive\": true\n    }\n]\n```"
       operationId: Getpagedadmin
       parameters:
       - name: sellerId
@@ -181,9 +189,10 @@ paths:
                     type: string
                     description: Date when the SKU binding was updated for the last time, in UTC format.
                   RequestedUpdateDate:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: Date when an SKU binding update was requested for the last time, in UTC format.
-                    nullable: true
                   SellerStockKeepingUnitId:
                     type: string
                     description: SKU ID in the seller's store.
@@ -213,7 +222,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Get details of a seller's SKU
-      description: "Retrieves the details of a seller's SKU given a seller ID and the SKU ID in the seller's store. \r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/{sellerId}/{sellerSkuId}`.\r\n\r\n## Response body example\r\n\r\n```json\r\n{\r\n    \"IsPersisted\": true,\r\n    \"IsRemoved\": false,\r\n    \"SkuSellerId\": 102,\r\n    \"UpdateDate\": \"2021-04-12T20:06:59.413Z\",\r\n    \"RequestedUpdateDate\": null,\r\n    \"SellerStockKeepingUnitId\": \"71\",\r\n    \"SellerId\": \"vtxkfj7352\",\r\n    \"StockKeepingUnitId\": 1,\r\n    \"IsActive\": true\r\n}\r\n```"
+      description: "Retrieves the details of a seller's SKU given a seller ID and the SKU ID in the seller's store. \n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/{sellerId}/{sellerSkuId}`.\n\n## Response body example\n\n```json\n{\n    \"IsPersisted\": true,\n    \"IsRemoved\": false,\n    \"SkuSellerId\": 102,\n    \"UpdateDate\": \"2021-04-12T20:06:59.413Z\",\n    \"RequestedUpdateDate\": null,\n    \"SellerStockKeepingUnitId\": \"71\",\n    \"SellerId\": \"vtxkfj7352\",\n    \"StockKeepingUnitId\": 1,\n    \"IsActive\": true\n}\n```"
       operationId: GetSKUseller
       parameters:
       - name: Content-Type
@@ -280,9 +289,10 @@ paths:
                     type: string
                     description: Date when the SKU binding was updated for the last time, in UTC format.
                   RequestedUpdateDate:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: Date when an SKU binding update was requested for the last time, in UTC format.
-                    nullable: true
                   SellerStockKeepingUnitId:
                     type: string
                     description: SKU seller ID.
@@ -311,7 +321,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Bind a seller's SKU to another SKU
-      description: "Associates a seller's SKU to another marketplace SKU.\r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/{sellerId}/{sellerSkuId}`.\r\n\r\n## Request body example\r\n\r\n```json\r\n{\r\n    \"StockKeepingUnitId\": 1\r\n}\r\n```"
+      description: "Associates a seller's SKU to another marketplace SKU.\n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/{sellerId}/{sellerSkuId}`.\n\n## Request body example\n\n```json\n{\n    \"StockKeepingUnitId\": 1\n}\n```"
       operationId: Bindtoanothersku
       parameters:
       - name: Content-Type
@@ -369,7 +379,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Get all SKU Bindings by Seller ID
-      description: "Retrieves a list of SKU Bindings given a specific Seller ID. \r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/list/bysellerId/{sellerId}`.\r\n\r\n## Response body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"SellerStockKeepingUnitId\": \"24\",\r\n        \"FreightCommissionPercentage\": null,\r\n        \"ProductCommissionPercentage\": null,\r\n        \"SellerId\": \"vtxkfj7352\",\r\n        \"StockKeepingUnitId\": 121,\r\n        \"IsActive\": true\r\n    }\r\n]\r\n```"
+      description: "Retrieves a list of SKU Bindings given a specific Seller ID. \n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/list/bysellerId/{sellerId}`.\n\n## Response body example\n\n```json\n[\n    {\n        \"SellerStockKeepingUnitId\": \"24\",\n        \"FreightCommissionPercentage\": null,\n        \"ProductCommissionPercentage\": null,\n        \"SellerId\": \"vtxkfj7352\",\n        \"StockKeepingUnitId\": 121,\n        \"IsActive\": true\n    }\n]\n```"
       operationId: GetallbySellerId
       parameters:
       - name: Content-Type
@@ -410,13 +420,15 @@ paths:
                       type: string
                       description: SKU ID in the seller's store.
                     FreightCommissionPercentage:
-                      type: number
+                      type:
+                      - number
+                      - 'null'
                       description: The percentage that must be filled in as agreed between the marketplace and the seller.
-                      nullable: true
                     ProductCommissionPercentage:
-                      type: number
+                      type:
+                      - number
+                      - 'null'
                       description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
-                      nullable: true
                     SellerId:
                       type: string
                       description: ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
@@ -440,7 +452,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Get paged SKU Bindings by Seller ID
-      description: "Retrieves a paged list of SKU Bindings given a specific Seller ID. \r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/paged/sellerid/{sellerId}`.\r\n\r\n## Response body example\r\n\r\n```json\r\n[\r\n    {\r\n        \"SellerId\": \"vtxkfj7352\",\r\n        \"StockKeepingUnitId\": 121,\r\n        \"SellerStockKeepingUnitId\": \"24\",\r\n        \"IsActive\": true,\r\n        \"FreightCommissionPercentage\": null,\r\n        \"ProductCommissionPercentage\": null\r\n    },\r\n    {\r\n        \"SellerId\": \"vtxkfj7352\",\r\n        \"StockKeepingUnitId\": 14,\r\n        \"SellerStockKeepingUnitId\": \"60\",\r\n        \"IsActive\": true,\r\n        \"FreightCommissionPercentage\": null,\r\n        \"ProductCommissionPercentage\": null\r\n    }\r\n]\r\n```"
+      description: "Retrieves a paged list of SKU Bindings given a specific Seller ID. \n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/paged/sellerid/{sellerId}`.\n\n## Response body example\n\n```json\n[\n    {\n        \"SellerId\": \"vtxkfj7352\",\n        \"StockKeepingUnitId\": 121,\n        \"SellerStockKeepingUnitId\": \"24\",\n        \"IsActive\": true,\n        \"FreightCommissionPercentage\": null,\n        \"ProductCommissionPercentage\": null\n    },\n    {\n        \"SellerId\": \"vtxkfj7352\",\n        \"StockKeepingUnitId\": 14,\n        \"SellerStockKeepingUnitId\": \"60\",\n        \"IsActive\": true,\n        \"FreightCommissionPercentage\": null,\n        \"ProductCommissionPercentage\": null\n    }\n]\n```"
       operationId: GetpagedbySellerId
       parameters:
       - name: page
@@ -509,13 +521,15 @@ paths:
                       type: boolean
                       description: Defines if the SKU binding is active.
                     FreightCommissionPercentage:
-                      type: number
+                      type:
+                      - number
+                      - 'null'
                       description: The percentage that must be filled in as agreed between the marketplace and the seller.
-                      nullable: true
                     ProductCommissionPercentage:
-                      type: number
+                      type:
+                      - number
+                      - 'null'
                       description: 'The percentage that must be filled in as agreed between the marketplace and the seller. If there is no such commission, please fill in the field with the value: `0.00`.'
-                      nullable: true
                   example:
                     SellerId: vtxkfj7352
                     StockKeepingUnitId: 121
@@ -542,7 +556,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Change Notification with SKU ID
-      description: "The seller is responsible for suggesting new SKUs to be sold in the VTEX marketplace and also for informing the marketplace about changes in their SKUs that already exist in the marketplace. Both actions start with a catalog notification, which is made by this request.\n\nWith this notification, the seller is telling the marketplace that something has changed about a specific SKU, like price or inventory, or that this is a new SKU that the seller would like to offer to the marketplace.\n\nThe body of the request should be empty.\r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/changenotification/{skuId}`."
+      description: "The seller is responsible for suggesting new SKUs to be sold in the VTEX marketplace and also for informing the marketplace about changes in their SKUs that already exist in the marketplace. Both actions start with a catalog notification, which is made by this request.\n\nWith this notification, the seller is telling the marketplace that something has changed about a specific SKU, like price or inventory, or that this is a new SKU that the seller would like to offer to the marketplace.\n\nThe body of the request should be empty.\n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/changenotification/{skuId}`."
       operationId: ChangeNotification
       parameters:
       - name: Content-Type
@@ -586,7 +600,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Change Notification with Seller ID and Seller SKU ID
-      description: "The seller is responsible for suggesting new SKUs to be sold in the VTEX marketplace and also for informing the marketplace about changes in their SKUs that already exist in the marketplace. Both actions start with a catalog notification, which is made by this request.\n\nWith this notification, the seller is telling the marketplace that something has changed about a specific SKU, like price or inventory, or that this is a new SKU that the seller would like to offer to the marketplace.\n\nThere are two information expected by the marketplace in this request: the `sellerId`, which identifies the seller, and the `sellerSkuId`, which identifies the binding of the seller with the SKU.\n\nBoth information are passed through the request URL. The body of the request should be empty.\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/changenotification/{sellerId}/{sellerSkuId}`.\r\n\r\n## Example\r\n\r\nLet's say your seller has the ID `123` in the marketplace and you want to inform the marketplace that has been a change in the SKU with ID `700`.\r\n\r\nIn this case, you would have to replace the `sellerId` parameter with the value `123` and the `skuId` parameter with the value `700`. The URL of the request would be the following.\r\n\r\n```\r\nhttps://{{accountName}}.vtexcommercestable.com.br/api/sku-binding/pvt/skuseller/changenotification/123/700\r\n```\r\n\r\n## Response codes\r\n\r\nThe following response codes are possible for this request.\r\n* 200: the SKU whose ID was informed in the URL already exists in the marketplace and was found. The marketplace can now proceed with a fulfillment simulation in order to get updated information about this SKU's inventory and price.\r\n* 403: Failure in the authentication.\r\n* 404: the SKU was not found in the marketplace. The body of the response, in this case, should follow this format: \"Seller StockKeepingUnit `{{skuId}}` not found for this seller id `{{sellerId}}`. This means that the seller can now proceed with sending an offer to the marketplace in order to suggest that this SKU is sold there.\r\n* 429: Failure due to too many requests."
+      description: "The seller is responsible for suggesting new SKUs to be sold in the VTEX marketplace and also for informing the marketplace about changes in their SKUs that already exist in the marketplace. Both actions start with a catalog notification, which is made by this request.\n\nWith this notification, the seller is telling the marketplace that something has changed about a specific SKU, like price or inventory, or that this is a new SKU that the seller would like to offer to the marketplace.\n\nThere are two information expected by the marketplace in this request: the `sellerId`, which identifies the seller, and the `sellerSkuId`, which identifies the binding of the seller with the SKU.\n\nBoth information are passed through the request URL. The body of the request should be empty.\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/changenotification/{sellerId}/{sellerSkuId}`.\n\n## Example\n\nLet's say your seller has the ID `123` in the marketplace and you want to inform the marketplace that has been a change in the SKU with ID `700`.\n\nIn this case, you would have to replace the `sellerId` parameter with the value `123` and the `skuId` parameter with the value `700`. The URL of the request would be the following.\n\n```\nhttps://{{accountName}}.vtexcommercestable.com.br/api/sku-binding/pvt/skuseller/changenotification/123/700\n```\n\n## Response codes\n\nThe following response codes are possible for this request.\n* 200: the SKU whose ID was informed in the URL already exists in the marketplace and was found. The marketplace can now proceed with a fulfillment simulation in order to get updated information about this SKU's inventory and price.\n* 403: Failure in the authentication.\n* 404: the SKU was not found in the marketplace. The body of the response, in this case, should follow this format: \"Seller StockKeepingUnit `{{skuId}}` not found for this seller id `{{sellerId}}`. This means that the seller can now proceed with sending an offer to the marketplace in order to suggest that this SKU is sold there.\n* 429: Failure due to too many requests."
       parameters:
       - name: Content-Type
         in: header
@@ -637,7 +651,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Insert SKU Binding
-      description: "Creates an SKU Binding, associating a seller's SKU with a marketplace's SKU.\r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/insertion`."
+      description: "Creates an SKU Binding, associating a seller's SKU with a marketplace's SKU.\n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/insertion`."
       operationId: InsertSKUBinding
       parameters:
       - name: Content-Type
@@ -700,7 +714,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Activate SKU Binding
-      description: "Changes the status of an SKU Binding to active, setting `isActive` to `true`.\r\n\r\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/activate/{sellerId}/{skuSellerId}`."
+      description: "Changes the status of an SKU Binding to active, setting `isActive` to `true`.\n\n > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/activate/{sellerId}/{skuSellerId}`."
       operationId: ActivateSKUBinding
       parameters:
       - name: Content-Type
@@ -744,7 +758,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Deactivate SKU Binding
-      description: "Changes the status of an SKU Binding to inactive, setting `isActive` to `false`.\r\n\r\n  > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/inactivate/{sellerId}/{skuSellerId}`."
+      description: "Changes the status of an SKU Binding to inactive, setting `isActive` to `false`.\n\n  > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/inactivate/{sellerId}/{skuSellerId}`."
       operationId: DeactivateSKUBinding
       parameters:
       - name: Content-Type
@@ -788,7 +802,7 @@ paths:
       tags:
       - SKU Bindings
       summary: VTex Remove a seller's SKU Binding
-      description: "Remove a seller's SKU binding, given the Seller ID and the SKU ID in the seller's store.\r\n\r\n  > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/remove/{sellerId}/{sellerSkuId}`."
+      description: "Remove a seller's SKU binding, given the Seller ID and the SKU ID in the seller's store.\n\n  > ℹ This path is an updated version of `/api/catalog_system/pvt/skuseller/remove/{sellerId}/{sellerSkuId}`."
       operationId: DeleteSKUsellerassociation
       parameters:
       - name: Content-Type
@@ -829,8 +843,11 @@ paths:
       deprecated: false
 components:
   securitySchemes:
-    VtexIdclientAutCookie:
+    appKey:
       type: apiKey
       in: header
-      name: VtexIdclientAutCookie
-      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+      name: X-VTEX-API-AppKey
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken

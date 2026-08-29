@@ -1,15 +1,89 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account App Keys API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex License Manager App Keys API
+  description: 'The License Manager API allows you to create users, modify their names and emails, add and remove [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) from users, and create and manage [appKeys](https://help.vtex.com/en/tutorial/application-keys--2iffYzlvvz4BDMr6WGUtet).
+
+
+    ## Common parameters
+
+
+    |Attribute name | Description |
+
+    |:------------|--------------|
+
+    |`accountName` | Account name in VTEX License Manager. |
+
+    |`environment` | Environment on which you want to run the query, e.g. `vtexcommercestable`. |
+
+    |`userId`      | Unique user identification string. |
+
+    |`roleId`      | Integer that represents a role, can be obtained from the [Get List of Roles](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/site/pvt/roles/list/paged) endpoint. |
+
+
+    ## Index
+
+
+    ### User
+
+
+    - `GET` [Get user](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/users/-userId-)
+
+    - `DELETE` [Delete user](https://developers.vtex.com/docs/api-reference/license-manager-api#delete-/api/license-manager/users/-userId-)
+
+    - `POST` [Create user](https://developers.vtex.com/docs/api-reference/license-manager-api#post-/api/license-manager/users)
+
+    - `GET` [Get list of users](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/site/pvt/logins/list/paged)
+
+
+    ### Roles
+
+
+    - `PUT` [Add roles to user or appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#put-/api/license-manager/users/-userId-/roles)
+
+    - `GET` [Get roles by user or appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/users/-userId-/roles)
+
+    - `DELETE` [Remove role from user or appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#delete-/api/license-manager/users/-userId-/roles/-roleId-)
+
+    - `GET` [Get list of roles](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/site/pvt/roles/list/paged)
+
+
+    ### App Keys
+
+
+    - `POST` [Create new appkey](https://developers.vtex.com/docs/api-reference/license-manager-api#post-/api/vlm/appkeys)
+
+    - `GET` [Get appKeys from account](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/vlm/appkeys)
+
+    - `PUT` [Update appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#put-/api/vlm/appkeys/-id-)
+
+
+    ### Store
+
+
+    - `GET` [Get stores](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/vlm/account/stores)
+
+
+    ### Account
+
+
+    - `GET` [Get information about account](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/vlm/account)'
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: App Keys
 paths:
@@ -18,7 +92,7 @@ paths:
       tags:
       - App Keys
       summary: VTex Create new appKey
-      description: "Creates a new pair of `appKey` and `appToken`. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: "Creates a new pair of `appKey` and `appToken`. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Save user** |\n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| User Administrator - RESTRICTED | Save user |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
       operationId: Createnewappkey
       parameters: []
       requestBody:
@@ -49,7 +123,7 @@ paths:
       tags:
       - App Keys
       summary: VTex Get appKeys from account
-      description: "Retrieves all application keys from an account. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: "Retrieves all application keys from an account. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Save user** |\n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| User Administrator - RESTRICTED | Save user |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
       operationId: Getappkeysfromaccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -81,7 +155,7 @@ paths:
       tags:
       - App Keys
       summary: VTex Update appKey
-      description: "Activates or deactivates an `appKey` by its ID. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save user** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| User Administrator - RESTRICTED | Save user |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: "Activates or deactivates an `appKey` by its ID. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Save user** |\n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| User Administrator - RESTRICTED | Save user |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
       operationId: Updateappkey
       parameters:
       - name: id
@@ -118,33 +192,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    VLMError:
-      description: Object representing VLMError.
-      type: object
-      properties:
-        Details:
-          description: Details of error.
-          type: string
-          nullable: true
-        HttpStatusCode:
-          description: Status code of HTTP response.
-          type: integer
-        VLMErrorCode:
-          description: Error code for License Manager.
-          type: integer
-        Message:
-          description: Error message.
-          type: string
-    UpdateappkeyRequest:
-      description: Request body for activating or deactivating application keys.
-      required:
-      - isActive
-      type: object
-      properties:
-        isActive:
-          description: Defines if the application key is active (`true`) or not (`false`).
-          type: boolean
-          example: true
     Getappkeysfromaccount:
       description: Response body for getting all application keys from the account.
       required:
@@ -171,6 +218,24 @@ components:
         isActive:
           description: Defines if the application key is active (`true`) or not (`false`).
           type: boolean
+    VLMError:
+      description: Object representing VLMError.
+      type: object
+      properties:
+        Details:
+          description: Details of error.
+          type:
+          - string
+          - 'null'
+        HttpStatusCode:
+          description: Status code of HTTP response.
+          type: integer
+        VLMErrorCode:
+          description: Error code for License Manager.
+          type: integer
+        Message:
+          description: Error message.
+          type: string
     CreatenewappkeyResponse:
       description: Response body of sucessful call to /api/vlm/appkeys.
       required:
@@ -190,8 +255,9 @@ components:
           type: string
         appToken:
           description: AppToken. For security reasons, it should always be null.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         label:
           description: Label of the application key.
           type: string
@@ -202,6 +268,16 @@ components:
         isActive:
           description: Defines if the application key is active (`true`) or not (`false`).
           type: boolean
+    UpdateappkeyRequest:
+      description: Request body for activating or deactivating application keys.
+      required:
+      - isActive
+      type: object
+      properties:
+        isActive:
+          description: Defines if the application key is active (`true`) or not (`false`).
+          type: boolean
+          example: true
     CreatenewappkeyRequest:
       description: Request body for creating new application key (/api/vlm/appkeys)
       required:
@@ -223,6 +299,16 @@ components:
         type: string
         default: application/json
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

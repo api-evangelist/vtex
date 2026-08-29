@@ -1,15 +1,86 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Account Provider API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex GiftCard Hub Provider API
+  description: '>ℹ️ Check the new [Payments onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer''s journey.
+
+
+    The Gift Card Hub API allows interactions with all Gift card providers registered to a store from a single point.
+
+
+    Gift card providers are systems capable of providing cards to be used in the buying process.
+
+
+    The following is the sequence diagram that represents calls in the purchase closing process.
+
+    ![](https://cdn.jsdelivr.net/gh/vtexdocs/dev-portal-content@main/images/gift-card-integration-guide-provider-protocol-0.png)
+
+
+    **Checkout + Gateway**: Systems responsible for the sale and for processing orders and payments.
+
+
+    **Gift Card Hub**: System responsible for managing multiple registered Gift card providers for a store.
+
+
+    **Gift Card Provider**: System responsible for providing the Gift cards available to the user not closing a purchase. This system can be implemented by third parties.
+
+
+    ## GiftCard Hub API Index
+
+
+    ### Provider
+
+
+    - `PUT` [Create/Update GiftCard Provider by ID](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#put-/api/giftcardproviders/-giftCardProviderId-)
+
+    - `GET` [Get GiftCard Provider by ID](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders/-giftCardProviderId-)
+
+    - `GET` [List All GiftCard Providers](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders)
+
+    - `DELETE` [Delete GiftCard Provider by ID](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#delete-/api/giftcardproviders/-giftCardProviderId-)
+
+
+    ### Transaction
+
+
+    - `POST` [Create GiftCard in GiftCard Provider](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#post-/api/giftcardproviders/-giftCardProviderId-/giftcards)
+
+    - `POST` [Get GiftCard from GiftCard Provider](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#post-/api/giftcardproviders/-giftCardProviderId-/giftcards/_search)
+
+    - `GET` [Get GiftCard from GiftCard Provider by ID](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-)
+
+    - `POST` [Create GiftCard Transaction](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#post-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions)
+
+    - `GET` [Get GiftCard Transaction by ID](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions/-transactionId-)
+
+    - `GET` [List All GiftCard Transactions](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions)
+
+    - `GET` [Get GiftCard Transaction Authorization](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions/-tId-/authorization)
+
+    - `POST` [Cancel GiftCard Transaction](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#post-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions/-tId-/cancellations)
+
+    - `GET` [List All GiftCard Transactions Cancellations](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions/-tId-/cancellations)
+
+    - `POST` [Settle GiftCard Transaction](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#post-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions/-tId-/settlements)
+
+    - `GET` [List All GiftCard Transactions Settlements](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#get-/api/giftcardproviders/-giftCardProviderId-/giftcards/-giftCardId-/transactions/-tId-/settlements)'
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Provider
 paths:
@@ -18,7 +89,26 @@ paths:
       tags:
       - Provider
       summary: VTex List All GiftCard Providers
-      description: "Returns a collection of gift card providers from a store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| GiftCard | GiftCard | **View Gift Card providers** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns a collection of gift card providers from a store.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | GiftCard | GiftCard | **View Gift Card providers** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: ListAllGiftCardProviders
       parameters:
       - name: Content-Type
@@ -99,7 +189,26 @@ paths:
       tags:
       - Provider
       summary: VTex Get GiftCard Provider by ID
-      description: "Returns a gift card provider from a store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| GiftCard | GiftCard | **View Gift Card providers** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns a gift card provider from a store.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | GiftCard | GiftCard | **View Gift Card providers** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: GetGiftCardProviderbyID
       parameters:
       - name: Content-Type
@@ -177,7 +286,26 @@ paths:
       tags:
       - Provider
       summary: VTex Create/Update GiftCard Provider by ID
-      description: "Create or update a gift card provider from a store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| GiftCard | GiftCard | **Edit Gift Card providers** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Create or update a gift card provider from a store.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | GiftCard | GiftCard | **Edit Gift Card providers** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Create/UpdateGiftCardProviderbyID
       parameters:
       - name: Content-Type
@@ -255,7 +383,26 @@ paths:
       tags:
       - Provider
       summary: VTex Delete GiftCard Provider by ID
-      description: "Delete a gift card provider from a store.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| GiftCard | GiftCard | **Edit Gift Card providers** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Delete a gift card provider from a store.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | GiftCard | GiftCard | **Edit Gift Card providers** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: DeleteGiftCardProviderbyID
       parameters:
       - name: Content-Type
@@ -329,6 +476,16 @@ components:
           description: Credential provided by the merchant that VTEX will use for identification.
           example: token
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

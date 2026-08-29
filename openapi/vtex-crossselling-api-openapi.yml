@@ -1,15 +1,24 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account CrossSelling API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Legacy Search Cross Selling API
+  description: "\n> Check the new [Search onboarding guide](https://developers.vtex.com/docs/guides/search-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Search and is organized by focusing on the developer's journey.\n\nThis API lets you search and sort products in the Catalog using Fulltext, Category and Brand search terms. \n\nRetrieve product data to create custom searches and product shelves."
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
 tags:
 - name: CrossSelling
 paths:
@@ -389,10 +398,11 @@ paths:
                       description: Product reference.
                       example: 000806
                     productReferenceCode:
-                      type: integer
+                      type:
+                      - integer
+                      - 'null'
                       description: Product reference ID.
                       example: 1234
-                      nullable: true
                     categoryId:
                       type: string
                       description: Product category ID.
@@ -462,10 +472,11 @@ paths:
                         description: Product specification group
                         example: Teste da Api2
                     description:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Description of the main information related to the product. A simple and easy to understand summary for the customer.
                       example: Description example
-                      nullable: true
                     items:
                       type: array
                       description: Array containing the product SKU general information.
@@ -986,10 +997,11 @@ paths:
                             description: numerical unit that multiplies the selected quantity of the product when it is inserted in the cart.
                             example: 1
                           modalType:
-                            type: string
+                            type:
+                            - string
+                            - 'null'
                             description: Modal Type.
                             example: Modal Type test
-                            nullable: true
                           isKit:
                             type: boolean
                             description: If the SKU is part of a kit.
@@ -1061,9 +1073,10 @@ paths:
                                   description: Image URL.
                                   example: https://merch.vteximg.com.br/arquivos/ids/155489/99B14097-BFEA-4C0E-899E-35C95A2E1509_4_5005_c.jpg?v=637376717675800000
                                 imageText:
-                                  type: string
+                                  type:
+                                  - string
+                                  - 'null'
                                   description: Image text.
-                                  nullable: true
                                   example: hoegaarden-kit
                                 imageLastModified:
                                   type: string
@@ -1734,10 +1747,11 @@ paths:
                                               description: Delivery SLA per types.
                                               example: []
                                             Region:
-                                              type: string
+                                              type:
+                                              - string
+                                              - 'null'
                                               description: Region.
                                               example: ''
-                                              nullable: true
                                     Installments:
                                       type: array
                                       description: Installments options.
@@ -2011,14 +2025,16 @@ paths:
                                             description: Delivery SLA per types.
                                             example: []
                                           Region:
-                                            type: string
+                                            type:
+                                            - string
+                                            - 'null'
                                             description: Region.
                                             example: null
-                                            nullable: true
                                     GetInfoErrorMessage:
-                                      type: string
+                                      type:
+                                      - string
+                                      - 'null'
                                       description: Get info error message.
-                                      nullable: true
                                       example: null
                                     CacheVersionUsedToCallCheckout:
                                       type: string
@@ -2286,9 +2302,10 @@ paths:
                                                 description: Payment system.
                                                 example: '2'
                                               bin:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Bin.
-                                                nullable: true
                                                 example: null
                                               paymentName:
                                                 type: string
@@ -2494,9 +2511,10 @@ paths:
                                                 description: Group name.
                                                 example: promissoryPaymentGroup
                                               validator:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Validator.
-                                                nullable: true
                                                 example: ''
                                               stringId:
                                                 type: string
@@ -2515,9 +2533,10 @@ paths:
                                                 description: If is custom or not.
                                                 example: false
                                               description:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Description.
-                                                nullable: true
                                                 example: ''
                                               requiresAuthentication:
                                                 type: boolean
@@ -2528,9 +2547,10 @@ paths:
                                                 description: Due date.
                                                 example: '2021-07-01T18:43:00.0264384Z'
                                               availablePayments:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Available payments.
-                                                nullable: true
                                                 example: ''
                                         payments:
                                           type: array
@@ -2557,9 +2577,10 @@ paths:
                             description: Videos.
                             example: []
                           estimatedDateArrival:
-                            type: string
+                            type:
+                            - string
+                            - 'null'
                             description: Estimated date arrival.
-                            nullable: true
                             example: ''
       deprecated: false
       servers:
@@ -2943,9 +2964,10 @@ paths:
                       description: Product reference.
                       example: 000806
                     productReferenceCode:
-                      type: integer
+                      type:
+                      - integer
+                      - 'null'
                       description: Product reference ID.
-                      nullable: true
                       example: 1234
                     categoryId:
                       type: string
@@ -3016,8 +3038,9 @@ paths:
                         description: Product specification group
                         example: Teste da Api2
                     description:
-                      type: string
-                      nullable: true
+                      type:
+                      - string
+                      - 'null'
                       description: Description of the main information related to the product. A simple and easy to understand summary for the customer.
                       example: Description example
                     items:
@@ -3540,9 +3563,10 @@ paths:
                             description: numerical unit that multiplies the selected quantity of the product when it is inserted in the cart.
                             example: 1
                           modalType:
-                            type: string
+                            type:
+                            - string
+                            - 'null'
                             description: Modal Type.
-                            nullable: true
                             example: Modal Type test
                           isKit:
                             type: boolean
@@ -3615,9 +3639,10 @@ paths:
                                   description: Image URL.
                                   example: https://merch.vteximg.com.br/arquivos/ids/155489/99B14097-BFEA-4C0E-899E-35C95A2E1509_4_5005_c.jpg?v=637376717675800000
                                 imageText:
-                                  type: string
+                                  type:
+                                  - string
+                                  - 'null'
                                   description: Image text.
-                                  nullable: true
                                   example: hoegaarden-kit
                                 imageLastModified:
                                   type: string
@@ -4288,9 +4313,10 @@ paths:
                                               description: Delivery SLA per types.
                                               example: []
                                             Region:
-                                              type: string
+                                              type:
+                                              - string
+                                              - 'null'
                                               description: Region.
-                                              nullable: true
                                               example: ''
                                     Installments:
                                       type: array
@@ -4565,14 +4591,16 @@ paths:
                                             description: Delivery SLA per types.
                                             example: []
                                           Region:
-                                            type: string
+                                            type:
+                                            - string
+                                            - 'null'
                                             description: Region.
-                                            nullable: true
                                             example: null
                                     GetInfoErrorMessage:
-                                      type: string
+                                      type:
+                                      - string
+                                      - 'null'
                                       description: Get info error message.
-                                      nullable: true
                                       example: null
                                     CacheVersionUsedToCallCheckout:
                                       type: string
@@ -4840,9 +4868,10 @@ paths:
                                                 description: Payment system.
                                                 example: '2'
                                               bin:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Bin.
-                                                nullable: true
                                                 example: null
                                               paymentName:
                                                 type: string
@@ -5048,9 +5077,10 @@ paths:
                                                 description: Group name.
                                                 example: promissoryPaymentGroup
                                               validator:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Validator.
-                                                nullable: true
                                                 example: ''
                                               stringId:
                                                 type: string
@@ -5069,9 +5099,10 @@ paths:
                                                 description: If is custom or not.
                                                 example: false
                                               description:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Description.
-                                                nullable: true
                                                 example: ''
                                               requiresAuthentication:
                                                 type: boolean
@@ -5082,9 +5113,10 @@ paths:
                                                 description: Due date.
                                                 example: '2021-07-01T18:43:00.0264384Z'
                                               availablePayments:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Available payments.
-                                                nullable: true
                                                 example: ''
                                         payments:
                                           type: array
@@ -5111,9 +5143,10 @@ paths:
                             description: Videos.
                             example: []
                           estimatedDateArrival:
-                            type: string
+                            type:
+                            - string
+                            - 'null'
                             description: Estimated date arrival.
-                            nullable: true
                             example: ''
       deprecated: false
       servers:
@@ -5497,9 +5530,10 @@ paths:
                       description: Product reference.
                       example: 000806
                     productReferenceCode:
-                      type: integer
+                      type:
+                      - integer
+                      - 'null'
                       description: Product reference ID.
-                      nullable: true
                       example: 1234
                     categoryId:
                       type: string
@@ -5570,10 +5604,11 @@ paths:
                         description: Product specification group
                         example: Teste da Api2
                     description:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Description of the main information related to the product. A simple and easy to understand summary for the customer.
                       example: Description example
-                      nullable: true
                     items:
                       type: array
                       description: Array containing the product SKU general information.
@@ -6094,9 +6129,10 @@ paths:
                             description: numerical unit that multiplies the selected quantity of the product when it is inserted in the cart.
                             example: 1
                           modalType:
-                            type: string
+                            type:
+                            - string
+                            - 'null'
                             description: Modal Type.
-                            nullable: true
                             example: Modal Type test
                           isKit:
                             type: boolean
@@ -6169,9 +6205,10 @@ paths:
                                   description: Image URL.
                                   example: https://merch.vteximg.com.br/arquivos/ids/155489/99B14097-BFEA-4C0E-899E-35C95A2E1509_4_5005_c.jpg?v=637376717675800000
                                 imageText:
-                                  type: string
+                                  type:
+                                  - string
+                                  - 'null'
                                   description: Image text.
-                                  nullable: true
                                   example: hoegaarden-kit
                                 imageLastModified:
                                   type: string
@@ -6842,9 +6879,10 @@ paths:
                                               description: Delivery SLA per types.
                                               example: []
                                             Region:
-                                              type: string
+                                              type:
+                                              - string
+                                              - 'null'
                                               description: Region.
-                                              nullable: true
                                               example: ''
                                     Installments:
                                       type: array
@@ -7119,14 +7157,16 @@ paths:
                                             description: Delivery SLA per types.
                                             example: []
                                           Region:
-                                            type: string
+                                            type:
+                                            - string
+                                            - 'null'
                                             description: Region.
-                                            nullable: true
                                             example: null
                                     GetInfoErrorMessage:
-                                      type: string
+                                      type:
+                                      - string
+                                      - 'null'
                                       description: Get info error message.
-                                      nullable: true
                                       example: null
                                     CacheVersionUsedToCallCheckout:
                                       type: string
@@ -7394,9 +7434,10 @@ paths:
                                                 description: Payment system.
                                                 example: '2'
                                               bin:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Bin.
-                                                nullable: true
                                                 example: null
                                               paymentName:
                                                 type: string
@@ -7602,9 +7643,10 @@ paths:
                                                 description: Group name.
                                                 example: promissoryPaymentGroup
                                               validator:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Validator.
-                                                nullable: true
                                                 example: ''
                                               stringId:
                                                 type: string
@@ -7623,9 +7665,10 @@ paths:
                                                 description: If is custom or not.
                                                 example: false
                                               description:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Description.
-                                                nullable: true
                                                 example: ''
                                               requiresAuthentication:
                                                 type: boolean
@@ -7636,9 +7679,10 @@ paths:
                                                 description: Due date.
                                                 example: '2021-07-01T18:43:00.0264384Z'
                                               availablePayments:
-                                                type: string
+                                                type:
+                                                - string
+                                                - 'null'
                                                 description: Available payments.
-                                                nullable: true
                                                 example: ''
                                         payments:
                                           type: array
@@ -7665,9 +7709,10 @@ paths:
                             description: Videos.
                             example: []
                           estimatedDateArrival:
-                            type: string
+                            type:
+                            - string
+                            - 'null'
                             description: Estimated date arrival.
-                            nullable: true
                             example: ''
       deprecated: false
       servers:
@@ -7837,8 +7882,11 @@ paths:
             default: DefaultParameterValue
 components:
   securitySchemes:
-    VtexIdclientAutCookie:
+    appKey:
       type: apiKey
       in: header
-      name: VtexIdclientAutCookie
-      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+      name: X-VTEX-API-AppKey
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken

@@ -1,15 +1,25 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Versions API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Master Data API - v2 Versions API
+  description: ">ℹ️ Master Data v2 is not compatible with data entities from previous versions, such as CL and AD.\n\n[Master Data](https://developers.vtex.com/docs/guides/master-data-introduction) is a secure, fast, scalable, and extensible solution that allows users to create their own entities, store data, and retrieve information directly from the storefront or external integrations.\n\nSeveral internal VTEX modules use Master Data as a data repository, including Orders and Sales App. \n\nThere are two main ways to use Master Data:\n\n- [Directly from the storefront](#directly-from-the-storefront)\n- [With an external integration](#external-integrations)\n\n## Directly from the storefront\n\nWhen using Master Data within the storefront, consider the following:\n\n- Use the storefront host to query or store information to avoid issues related to Cross-origin resource sharing (CORS).\n- Use the relative path to avoid CORS issues.\n- Configure the JSON Schema of the Data Entity to specify which information should be public and which should not be.\n- Avoid creating query loops to prevent potential throttling issues or APIs being disabled due to security protection measures.\n- Never add authentication keys, such as `X-VTEX-API-AppKey` or `X-VTEX-API-AppToken`, via JavaScript as this could pose security risks.\n\n## External integrations\n\nWhen using Master Data to store data from an external integration, such as client data from another service, consider the following:\n\n- Use the host `{{accountName}}.vtexcommercestable.com.br`.\n- Use the authentication keys (`X-VTEX-API-AppKey` ou `X-VTEX-API-AppToken`).\n\n## Common parameters\n\n| Name | Description |\n| -------- | -------- |\n| `accountName` | Account name in VTEX License Manager. |\n| `name` | Data Entity name. |\n| `schema` | JSON Schema of a Data Entity. |\n| `id` | Identifier of a document. |\n| `X-VTEX-API-AppKey` | appKey. |\n| `X-VTEX-API-AppToken` | appToken. | \n\n## Index\n\n### Documents\n\n- `POST` [Create new document](https://developers.vtex.com/docs/api-reference/master-data-api-v2#post-/api/dataentities/-dataEntityName-/documents)\n- `PATCH` [Create partial document](https://developers.vtex.com/docs/api-reference/master-data-api-v2#patch-/api/dataentities/-dataEntityName-/documents)\n- `GET` [Get document](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/documents/-id-)\n- `PUT` [Create document with custom ID or Update entire document](https://developers.vtex.com/docs/api-reference/master-data-api-v2#put-/api/dataentities/-dataEntityName-/documents/-id-)\n- `PATCH` [Update partial document](https://developers.vtex.com/docs/api-reference/master-data-api-v2#patch-/api/dataentities/-dataEntityName-/documents/-id-)\n- `DELETE` [Delete document](https://developers.vtex.com/docs/api-reference/master-data-api-v2#delete-/api/dataentities/-dataEntityName-/documents/-id-)\n\n### Search\n\n- `GET` [Search documents](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/search)\n\n### Scroll\n\n- `GET` [Scroll documents](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/scroll)\n\n### Schemas\n\n- `GET` [Get schemas](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/schemas)\n- `GET` [Get schema by name](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/schemas/-schemaName-)\n- `PUT` [Save schema by name](https://developers.vtex.com/docs/api-reference/master-data-api-v2#put-/api/dataentities/-dataEntityName-/schemas/-schemaName-)\n- `DELETE` [Delete schema by name](https://developers.vtex.com/docs/api-reference/master-data-api-v2#delete-/api/dataentities/-dataEntityName-/schemas/-schemaName-)\n\n### Indices\n\n- `GET` [Get indices](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/indices)\n- `PUT` [Put indices](https://developers.vtex.com/docs/api-reference/master-data-api-v2#put-/api/dataentities/-dataEntityName-/indices)\n- `GET` [Get index by name](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/indices/-index_name-)\n- `DELETE` [Delete index by name](https://developers.vtex.com/docs/api-reference/master-data-api-v2#delete-/api/dataentities/-dataEntityName-/indices/-index_name-)\n\n### Clusters\n\n- `POST` [Validate document by clusters](https://developers.vtex.com/docs/api-reference/master-data-api-v2#post-/api/dataentities/-dataEntityName-/documents/-id-/clusters)\n\n### Versions\n\n- `GET` [List versions](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/documents/-id-/versions)\n- `GET` [Get version](https://developers.vtex.com/docs/api-reference/master-data-api-v2#get-/api/dataentities/-dataEntityName-/documents/-id-/versions/-versionId-)\n- `PUT` [Put version](https://developers.vtex.com/docs/api-reference/master-data-api-v2#put-/api/dataentities/-dataEntityName-/documents/-id-/versions/-versionId-)"
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Versions
 paths:
@@ -18,7 +28,7 @@ paths:
       tags:
       - Versions
       summary: VTex List versions
-      description: "Lists the versions of a document. \r\n\r\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Dynamic Storage | Dynamic storage generic resources | **Read only documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Lists the versions of a document. \n\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Dynamic Storage | Dynamic storage generic resources | **Read only documents** |\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: Listversions
       parameters:
       - $ref: '#/components/parameters/dataEntityName'
@@ -69,7 +79,7 @@ paths:
       tags:
       - Versions
       summary: VTex Get version
-      description: "Returns the version of a document. \r\n\r\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Dynamic Storage | Dynamic storage generic resources | **Read only documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Returns the version of a document. \n\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Dynamic Storage | Dynamic storage generic resources | **Read only documents** |\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: Getversion
       parameters:
       - $ref: '#/components/parameters/dataEntityName'
@@ -103,7 +113,7 @@ paths:
       tags:
       - Versions
       summary: VTex Update version
-      description: "Updates the document's version value.\r\n\r\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\r\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Updates the document's version value.\n\n>ℹ Master Data documents are versioned. This means that, for each change, a new version is generated. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: Putversion
       parameters:
       - $ref: '#/components/parameters/dataEntityName'
@@ -132,52 +142,20 @@ paths:
           description: Not Modified
       deprecated: false
 components:
-  parameters:
-    id:
-      name: id
-      in: path
-      description: ID of the Document.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: b818cbda-e489-11e6-94f4-0ac138d2d42e
-    dataEntityName:
-      name: dataEntityName
-      in: path
-      required: true
-      description: Name of the data entity.
-      schema:
-        type: string
-        example: Newsletter
-    versionId:
-      name: versionId
-      in: path
-      description: ID of the version to update.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: _8sZcvyj4nng7FgA2RgtVVZmkIxb4Pbfe_
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   schemas:
+    documentResponse:
+      required:
+      - Id
+      - Href
+      type: object
+      description: Response body object.
+      properties:
+        Id:
+          type: string
+          description: ID of the document that was created or updated.
+        Href:
+          type: string
+          description: Document reference URL.
     Getversion:
       title: Getversion
       required:
@@ -195,19 +173,6 @@ components:
           description: ID of the user who created the version.
         document:
           $ref: '#/components/schemas/Document'
-    documentResponse:
-      required:
-      - Id
-      - Href
-      type: object
-      description: Response body object.
-      properties:
-        Id:
-          type: string
-          description: ID of the document that was created or updated.
-        Href:
-          type: string
-          description: Document reference URL.
     Listversion:
       title: Listversion
       required:
@@ -233,10 +198,11 @@ components:
               type: string
               description: Data entity name.
             isNewsletterOptIn:
-              type: boolean
+              type:
+              - boolean
+              - 'null'
               description: Indicates whether client otped to receive the store newsletter (`true`) or not (`false`).
               example: false
-              nullable: true
             createdBy:
               type: string
               description: ID of the user who created the document.
@@ -279,7 +245,62 @@ components:
         email:
           type: string
           description: User email.
+  parameters:
+    dataEntityName:
+      name: dataEntityName
+      in: path
+      required: true
+      description: Name of the data entity.
+      schema:
+        type: string
+        example: Newsletter
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    id:
+      name: id
+      in: path
+      description: ID of the Document.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: b818cbda-e489-11e6-94f4-0ac138d2d42e
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    versionId:
+      name: versionId
+      in: path
+      description: ID of the version to update.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: _8sZcvyj4nng7FgA2RgtVVZmkIxb4Pbfe_
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

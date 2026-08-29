@@ -1,15 +1,24 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: Vtex Account API
   version: '1.0'
+  description: 'Operations tagged Account across 2 of this provider''s published API definitions: vtex-customer-credit-openapi-original.yml, vtex-license-manager-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Account
 paths:
@@ -18,7 +27,44 @@ paths:
       tags:
       - Account
       summary: VTex Search all accounts
-      description: "Retrieves a list of all [customer credit accounts](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) in the store.\r\n\r\n>ℹ️ You can use the queries below (individually or combined) to obtain a more accurate search result. If your store has more than 20 customer credit accounts and you do not use any queries in the call, only the first 20 account records will appear in the response body.\r\n\r\n>ℹ️ Query params can be used individually or combined.\r\n\r\n### Queries to filter results\r\n\r\n- **By the location of the accounts in the list (quantity of accounts)**: `?from={int}&to={int}`\r\n- **By status**: `?status={Open, Closed or Cancelled}`\r\n- **By email**: `?email={string}`\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Read Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a list of all [customer credit accounts](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) in the store.
+
+
+        >ℹ️ You can use the queries below (individually or combined) to obtain a more accurate search result. If your store has more than 20 customer credit accounts and you do not use any queries in the call, only the first 20 account records will appear in the response body.
+
+
+        >ℹ️ Query params can be used individually or combined.
+
+
+        ### Queries to filter results
+
+
+        - **By the location of the accounts in the list (quantity of accounts)**: `?from={int}&to={int}`
+
+        - **By status**: `?status={Open, Closed or Cancelled}`
+
+        - **By email**: `?email={string}`
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Read Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Searchallaccounts
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -228,7 +274,31 @@ paths:
       tags:
       - Account
       summary: VTex Open an account
-      description: "Opens a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) on your store.\r\n\r\n>⚠️ This request should only be used if you do not have an account yet registered. If you already have an account (open or closed) and want to create or modify an account, go to [Open or Change Account](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-accountId-) endpoint.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Create Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Opens a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) on your store.
+
+
+        >⚠️ This request should only be used if you do not have an account yet registered. If you already have an account (open or closed) and want to create or modify an account, go to [Open or Change Account](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-accountId-) endpoint.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Create Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: OpenanAccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -356,12 +426,45 @@ paths:
                 tolerance: 0.2
                 availableBalance: 1100
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}:
     get:
       tags:
       - Account
       summary: VTex Retrieve an account by ID
-      description: "Retrieves a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) by the credit account identification.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Read Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) by the credit account identification.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Read Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: RetrieveaAccountbyId
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -451,7 +554,28 @@ paths:
       tags:
       - Account
       summary: VTex Close an account
-      description: "Closes a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Create Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Closes a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Create Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: CloseanAccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -569,7 +693,28 @@ paths:
       tags:
       - Account
       summary: VTex Update account information
-      description: "Updates information on a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Create Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Updates information on a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Create Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Updateemailanddescriptionofaaccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -692,12 +837,45 @@ paths:
                 tolerance: 0.25
                 availableBalance: 3400
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/statements:
     get:
       tags:
       - Account
       summary: VTex Get account statements
-      description: "Retrieves the [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) statements.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Statements | **Read Statements** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves the [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU) statements.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Statements | **Read Statements** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Accountstatements
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -794,12 +972,45 @@ paths:
                 intervalBalance: -1110.9
                 previousBalance: 0
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/creditlimit:
     put:
       tags:
       - Account
       summary: VTex Change credit limit of an account
-      description: "Increases or decreases the credit limit of a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Edit credits** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Increases or decreases the credit limit of a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Edit credits** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: ChangecreditlimitofanAccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -888,12 +1099,45 @@ paths:
                 tolerance: 0.3
                 availableBalance: 5500
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/statements/{statementId}:
     put:
       tags:
       - Account
       summary: VTex Decrease balance of an account
-      description: "Creates a debit value updating the account balance.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Edit credits** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Creates a debit value updating the account balance.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Edit credits** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Decreasebalanceofanaccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -936,12 +1180,51 @@ paths:
               example:
                 value: '-15.0'
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/transactions/{transactionId}/settlement:
     put:
       tags:
       - Account
       summary: VTex Create or update settlement
-      description: "Creates an invoice or update its value for an order placed in the store that used customer credit as a payment method.\r\n\r\n>ℹ️ If payment for the order is made in installments, you can create an invoice for each installment. The first invoice will be due in 30 days, and subsequent invoices will be due 30 days after the previous invoice.\r\n\r\n.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Statements | **Create Statements** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Creates an invoice or update its value for an order placed in the store that used customer credit as a payment method.
+
+
+        >ℹ️ If payment for the order is made in installments, you can create an invoice for each installment. The first invoice will be due in 30 days, and subsequent invoices will be due 30 days after the previous invoice.
+
+
+        .
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Statements | **Create Statements** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: CreateorUpdateSettlement
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -982,12 +1265,51 @@ paths:
                 value: 49.95
                 id: B2E754DCD7304D22866CB6F221CF0FEB
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/transactions:
     post:
       tags:
       - Account
       summary: VTex Create a pre-authorization
-      description: "Creates a Pre-Authorization. Also known as authorization hold, card authorization or pre-auth, pre-authorization is the practice of holding this balance as unavailable until either the merchant clears the transaction, also called settlement, or the hold *falls off*.\r\n\r\nThis operation does not appear in statements, but the available balance will be updated.\r\n\r\nThe result of this operation is generating a `transactionId` (pre-authorization identification) to use in a settlement.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Statements | **Create Statements** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Creates a Pre-Authorization. Also known as authorization hold, card authorization or pre-auth, pre-authorization is the practice of holding this balance as unavailable until either the merchant clears the transaction, also called settlement, or the hold *falls off*.
+
+
+        This operation does not appear in statements, but the available balance will be updated.
+
+
+        The result of this operation is generating a `transactionId` (pre-authorization identification) to use in a settlement.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Statements | **Create Statements** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: CreateaPreAuthorization
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1050,12 +1372,54 @@ paths:
                 expirationDate: '2023-11-25T00:00:00'
                 installments: 1
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/transactions/{transactionId}:
     put:
       tags:
       - Account
       summary: VTex Update a pre-authorization
-      description: "Updates information for a specific pre-authorization request.\r\n\r\n>⚠️ This call can only be used for pre-authorizations that have not yet been captured or canceled.\r\n\r\nAlso known as authorization hold, card authorization or pre-auth, pre-authorization is the practice of holding this balance as unavailable until either the merchant clears the transaction, also called settlement, or the hold *falls off*.\r\n\r\nThis operation does not appear in statements but the available balance will be updated.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Statements | **Create Statements** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Updates information for a specific pre-authorization request.
+
+
+        >⚠️ This call can only be used for pre-authorizations that have not yet been captured or canceled.
+
+
+        Also known as authorization hold, card authorization or pre-auth, pre-authorization is the practice of holding this balance as unavailable until either the merchant clears the transaction, also called settlement, or the hold *falls off*.
+
+
+        This operation does not appear in statements but the available balance will be updated.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Statements | **Create Statements** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: CreateaPreAuthorization(usingid)
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1115,7 +1479,7 @@ paths:
       tags:
       - Account
       summary: VTex Cancel a pre-authorization
-      description: "Cancels a pre-authorization created by the [Create a Pre-Authorization](https://developers.vtex.com/docs/api-reference/customer-credit-api#post-/api/creditcontrol/accounts/-creditAccountId-/transaction) endpoint. \r\n\r\n>⚠️ The pre-authorization can only be deleted by this endpoint if it was created with the `settled` field set to `false` previously.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Statements | **Create Statements** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Cancels a pre-authorization created by the [Create a Pre-Authorization](https://developers.vtex.com/docs/api-reference/customer-credit-api#post-/api/creditcontrol/accounts/-creditAccountId-/transaction) endpoint. \n\n>⚠️ The pre-authorization can only be deleted by this endpoint if it was created with the `settled` field set to `false` previously.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Credit Control | Main | **Main Access** |\n| Credit Control | Statements | **Create Statements** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: CancelaPreAuthorization
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1126,12 +1490,45 @@ paths:
         '200':
           description: OK. This endpoint does not return any data in the response body.
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/holders:
     post:
       tags:
       - Account
       summary: VTex Add an account holder
-      description: "Adds a new account holder to the [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU). This new user can share the account's credit limit with users already registered on the account.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Create Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Adds a new account holder to the [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU). This new user can share the account''s credit limit with users already registered on the account.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Create Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: AddanaccountHolder
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1194,12 +1591,45 @@ paths:
                 id: 054a67b342164018a0f291636c1669f1
                 createdAt: '2023-11-10T18:33:58.402627Z'
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/holders/{holderId}:
     delete:
       tags:
       - Account
       summary: VTex Delete an account holder
-      description: "Deletes an account holder from the [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Create Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Deletes an account holder from the [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Create Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Deleteanaccountholder
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1229,12 +1659,45 @@ paths:
               example:
                 id: 054a67b342164018a0f291636c1669f1
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/tolerance:
     put:
       tags:
       - Account
       summary: VTex Change tolerance of an account
-      description: "Modifies the credit tolerance amount to increase the credit limit on a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Checking Accounts | **Create Checking Accounts** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Modifies the credit tolerance amount to increase the credit limit on a [customer credit account](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Checking Accounts | **Create Checking Accounts** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Changetoleranceofanaccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1324,12 +1787,45 @@ paths:
                 tolerance: 0.3
                 availableBalance: 12444.99
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/creditcontrol/accounts/{creditAccountId}/transactions/{transactionId}/refunds:
     post:
       tags:
       - Account
       summary: VTex Partially or totally refund a settlement
-      description: "Refunds a value from an already settled transaction.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Statements | **Create Statements** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Refunds a value from an already settled transaction.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Statements | **Create Statements** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: PartialorTotalRefundaSettlement
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1365,12 +1861,24 @@ paths:
               example:
                 value: 30
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/vlm/account:
     get:
       tags:
       - Account
       summary: VTex Get information about account
-      description: "Retrieves information from an account, such as company and sponsor user details, stores, and appTokens.\n\r\n\rThis endpoint only accepts requests from the host list designated for that store. If you want to try this request from this portal, be sure to add it to the list. Learn how to add hosts to the list in [How to manage accounts](https://help.vtex.com/en/tutorial/how-to-manage-accounts--tutorials_6285#). \r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| License Manager | Services access control | **Save account** |\r\n\r\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\r\n\r\n| **Role** | **Resource** | \r\n| --------------- | ----------------- | \r\n| Finance - Full access | Save account |\r\n\r\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\r\n\r\n To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: "Retrieves information from an account, such as company and sponsor user details, stores, and appTokens.\n\nThis endpoint only accepts requests from the host list designated for that store. If you want to try this request from this portal, be sure to add it to the list. Learn how to add hosts to the list in [How to manage accounts](https://help.vtex.com/en/tutorial/how-to-manage-accounts--tutorials_6285#). \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Save account** |\n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| Finance - Full access | Save account |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\n\n To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
       operationId: GetAccount
       parameters: []
       responses:
@@ -3828,35 +4336,114 @@ paths:
                   isActive: true
                   isBlocked: false
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
 components:
+  parameters:
+    transactionId:
+      name: transactionId
+      in: path
+      description: Pre-authorization identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: B2E754DCD7304D22866CB6F221CF0FEB
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    creditAccountId:
+      name: creditAccountId
+      in: path
+      description: Credit account identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 01bce461-9g03-12ds-8217-b3d39271e15b
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
-    AppKeyItems:
-      description: Object representing application keys.
+    LicenseItems:
+      description: Object representing licenses.
       type: object
       properties:
-        id:
-          description: ID of the application key.
-          type: string
-        appKey:
-          description: AppKey.
-          type: string
-        appToken:
-          description: AppToken. For security reasons, it should always be null.
-          type: string
-          nullable: true
-        label:
-          description: Label of the application key.
-          type: string
-        createdIn:
-          description: Creation date of the application key.
-          type: string
+        expiration:
+          type:
+          - string
+          - 'null'
           format: date-time
-        isActive:
-          description: Defines if the application key is active (`true`) or not (`false`).
+          deprecated: true
+          description: Expiration date.
+        id:
+          description: ID of the category of the license.
+          type: number
+        isPurchased:
+          description: Defines if the license is purchased (`true`) or not (`false`).
           type: boolean
-        isBlocked:
-          description: Defines if the application key is blocked (`true`) or not (`false`).
-          type: boolean
+        products:
+          description: Array of products.
+          type: array
+          items:
+            description: Object representing products of licenses.
+            type: object
+            properties:
+              id:
+                description: ID of the product.
+                type: number
+              name:
+                description: Name of the product.
+                type: string
+              domains:
+                description: List of domains of the product.
+                type: array
+                items:
+                  type: string
+                  description: Domain of the product.
+                deprecated: true
+              endpoints:
+                type: object
+                description: Endpoints.
+                properties:
+                  webApiUrl:
+                    type:
+                    - string
+                    - 'null'
+                    description: Web API URL.
+                    deprecated: true
+                  consoleUrl:
+                    type:
+                    - string
+                    - 'null'
+                    description: Console URL.
+                    deprecated: true
+                deprecated: true
+        name:
+          description: Name of the category of the license.
+          type: string
     AccountResponse:
       description: Successful response for `/api/vlm/account`.
       type: object
@@ -3874,9 +4461,10 @@ components:
           description: Account name.
           type: string
         lv:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Level.
-          nullable: true
           deprecated: true
         isOperating:
           description: Defines if the account is in production (`true`) or not (`false`).
@@ -3884,65 +4472,78 @@ components:
         defaultUrl:
           deprecated: true
           description: Default URL.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         district:
           description: Neighborhood of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         country:
           description: Country of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         complement:
           description: Additional address of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         companyName:
           description: Company name.
           type: string
         cnpj:
           description: CNPJ (Corporate Tax ID) of account.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         haveParentAccount:
           description: Defines if the account has a parent account (`true`) or not (`false`).
           type: boolean
         parentAccountId:
           description: ID of the parent account.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         parentAccountName:
           description: Name of the parent account.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         city:
           description: City of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         address:
           description: Address of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         logo:
           description: Filename of the account's logotype.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         hasLogo:
           description: Defines if the store's logotype has been uploaded (`true`) or not (`false`).
           type: boolean
         number:
           description: Number of the address of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         postalCode:
           description: Zip code of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         state:
           description: State or province of the person assigned as main contact of the store.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         telephone:
           description: Telephone number of the person assigned as main contact of the store.
           type: string
@@ -3982,13 +4583,15 @@ components:
               type: string
         operationDate:
           description: Date when the account went into production.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           format: date-time
         inactivationDate:
           description: Date when the account was deactivated.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           format: date-time
         creationDate:
           description: Date when the account was created.
@@ -4010,14 +4613,16 @@ components:
           type: object
           properties:
             token:
-              type: string
+              type:
+              - string
+              - 'null'
               description: Token.
-              nullable: true
               deprecated: true
             name:
-              type: string
+              type:
+              - string
+              - 'null'
               description: Token name.
-              nullable: true
               deprecated: true
           deprecated: true
         appKeys:
@@ -4025,60 +4630,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AppKeyItems'
-    LicenseItems:
-      description: Object representing licenses.
-      type: object
-      properties:
-        expiration:
-          type: string
-          format: date-time
-          nullable: true
-          deprecated: true
-          description: Expiration date.
-        id:
-          description: ID of the category of the license.
-          type: number
-        isPurchased:
-          description: Defines if the license is purchased (`true`) or not (`false`).
-          type: boolean
-        products:
-          description: Array of products.
-          type: array
-          items:
-            description: Object representing products of licenses.
-            type: object
-            properties:
-              id:
-                description: ID of the product.
-                type: number
-              name:
-                description: Name of the product.
-                type: string
-              domains:
-                description: List of domains of the product.
-                type: array
-                items:
-                  type: string
-                  description: Domain of the product.
-                deprecated: true
-              endpoints:
-                type: object
-                description: Endpoints.
-                properties:
-                  webApiUrl:
-                    type: string
-                    description: Web API URL.
-                    nullable: true
-                    deprecated: true
-                  consoleUrl:
-                    type: string
-                    description: Console URL.
-                    nullable: true
-                    deprecated: true
-                deprecated: true
-        name:
-          description: Name of the category of the license.
-          type: string
     SiteItems:
       description: Object containing complete information from a store.
       type: object
@@ -4093,27 +4644,30 @@ components:
           description: Trading name of the store.
           type: string
         LV:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Level.
-          nullable: true
           deprecated: true
         logo:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Logo.
-          nullable: true
           deprecated: true
         monetaryUnitId:
           type: number
           description: Monetary unit ID.
           deprecated: true
         domains:
-          type: array
+          type:
+          - array
+          - 'null'
           description: List of domains.
           items:
             type: string
             description: Domain.
             deprecated: true
-          nullable: true
           deprecated: true
         hosts:
           description: Hosts associated to the store.
@@ -4129,46 +4683,50 @@ components:
             description: Alias.
             deprecated: true
           deprecated: true
-  parameters:
-    creditAccountId:
-      name: creditAccountId
-      in: path
-      description: Credit account identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 01bce461-9g03-12ds-8217-b3d39271e15b
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    transactionId:
-      name: transactionId
-      in: path
-      description: Pre-authorization identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: B2E754DCD7304D22866CB6F221CF0FEB
+    AppKeyItems:
+      description: Object representing application keys.
+      type: object
+      properties:
+        id:
+          description: ID of the application key.
+          type: string
+        appKey:
+          description: AppKey.
+          type: string
+        appToken:
+          description: AppToken. For security reasons, it should always be null.
+          type:
+          - string
+          - 'null'
+        label:
+          description: Label of the application key.
+          type: string
+        createdIn:
+          description: Creation date of the application key.
+          type: string
+          format: date-time
+        isActive:
+          description: Defines if the application key is active (`true`) or not (`false`).
+          type: boolean
+        isBlocked:
+          description: Defines if the application key is blocked (`true`) or not (`false`).
+          type: boolean
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header
       name: VtexIdclientAutCookie
       description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+x-refined-from:
+- vtex-customer-credit-openapi-original.yml
+- vtex-license-manager-openapi-original.yml

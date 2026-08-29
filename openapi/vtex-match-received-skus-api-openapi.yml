@@ -1,15 +1,16 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Match Received SKUs API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Suggestions Match Received SKUs API
+  description: "\nThe **Marketplace API** enables marketplaces and sellers hosted on VTEX to perform their collaborative operations.  \n\n>⚠️ The marketplace must [create an appKey and appToken](https://developers.vtex.com/docs/guides/getting-started-authentication) for each non-VTEX seller that will use this API.\n\n## Index\n\n### Notification\n\nEndpoints used by sellers to notify marketplaces that the price or inventory language has changed for one of their SKUs.\n\n`POST` [Notify marketplace of price update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/price)\n\n`POST` [Notify marketplace of inventory update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/inventory)\n\n\n### Suggestions\n\n#### Get Suggestions\n\nSearch and filter all suggestions using specific criteria.\n\n`GET` [Get all SKU Suggestions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions)\n\n`GET` [Get SKU Suggestion by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Manage Suggestions\n\nSend or delete SKU suggestions from the seller to marketplace.\n\n`PUT` [Send SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerSkuId-)\n\n`DELETE` [Delete SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#delete-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Get Versions\n\nSearch and filter all versions of suggestions, using specific criteria.\n\n`GET` [Get all versions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions)\n\n`GET` [Get version by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions/-version-)\n\n\n#### Match Received SKUs\n\nMatch SKU suggestions received in the marketplace.\n\n`PUT` [Match Received SKUs individually](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerskuid-/versions/-version-/matches/-matchid-)\n\n`PUT` [Match Multiple Received SKUs](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/matches/action/-actionName-)\n\n\n#### SKU Approval Settings\n\nAllows marketplaces to configure rules for automatically and manually approving SKUs received from sellers.\n\n`GET`[Get autoApprove Status in Account Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/autoapproval/toggle)  \n\n`PUT`[Activate autoApprove in Marketplace's Account](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle)  \n\n`GET`[Get Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration)\n\n`PUT`[Save Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration)\n\n`GET`[Get Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Save Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Activate autoApprove Setting for a Seller](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle/seller/-sellerId-)   \n\n\n### Matched Offers\n\nOffers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured.\n\n`GET`[Get Matched Offers List](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/offers)\n\n`GET`[Get Matched Offer's Data by SKU ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-/sku/-skuId-)  \n\n`GET`[Get Matched Offer's Data by Product ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-)\n"
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://api.vtex.com/{accountName}
+  description: Suggestions Server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
 tags:
 - name: Match Received SKUs
 paths:
@@ -178,50 +179,150 @@ paths:
               deprecated: false
 components:
   schemas:
-    Specifications:
-      title: Specifications
-      required:
-      - Embalagem
-      type: object
-      properties:
-        Embalagem:
-          type: string
-          description: Packaging specifications. Should include package's weight.
-      example:
-        Embalagem: 3 kg
-    Product:
-      title: Product
+    Sku:
+      title: SKU
       required:
       - name
-      - description
-      - categoryId
-      - brandId
+      - eans
+      - refId
+      - height
+      - width
+      - length
+      - weight
+      - images
+      - unitMultiplier
+      - measurementUnit
       - specifications
       type: object
       properties:
         name:
           type: string
-          description: Name of the product that will be matched.
-          default: Book
-        description:
-          type: string
-          description: Product's description.
-          default: Description of the product, how it will appear on the marketplace.
-        categoryId:
-          type: integer
-          format: int32
-          description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
-          default: 12
-        brandId:
-          type: integer
-          format: int32
-          description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The brandId is already mapped through the Get Suggestions API. This field is nulled when the inserted value is 0.
-          default: 1234567
-        specifications:
-          type: string
-          description: This field is optional. Add here any product specifications or details.
+          description: ''
           default: ''
-          nullable: true
+        eans:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: SKU reference code.
+          default:
+          - '12345678901213'
+        refId:
+          type:
+          - string
+          - 'null'
+          description: SKU reference code.
+          default: '1234'
+        height:
+          type: integer
+          format: int32
+          description: Height of the SKU.
+          default: 10
+        width:
+          type: integer
+          format: int32
+          description: Width of the SKU.
+          default: 20
+        length:
+          type: integer
+          format: int32
+          description: Length of the SKU.
+          default: 10
+        weight:
+          type: integer
+          format: int32
+          description: Weight of the SKU.
+          default: 100
+        images:
+          $ref: '#/components/schemas/Images'
+        unitMultiplier:
+          type: integer
+          format: int32
+          description: Unit multiplier for this SKU. If this information doesn't apply, you should use the default value 1.
+          default: 1
+        measurementUnit:
+          type:
+          - string
+          - 'null'
+          description: Measurement unit that should be used for this SKU. If this information doesn't apply, you should use the default value un.
+          default: un
+        specifications:
+          $ref: '#/components/schemas/Specifications'
+      example:
+        name: Sku exemplo
+        eans:
+        - '12345678901213'
+        refId: null
+        height: 1
+        width: 1
+        length: 1
+        weight: 1
+        images:
+        - imagem1.jpg: imageurl.example
+        unitMultiplier: 1
+        measurementUnit: un
+        specifications:
+          Embalagem: 3 kg
+    MatchMultiple:
+      title: MatchMultiple
+      type: array
+      items:
+        type: object
+        required:
+        - itemId
+        - versionId
+        - matchId
+        - matcherId
+        - categoryId
+        - sellerId
+        properties:
+          itemId:
+            type: string
+            description: This field can be used to link any string that identifies that SKU. Its most common use is the seller's SKU ID.
+            example: '1234567'
+          versionId:
+            type: string
+            description: Whenever an SKU Suggestion is updated or changed, a new version of the original one is created. All versions are logged, so you can search for previous our current states of SKU suggestions. This field is the `versionId` associated to the version you choose to search for. You can get this field's value through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). through the `latestVersionId` field.
+            example: v.2
+          matchId:
+            type: string
+            description: Whenever an SKU suggestion is matched, it is associated to a unique ID. Fill in this field with the `matchId` you wish to filter by. The `matchId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+            default: vtex-matcher
+          matcherId:
+            type: string
+            description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+            default: vtex-matcher
+          categoryId:
+            type:
+            - integer
+            - 'null'
+            format: int32
+            description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
+            example: 12
+          brandId:
+            type:
+            - integer
+            - 'null'
+            format: int32
+            description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The `brandId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). This field is nulled when the inserted value is 0, and is mandatory for the `newproduct` action.
+            example: 1234567
+          skuRef:
+            type:
+            - string
+            - 'null'
+            description: Fill in this field on your request when the matched item is an SKU. This field is mandatory for the `skuassociation` action.
+            example: 123 sku ref
+          productRef:
+            type:
+            - string
+            - 'null'
+            description: Fill in this field on your request when the matched item is a product. This field is mandatory for the `productassociation` action.
+            example: 123 product ref
+          sellerId:
+            type: string
+            description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
+            example: seller123
     responseMatchMultiple:
       title: responseMatchMultiple
       type: array
@@ -243,6 +344,29 @@ components:
           isSuccess:
             type: boolean
             example: false
+    Images:
+      title: Images
+      required:
+      - imagem1.jpg
+      type: array
+      properties:
+        imagem1.jpg:
+          type: string
+          description: Array containing the URLs of the SKU's images.  The image must be sent through `https` protocol, otherwise it will not be rendered in VTEX Admin.
+          default: https://imageurl.example
+      example:
+      - imagem1.jpg: imageurl.example
+    Specifications:
+      title: Specifications
+      required:
+      - Embalagem
+      type: object
+      properties:
+        Embalagem:
+          type: string
+          description: Packaging specifications. Should include package's weight.
+      example:
+        Embalagem: 3 kg
     MatchRequest:
       title: ''
       required:
@@ -265,15 +389,17 @@ components:
           description: "Matcher rates received SKUs by correlating the data sent by sellers, to existing fields in the marketplace. The calculation of these scores determines whether the product has been: \n\n`Approved`: score equal to or greater than 80 points. \n\n`Pending`: from 31 to 79 points.\n\n`Denied`: from 0 to 30 points. \n\nNote that  if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score."
           default: '80'
         skuRef:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: In `itemMatch` actions, fill in this field on your request to match the item to an existing SKU in the marketplace.
           default: ''
         productRef:
-          type: string
+          type:
+          - string
+          - 'null'
           description: In `productMatch` actions, fill in this field on your request to match the item to an existing product in the marketplace.
           default: ''
-          nullable: true
         product:
           $ref: '#/components/schemas/Product'
         sku:
@@ -305,158 +431,37 @@ components:
           measurementUnit: un
           specifications:
             Embalagem: 3 kg
-    MatchMultiple:
-      title: MatchMultiple
-      type: array
-      items:
-        type: object
-        required:
-        - itemId
-        - versionId
-        - matchId
-        - matcherId
-        - categoryId
-        - sellerId
-        properties:
-          itemId:
-            type: string
-            description: This field can be used to link any string that identifies that SKU. Its most common use is the seller's SKU ID.
-            example: '1234567'
-          versionId:
-            type: string
-            description: Whenever an SKU Suggestion is updated or changed, a new version of the original one is created. All versions are logged, so you can search for previous our current states of SKU suggestions. This field is the `versionId` associated to the version you choose to search for. You can get this field's value through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). through the `latestVersionId` field.
-            example: v.2
-          matchId:
-            type: string
-            description: Whenever an SKU suggestion is matched, it is associated to a unique ID. Fill in this field with the `matchId` you wish to filter by. The `matchId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
-            default: vtex-matcher
-          matcherId:
-            type: string
-            description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
-            default: vtex-matcher
-          categoryId:
-            type: integer
-            format: int32
-            nullable: true
-            description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
-            example: 12
-          brandId:
-            type: integer
-            format: int32
-            nullable: true
-            description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The `brandId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). This field is nulled when the inserted value is 0, and is mandatory for the `newproduct` action.
-            example: 1234567
-          skuRef:
-            type: string
-            nullable: true
-            description: Fill in this field on your request when the matched item is an SKU. This field is mandatory for the `skuassociation` action.
-            example: 123 sku ref
-          productRef:
-            type: string
-            description: Fill in this field on your request when the matched item is a product. This field is mandatory for the `productassociation` action.
-            example: 123 product ref
-            nullable: true
-          sellerId:
-            type: string
-            description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
-            example: seller123
-    Sku:
-      title: SKU
+    Product:
+      title: Product
       required:
       - name
-      - eans
-      - refId
-      - height
-      - width
-      - length
-      - weight
-      - images
-      - unitMultiplier
-      - measurementUnit
+      - description
+      - categoryId
+      - brandId
       - specifications
       type: object
       properties:
         name:
           type: string
-          description: ''
+          description: Name of the product that will be matched.
+          default: Book
+        description:
+          type: string
+          description: Product's description.
+          default: Description of the product, how it will appear on the marketplace.
+        categoryId:
+          type: integer
+          format: int32
+          description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
+          default: 12
+        brandId:
+          type: integer
+          format: int32
+          description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The brandId is already mapped through the Get Suggestions API. This field is nulled when the inserted value is 0.
+          default: 1234567
+        specifications:
+          type:
+          - string
+          - 'null'
+          description: This field is optional. Add here any product specifications or details.
           default: ''
-        eans:
-          type: array
-          items:
-            type: string
-          description: SKU reference code.
-          default:
-          - '12345678901213'
-          nullable: true
-        refId:
-          type: string
-          description: SKU reference code.
-          default: '1234'
-          nullable: true
-        height:
-          type: integer
-          format: int32
-          description: Height of the SKU.
-          default: 10
-        width:
-          type: integer
-          format: int32
-          description: Width of the SKU.
-          default: 20
-        length:
-          type: integer
-          format: int32
-          description: Length of the SKU.
-          default: 10
-        weight:
-          type: integer
-          format: int32
-          description: Weight of the SKU.
-          default: 100
-        images:
-          $ref: '#/components/schemas/Images'
-        unitMultiplier:
-          type: integer
-          format: int32
-          description: Unit multiplier for this SKU. If this information doesn't apply, you should use the default value 1.
-          default: 1
-        measurementUnit:
-          type: string
-          description: Measurement unit that should be used for this SKU. If this information doesn't apply, you should use the default value un.
-          default: un
-          nullable: true
-        specifications:
-          $ref: '#/components/schemas/Specifications'
-      example:
-        name: Sku exemplo
-        eans:
-        - '12345678901213'
-        refId: null
-        height: 1
-        width: 1
-        length: 1
-        weight: 1
-        images:
-        - imagem1.jpg: imageurl.example
-        unitMultiplier: 1
-        measurementUnit: un
-        specifications:
-          Embalagem: 3 kg
-    Images:
-      title: Images
-      required:
-      - imagem1.jpg
-      type: array
-      properties:
-        imagem1.jpg:
-          type: string
-          description: Array containing the URLs of the SKU's images.  The image must be sent through `https` protocol, otherwise it will not be rendered in VTEX Admin.
-          default: https://imageurl.example
-      example:
-      - imagem1.jpg: imageurl.example
-  securitySchemes:
-    VtexIdclientAutCookie:
-      type: apiKey
-      in: header
-      name: VtexIdclientAutCookie
-      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'

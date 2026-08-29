@@ -1,22 +1,32 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Product List Page API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
-  version: '1.0'
+  version: 0.1.12
+  title: VTex Intelligent Search Product List Page API
+  description: ">ℹ️ Onboarding guide\n>\n> Check the new [Search onboarding guide](https://developers.vtex.com/docs/guides/search-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Search and is organized by focusing on the developer's journey.\n\n[VTEX Intelligent Search](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/3qgT47zY08biLP3d5os3DG) is a search solution for digital commerce that simply and intuitively displays relevant results based on the catalog from the user's first interaction with the store through the search bar, browsing categories, or even through the window displays.\n\n The tool also offers features such as autocomplete, displaying search and product suggestions based on the shopper's context, and filters that help when searching for the desired product.\n\n> ℹ️ VTEX Intelligent Search is an alternative to [VTEX search](https://help.vtex.com/en/tutorial/how-does-vtex-search-work--tutorials_542).\n\n## Index\n### Autocomplete\n - `GET` [Get list of the 10 most searched terms](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/top_searches)\n - `GET` [Get list of suggested terms and attributes similar to the search term](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/autocomplete_suggestions)\n - `GET` [Get list of suggested terms similar to the search term](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/search_suggestions)\n ### Product List Page\n - `GET` [Get attempt of correction of a misspelled term](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/correction_search)\n - `GET` [Get list of banners registered for query](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/banners/-facets-)\n - `GET` [Get list of products for a query](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/product_search/-facets-)\n - `GET` [Get list of the possible facets for a given query](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/facets/-facets-)\n ## Common parameters \n\n| **Parameter name** | **Description**   |\n| --------------- | ----------------- | \n| `{{accountName}}` | Name of the VTEX account. Used as part of the URL. |  \n| ` {{environment}}` | Environment to use. Used as part of the URL. |"
+  license:
+    name: MIT
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br/api/io/_v/api/intelligent-search
+  description: VTEX IO Intelligent Search server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      default: apiexamples
+      description: Name of the VTEX account. Used as part of the URL.
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
 tags:
 - name: Product List Page
 paths:
   /correction_search:
     get:
       summary: VTex Get attempt of correction of a misspelled term
-      description: "Tries to correct a misspelled term from the search.\r\n\r\nThis endpoint does not require authentication."
+      description: 'Tries to correct a misspelled term from the search.
+
+
+        This endpoint does not require authentication.'
       tags:
       - Product List Page
       parameters:
@@ -38,7 +48,10 @@ paths:
   /banners/{facets}:
     get:
       summary: VTex Get list of banners registered for query
-      description: "Lists the banners registered for a given query. Check the [configuring banners documentation](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4ViKEivLJtJsvpaW0aqIQ5) for a full explanation of the banner feature.\r\n\r\nThis endpoint does not require authentication."
+      description: 'Lists the banners registered for a given query. Check the [configuring banners documentation](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4ViKEivLJtJsvpaW0aqIQ5) for a full explanation of the banner feature.
+
+
+        This endpoint does not require authentication.'
       tags:
       - Product List Page
       parameters:
@@ -61,7 +74,10 @@ paths:
   /product_search/{facets}:
     get:
       summary: VTex Get list of products for a query
-      description: "Lists the active products for a given query.\r\n\r\nThis endpoint does not require authentication."
+      description: 'Lists the active products for a given query.
+
+
+        This endpoint does not require authentication.'
       tags:
       - Product List Page
       parameters:
@@ -70,34 +86,38 @@ paths:
       - in: query
         name: simulationBehavior
         schema:
-          type: string
+          type:
+          - string
+          - 'null'
           enum:
           - default
           - skip
           - only1P
-          nullable: true
           default: default
         description: "Defines the simulation behavior.\n\n * `default` - Calls the simulation for every single seller.\n * `skip` - Never calls the simulation.\n * `only1P` - Only calls the simulation for first party sellers."
       - in: query
         name: count
         description: Number of products per page.
         schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           default: 24
       - in: query
         name: page
         description: Current search page.
         schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           default: 1
       - in: query
         name: sort
-        description: "Defines the sort type. The possible values are: \r\n- `price:desc`: The results will be sorted by price in descending order, from highest to lowest.\r\n- `price:asc`: The results will be sorted by price in ascending order, from lowest to highest.\r\n- `orders:desc`: The results will be sorted by the amount of orders in the past 90 days, in descending order.\r\n- `name:desc`: The results will be sorted by name in descending alphabetical order.\r\n- `name:asc`: The results will be sorted by name in ascending alphabetical order.\r\n- `release:desc`: The results will be sorted by release date in descending order, from most recent to least recent.\r\n- `discount:desc`: The results will be sorted by discount percentage in descending order, from highest to lowest.\r\n\r\nIf `null`, the products will be sorted by relevance."
+        description: "Defines the sort type. The possible values are: \n- `price:desc`: The results will be sorted by price in descending order, from highest to lowest.\n- `price:asc`: The results will be sorted by price in ascending order, from lowest to highest.\n- `orders:desc`: The results will be sorted by the amount of orders in the past 90 days, in descending order.\n- `name:desc`: The results will be sorted by name in descending alphabetical order.\n- `name:asc`: The results will be sorted by name in ascending alphabetical order.\n- `release:desc`: The results will be sorted by release date in descending order, from most recent to least recent.\n- `discount:desc`: The results will be sorted by discount percentage in descending order, from highest to lowest.\n\nIf `null`, the products will be sorted by relevance."
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           enum:
           - price:desc
           - price:asc
@@ -502,7 +522,10 @@ paths:
   /facets/{facets}:
     get:
       summary: VTex Get list of the possible facets for a given query
-      description: "Lists the possible facets for a given query.\r\n\r\nThis endpoint does not require authentication."
+      description: 'Lists the possible facets for a given query.
+
+
+        This endpoint does not require authentication.'
       tags:
       - Product List Page
       parameters:
@@ -626,6 +649,55 @@ paths:
                 translated: false
 components:
   parameters:
+    facetsPath:
+      in: path
+      name: facets
+      required: true
+      description: '## Format
+
+
+        The `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.
+
+
+        The order in which the terms appear is not relevant to the search.
+
+
+        You can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.
+
+
+        ## General filters
+
+
+        The `facets` parameter also allows the following general filters:
+
+
+        | `facetKey` | Description | Example |
+
+        | - | - | - |
+
+        | `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |
+
+        | `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |
+
+        | `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |
+
+        | `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|
+
+        '
+      example: category-1/clothing/category-2/shirt/category-3/man
+      schema:
+        type:
+        - string
+        - 'null'
+        default: /
+        example: color/blue
+    query:
+      in: query
+      name: query
+      description: Search term. It can contain any character.
+      schema:
+        type: string
+        example: shirt
     hideUnavailableItems:
       in: query
       name: hideUnavailableItems
@@ -639,27 +711,32 @@ components:
       description: Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language.
       example: en-US
       schema:
-        type: string
-        nullable: true
-    facetsPath:
-      in: path
-      name: facets
-      required: true
-      description: "## Format\r\n\r\nThe `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.\r\n\r\nThe order in which the terms appear is not relevant to the search.\r\n\r\nYou can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.\r\n\r\n## General filters\r\n\r\nThe `facets` parameter also allows the following general filters:\r\n\r\n| `facetKey` | Description | Example |\r\n| - | - | - |\r\n| `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |\r\n| `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |\r\n| `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |\r\n| `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|\n"
-      example: category-1/clothing/category-2/shirt/category-3/man
-      schema:
-        nullable: true
-        type: string
-        default: /
-        example: color/blue
-    query:
-      in: query
-      name: query
-      description: Search term. It can contain any character.
-      schema:
-        type: string
-        example: shirt
+        type:
+        - string
+        - 'null'
   schemas:
+    Banners:
+      type: object
+      description: Response body object.
+      properties:
+        banners:
+          type: array
+          description: List of banners.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Banner ID.
+              name:
+                type: string
+                description: Banner name.
+              area:
+                type: string
+                description: Banner area, which can be a number between 1 and 4, to be used in the store's [Banner](https://developers.vtex.com/docs/guides/vtex-search-banner) block.
+              html:
+                type: string
+                description: Banner HTML, which can be an image or text.
     Facets:
       type: object
       description: Response body object.
@@ -756,26 +833,6 @@ components:
         translated:
           type: boolean
           description: Defines whether the facets were translated by Intelligent Search (`true`) or not (`false`).
-    Correction:
-      type: object
-      description: Response body object.
-      properties:
-        correction:
-          type: object
-          description: Object that indicates if the term was misspelled and suggests a possible correction.
-          properties:
-            misspelled:
-              type: boolean
-              description: Defines whether the term was misspelled (`true`) or not (`false`).
-            correction:
-              type: boolean
-              description: Defines whether the API was able to suggest a correction (`true`) or not (`false`).
-            text:
-              type: string
-              description: The corrected term. If the API was not able to correct the term, it will show the original search term.
-            highlighted:
-              type: string
-              description: The same as `text`, but it highlights the corrected word. Useful when there is more than one word.
     ProductSearch:
       type: object
       description: Response body object.
@@ -1006,9 +1063,10 @@ components:
                                       type: array
                                       description: Delivery SLA per types.
                                     Region:
-                                      type: string
+                                      type:
+                                      - string
+                                      - 'null'
                                       description: Region.
-                                      nullable: true
                               AvailableQuantity:
                                 description: Available quantity of the item.
                                 type: number
@@ -1138,8 +1196,9 @@ components:
                                 type: string
                               GetInfoErrorMessage:
                                 description: Get info error message.
-                                type: string
-                                nullable: true
+                                type:
+                                - string
+                                - 'null'
                               CacheVersionUsedToCallCheckout:
                                 description: Cache version used to call Checkout.
                                 type: string
@@ -1411,31 +1470,23 @@ components:
                 index:
                   description: Page index.
                   type: number
-    Banners:
+    Correction:
       type: object
       description: Response body object.
       properties:
-        banners:
-          type: array
-          description: List of banners.
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: Banner ID.
-              name:
-                type: string
-                description: Banner name.
-              area:
-                type: string
-                description: Banner area, which can be a number between 1 and 4, to be used in the store's [Banner](https://developers.vtex.com/docs/guides/vtex-search-banner) block.
-              html:
-                type: string
-                description: Banner HTML, which can be an image or text.
-  securitySchemes:
-    VtexIdclientAutCookie:
-      type: apiKey
-      in: header
-      name: VtexIdclientAutCookie
-      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+        correction:
+          type: object
+          description: Object that indicates if the term was misspelled and suggests a possible correction.
+          properties:
+            misspelled:
+              type: boolean
+              description: Defines whether the term was misspelled (`true`) or not (`false`).
+            correction:
+              type: boolean
+              description: Defines whether the API was able to suggest a correction (`true`) or not (`false`).
+            text:
+              type: string
+              description: The corrected term. If the API was not able to correct the term, it will show the original search term.
+            highlighted:
+              type: string
+              description: The same as `text`, but it highlights the corrected word. Useful when there is more than one word.

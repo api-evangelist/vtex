@@ -1,15 +1,109 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Invoices API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Customer Credit Invoices API
+  description: 'With Customer Credit your store can enable **credit payments** through the checkout. You can also control **invoices** and the **credit limits** of your clients.
+
+
+    Learn more about Customer Credit in our [Help Center article](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/36grlQ69NK6OCuioeekyCs).
+
+
+    Additionally, you can find more information on installment payments for an order in the `customData`  field found in the [Get Order](https://developers.vtex.com/docs/api-reference/orders-api#get-/api/oms/pvt/orders/-orderId-) endpoint of the Orders API. This includes the number of installments, amount and due dates.
+
+
+    All requests need an authorization header. This API allows two kinds of authorization:
+
+
+    1. Authorization header containing the VTEX ID authentication token.
+
+    2. VTEX Appkey and Apptoken headers.
+
+
+    Read [Authentication](https://developers.vtex.com/docs/guides/authentication) for more information about authentication options.
+
+
+    ## Customer Credit API Index
+
+
+    ### Invoices
+
+
+    - `GET` [Search all invoices](https://developers.vtex.com/docs/api-reference/customer-credit-api#get-/api/creditcontrol/invoices)
+
+    - `GET` [Retrieve Invoice by Id](https://developers.vtex.com/docs/api-reference/customer-credit-api#get-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-)
+
+    - `PUT` [Change Invoice](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-)
+
+    - `DELETE` [Cancel Invoice](https://developers.vtex.com/docs/api-reference/customer-credit-api#delete-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-)
+
+    - `GET` [Retrieve invoice by creditAccountId](https://developers.vtex.com/docs/api-reference/customer-credit-api#get-/api/creditcontrol/accounts/-creditAccountId-/invoices)
+
+    - `POST` [Mark an invoice as Paid](https://developers.vtex.com/docs/api-reference/customer-credit-api#post-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-/payments)
+
+    - `PUT` [Postpone an invoice](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-/postponement)
+
+
+    ### Account
+
+
+    - `GET` [Search all accounts](https://developers.vtex.com/docs/api-reference/customer-credit-api#get-/api/creditcontrol/accounts)
+
+    - `POST` [Open an account](https://developers.vtex.com/docs/api-reference/customer-credit-api#post-/api/creditcontrol/accounts)
+
+    - `GET` [Retrieve an account by Id](https://developers.vtex.com/docs/api-reference/customer-credit-api#get-/api/creditcontrol/accounts/-creditAccountId-)
+
+    - `DELETE` [Close an account](https://developers.vtex.com/docs/api-reference/customer-credit-api#delete-/api/creditcontrol/accounts/-creditAccountId-)
+
+    - `PUT` [Update account information](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-)
+
+    - `GET` [Account statements](https://developers.vtex.com/docs/api-reference/customer-credit-api#get-/api/creditcontrol/accounts/-creditAccountId-/statements)
+
+    - `PUT` [Change credit limit of an account](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/creditlimit)
+
+    - `PUT` [Decrease balance of an account](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/statements/-statementId-)
+
+    - `PUT` [Create or Update Settlement](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/transactions/-transactionId-/settlement)
+
+    - `POST` [Create a Pre-Authorization](https://developers.vtex.com/docs/api-reference/customer-credit-api#post-/api/creditcontrol/accounts/-creditAccountId-/transactions)
+
+    - `PUT` [Update a Pre-Authorization](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/transactions/-transactionId-)
+
+    - `DELETE` [Cancel a Pre-Authorization](https://developers.vtex.com/docs/api-reference/customer-credit-api#delete-/api/creditcontrol/accounts/-creditAccountId-/transactions/-transactionId-)
+
+    - `POST` [Add an account Holder](https://developers.vtex.com/docs/api-reference/customer-credit-api#post-/api/creditcontrol/accounts/-creditAccountId-/holders)
+
+    - `DELETE` [Delete an account holder](https://developers.vtex.com/docs/api-reference/customer-credit-api#delete-/api/creditcontrol/accounts/-creditAccountId-/holders/-holderId-)
+
+    - `PUT` [Change tolerance of an account](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/tolerance)
+
+    - `POST` [Partial or Total Refund a Settlement](https://developers.vtex.com/docs/api-reference/customer-credit-api#post-/api/creditcontrol/accounts/-creditAccountId-/transactions/-transactionId-/refunds)
+
+
+    ### Store Configuration
+
+
+    - `GET` [Retrieve store configuration](https://developers.vtex.com/docs/api-reference/customer-credit-api#get-/api/creditcontrol/storeconfig)
+
+    - `PUT` [Create or change store configuration](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/storeconfig)
+
+    '
+  contact: {}
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Invoices
 paths:
@@ -18,7 +112,66 @@ paths:
       tags:
       - Invoices
       summary: VTex Search all invoices
-      description: "Returns a list of invoices related to payment orders created through [customer credit accounts](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).\r\n\r\n>ℹ️ Query parameters can be used individually or combined to filter invoice results.\r\n\r\n### Queries to filter results\r\n\r\n- **By the location of the invoices in the list (quantity of invoices)**: `?from={int}&to={int}`\r\n- **By creation date**: `?createdDateFrom={dateISO8601}&createDateTo={dateISO8601}`. The dates should be in ISO8601 format.\r\n- **By due date**: `?dueDateFrom={dateISO8601}&dueDateTo={dateISO8601}`. The dates should be in ISO8601 format.\r\n- **By value**: `?value={decimal}`\r\n- **By status**: `?status={string}`\r\n- **By Id**: `?friendlyId={string}`\r\n- **By observation**: `?observation={string}`\r\n- **By creditAccountId**: `?creditAccountId={creditAcountId}`\r\n\r\n### Combining filters\r\n\r\nYou can use the `op` query parameter to specify if filters will be evaluated as `AND` or `OR` for the query. The default behavior when there is more than one query parameter is `AND`.\r\n\r\nExample:\r\n\r\nFor the query `?value=100&status=Paid`, the criteria will build **value = 100 AND status = Paid**.\r\n\r\nFor the same query, adding the `op` parameter (`?value=100&status=Paid&op=or`), the criteria will build **value = 100 OR status = Paid**.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Read Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns a list of invoices related to payment orders created through [customer credit accounts](https://help.vtex.com/en/tracks/customer-credit-getting-started--1hCRg21lXYy2seOKgqQ2CC/7FHLd0cmxqqGeEUuc8uioU).
+
+
+        >ℹ️ Query parameters can be used individually or combined to filter invoice results.
+
+
+        ### Queries to filter results
+
+
+        - **By the location of the invoices in the list (quantity of invoices)**: `?from={int}&to={int}`
+
+        - **By creation date**: `?createdDateFrom={dateISO8601}&createDateTo={dateISO8601}`. The dates should be in ISO8601 format.
+
+        - **By due date**: `?dueDateFrom={dateISO8601}&dueDateTo={dateISO8601}`. The dates should be in ISO8601 format.
+
+        - **By value**: `?value={decimal}`
+
+        - **By status**: `?status={string}`
+
+        - **By Id**: `?friendlyId={string}`
+
+        - **By observation**: `?observation={string}`
+
+        - **By creditAccountId**: `?creditAccountId={creditAcountId}`
+
+
+        ### Combining filters
+
+
+        You can use the `op` query parameter to specify if filters will be evaluated as `AND` or `OR` for the query. The default behavior when there is more than one query parameter is `AND`.
+
+
+        Example:
+
+
+        For the query `?value=100&status=Paid`, the criteria will build **value = 100 AND status = Paid**.
+
+
+        For the same query, adding the `op` parameter (`?value=100&status=Paid&op=or`), the criteria will build **value = 100 OR status = Paid**.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Invoices | **Read Invoices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Searchallinvoices
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -168,16 +321,18 @@ paths:
                           type: string
                           description: Invoice creation date.
                         resolvedAt:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Invoice closing date.
-                          nullable: true
                         updatedAt:
                           type: string
                           description: Date of the last update made to the invoice.
                         paymentLink:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Link (URL) created to direct the customer to an invoice payment environment (optional).
-                          nullable: true
                         originalDueDate:
                           type: string
                           description: Original invoice expiration date.
@@ -191,9 +346,10 @@ paths:
                           type: string
                           description: Identification of the order that generated the invoice.
                         observation:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Observation notes about the invoice.
-                          nullable: true
                         transactionId:
                           type: string
                           description: Identification of the invoice transaction. This is the same number as the `id` field, removing the last three characters.
@@ -284,7 +440,28 @@ paths:
       tags:
       - Invoices
       summary: VTex Retrieve invoice by ID
-      description: "Returns data from a specific invoice using `invoiceId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Read Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns data from a specific invoice using `invoiceId`.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Invoices | **Read Invoices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: RetrieveInvoicebyId
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -385,7 +562,28 @@ paths:
       tags:
       - Invoices
       summary: VTex Change invoice
-      description: "Updates invoice's `status`, `observation` and `paymentLink` attributes.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Create Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Updates invoice''s `status`, `observation` and `paymentLink` attributes.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Invoices | **Create Invoices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: ChangeInvoice
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -410,15 +608,17 @@ paths:
                   - Cancelled
                   example: Paid
                 observation:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Observation notes about the invoice.
                   example: BF 2023 customer invoice.
-                  nullable: true
                 paymentLink:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Link (URL) created to direct the customer to an invoice payment environment (optional).
                   example: https://paymentlink.com
-                  nullable: true
         required: true
       responses:
         '200':
@@ -428,7 +628,28 @@ paths:
       tags:
       - Invoices
       summary: VTex Cancel invoice
-      description: "Changes the status of a specific invoice (`invoiceId`) to `Cancelled`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Create Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Changes the status of a specific invoice (`invoiceId`) to `Cancelled`.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Invoices | **Create Invoices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: CancelInvoice
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -444,7 +665,28 @@ paths:
       tags:
       - Invoices
       summary: VTex Retrieve invoices by creditaccountid
-      description: "Returns associated invoices given a specific `creditAccountId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Read Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns associated invoices given a specific `creditAccountId`.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Invoices | **Read Invoices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: SearchallinvoicesofaAccount
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -595,7 +837,31 @@ paths:
       tags:
       - Invoices
       summary: VTex Mark an invoice as paid
-      description: "Records the payment of an invoice.\r\n\r\nThis operation causes a balance restore with the invoice value to the checking account.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Pay Invoice** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Records the payment of an invoice.
+
+
+        This operation causes a balance restore with the invoice value to the checking account.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Invoices | **Pay Invoice** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: MarkaninvoiceasPaid
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -697,7 +963,34 @@ paths:
       tags:
       - Invoices
       summary: VTex Postpone an invoice
-      description: "Postpones an invoice by the amount of time defined on the `dueDays` field (number of days for the invoice to be postponed by).\r\n\r\nThis operation updates the invoice field `dueDate`.\r\n\r\n>⚠️ Before making this request, access the endpoint [Retrieve store configuration](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-/postponement) to check whether the option to postpone invoice is enabled in the store (`invoicePostponementLimit: value greater than 0`  and `postponementEnabled: true`).\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Credit Control | Main | **Main Access** |\r\n| Credit Control | Invoices | **Create Invoices** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Postpones an invoice by the amount of time defined on the `dueDays` field (number of days for the invoice to be postponed by).
+
+
+        This operation updates the invoice field `dueDate`.
+
+
+        >⚠️ Before making this request, access the endpoint [Retrieve store configuration](https://developers.vtex.com/docs/api-reference/customer-credit-api#put-/api/creditcontrol/accounts/-creditAccountId-/invoices/-invoiceId-/postponement) to check whether the option to postpone invoice is enabled in the store (`invoicePostponementLimit: value greater than 0`  and `postponementEnabled: true`).
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Credit Control | Main | **Main Access** |
+
+        | Credit Control | Invoices | **Create Invoices** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Postponeaninvoice
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -723,15 +1016,6 @@ paths:
       deprecated: false
 components:
   parameters:
-    creditAccountId:
-      name: creditAccountId
-      in: path
-      description: Credit account identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 01bce461-9g03-12ds-8217-b3d39271e15b
     invoiceId:
       name: invoiceId
       in: path
@@ -741,15 +1025,15 @@ components:
       schema:
         type: string
         example: A424887D0F2D45028FE5C96E9B0E1A2D-01
-    friendlyId:
-      name: friendlyId
-      in: query
-      description: Simplified identification of an invoice. This code is created automatically, always associated with an existing invoice. It consists of an 8-digit random ID (of numbers and letters) and the installment.
-      required: false
-      style: form
+    creditAccountId:
+      name: creditAccountId
+      in: path
+      description: Credit account identification.
+      required: true
+      style: simple
       schema:
         type: string
-        example: u8KFsGDk-1
+        example: 01bce461-9g03-12ds-8217-b3d39271e15b
     Accept:
       name: Accept
       in: header
@@ -759,6 +1043,15 @@ components:
       schema:
         type: string
         example: application/json
+    friendlyId:
+      name: friendlyId
+      in: query
+      description: Simplified identification of an invoice. This code is created automatically, always associated with an existing invoice. It consists of an 8-digit random ID (of numbers and letters) and the installment.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: u8KFsGDk-1
     Content-Type:
       name: Content-Type
       in: header
@@ -769,6 +1062,16 @@ components:
         type: string
         example: application/json
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

@@ -1,15 +1,23 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Matched Offers API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Marketplace Matched Offers API
+  description: "The **Marketplace API** enables marketplaces and sellers hosted on VTEX to perform their collaborative operations.  \n\n>⚠️ The marketplace must [create an appKey and appToken](https://developers.vtex.com/docs/guides/getting-started-authentication) for each non-VTEX seller that will use this API.\n\n## Index\n\n### Notification\n\nEndpoints used by sellers to notify marketplaces that the price or inventory language has changed for one of their SKUs.\n\n`POST` [Notify marketplace of price update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/price)\n\n`POST` [Notify marketplace of inventory update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/inventory)\n\n\n### Suggestions\n\n#### Get Suggestions\n\nSearch and filter all suggestions using specific criteria.\n\n`GET` [Get all SKU Suggestions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions)\n\n`GET` [Get SKU Suggestion by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Manage Suggestions\n\nSend or delete SKU suggestions from the seller to marketplace.\n\n`PUT` [Send SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerSkuId-)\n\n`DELETE` [Delete SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#delete-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Get Versions\n\nSearch and filter all versions of suggestions, using specific criteria.\n\n`GET` [Get all versions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions)\n\n`GET` [Get version by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions/-version-)\n\n\n#### Match Received SKUs\n\nMatch SKU suggestions received in the marketplace.\n\n`PUT` [Match Received SKUs individually](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerskuid-/versions/-version-/matches/-matchid-)\n\n`PUT` [Match Multiple Received SKUs](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/matches/action/-actionName-)\n\n\n#### SKU Approval Settings\n\nAllows marketplaces to configure rules for automatically and manually approving SKUs received from sellers.\n\n`GET`[Get autoApprove Status in Account Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/autoapproval/toggle)  \n\n`PUT`[Activate autoApprove in Marketplace's Account](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle)  \n\n`GET`[Get Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration)\n\n`PUT`[Save Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration)\n\n`GET`[Get Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Save Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Activate autoApprove Setting for a Seller](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle/seller/-sellerId-)   \n\n\n### Matched Offers\n\nOffers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured.\n\n`GET`[Get Matched Offers List](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/offers)\n\n`GET`[Get Matched Offer's Data by SKU ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-/sku/-skuId-)  \n\n`GET`[Get Matched Offer's Data by Product ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-)\n"
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br/api
+  description: VTEX Server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
 tags:
 - name: Matched Offers
 paths:
@@ -18,7 +26,7 @@ paths:
       tags:
       - Matched Offers
       summary: VTex Get Matched Offers List
-      description: "Offers are seller's products and SKUs that were sent to the marketplace, and already have their price and inventory level configured. \n\n This endpoint retrieves the available offers in a marketplace. It differs from the Get Suggestions endpoints, since it retrieves products that were already matched by the marketplace, and are currently in its catalog. \n\nIt is possible to filter the search through the following parameters: \n\n- rows \n- sort \n\n- start \n\n- fq\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Offers are seller's products and SKUs that were sent to the marketplace, and already have their price and inventory level configured. \n\n This endpoint retrieves the available offers in a marketplace. It differs from the Get Suggestions endpoints, since it retrieves products that were already matched by the marketplace, and are currently in its catalog. \n\nIt is possible to filter the search through the following parameters: \n\n- rows \n- sort \n\n- start \n\n- fq\n\n## Permissions\n\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: Getofferslist
       parameters:
       - $ref: '#/components/parameters/sort'
@@ -127,7 +135,7 @@ paths:
       tags:
       - Matched Offers
       summary: VTex Get Matched Offer's Data by Product ID
-      description: "Offers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured. \n\nThis endpoint retrieves the available offers for a speciic Product ID in the marketplace's catalog. It differs from the Get Suggestions endpoints, since it retrieves products that were already matched by the marketplace operator, and are currently active in its catalog. \n\nThe call returns a list of offers for that ID, that contain the following data: \n\n- Seller that sells the SKU \n\n- Correspondent SKU ID \n\n- SKU's price value \n\n- Inventory level \n\n- Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) that it is available at.\r\n\r\n## Permissions\r\n\r\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).\r\n\r\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Offers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured. \n\nThis endpoint retrieves the available offers for a speciic Product ID in the marketplace's catalog. It differs from the Get Suggestions endpoints, since it retrieves products that were already matched by the marketplace operator, and are currently active in its catalog. \n\nThe call returns a list of offers for that ID, that contain the following data: \n\n- Seller that sells the SKU \n\n- Correspondent SKU ID \n\n- SKU's price value \n\n- Inventory level \n\n- Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) that it is available at.\n\n## Permissions\n\nThis endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication-overview#machine-authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: GetProductoffers
       parameters:
       - $ref: '#/components/parameters/accountName'
@@ -176,23 +184,6 @@ paths:
       deprecated: false
 components:
   parameters:
-    accountName:
-      name: accountName
-      in: path
-      required: true
-      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
-      schema:
-        type: string
-        example: apiexamples
-    accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
     contentType:
       name: Content-Type
       in: header
@@ -202,15 +193,14 @@ components:
       schema:
         type: string
         default: application/json
-    skuId:
-      name: skuId
+    accountName:
+      name: accountName
       in: path
-      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
       required: true
-      style: simple
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
       schema:
         type: string
-        example: '1234'
+        example: apiexamples
     fq:
       name: fq
       in: query
@@ -221,35 +211,6 @@ components:
       schema:
         type: string
         example: skuId:172
-    start:
-      name: start
-      in: query
-      description: Number corresponding to the row from which the offer list will begin, used for pagination. Filters the list of offers by retrieving the offers starting from the row defined. The default value is 0, if the param is not included in the call.
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: integer
-        default: 0
-    sort:
-      name: sort
-      in: query
-      description: "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: availability,desc
-    productId:
-      name: productId
-      in: path
-      description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product, such as price and inventory notifications.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '123456'
     rows:
       name: rows
       in: query
@@ -260,6 +221,25 @@ components:
       schema:
         type: integer
         example: 20
+    accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    sort:
+      name: sort
+      in: query
+      description: "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: availability,desc
     environment:
       name: environment
       in: path
@@ -268,130 +248,71 @@ components:
       schema:
         type: string
         default: vtexcommercestable
+    productId:
+      name: productId
+      in: path
+      description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product, such as price and inventory notifications.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '123456'
+    skuId:
+      name: skuId
+      in: path
+      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '1234'
+    start:
+      name: start
+      in: query
+      description: Number corresponding to the row from which the offer list will begin, used for pagination. Filters the list of offers by retrieving the offers starting from the row defined. The default value is 0, if the param is not included in the call.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        default: 0
   schemas:
-    Offer:
-      title: Offer
+    OffersPerSalesChannel:
+      title: OffersPerSalesChannel
       required:
-      - SellerId
-      - SellerSkuId
-      - OffersPerSalesChannel
-      - AvailableSalesChannels
+      - SaleChannel
+      - Price
+      - ListPrice
+      - PriceWithoutDiscount
+      - AvailableQuantity
       type: object
       properties:
-        SellerId:
-          type: string
-          description: ID of the seller in the marketplace. This ID must be created by the marketplace.
-          default: '1'
-        SellerSkuId:
-          type: string
-          description: A string that identifies the SKU in the seller. This is the ID that the marketplace will use for future references to this SKU, such as price and inventory notifications.
-          default: '1070268'
-        OffersPerSalesChannel:
-          type: array
-          items:
-            $ref: '#/components/schemas/OffersPerSalesChannel'
-          description: Each element in the array corresponds to an offer in a specific sales channel.
-        AvailableSalesChannels:
-          type: string
-          nullable: true
-          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) ID in which the SKU is available.
-          default: '1'
+        SaleChannel:
+          type: integer
+          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) of the SKU.
+          default: 1
+        Price:
+          type: integer
+          description: SKU's price.
+          default: 1300
+        ListPrice:
+          type: integer
+          description: SKU's suggested selling price
+          default: 1200
+        PriceWithoutDiscount:
+          type: integer
+          description: SKU's price without discount applied.
+          default: 1400
+        AvailableQuantity:
+          type: integer
+          description: Available SKU stock quantity
+          default: 30
       example:
-        SellerId: '1'
-        SellerSkuId: '1070268'
-        OffersPerSalesChannel:
-        - SaleChannel: 1
-          Price: 0
-          ListPrice: 0
-          PriceWithoutDiscount: 0
-          AvailableQuantity: 0
-        AvailableSalesChannels: null
-    MainImage:
-      title: MainImage
-      required:
-      - ImageId
-      - ImageLabel
-      - ImageTag
-      - ImagePath
-      - IsMain
-      - IsZoomSize
-      - ImageText
-      - LastModified
-      type: object
-      properties:
-        ImageId:
-          type: string
-          description: Code identifying the image's file.
-          default: '53878805'
-        ImageLabel:
-          type: string
-          nullable: true
-          description: Image's label.
-          default: Image 1
-        ImageTag:
-          type: string
-          description: HTML tag for the selected image.
-          default: <img src="~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg" width="#width#" height="#height#" alt="Image name and description" id="" />
-        ImagePath:
-          type: string
-          description: Path for the image's file.
-          default: ~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg
-        IsMain:
-          type: boolean
-          description: Whether the image is the main one or not.
-          default: true
-        IsZoomSize:
-          type: boolean
-          description: If zoom can be applied to the image.
-          default: true
-        ImageText:
-          type: string
-          description: Alt text for the image.
-          default: Image name and description
-        LastModified:
-          type: string
-          description: Date of the last changed made to the offer.
-          default: '2021-05-06T21:37:24.262529'
-      example:
-        ImageId: '53878805'
-        ImageLabel: null
-        ImageTag: <img src="~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg" width="#width#" height="#height#" alt="image-8b4364782e664d76a6ebc8702008e478" id="" />
-        ImagePath: ~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg
-        IsMain: true
-        IsZoomSize: true
-        ImageText: image-8b4364782e664d76a6ebc8702008e478
-        LastModified: '2021-04-06T03:01:30.747'
-    responseGetMatchedOffersList:
-      type: array
-      description: Response with the list of offers available on the Marketplace.
-      items:
-        type: object
-        description: Array of SKUs in the offer.
-        properties:
-          LastModified:
-            type: string
-            description: Last date the offer was modified.
-            example: '2021-05-06T21:37:24.262529'
-          ProductId:
-            type: string
-            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
-            example: '941947'
-          CategoryId:
-            type: integer
-            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
-            example: 1563
-          BrandId:
-            type: integer
-            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
-            example: 2004291
-          ProductName:
-            type: string
-            description: Name of the offer's product.
-            example: Name of the Product - 123
-          Skus:
-            type: array
-            items:
-              $ref: '#/components/schemas/Sku2'
+        SaleChannel: 1
+        Price: 0
+        ListPrice: 0
+        PriceWithoutDiscount: 0
+        AvailableQuantity: 0
     responseGetMatchedOffersDataBySKU:
       description: Array of matched offers data by SKU.
       type: array
@@ -467,42 +388,75 @@ components:
                         type: integer
                         description: The available quantity of the product.
                         example: 8
-    OffersPerSalesChannel:
-      title: OffersPerSalesChannel
+    responseGetMatchedOffersList:
+      type: array
+      description: Response with the list of offers available on the Marketplace.
+      items:
+        type: object
+        description: Array of SKUs in the offer.
+        properties:
+          LastModified:
+            type: string
+            description: Last date the offer was modified.
+            example: '2021-05-06T21:37:24.262529'
+          ProductId:
+            type: string
+            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
+            example: '941947'
+          CategoryId:
+            type: integer
+            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
+            example: 1563
+          BrandId:
+            type: integer
+            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
+            example: 2004291
+          ProductName:
+            type: string
+            description: Name of the offer's product.
+            example: Name of the Product - 123
+          Skus:
+            type: array
+            items:
+              $ref: '#/components/schemas/Sku2'
+    Offer:
+      title: Offer
       required:
-      - SaleChannel
-      - Price
-      - ListPrice
-      - PriceWithoutDiscount
-      - AvailableQuantity
+      - SellerId
+      - SellerSkuId
+      - OffersPerSalesChannel
+      - AvailableSalesChannels
       type: object
       properties:
-        SaleChannel:
-          type: integer
-          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) of the SKU.
-          default: 1
-        Price:
-          type: integer
-          description: SKU's price.
-          default: 1300
-        ListPrice:
-          type: integer
-          description: SKU's suggested selling price
-          default: 1200
-        PriceWithoutDiscount:
-          type: integer
-          description: SKU's price without discount applied.
-          default: 1400
-        AvailableQuantity:
-          type: integer
-          description: Available SKU stock quantity
-          default: 30
+        SellerId:
+          type: string
+          description: ID of the seller in the marketplace. This ID must be created by the marketplace.
+          default: '1'
+        SellerSkuId:
+          type: string
+          description: A string that identifies the SKU in the seller. This is the ID that the marketplace will use for future references to this SKU, such as price and inventory notifications.
+          default: '1070268'
+        OffersPerSalesChannel:
+          type: array
+          items:
+            $ref: '#/components/schemas/OffersPerSalesChannel'
+          description: Each element in the array corresponds to an offer in a specific sales channel.
+        AvailableSalesChannels:
+          type:
+          - string
+          - 'null'
+          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) ID in which the SKU is available.
+          default: '1'
       example:
-        SaleChannel: 1
-        Price: 0
-        ListPrice: 0
-        PriceWithoutDiscount: 0
-        AvailableQuantity: 0
+        SellerId: '1'
+        SellerSkuId: '1070268'
+        OffersPerSalesChannel:
+        - SaleChannel: 1
+          Price: 0
+          ListPrice: 0
+          PriceWithoutDiscount: 0
+          AvailableQuantity: 0
+        AvailableSalesChannels: null
     responseGetMatchedOffersDataByProductId:
       type: array
       description: Array of matched offers data by product ID.
@@ -593,13 +547,15 @@ components:
           description: SKU's unique identifier number
           default: '1070268'
         EanId:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: EAN's unique identifier number
           default: '768655'
         RefId:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: SKU's Reference ID
           default: '1234'
         NameComplete:
@@ -659,7 +615,73 @@ components:
             PriceWithoutDiscount: 1200
             AvailableQuantity: 10000000
           AvailableSalesChannels: null
+    MainImage:
+      title: MainImage
+      required:
+      - ImageId
+      - ImageLabel
+      - ImageTag
+      - ImagePath
+      - IsMain
+      - IsZoomSize
+      - ImageText
+      - LastModified
+      type: object
+      properties:
+        ImageId:
+          type: string
+          description: Code identifying the image's file.
+          default: '53878805'
+        ImageLabel:
+          type:
+          - string
+          - 'null'
+          description: Image's label.
+          default: Image 1
+        ImageTag:
+          type: string
+          description: HTML tag for the selected image.
+          default: <img src="~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg" width="#width#" height="#height#" alt="Image name and description" id="" />
+        ImagePath:
+          type: string
+          description: Path for the image's file.
+          default: ~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg
+        IsMain:
+          type: boolean
+          description: Whether the image is the main one or not.
+          default: true
+        IsZoomSize:
+          type: boolean
+          description: If zoom can be applied to the image.
+          default: true
+        ImageText:
+          type: string
+          description: Alt text for the image.
+          default: Image name and description
+        LastModified:
+          type: string
+          description: Date of the last changed made to the offer.
+          default: '2021-05-06T21:37:24.262529'
+      example:
+        ImageId: '53878805'
+        ImageLabel: null
+        ImageTag: <img src="~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg" width="#width#" height="#height#" alt="image-8b4364782e664d76a6ebc8702008e478" id="" />
+        ImagePath: ~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg
+        IsMain: true
+        IsZoomSize: true
+        ImageText: image-8b4364782e664d76a6ebc8702008e478
+        LastModified: '2021-04-06T03:01:30.747'
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

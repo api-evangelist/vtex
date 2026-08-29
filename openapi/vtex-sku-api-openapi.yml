@@ -1,15 +1,24 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account SKU API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: Vtex SKU API
   version: '1.0'
+  description: 'Operations tagged SKU across 2 of this provider''s published API definitions: vtex-catalog-api-seller-portal-openapi-original.yml, vtex-catalog-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: SKU
 paths:
@@ -18,7 +27,7 @@ paths:
       tags:
       - SKU
       summary: VTex Search for SKU
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about an SKU taking into consideration the defined search criteria. It is mandatory to use at least one query parameter.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \n\n Retrieves general information about an SKU taking into consideration the defined search criteria. It is mandatory to use at least one query parameter.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Read** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: SearchSKU
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -104,12 +113,24 @@ paths:
                       to:
                         type: integer
                         description: The last page of the interval of the SKU list.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog-seller-portal/skus/ids:
     get:
       tags:
       - SKU
       summary: VTex Get List of SKUs
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about all SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \n\n Retrieves general information about all SKUs.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Write** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: ListSKU
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -167,12 +188,24 @@ paths:
                       to:
                         type: integer
                         description: The last page of the interval of the SKU list.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/sku/stockkeepingunitids:
     get:
       tags:
       - SKU
       summary: VTex List all SKU IDs
-      description: "Retrieves the IDs of all SKUs in your store. Presents the results with page size and pagination.\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Retrieves the IDs of all SKUs in your store. Presents the results with page size and pagination.\n> \U0001F4D8 Onboarding guide \n>\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Catalog | Content | **SKUs** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: ListallSKUIDs
       parameters:
       - name: page
@@ -219,12 +252,24 @@ paths:
               - 9
               - 10
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/sku/stockkeepingunitbyid/{skuId}:
     get:
       tags:
       - SKU
       summary: VTex Get SKU and context
-      description: "Retrieves context of an SKU.\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Retrieves context of an SKU.\n> \U0001F4D8 Onboarding guide \n>\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Catalog | Content | **SKUs** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: SkuContext
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -404,12 +449,43 @@ paths:
                 IsProductActive: true
                 ProductFinalScore: 0
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog/pvt/stockkeepingunit:
     get:
       tags:
       - SKU
       summary: VTex Get SKU by RefId
-      description: "Retrieves information about a specific SKU by its `RefId`.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves information about a specific SKU by its `RefId`.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
       - $ref: '#/components/parameters/Accept_2'
@@ -512,9 +588,10 @@ paths:
                     type: number
                     description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
                   EstimatedDateArrival:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
-                    nullable: true
                   ManufacturerCode:
                     type: string
                     description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
@@ -529,8 +606,9 @@ paths:
                     type: number
                     description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
                   ModalType:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
                   KitItensSellApart:
                     type: boolean
@@ -545,7 +623,29 @@ paths:
       tags:
       - SKU
       summary: VTex Create SKU
-      description: "Creates a new SKU.\r\n\r\nIf there is a need to create a new SKU with a specific custom ID, specify the `Id` (integer) in the request. Otherwise, VTEX will generate the ID automatically.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Creates a new SKU.
+
+
+        If there is a need to create a new SKU with a specific custom ID, specify the `Id` (integer) in the request. Otherwise, VTEX will generate the ID automatically.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
       - $ref: '#/components/parameters/Accept_2'
@@ -639,8 +739,9 @@ paths:
                   description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
                   example: 1.0
                 EstimatedDateArrival:
-                  type: string
-                  nullable: true
+                  type:
+                  - string
+                  - 'null'
                   description: To add the product as pre-sale, enter the product estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format. You must take into consideration both the launch date and the freight calculation for the arrival date.
                   example: null
                 ManufacturerCode:
@@ -660,8 +761,9 @@ paths:
                   description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
                   example: 2.0
                 ModalType:
-                  type: string
-                  nullable: true
+                  type:
+                  - string
+                  - 'null'
                   description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
                   example: null
                 KitItensSellApart:
@@ -772,9 +874,10 @@ paths:
                     type: number
                     description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
                   EstimatedDateArrival:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
-                    nullable: true
                   ManufacturerCode:
                     type: string
                     description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
@@ -789,8 +892,9 @@ paths:
                     type: number
                     description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
                   ModalType:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
                   KitItensSellApart:
                     type: boolean
@@ -801,12 +905,43 @@ paths:
                     items:
                       type: string
                       description: Video URL.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/sku/stockkeepingunitidbyrefid/{refId}:
     get:
       tags:
       - SKU
       summary: VTex Get SKU ID by reference ID
-      description: "Retrieves an SKU ID by the SKU's reference ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves an SKU ID by the SKU''s reference ID.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: SkuIdbyRefId
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -829,12 +964,43 @@ paths:
                 description: SKU ID.
               example: '1'
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/sku/stockkeepingunitbyalternateId/{alternateId}:
     get:
       tags:
       - SKU
       summary: VTex Get SKU by alternate ID
-      description: "Retrieves an SKU by its alternate ID, which can be the EAN or the reference ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves an SKU by its alternate ID, which can be the EAN or the reference ID.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: SkubyAlternateId
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -948,12 +1114,43 @@ paths:
                 IsProductActive: true
                 ProductFinalScore: 0
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/sku/stockkeepingunitByProductId/{productId}:
     get:
       tags:
       - SKU
       summary: VTex Get SKU list by product ID
-      description: "Retrieves a list with the SKUs related to a product by the product's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a list with the SKUs related to a product by the product''s ID.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: SkulistbyProductId
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -1017,12 +1214,46 @@ paths:
                 IsGiftCardRecharge: null
                 ModalType: null
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pub/sku/stockkeepingunitidsbyrefids:
     post:
       tags:
       - SKU
       summary: VTex Retrieve SKU ID list by reference ID list
-      description: "Given a list of reference IDs, this endpoint returns a list with the corresponding SKU IDs.\r\n\r\n>⚠️ The list of reference IDs in the request body cannot have repeated reference IDs, or the API will return an error 500.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Given a list of reference IDs, this endpoint returns a list with the corresponding SKU IDs.
+
+
+        >⚠️ The list of reference IDs in the request body cannot have repeated reference IDs, or the API will return an error 500.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: SkuIdlistbyRefIdlist
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -1056,12 +1287,43 @@ paths:
         '500':
           description: Internal Server Error
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog/pvt/stockkeepingunit/{skuId}:
     get:
       tags:
       - SKU
       summary: VTex Get SKU
-      description: "Retrieves a specific SKU by its ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a specific SKU by its ID.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Sku
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -1165,8 +1427,9 @@ paths:
                     type: number
                     description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
                   EstimatedDateArrival:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
                   ManufacturerCode:
                     type: string
@@ -1181,8 +1444,9 @@ paths:
                     type: number
                     description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
                   ModalType:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
                   KitItensSellApart:
                     type: boolean
@@ -1198,7 +1462,26 @@ paths:
       tags:
       - SKU
       summary: VTex Update SKU
-      description: "Updates an existing SKU.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **SKUs** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Updates an existing SKU.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **SKUs** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
       - $ref: '#/components/parameters/Accept_2'
@@ -1292,8 +1575,9 @@ paths:
                   description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
                   example: 1.0
                 EstimatedDateArrival:
-                  type: string
-                  nullable: true
+                  type:
+                  - string
+                  - 'null'
                   description: To add the product as pre-sale, enter the product estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format. You must take into consideration both the launch date and the freight calculation for the arrival date.
                   example: null
                 ManufacturerCode:
@@ -1313,8 +1597,9 @@ paths:
                   description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
                   example: 2.0
                 ModalType:
-                  type: string
-                  nullable: true
+                  type:
+                  - string
+                  - 'null'
                   description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
                   example: null
                 KitItensSellApart:
@@ -1421,9 +1706,10 @@ paths:
                     type: number
                     description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
                   EstimatedDateArrival:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
-                    nullable: true
                   ManufacturerCode:
                     type: string
                     description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
@@ -1438,8 +1724,9 @@ paths:
                     type: number
                     description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
                   ModalType:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: Links an unusual type of SKU that need special transportation, suach as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
                   KitItensSellApart:
                     type: boolean
@@ -1450,66 +1737,57 @@ paths:
                     items:
                       type: string
                       description: Video URL.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
 components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Accept_2:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type_2:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   schemas:
-    SkuSpecification:
-      required:
-      - FieldId
-      - FieldName
-      - FieldValueIds
-      - FieldValues
-      type: object
-      description: Object containing related SKU specifications.
-      properties:
-        FieldId:
-          type: integer
-          format: int32
-          description: Specification field ID.
-        FieldName:
-          type: string
-          description: Specification field Name.
-        FieldValueIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-            description: Specification value ID.
-          description: Array with related specification values IDs.
-        FieldValues:
-          type: array
-          items:
-            type: string
-          description: Array with related specification values.
-      example:
-        FieldId: 102
-        FieldName: Cor
-        FieldValueIds:
-        - 266
-        FieldValues:
-        - Padrão
-    Image:
-      required:
-      - ImageUrl
-      - ImageName
-      - FileId
-      type: object
-      description: Object containing SKU images details.
-      properties:
-        ImageUrl:
-          type: string
-          description: Image URL.
-        ImageName:
-          type: string
-          description: Image label.
-          nullable: true
-        FileId:
-          type: integer
-          format: int32
-          description: SKU image ID.
-      example:
-        ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
-        ImageName: ''
-        FileId: 168952
     SkuSeller:
       required:
       - SellerId
@@ -1547,6 +1825,37 @@ components:
         IsActive: true
         FreightCommissionPercentage: 0
         ProductCommissionPercentage: 0
+    Dimension:
+      required:
+      - cubicweight
+      - height
+      - length
+      - weight
+      - width
+      type: object
+      description: Object containing the SKU dimensions to be used on the shipping calculation.
+      properties:
+        cubicweight:
+          type: number
+          description: SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
+        height:
+          type: number
+          description: SKU height.
+        length:
+          type: number
+          description: SKU length.
+        weight:
+          type: number
+          description: SKU weight.
+        width:
+          type: number
+          description: SKU width.
+      example:
+        cubicweight: 81.6833
+        height: 65
+        length: 58
+        weight: 10000
+        width: 130
     GetSKUandContext:
       required:
       - Id
@@ -1626,14 +1935,16 @@ components:
           type: boolean
           description: Defines if the SKU is active or not.
         IsTransported:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Deprecated field.
-          nullable: true
           deprecated: true
         IsInventoried:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Deprecated field.
-          nullable: true
           deprecated: true
         IsGiftCardRecharge:
           type: boolean
@@ -1645,8 +1956,9 @@ components:
           type: string
           description: Product URL.
         CSCIdentification:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: SKU seller identification.
         BrandId:
           type: string
@@ -1727,8 +2039,9 @@ components:
           type: string
           description: Category hierarchy with category IDs.
         ProductGlobalCategoryId:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
           description: Global category ID.
         ProductCategories:
           type: object
@@ -1756,8 +2069,9 @@ components:
             description: Alternative SKU ID.
           description: Array with values of alternative SKU IDs.
         EstimatedDateArrival:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: To add the product as pre-sale, enter the product estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format. You must take into consideration both the launch date and the freight calculation for the arrival date.
         MeasurementUnit:
           type: string
@@ -1766,20 +2080,24 @@ components:
           type: number
           description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
         InformationSource:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Information source.
-          nullable: true
         ModalType:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
         KeyWords:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Keywords related to the product.
         ReleaseDate:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Release date of the product.
         ProductIsVisible:
           type: boolean
@@ -1886,197 +2204,6 @@ components:
         ShowIfNotAvailable: true
         IsProductActive: true
         ProductFinalScore: 0
-    Field:
-      required:
-      - FieldName
-      - MaxCaracters
-      - DomainValues
-      type: object
-      properties:
-        FieldName:
-          type: string
-          description: Attachment field name.
-        MaxCaracters:
-          type: string
-          description: Maximum number of characters accepted in the attachment field.
-        DomainValues:
-          type: string
-          nullable: true
-          description: Allowed key values.
-      example:
-        FieldName: nome
-        MaxCaracters: '20'
-        DomainValues: Adalberto,Pedro,João
-    SkulistbyProductId:
-      type: object
-      properties:
-        IsPersisted:
-          type: boolean
-          description: Defines if the SKU is persisted.
-        IsRemoved:
-          type: boolean
-          deprecated: true
-          description: Defines if the SKU is removed.
-        Id:
-          type: integer
-          format: int32
-          description: SKU ID.
-        ProductId:
-          type: integer
-          format: int32
-          description: Product ID.
-        IsActive:
-          type: boolean
-          description: Defines if the SKU is active or not.
-        Name:
-          type: string
-          description: SKU name.
-        Height:
-          type: number
-          description: SKU height.
-        RealHeight:
-          type: number
-          nullable: true
-          description: Real SKU height.
-        Width:
-          type: number
-          description: SKU width.
-        RealWidth:
-          type: number
-          nullable: true
-          description: Real SKU width.
-        Length:
-          type: number
-          description: SKU length.
-        RealLength:
-          type: number
-          nullable: true
-          description: Real SKU length.
-        WeightKg:
-          type: number
-          nullable: true
-          description: Weight of the SKU in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
-        RealWeightKg:
-          type: number
-          nullable: true
-          description: Real weight of the SKU in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
-        ModalId:
-          type: integer
-          format: int32
-          description: Delivery method (modal type) ID.
-        RefId:
-          type: string
-          description: Product reference ID.
-        CubicWeight:
-          type: number
-          description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
-        IsKit:
-          type: boolean
-          description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
-        IsDynamicKit:
-          type: string
-          nullable: true
-          deprecated: true
-          description: Deprecated field.
-        InternalNote:
-          type: string
-          nullable: true
-          description: Internal note.
-        DateUpdated:
-          type: string
-          description: Date when the product was updated for the most recent time.
-        RewardValue:
-          type: number
-          nullable: true
-          description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
-        CommercialConditionId:
-          type: integer
-          format: int32
-          description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
-          default: 1
-        EstimatedDateArrival:
-          type: string
-          nullable: true
-          description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
-        FlagKitItensSellApart:
-          type: boolean
-          description: Defines if the SKU bundle items can be sold separately.
-        ManufacturerCode:
-          type: string
-          description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
-        ReferenceStockKeepingUnitId:
-          type: string
-          nullable: true
-          description: SKU reference ID.
-        Position:
-          type: integer
-          format: int32
-          description: SKU position.
-        ActivateIfPossible:
-          type: boolean
-          description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
-        MeasurementUnit:
-          type: string
-          description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
-        UnitMultiplier:
-          type: number
-          description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
-        IsInventoried:
-          type: boolean
-          nullable: true
-          deprecated: true
-          description: Deprecated field.
-        IsTransported:
-          type: boolean
-          nullable: true
-          deprecated: true
-          description: Deprecated field.
-        IsGiftCardRecharge:
-          type: boolean
-          nullable: true
-          description: Defines if the purchase of the SKU will generate reward value for the customer.
-        ModalType:
-          type: string
-          nullable: true
-          description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
-        isKitOptimized:
-          type: boolean
-          description: Defines if the SKU is an optimized bundle.
-      example:
-        IsPersisted: true
-        Id: 1
-        ProductId: 1
-        IsActive: true
-        Name: Ração Royal Canin Feline Urinary 500g
-        Height: 6.5
-        RealHeight: 2.2
-        Width: 14.0
-        RealWidth: 3.3
-        Length: 24.0
-        RealLength: 4.4
-        WeightKg: 550.0
-        RealWeightKg: 1.1
-        ModalId: 1
-        RefId: '0001'
-        CubicWeight: 1.0
-        IsKit: false
-        InternalNote: null
-        DateUpdated: '2021-10-29T18:25:00'
-        RewardValue: null
-        CommercialConditionId: 1
-        EstimatedDateArrival: null
-        FlagKitItensSellApart: false
-        ManufacturerCode: ''
-        ReferenceStockKeepingUnitId: null
-        Position: 1
-        ActivateIfPossible: true
-        MeasurementUnit: un
-        UnitMultiplier: 300.0
-        IsInventoried: true
-        IsTransported: true
-        IsGiftCardRecharge: false
-        ModalType: null
-        isKitOptimized: false
     AlternateIds:
       type: object
       description: Array with alternate SKU IDs, such as EAN and `RefId`.
@@ -2090,13 +2217,14 @@ components:
       example:
         Ean: '8781'
         RefId: '878181'
-    ProductSpecification:
+    SkuSpecification:
       required:
       - FieldId
       - FieldName
       - FieldValueIds
       - FieldValues
       type: object
+      description: Object containing related SKU specifications.
       properties:
         FieldId:
           type: integer
@@ -2104,7 +2232,7 @@ components:
           description: Specification field ID.
         FieldName:
           type: string
-          description: Specification name. Limited to 100 characters.
+          description: Specification field Name.
         FieldValueIds:
           type: array
           items:
@@ -2118,18 +2246,43 @@ components:
             type: string
           description: Array with related specification values.
       example:
-        FieldId: 7
-        FieldName: Faixa Etária
+        FieldId: 102
+        FieldName: Cor
         FieldValueIds:
-        - 58
-        - 56
-        - 55
-        - 52
+        - 266
         FieldValues:
-        - 5 a 6 anos
-        - 7 a 8 anos
-        - 9 a 10 anos
-        - Acima de 10 anos
+        - Padrão
+    RealDimension:
+      required:
+      - realCubicWeight
+      - realHeight
+      - realLength
+      - realWeight
+      - realWidth
+      type: object
+      description: Object containing the real SKU dimensions, which appear in the product page.
+      properties:
+        realCubicWeight:
+          type: number
+          description: Real SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
+        realHeight:
+          type: number
+          description: Real SKU height.
+        realLength:
+          type: number
+          description: Real SKU length.
+        realWeight:
+          type: number
+          description: Real SKU weight.
+        realWidth:
+          type: number
+          description: Real SKU width.
+      example:
+        realCubicWeight: 274.1375
+        realHeight: 241
+        realLength: 65
+        realWeight: 9800
+        realWidth: 105
     Attachment:
       required:
       - Id
@@ -2179,6 +2332,276 @@ components:
           DomainValues: null
         IsActive: true
         IsRequired: false
+    SkulistbyProductId:
+      type: object
+      properties:
+        IsPersisted:
+          type: boolean
+          description: Defines if the SKU is persisted.
+        IsRemoved:
+          type: boolean
+          deprecated: true
+          description: Defines if the SKU is removed.
+        Id:
+          type: integer
+          format: int32
+          description: SKU ID.
+        ProductId:
+          type: integer
+          format: int32
+          description: Product ID.
+        IsActive:
+          type: boolean
+          description: Defines if the SKU is active or not.
+        Name:
+          type: string
+          description: SKU name.
+        Height:
+          type: number
+          description: SKU height.
+        RealHeight:
+          type:
+          - number
+          - 'null'
+          description: Real SKU height.
+        Width:
+          type: number
+          description: SKU width.
+        RealWidth:
+          type:
+          - number
+          - 'null'
+          description: Real SKU width.
+        Length:
+          type: number
+          description: SKU length.
+        RealLength:
+          type:
+          - number
+          - 'null'
+          description: Real SKU length.
+        WeightKg:
+          type:
+          - number
+          - 'null'
+          description: Weight of the SKU in the measurement [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+        RealWeightKg:
+          type:
+          - number
+          - 'null'
+          description: Real weight of the SKU in the measurement unit [configured in the store](https://help.vtex.com/en/tutorial/filling-in-system-settings--tutorials_269), which by default is in grams.
+        ModalId:
+          type: integer
+          format: int32
+          description: Delivery method (modal type) ID.
+        RefId:
+          type: string
+          description: Product reference ID.
+        CubicWeight:
+          type: number
+          description: '[Cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).'
+        IsKit:
+          type: boolean
+          description: Defines whether the SKU is made up of one or more SKUs (part of a kit) (`true`) or not (`false`). Must be enabled if you are adding a kit. Once activated, this definition cannot be reverted.
+        IsDynamicKit:
+          type:
+          - string
+          - 'null'
+          deprecated: true
+          description: Deprecated field.
+        InternalNote:
+          type:
+          - string
+          - 'null'
+          description: Internal note.
+        DateUpdated:
+          type: string
+          description: Date when the product was updated for the most recent time.
+        RewardValue:
+          type:
+          - number
+          - 'null'
+          description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
+        CommercialConditionId:
+          type: integer
+          format: int32
+          description: Commercial condition ID, used to define SKU specific promotions or installment rules. In case of no specific condition, use `1` (default value). This field does not accept `0`. Learn more at [Registering a commercial condition](https://help.vtex.com/tutorial/registering-a-commercial-condition--tutorials_445).
+          default: 1
+        EstimatedDateArrival:
+          type:
+          - string
+          - 'null'
+          description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
+        FlagKitItensSellApart:
+          type: boolean
+          description: Defines if the SKU bundle items can be sold separately.
+        ManufacturerCode:
+          type: string
+          description: Identifier provided by the manufacturers to identify their product. This field should be filled in if the product has a specific manufacturer's code.
+        ReferenceStockKeepingUnitId:
+          type:
+          - string
+          - 'null'
+          description: SKU reference ID.
+        Position:
+          type: integer
+          format: int32
+          description: SKU position.
+        ActivateIfPossible:
+          type: boolean
+          description: When set to `true`, this attribute will automatically update the SKU as active once associated with an image or an active component.
+        MeasurementUnit:
+          type: string
+          description: Measurement unit. This field should only be used when it is necessary to convert the unit of measure for sale. For example, if a product is sold in boxes, but customers want to buy per square meter (m²). In common cases, use `"un"`.
+        UnitMultiplier:
+          type: number
+          description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
+        IsInventoried:
+          type:
+          - boolean
+          - 'null'
+          deprecated: true
+          description: Deprecated field.
+        IsTransported:
+          type:
+          - boolean
+          - 'null'
+          deprecated: true
+          description: Deprecated field.
+        IsGiftCardRecharge:
+          type:
+          - boolean
+          - 'null'
+          description: Defines if the purchase of the SKU will generate reward value for the customer.
+        ModalType:
+          type:
+          - string
+          - 'null'
+          description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
+        isKitOptimized:
+          type: boolean
+          description: Defines if the SKU is an optimized bundle.
+      example:
+        IsPersisted: true
+        Id: 1
+        ProductId: 1
+        IsActive: true
+        Name: Ração Royal Canin Feline Urinary 500g
+        Height: 6.5
+        RealHeight: 2.2
+        Width: 14.0
+        RealWidth: 3.3
+        Length: 24.0
+        RealLength: 4.4
+        WeightKg: 550.0
+        RealWeightKg: 1.1
+        ModalId: 1
+        RefId: '0001'
+        CubicWeight: 1.0
+        IsKit: false
+        InternalNote: null
+        DateUpdated: '2021-10-29T18:25:00'
+        RewardValue: null
+        CommercialConditionId: 1
+        EstimatedDateArrival: null
+        FlagKitItensSellApart: false
+        ManufacturerCode: ''
+        ReferenceStockKeepingUnitId: null
+        Position: 1
+        ActivateIfPossible: true
+        MeasurementUnit: un
+        UnitMultiplier: 300.0
+        IsInventoried: true
+        IsTransported: true
+        IsGiftCardRecharge: false
+        ModalType: null
+        isKitOptimized: false
+    Image:
+      required:
+      - ImageUrl
+      - ImageName
+      - FileId
+      type: object
+      description: Object containing SKU images details.
+      properties:
+        ImageUrl:
+          type: string
+          description: Image URL.
+        ImageName:
+          type:
+          - string
+          - 'null'
+          description: Image label.
+        FileId:
+          type: integer
+          format: int32
+          description: SKU image ID.
+      example:
+        ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
+        ImageName: ''
+        FileId: 168952
+    ProductSpecification:
+      required:
+      - FieldId
+      - FieldName
+      - FieldValueIds
+      - FieldValues
+      type: object
+      properties:
+        FieldId:
+          type: integer
+          format: int32
+          description: Specification field ID.
+        FieldName:
+          type: string
+          description: Specification name. Limited to 100 characters.
+        FieldValueIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Specification value ID.
+          description: Array with related specification values IDs.
+        FieldValues:
+          type: array
+          items:
+            type: string
+          description: Array with related specification values.
+      example:
+        FieldId: 7
+        FieldName: Faixa Etária
+        FieldValueIds:
+        - 58
+        - 56
+        - 55
+        - 52
+        FieldValues:
+        - 5 a 6 anos
+        - 7 a 8 anos
+        - 9 a 10 anos
+        - Acima de 10 anos
+    Field:
+      required:
+      - FieldName
+      - MaxCaracters
+      - DomainValues
+      type: object
+      properties:
+        FieldName:
+          type: string
+          description: Attachment field name.
+        MaxCaracters:
+          type: string
+          description: Maximum number of characters accepted in the attachment field.
+        DomainValues:
+          type:
+          - string
+          - 'null'
+          description: Allowed key values.
+      example:
+        FieldName: nome
+        MaxCaracters: '20'
+        DomainValues: Adalberto,Pedro,João
     GetSKUAltID:
       required:
       - Id
@@ -2275,8 +2698,9 @@ components:
           type: string
           description: Product slug.
         CSCIdentification:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: SKU seller identification.
         BrandId:
           type: string
@@ -2396,8 +2820,9 @@ components:
           type: boolean
           description: Indicates if the direct product category is active or not.
         ProductGlobalCategoryId:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
           description: Product global category ID.
         ProductCategories:
           type: object
@@ -2425,8 +2850,9 @@ components:
             type: string
             description: Alternative SKU ID.
         EstimatedDateArrival:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: SKU estimated arrival date in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format, when the product is on pre-sale. You must take into consideration both the launch date and the freight calculation for the arrival date.
         MeasurementUnit:
           type: string
@@ -2435,20 +2861,24 @@ components:
           type: number
           description: Multiple number of SKU. If the multiplier is 5.0000, the product can be added in multiple quantities of 5, 10, 15, 20, onward.
         InformationSource:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Information source.
         ModalType:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Links an unusual type of SKU that needs special transportation, such as meat, glass, or a mattress, to a carrier specialized in delivering it. This field should be filled in with the name of the modal (e.g. "Chemicals" or "Refrigerated products"). To learn more about this feature, read our articles [How the modal works](https://help.vtex.com/en/tutorial/how-does-the-modal-work--tutorials_125) and [Setting up modal for carriers](https://help.vtex.com/en/tutorial/configure-modal--3jhLqxuPhuiq24UoykCcqy).
         KeyWords:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Keywords related to the product.
         ReleaseDate:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Release date of the product.
         ProductIsVisible:
           type: boolean
@@ -2555,108 +2985,22 @@ components:
         ShowIfNotAvailable: true
         IsProductActive: true
         ProductFinalScore: 0
-    Dimension:
-      required:
-      - cubicweight
-      - height
-      - length
-      - weight
-      - width
-      type: object
-      description: Object containing the SKU dimensions to be used on the shipping calculation.
-      properties:
-        cubicweight:
-          type: number
-          description: SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
-        height:
-          type: number
-          description: SKU height.
-        length:
-          type: number
-          description: SKU length.
-        weight:
-          type: number
-          description: SKU weight.
-        width:
-          type: number
-          description: SKU width.
-      example:
-        cubicweight: 81.6833
-        height: 65
-        length: 58
-        weight: 10000
-        width: 130
-    RealDimension:
-      required:
-      - realCubicWeight
-      - realHeight
-      - realLength
-      - realWeight
-      - realWidth
-      type: object
-      description: Object containing the real SKU dimensions, which appear in the product page.
-      properties:
-        realCubicWeight:
-          type: number
-          description: Real SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
-        realHeight:
-          type: number
-          description: Real SKU height.
-        realLength:
-          type: number
-          description: Real SKU length.
-        realWeight:
-          type: number
-          description: Real SKU weight.
-        realWidth:
-          type: number
-          description: Real SKU width.
-      example:
-        realCubicWeight: 274.1375
-        realHeight: 241
-        realLength: 65
-        realWeight: 9800
-        realWidth: 105
-  parameters:
-    Content-Type_2:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Accept_2:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header
       name: VtexIdclientAutCookie
       description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+x-refined-from:
+- vtex-catalog-api-seller-portal-openapi-original.yml
+- vtex-catalog-openapi-original.yml

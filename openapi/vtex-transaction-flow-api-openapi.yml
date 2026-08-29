@@ -1,15 +1,91 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Transaction Flow API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: VTex Payments Gateway Transaction Flow API
+  description: '>ℹ️ Onboarding guide
+
+    >
+
+    > Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer''s journey.
+
+
+    The Payments Gateway API allows you to get payment data and process your store''s transactions.
+
+
+    ## Payments Gateway API Index
+
+
+    ### Installments
+
+
+    - `GET` [Get installments options](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/installments)
+
+
+    ### Configuration
+
+
+    - `GET` [List all affiliations](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/affiliations)
+
+    - `POST` [Insert a new affiliation](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/affiliations)
+
+    - `PUT` [Update affiliation by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#put-/api/pvt/affiliations/-affiliationId-)
+
+    - `GET` [Get affiliation by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/affiliations/-affiliationId-)
+
+    - `GET` [List all payment rules](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/rules)
+
+    - `POST` [Insert a new payment rule](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/rules)
+
+    - `GET` [Get payment rule by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/rules/-ruleId-)
+
+    - `PUT` [Update payment rule by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#put-/api/pvt/rules/-ruleId-)
+
+    - `DELETE` [Delete payment rule by ID](https://developers.vtex.com/docs/api-reference/payments-gateway-api#delete-/api/pvt/rules/-ruleId-)
+
+    - `GET` [List all available payment methods](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/merchants/payment-systems)
+
+
+    ### Transaction Process
+
+
+    - `POST` [1. Starts a new transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions)
+
+    - `POST` [2.1 Send payments information public](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pub/transactions/-transactionId-/payments)
+
+    - `POST` [2.2 Send payments with saved credit card](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/payments)
+
+    - `POST` [3. Send additional data](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/additional-data)
+
+    - `PATCH` [3.1 Update additional data (optional)](https://developers.vtex.com/docs/api-reference/payments-gateway-api#patch-/api/pvt/transactions/-transactionId-/additional-data)
+
+    - `POST` [Authorize new transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/authorization-request)
+
+    - `GET` [Get transaction details](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/transactions/-transactionId-)
+
+    - `GET` [Get payment details](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/transactions/-transactionId-/payments/-paymentId-)
+
+    - `GET` [Get transaction settlement details](https://developers.vtex.com/docs/api-reference/payments-gateway-api#get-/api/pvt/transactions/-transactionId-/settlements)
+
+
+    ### Transaction Flow
+
+
+    - `POST` [Settle the transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/settlement-request)
+
+    - `POST` [Refund the transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/refunding-request)
+
+    - `POST` [Cancel the transaction](https://developers.vtex.com/docs/api-reference/payments-gateway-api#post-/api/pvt/transactions/-transactionId-/cancellation-request)'
   version: '1.0'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.vtexpayments.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Transaction Flow
 paths:
@@ -18,7 +94,29 @@ paths:
       tags:
       - Transaction Flow
       summary: VTex Settle the transaction
-      description: "Settles the transaction amount. A payment settled means that the seller will receive the value of the purchase value after bank conciliation.\r\n\r\n>ℹ️ This call is mandatory to complete a transaction and its payments.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Settles the transaction amount. A payment settled means that the seller will receive the value of the purchase value after bank conciliation.
+
+
+        >ℹ️ This call is mandatory to complete a transaction and its payments.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Settlethetransaction
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -54,7 +152,32 @@ paths:
       tags:
       - Transaction Flow
       summary: VTex Refund the transaction
-      description: "Refunds the amount of the transaction that was previously settled.\r\n\r\nAfter a transaction is settled, this request can be used to partially or fully refund the transaction amount.\r\n\r\nDue to acquirer rules, it is not possible to perform this step online against the acquirer, and, if an error occurrs, we notify the seller company responsible by email to manually check the transaction status against the acquirer.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Refunds the amount of the transaction that was previously settled.
+
+
+        After a transaction is settled, this request can be used to partially or fully refund the transaction amount.
+
+
+        Due to acquirer rules, it is not possible to perform this step online against the acquirer, and, if an error occurrs, we notify the seller company responsible by email to manually check the transaction status against the acquirer.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Refundthetransaction
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -108,7 +231,29 @@ paths:
       tags:
       - Transaction Flow
       summary: VTex Cancel the transaction
-      description: "Cancels a transaction that was previously approved, but not settled. It is possible to cancel partially or complete value of the transaction.\r\n\r\nDue to acquirer rules it is not possible to perform this step online against the acquirer.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| PCI Gateway | Payment-Make Payments | **Process payments** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Cancels a transaction that was previously approved, but not settled. It is possible to cancel partially or complete value of the transaction.
+
+
+        Due to acquirer rules it is not possible to perform this step online against the acquirer.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | PCI Gateway | Payment-Make Payments | **Process payments** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: Cancelthetransaction
       parameters:
       - $ref: '#/components/parameters/transactionId'
@@ -143,6 +288,72 @@ paths:
       deprecated: false
 components:
   schemas:
+    CancelthetransactionRequest:
+      required:
+      - value
+      type: object
+      description: Cancel transaction request body information.
+      properties:
+        value:
+          type: number
+          description: Value of the purchase that will be cancelled.
+    SettleResponse:
+      required:
+      - id
+      - token
+      - status
+      - statusDetail
+      - processingDate
+      - refundedValue
+      - refundedToken
+      - message
+      - code
+      - connectorRefundedValue
+      - cancelledValue
+      type: object
+      description: ' Transaction response body information.'
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Settle request identification.
+        token:
+          type: string
+          description: Token identification.
+        status:
+          type: number
+          description: Status code.
+        statusDetail:
+          type: string
+          description: Status detail information.
+        processingDate:
+          type: string
+          description: Settlement processing date.
+        refundedValue:
+          type: integer
+          description: Refunded value.
+        refundedToken:
+          type:
+          - string
+          - 'null'
+          description: Refund operation token.
+        message:
+          type:
+          - string
+          - 'null'
+          description: Custom message.
+        code:
+          type:
+          - string
+          - 'null'
+          description: Custom code.
+        connectorRefundedValue:
+          type: number
+          description: Refunded value by connector (provider).
+        cancelledValue:
+          type: integer
+          description: Cancelled value.
     RefundthetransactionRequest:
       required:
       - value
@@ -188,15 +399,6 @@ components:
                   type: integer
                   description: Discount applied on item.
                   example: 50
-    CancelthetransactionRequest:
-      required:
-      - value
-      type: object
-      description: Cancel transaction request body information.
-      properties:
-        value:
-          type: number
-          description: Value of the purchase that will be cancelled.
     SettlethetransactionRequest:
       required:
       - value
@@ -207,60 +409,16 @@ components:
           type: number
           description: Value to be settled. The value must be described without using separation for decimals, e.g. to capture a value of 320.50, send 32050.
           example: 10050
-    SettleResponse:
-      required:
-      - id
-      - token
-      - status
-      - statusDetail
-      - processingDate
-      - refundedValue
-      - refundedToken
-      - message
-      - code
-      - connectorRefundedValue
-      - cancelledValue
-      type: object
-      description: ' Transaction response body information.'
-      properties:
-        id:
-          type: string
-          description: Settle request identification.
-          nullable: true
-        token:
-          type: string
-          description: Token identification.
-        status:
-          type: number
-          description: Status code.
-        statusDetail:
-          type: string
-          description: Status detail information.
-        processingDate:
-          type: string
-          description: Settlement processing date.
-        refundedValue:
-          type: integer
-          description: Refunded value.
-        refundedToken:
-          type: string
-          description: Refund operation token.
-          nullable: true
-        message:
-          type: string
-          description: Custom message.
-          nullable: true
-        code:
-          type: string
-          description: Custom code.
-          nullable: true
-        connectorRefundedValue:
-          type: number
-          description: Refunded value by connector (provider).
-        cancelledValue:
-          type: integer
-          description: Cancelled value.
   parameters:
+    transactionId:
+      name: transactionId
+      in: path
+      description: Transaction identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: A3BDE325F76B4B758B398D900DF06150
     Accept:
       name: Accept
       in: header
@@ -279,16 +437,17 @@ components:
       schema:
         type: string
         example: application/json
-    transactionId:
-      name: transactionId
-      in: path
-      description: Transaction identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: A3BDE325F76B4B758B398D900DF06150
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header

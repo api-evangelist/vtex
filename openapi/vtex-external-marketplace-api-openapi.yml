@@ -1,15 +1,32 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account External Marketplace API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: Vtex External Marketplace API
   version: '1.0'
+  contact: {}
+  description: 'Operations tagged External Marketplace across 2 of this provider''s published API definitions: vtex-marketplace-protocol-external-mapper-openapi-original.yml, vtex-marketplace-protocol-external-orders-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://portal.{environment}.com.br
+  description: Server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX Server URL.
+  variables:
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
 tags:
 - name: External Marketplace
 paths:
@@ -81,6 +98,15 @@ paths:
                   id: 1
                   name: Mercado Livre
       deprecated: false
+    servers:
+    - url: https://portal.{environment}.com.br
+      description: Server URL.
+      variables:
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/channel-manager/channel/:channelId:
     get:
       tags:
@@ -156,6 +182,15 @@ paths:
                 example:
                   id: 1
                   name: Mercado Livre
+    servers:
+    - url: https://portal.{environment}.com.br
+      description: Server URL.
+      variables:
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/mkp-category-mapper/connector/register:
     post:
       tags:
@@ -200,6 +235,15 @@ paths:
           description: OK
           headers: {}
       deprecated: false
+    servers:
+    - url: https://portal.{environment}.com.br
+      description: Server URL.
+      variables:
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/mkp-category-mapper/categories/marketplace/{id}:
     post:
       tags:
@@ -244,12 +288,69 @@ paths:
           description: OK
           headers: {}
       deprecated: false
+    servers:
+    - url: https://portal.{environment}.com.br
+      description: Server URL.
+      variables:
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/channel-manager/connector:
     post:
       tags:
       - External Marketplace
       summary: VTex Register connector
-      description: "Registers a new connector in our platform. The account name informed in the request should be the one owned by the partner since it is the only account that will have permission to update or delete the connector.\r\n\r\nPossible values for field `type`:\r\n\r\n- `APP`, if using our App Template.\r\n- `EXTERNAL`, if not using App Template.\r\n\r\nPossible values for field `segment`:\r\n\r\n- `ADS`\r\n- `APPAREL_ACCESSORIES`\r\n- `BEAUTY_HEALTH`\r\n- `BOOKS_EDUCATION`\r\n- `CARS_AUTOPARTS`\r\n- `DEPARTMENT_STORES`\r\n- `ELETRONICS`\r\n- `FINANCIAL_INSURANCES`\r\n- `FOOD_BEVERAGES`\r\n- `GROCERY`\r\n- `HOME_APPLIANCES`\r\n- `HOME_FURNITURE_DECOR`\r\n- `JEWELRY`\r\n- `PET_SHOP`\r\n- `SPORTS_FITNESS`\r\n- `TOURISM`\r\n- `TOYS_HOBBIES`\r\n- `OTHERS`"
+      description: 'Registers a new connector in our platform. The account name informed in the request should be the one owned by the partner since it is the only account that will have permission to update or delete the connector.
+
+
+        Possible values for field `type`:
+
+
+        - `APP`, if using our App Template.
+
+        - `EXTERNAL`, if not using App Template.
+
+
+        Possible values for field `segment`:
+
+
+        - `ADS`
+
+        - `APPAREL_ACCESSORIES`
+
+        - `BEAUTY_HEALTH`
+
+        - `BOOKS_EDUCATION`
+
+        - `CARS_AUTOPARTS`
+
+        - `DEPARTMENT_STORES`
+
+        - `ELETRONICS`
+
+        - `FINANCIAL_INSURANCES`
+
+        - `FOOD_BEVERAGES`
+
+        - `GROCERY`
+
+        - `HOME_APPLIANCES`
+
+        - `HOME_FURNITURE_DECOR`
+
+        - `JEWELRY`
+
+        - `PET_SHOP`
+
+        - `SPORTS_FITNESS`
+
+        - `TOURISM`
+
+        - `TOYS_HOBBIES`
+
+        - `OTHERS`'
       operationId: register-connector
       parameters:
       - name: Accept
@@ -557,6 +658,15 @@ paths:
                   isConnectionActive: false
                   affiliateId: '1234'
       deprecated: false
+    servers:
+    - url: https://portal.{environment}.com.br
+      description: Server URL.
+      variables:
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/channel-manager/connector/all:
     get:
       tags:
@@ -1052,6 +1162,15 @@ paths:
                     isConnectionActive: false
                     affiliateId: '1234'
       deprecated: false
+    servers:
+    - url: https://portal.{environment}.com.br
+      description: Server URL.
+      variables:
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/channel-manager/connector/:connectorId:
     get:
       tags:
@@ -1506,12 +1625,21 @@ paths:
           description: OK
           headers: {}
       deprecated: false
+    servers:
+    - url: https://portal.{environment}.com.br
+      description: Server URL.
+      variables:
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/fulfillment/pvt/orders:
     post:
       tags:
       - External Marketplace
       summary: VTex Place fulfillment order
-      description: "Creates fulfillment order, meaning that it is an order for the seller's side in a sale made through a marketplace. This order assumes the transaction itself has already happened on the marketplace's side and, therfore, cares only about the fulfillment side.\n\r\n\r> If you plan to integrate external orders with possible [Price divergence](https://help.vtex.com/en/tutorial/price-divergence-rule--6RlFLhD1rIRRshl83KnCjW#) be mindful of the `isCreatedAsync` request body field. \n\nFor a detailed explanation of the steps required to develop a custom connector to become an external marketplace for VTEX sellers, check out our complete [External Marketplace Integration Guide](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-guide)."
+      description: "Creates fulfillment order, meaning that it is an order for the seller's side in a sale made through a marketplace. This order assumes the transaction itself has already happened on the marketplace's side and, therfore, cares only about the fulfillment side.\n\n> If you plan to integrate external orders with possible [Price divergence](https://help.vtex.com/en/tutorial/price-divergence-rule--6RlFLhD1rIRRshl83KnCjW#) be mindful of the `isCreatedAsync` request body field. \n\nFor a detailed explanation of the steps required to develop a custom connector to become an external marketplace for VTEX sellers, check out our complete [External Marketplace Integration Guide](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-guide)."
       operationId: PlaceFulfillmentOrder
       parameters:
       - name: accountName
@@ -1740,35 +1868,41 @@ paths:
                       description: Customer's phone number.
                       example: '+55110988887777'
                     corporateName:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Company name, if the customer is a legal entity.
                       example: company-name
-                      nullable: true
                     tradeName:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Trade name, if the customer is a legal entity.
                       example: trade-name
-                      nullable: true
                     corporateDocument:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Corporate document, if the customer is a legal entity.
                       example: '12345678000100'
-                      nullable: true
                     stateInscription:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: State inscription, if the customer is a legal entity.
                       example: '12345678'
-                      nullable: true
                     corporatePhone:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Corporate phone number, if the customer is a legal entity.
                       example: '+551100988887777'
-                      nullable: true
                     isCorporate:
-                      type: boolean
+                      type:
+                      - boolean
+                      - 'null'
                       description: '`true` if the customer is a legal entity.'
                       example: false
-                      nullable: true
                 shippingData:
                   type: object
                   description: Shipping information.
@@ -1899,9 +2033,10 @@ paths:
                       description: Indicate whether this object's information is up to date according to the order's items. An order can not be placed if `"outdated"`
                       example: updated
                 paymentData:
-                  type: object
+                  type:
+                  - object
+                  - 'null'
                   description: In other contexts, this field tipically holds an object with payment information. However, since the payment is processed by the marketplace, it will be sent to the seller as `null` in this context.
-                  nullable: true
                   default: null
                 marketingData:
                   type: object
@@ -2019,6 +2154,18 @@ paths:
                     paymentData: null
                     customData: null
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX Server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/fulfillment/pvt/orders/{orderId}/fulfill:
     post:
       tags:
@@ -2101,6 +2248,18 @@ paths:
                   value:
                     marketplaceOrderId: '123'
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX Server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/order-integration/orders:
     post:
       tags:
@@ -2252,6 +2411,18 @@ paths:
                 fields: null
                 message: Order successfully enqueued
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX Server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/order-integration/orders/status:
     put:
       tags:
@@ -2323,12 +2494,27 @@ paths:
                 fields: null
                 message: Order successfully enqueued
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX Server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/checkout/pub/orderForms/simulation:
     post:
       tags:
       - External Marketplace
       summary: VTex Fulfillment simulation - External Marketplace
-      description: "This endpoint can be triggered by marketplaces to simulate the fulfillment of an item in the cart.\r\n\r\nThe fulfillment information is useful whenever you need to know the availability of fulfilling an order for a specific cart setting, since the API response will let you know the updated price, inventory and shipping data."
+      description: 'This endpoint can be triggered by marketplaces to simulate the fulfillment of an item in the cart.
+
+
+        The fulfillment information is useful whenever you need to know the availability of fulfilling an order for a specific cart setting, since the API response will let you know the updated price, inventory and shipping data.'
       operationId: fulfillment-simulation-external-marketplace
       parameters:
       - name: accountName
@@ -2479,25 +2665,30 @@ paths:
                       description: Phone number.
                       example: '+552199999999'
                     corporateName:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Company name, if the customer is a legal entity.
-                      nullable: true
                     tradeName:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Trade name, if the customer is a legal entity.
-                      nullable: true
                     corporateDocument:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Corporate document, if the customer is a legal entity.
-                      nullable: true
                     stateInscription:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: State inscription, if the customer is a legal entity.
-                      nullable: true
                     corporatePhone:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Corporate phone number, if the customer is a legal entity.
-                      nullable: true
                     isCorporate:
                       type: boolean
                       description: Indicates whether the customer is a legal entity.
@@ -2505,13 +2696,15 @@ paths:
                       type: boolean
                       description: Indicates whether profile is complete on loading.
                     profileErrorOnLoading:
-                      type: boolean
+                      type:
+                      - boolean
+                      - 'null'
                       description: Indicates whether profile presents error on loading.
-                      nullable: true
                     customerClass:
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                       description: Customer class.
-                      nullable: true
                 geoCoordinates:
                   type: array
                   description: Array containing two floats with geocoordinates, first longitude, then latitude.
@@ -2526,9 +2719,10 @@ paths:
                   description: Indicates whether order is checked in.
                   default: false
                 storeId:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: ID of the store.
-                  nullable: true
       responses:
         '200':
           description: OK
@@ -2614,13 +2808,15 @@ paths:
                           type: integer
                           description: Unit multiplier.
                         parentItemIndex:
-                          type: integer
+                          type:
+                          - integer
+                          - 'null'
                           description: Parent item index.
-                          nullable: true
                         parentAssemblyBinding:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Parent assembly binding.
-                          nullable: true
                         availability:
                           type: string
                           description: Availability.
@@ -2668,9 +2864,10 @@ paths:
                             type: integer
                             description: Payment system identification.
                           bin:
-                            type: string
+                            type:
+                            - string
+                            - 'null'
                             description: Bin.
-                            nullable: true
                           paymentName:
                             type: string
                             description: Payment name.
@@ -2718,9 +2915,10 @@ paths:
                               type: string
                               description: Payment group name.
                             validator:
-                              type: object
+                              type:
+                              - object
+                              - 'null'
                               description: Payment system validator.
-                              nullable: true
                             stringId:
                               type: string
                               description: String ID.
@@ -2746,9 +2944,10 @@ paths:
                               type: string
                               description: Payment due date.
                             availablePayments:
-                              type: string
+                              type:
+                              - string
+                              - 'null'
                               description: Availability of payment.
-                              nullable: true
                       payments:
                         type: array
                         description: Information on each payment.
@@ -2771,13 +2970,15 @@ paths:
                     type: array
                     description: Array containing the data of the item selected as a gift.
                   marketingData:
-                    type: object
+                    type:
+                    - object
+                    - 'null'
                     description: Object containing promotion data such as coupon tracking information and internal or external UTMs.
-                    nullable: true
                   postalCode:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: Postal Code.
-                    nullable: true
                   country:
                     type: string
                     description: Three letter ISO code of the country of the shipping address.
@@ -2791,17 +2992,20 @@ paths:
                           type: integer
                           description: Index of item in items array.
                         addressId:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Address ID.
-                          nullable: true
                         selectedSla:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Selected SLA. For example, `"normal"` or `"express"`.
-                          nullable: true
                         selectedDeliveryChannel:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Delivery channel selected by the customer. For example, `"delivery"` or `"pickup-in-point"`.
-                          nullable: true
                         quantity:
                           type: integer
                           description: Quantity.
@@ -2848,9 +3052,10 @@ paths:
                                 type: string
                                 description: Shipping estimate. For instance, "three business days" will be represented as `3bd`.
                               shippingEstimateDate:
-                                type: string
+                                type:
+                                - string
+                                - 'null'
                                 description: Shipping estimate date.
-                                nullable: true
                               lockTTL:
                                 type: string
                                 description: Estimate date of delivery.
@@ -2909,32 +3114,38 @@ paths:
                                     type: boolean
                                     description: Indicates whether it is the pickup store.
                                   friendlyName:
-                                    type: string
+                                    type:
+                                    - string
+                                    - 'null'
                                     description: Friendly name.
-                                    nullable: true
                                   address:
-                                    type: object
+                                    type:
+                                    - object
+                                    - 'null'
                                     description: Address information.
-                                    nullable: true
                                   additionalInfo:
-                                    type: string
+                                    type:
+                                    - string
+                                    - 'null'
                                     description: Additional information.
-                                    nullable: true
                                   dockId:
-                                    type: string
+                                    type:
+                                    - string
+                                    - 'null'
                                     description: Corresponding dock ID.
-                                    nullable: true
                               pickupPointId:
-                                type: string
+                                type:
+                                - string
+                                - 'null'
                                 description: Pickup point ID.
-                                nullable: true
                               pickupDistance:
                                 type: integer
                                 description: Pickup point distance.
                               polygonName:
-                                type: string
+                                type:
+                                - string
+                                - 'null'
                                 description: Polygon name.
-                                nullable: true
                               transitTime:
                                 type: string
                                 description: Transit time. For instance, "three business days" is represented as `3bd`.
@@ -3009,9 +3220,10 @@ paths:
                                           type: string
                                           description: Shipping estimate. For instance, "three business days" will be represented as `3bd`.
                                         shippingEstimateDate:
-                                          type: string
+                                          type:
+                                          - string
+                                          - 'null'
                                           description: Shipping estimate date.
-                                          nullable: true
                                         lockTTL:
                                           type: string
                                           description: Estimate date of delivery.
@@ -3070,32 +3282,38 @@ paths:
                                               type: boolean
                                               description: Indicates whether it is the pickup store.
                                             friendlyName:
-                                              type: string
+                                              type:
+                                              - string
+                                              - 'null'
                                               description: Friendly name.
-                                              nullable: true
                                             address:
-                                              type: object
+                                              type:
+                                              - object
+                                              - 'null'
                                               description: Address information.
-                                              nullable: true
                                             additionalInfo:
-                                              type: string
+                                              type:
+                                              - string
+                                              - 'null'
                                               description: Additional information.
-                                              nullable: true
                                             dockId:
-                                              type: string
+                                              type:
+                                              - string
+                                              - 'null'
                                               description: Corresponding dock ID.
-                                              nullable: true
                                         pickupPointId:
-                                          type: string
+                                          type:
+                                          - string
+                                          - 'null'
                                           description: Pickup point ID.
-                                          nullable: true
                                         pickupDistance:
                                           type: integer
                                           description: Pickup point distance.
                                         polygonName:
-                                          type: string
+                                          type:
+                                          - string
+                                          - 'null'
                                           description: Polygon name.
-                                          nullable: true
                                         transitTime:
                                           type: string
                                           description: Transit time. For instance, "three business days" is represented as `3bd`.
@@ -3109,9 +3327,10 @@ paths:
                           type: array
                           description: Array containing pickup points information.
                         subscriptionData:
-                          type: object
+                          type:
+                          - object
+                          - 'null'
                           description: Subscription information.
-                          nullable: true
                         totals:
                           type: array
                           description: Information on order totals.
@@ -3160,9 +3379,10 @@ paths:
                                         type: object
                                         description: Input values information.
                                       composition:
-                                        type: string
+                                        type:
+                                        - string
+                                        - 'null'
                                         description: Composition information.
-                                        nullable: true
               example:
                 items:
                 - id: '1'
@@ -3467,434 +3687,20 @@ paths:
                           - '[]'
                       composition: null
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX Server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
 components:
   schemas:
-    upsertMerchantConnection:
-      title: Upsert merchant connection
-      required:
-      - isActive
-      - affiliateId
-      type: object
-      properties:
-        isActive:
-          type: boolean
-          default: false
-        affiliateId:
-          type: string
-          default: ''
-    Fields:
-      title: Fields
-      description: String dictionary with the names of the fields and their respective values that must be inserted into the order.
-      required:
-      - marketplacePaymentMethod
-      type: object
-      properties:
-        marketplacePaymentMethod:
-          type: string
-          title: marketplacePaymentMethod
-          description: String with field's key and value.
-          example: credit card
-      example:
-        marketplacePaymentMethod: credit card
-    Deliverybyseller:
-      title: Deliverybyseller
-      required:
-      - marketplaceOrderId
-      - accountName
-      - code
-      - flow
-      - success
-      - operationId
-      - errors
-      - fields
-      - message
-      type: object
-      properties:
-        marketplaceOrderId:
-          type: string
-          nullable: true
-          description: String that indicates the order's ID in the marketplace.
-          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
-        accountName:
-          type: string
-          description: String that indicates which account made the request.
-          example: accountName
-        code:
-          type: string
-          description: String with a internal Channel Order API code that classifies the response. The possible values returned in this field are described in the [Response Codes]() section.
-          example: SOI001
-        flow:
-          type: string
-          description: "String containing the name of the flow responsible for the response. This field can contain the following values: \n\n`PlaceOrder`: when integrating new orders \n\n`ApproveOrder`: when approving existing orders \n\n`Unknown`: when we’re not able to identify the flow"
-          example: ApproveOrder
-        success:
-          type: boolean
-          description: Boolean that indicates if the response is successful or not.
-          example: true
-        operationId:
-          type: string
-          nullable: true
-          description: String GUID that identifies the operation in our service. This field can be used to help us analyze unexpected errors or behaviors.
-          example: '1234567'
-        errors:
-          type: array
-          nullable: true
-          description: List with errors related to the response, if there's any.
-          items:
-            type: object
-            title: errors
-            required:
-            - source
-            - code
-            - description
-            properties:
-              source:
-                type: string
-                title: Checkout
-                description: "Includes the following fields pointing out the context of the error: \n\n`Fulfillment` \n\n`Checkout` \n\n`Order Integration`"
-                example: Fulfillment
-              code:
-                type: string
-                title: code
-                description: 'String containing the code returned by the source. Example value: If the source is `Fulfillment`, the code can be FMT005 to indicate that the item(s) in the order are not available.'
-                example: FMT005
-              description:
-                type: string
-                title: description
-                description: String containing the error message/description returned by the source.
-                example: Message describing the error.
-            example:
-              source: Fulfillment
-              code: FMT005
-              description: Message describing the error.
-        fields:
-          type: object
-          nullable: true
-          description: "Structure with important fields for the connector. This structure is only returned if the response is successful. Includes the following fields: \n\n`mainOrderId`: String with the order's ID inside the main seller account in VTEX. \n\n`franchiseOrderId`: - String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n\n- `SLA` chosen for the order is from a franchise account."
-          properties:
-            fields:
-              type: object
-              title: fields
-              required:
-              - mainOrderId
-              properties:
-                mainOrderId:
-                  type: string
-                  title: mainOrderId
-                  description: String with the order’s ID inside the main seller account in VTEX.
-                  example: MKP-123456789
-                franchiseOrderId:
-                  type: string
-                  title: franchiseOrderId
-                  description: "String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \r\n- SLA chosen for the order is from a franchise account"
-                  example: '432874921387409182347'
-              example:
-                mainOrderId: MKP-123456789
-                franchiseOrderId: '432874921387409182347'
-          example:
-            franchiseOrderId: '38475934875'
-        message:
-          type: string
-          description: 'String with a message explaining the code returned in the response. '
-          example: The order was integrated into VTEX successfully
-      example:
-        marketplaceOrderId: null
-        accountName: grocery1
-        code: SOI003
-        flow: PlaceOrder
-        success: true
-        operationId: null
-        errors: null
-        fields: null
-        message: Order successfully enqueued
-    CustomData:
-      title: CustomData
-      description: Structure with the order's customizable fields. To insert custom fields in the order, you must first go through the process of [Creating an app](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template), and then adding the app, as well as the desired fields, within the seller's `orderForm`. More information on [Creating customizable fields in the cart with Checkout API](https://developers.vtex.com/vtex-rest-api/docs/customizable-fields-with-checkout-api).
-      required:
-      - customApps
-      type: object
-      properties:
-        customApps:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomApp'
-          description: Array of objects with information about custom apps.
-      example:
-        customApps:
-        - id: marketplace-integration
-          major: 1
-          fields:
-            marketplacePaymentMethod: credit card
-    Item:
-      title: Item
-      required:
-      - id
-      - price
-      - quantity
-      type: object
-      properties:
-        id:
-          type: string
-          title: id
-          description: String with the SKU ID in VTEX’s catalog.
-          example: '1'
-        price:
-          type: integer
-          title: price
-          description: Integer with the SKU’s unit price. If the value is `USD110.50`, convert it to the format → `11050`.
-          example: 11050
-        quantity:
-          type: integer
-          title: quantity
-          description: Integer with the quantity of the SKU present in the order. The value should be greater than zero.
-          example: 10
-      example:
-        id: '1'
-        price: 975
-        quantity: 1
-    partialUpdateConnector:
-      title: Partial update connector
-      required:
-      - path
-      - op
-      - value
-      type: object
-      properties:
-        path:
-          type: string
-          default: ''
-          description: What part of the configuration do you want to change.
-        op:
-          type: string
-          default: ''
-          description: Type of operation to be performed.
-        value:
-          type: string
-          default: ''
-          description: New value which will appear in the changed field.
-      example:
-        path: /segment
-        op: replace
-        value: DEPARTMENT_STORES
-    InvoiceData:
-      title: InvoiceData
-      description: Object with the order's billing data.
-      required:
-      - userPaymentInfo
-      type: object
-      properties:
-        userPaymentInfo:
-          $ref: '#/components/schemas/UserPaymentInfo'
-      example:
-        userPaymentInfo:
-          paymentMethods:
-          - creditCardPaymentGroup
-    UpdateOrderStatusRequest:
-      title: UpdateOrderStatusRequest
-      required:
-      - marketplaceOrderId
-      - marketplaceOrderStatus
-      - connectorName
-      - connectorEndpoint
-      type: object
-      properties:
-        marketplaceOrderId:
-          type: string
-          description: String that indicates the order's ID in the marketplace.
-          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
-        marketplaceOrderStatus:
-          type: string
-          title: marketplaceOrderStatus
-          description: "Required field including a string with the order’s status in the marketplace. If you send an order with the status APPROVED to integrate, our service will automatically try to advance its status in VTEX after integrating it. This field accepts the following values:  \n\n- `new`  \n\n- `approved`."
-          example: new
-        connectorName:
-          type: string
-          title: connectorName
-          description: "String with the identifier code of the connector responsible for the order.  \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template."
-          example: connectorName
-        connectorEndpoint:
-          type: string
-          title: connectorEndpoint
-          description: "String with the connector's base endpoint that will receive notifications about the orders processing results, as well as status updates from VTEX OMS. This field does not accept query strings. You can use the models below:  \n\n- `https://{{externalconnector}}.com`  \n\n- `https://{{externalconnector.com}}/api/vtex` if you additionaly want to send a relative URL with the endpoint. \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template."
-          example: https://{{externalconnector.com}}/api/vtex
-      example:
-        marketplaceOrderId: '{{$guid}}'
-        marketplaceOrderStatus: APPROVED
-        connectorName: Skyhub
-        connectorEndpoint: https://connector-endpoint.com/api/vtex
-    Approveorder:
-      title: Approveorder
-      required:
-      - marketplaceOrderId
-      - accountName
-      - code
-      - flow
-      - success
-      - operationId
-      - errors
-      - fields
-      - message
-      type: object
-      properties:
-        marketplaceOrderId:
-          type: string
-          nullable: true
-          description: String that indicates the order's ID in the marketplace.
-          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
-        accountName:
-          type: string
-          description: String that indicates which account made the request.
-          example: accountName
-          nullable: true
-        code:
-          type: string
-          description: String with a internal Channel Order API code that classifies the response. The possible values returned in this field are described in the Response Codes section of this API Reference.
-          example: SOI001
-        flow:
-          type: string
-          description: "String containing the name of the flow responsible for the response. This field can contain the following values: \n\n`PlaceOrder`: when integrating new orders. \n\n`ApproveOrder`: when approving existing orders. \n\n`Unknown`: when we’re not able to identify the flow."
-          example: ApproveOrder
-        success:
-          type: boolean
-          description: Boolean that indicates if the response is successful or not.
-          example: true
-        operationId:
-          type: string
-          nullable: true
-          description: String GUID that identifies the operation in our service. This field can be used to help us analyze unexpected errors or behaviors.
-          example: '1234567'
-        errors:
-          type: array
-          nullable: true
-          description: List with errors related to the response, if there is any.
-          items:
-            type: object
-            title: errors
-            required:
-            - source
-            - code
-            - description
-            properties:
-              source:
-                type: string
-                title: Checkout
-                description: "Includes the following fields pointing out the context of the error: \n\n`Fulfillment` \n\n`Checkout` \n\n`Order Integration`"
-                example: Fulfillment
-              code:
-                type: string
-                title: code
-                description: 'String containing the code returned by the source. Example value: If the source is `Fulfillment`, the code can be FMT005 to indicate that the item(s) in the order are not available.'
-                example: FMT005
-              description:
-                type: string
-                title: description
-                description: String containing the error message/description returned by the source.
-                example: Message describing the error.
-            example:
-              source: Fulfillment
-              code: FMT005
-              description: Message describing the error.
-        fields:
-          type: object
-          nullable: true
-          description: "Structure with important fields for the connector. This structure is only returned if the response is successful. Includes the following fields: \n\n`mainOrderId`: String with the order's ID inside the main seller account in VTEX. \n\n`franchiseOrderId`: - String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n\n- `SLA` chosen for the order is from a franchise account."
-          properties:
-            fields:
-              type: object
-              title: fields
-              required:
-              - mainOrderId
-              properties:
-                mainOrderId:
-                  type: string
-                  title: The mainOrderId Schema
-                  description: String with the order’s ID inside the main seller account in VTEX.
-                  example: MKP-123456789
-                franchiseOrderId:
-                  type: string
-                  title: The franchiseOrderId Schema
-                  description: "String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \r\n- SLA chosen for the order is from a franchise account"
-                  example: '432874921387409182347'
-              example:
-                mainOrderId: MKP-123456789
-                franchiseOrderId: '432874921387409182347'
-          example:
-            franchiseOrderId: '38475934875'
-        message:
-          type: string
-          description: String with a message explaining the code returned in the response.
-          example: The order was integrated into VTEX successfully
-      example:
-        marketplaceOrderId: 7e62fcd3-827b-400d-be8a-f050a79c4976
-        accountName: null
-        code: SOI003
-        flow: ApproveOrder
-        success: true
-        operationId: null
-        errors: null
-        fields: null
-        message: Order successfully enqueued
-    CustomApp:
-      title: CustomApp
-      required:
-      - id
-      - major
-      - fields
-      type: object
-      properties:
-        id:
-          type: string
-          title: id
-          description: App's ID.
-          example: ID
-        major:
-          type: integer
-          title: major
-          description: Integer with the major version of the app. Optional, defaulting to one.
-          example: 1
-        fields:
-          $ref: '#/components/schemas/Fields'
-      example:
-        id: marketplace-integration
-        major: 1
-        fields:
-          marketplacePaymentMethod: credit card
-    VtexMapperRegistration:
-      required:
-      - displayName
-      - categoryTreeEndPoint
-      - mappingEndPoint
-      - properties
-      type: object
-      properties:
-        displayName:
-          type: string
-          description: Marketplace Name, that will be displayed in VTEX Mapper.
-          example: Marketplace A
-        categoryTreeEndPoint:
-          type: string
-          description: Endpoint that returns categories and attributes according to VTEX  Mapper specifications.
-          example: http://api.vtexinternal.com.br/api/{{marketplaceName}}/mapper/categories
-        mappingEndPoint:
-          type: string
-          description: Secure endpoint that will receive the category mapping sent by VTEX Mapper.
-          example: http://api.vtexinternal.com.br/api/{{marketplaceName}}/mapper/mapping
-        properties:
-          required:
-          - allowsRemap
-          type: object
-          description: Refers to the `allowsRemap` property.
-          items:
-            type: object
-            properties:
-              allowsRemap:
-                type: boolean
-                description: Allows rempaping categories in case the marketplace or seller tree is altered. If marked as `true`, all trees will be remapped.
-                example: false
-        CategoryTreeProcessingNotificationEndpoint:
-          description: The `CategoryTreeProcessingNotificationEndpoint` is optional, and should be an endpoint from the external marketplace, that will be notified after the marketplace's category tree is successfully processed or not.
-          type: string
-          example: https://CategoryTreeProcessingNotificationEndpoint.com/api
     sendCategoryMappingToVtexMapper:
       required:
       - categories
@@ -3949,12 +3755,13 @@ components:
                       description: Name of the child  category in the marketplace.
                       default: Kitchen
                     children:
-                      type: array
+                      type:
+                      - array
+                      - 'null'
                       title: children
                       description: Grandchildren categories in the marketplace. Send as array of `ID`, `name` and `specifications`.
                       default: []
                       items: {}
-                      nullable: true
                     specifications:
                       type: array
                       title: specifications
@@ -4007,6 +3814,55 @@ components:
                                   title: valueName
                                   description: Name of the value
                                   default: Red
+    VtexMapperRegistration:
+      required:
+      - displayName
+      - categoryTreeEndPoint
+      - mappingEndPoint
+      - properties
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: Marketplace Name, that will be displayed in VTEX Mapper.
+          example: Marketplace A
+        categoryTreeEndPoint:
+          type: string
+          description: Endpoint that returns categories and attributes according to VTEX  Mapper specifications.
+          example: http://api.vtexinternal.com.br/api/{{marketplaceName}}/mapper/categories
+        mappingEndPoint:
+          type: string
+          description: Secure endpoint that will receive the category mapping sent by VTEX Mapper.
+          example: http://api.vtexinternal.com.br/api/{{marketplaceName}}/mapper/mapping
+        properties:
+          required:
+          - allowsRemap
+          type: object
+          description: Refers to the `allowsRemap` property.
+          items:
+            type: object
+            properties:
+              allowsRemap:
+                type: boolean
+                description: Allows rempaping categories in case the marketplace or seller tree is altered. If marked as `true`, all trees will be remapped.
+                example: false
+        CategoryTreeProcessingNotificationEndpoint:
+          description: The `CategoryTreeProcessingNotificationEndpoint` is optional, and should be an endpoint from the external marketplace, that will be notified after the marketplace's category tree is successfully processed or not.
+          type: string
+          example: https://CategoryTreeProcessingNotificationEndpoint.com/api
+    upsertMerchantConnection:
+      title: Upsert merchant connection
+      required:
+      - isActive
+      - affiliateId
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          default: false
+        affiliateId:
+          type: string
+          default: ''
     fullUpdateConnector:
       title: ''
       required:
@@ -4065,149 +3921,47 @@ components:
         - ARG
         connectorVtexAdminPath: /bridge/#/settings?openConfig=mercadolivre
         connectorApiEndpoint: portal.vtexcommercestable.com/api/meliintegration/notifications
-    Deliverybyfranchiseseller:
-      title: Deliverybyfranchiseseller
+    partialUpdateConnector:
+      title: Partial update connector
       required:
-      - marketplaceOrderId
-      - accountName
-      - code
-      - flow
-      - success
-      - operationId
-      - errors
-      - fields
-      - message
+      - path
+      - op
+      - value
       type: object
       properties:
-        marketplaceOrderId:
+        path:
           type: string
-          nullable: true
-          description: String that indicates the order's ID in the marketplace.
-          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
-        accountName:
+          default: ''
+          description: What part of the configuration do you want to change.
+        op:
           type: string
-          description: String that indicates which account made the request.
-          example: accountName
-        code:
+          default: ''
+          description: Type of operation to be performed.
+        value:
           type: string
-          description: String with a internal Channel Order API code that classifies the response. The possible values returned in this field are described in the [Response Codes]() section.
-          example: SOI001
-        flow:
-          type: string
-          description: "String containing the name of the flow responsible for the response. This field can contain the following values: \n\n`PlaceOrder`: when integrating new orders \n\n`ApproveOrder`: when approving existing orders \n\n`Unknown`: when we’re not able to identify the flow"
-          example: ApproveOrder
-        success:
-          type: boolean
-          description: Boolean that indicates if the response is successful or not.
-          example: true
-        operationId:
-          type: string
-          nullable: true
-          description: String GUID that identifies the operation in our service. This field can be used to help us analyze unexpected errors or behaviors.
-          example: '1234567'
-        errors:
+          default: ''
+          description: New value which will appear in the changed field.
+      example:
+        path: /segment
+        op: replace
+        value: DEPARTMENT_STORES
+    UserPaymentInfo:
+      title: UserPaymentInfo
+      description: Structure with the order’s payment data. Required only if `invoiceData` is defined.
+      required:
+      - paymentMethods
+      type: object
+      properties:
+        paymentMethods:
           type: array
-          nullable: true
-          description: List with errors related to the response, if there's any.
           items:
-            type: object
-            title: errors
-            required:
-            - source
-            - code
-            - description
-            properties:
-              source:
-                type: string
-                title: Checkout
-                description: "Includes the following fields pointing out the context of the error: \n\n`Fulfillment` \n\n`Checkout` \n\n`Order Integration`"
-                example: Fulfillment
-              code:
-                type: string
-                title: code
-                description: 'String containing the code returned by the source. Example value: If the source is `Fulfillment`, the code can be FMT005 to indicate that the item(s) in the order are not available.'
-                example: FMT005
-              description:
-                type: string
-                title: description
-                description: String containing the error message/description returned by the source.
-                example: Message describing the error.
-            example:
-              source: Fulfillment
-              code: FMT005
-              description: Message describing the error.
-        fields:
-          type: object
-          nullable: true
-          description: "Structure with important fields for the connector. This structure is only returned if the response is successful. Includes the following fields: \n\n`mainOrderId`: String with the order's ID inside the main seller account in VTEX. \n\n`franchiseOrderId`: - String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n\n- `SLA` chosen for the order is from a franchise account."
-          properties:
-            fields:
-              type: object
-              title: fields
-              required:
-              - mainOrderId
-              properties:
-                mainOrderId:
-                  type: string
-                  title: mainOrderId
-                  description: String with the order’s ID inside the main seller account in VTEX.
-                  example: MKP-123456789
-                franchiseOrderId:
-                  type: string
-                  title: franchiseOrderId
-                  description: "String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \r\n- SLA chosen for the order is from a franchise account"
-                  example: '432874921387409182347'
-              example:
-                mainOrderId: MKP-123456789
-                franchiseOrderId: '432874921387409182347'
+            type: string
+          description: List of strings with the payment methods used in the order. Required only if `invoiceData` is defined. The format and some possible values of payment methods accepted in this list can be found in the call [Fetching marketplace information with the Orders API](https://developers.vtex.com/vtex-rest-api/docs/get-marketplace-data-orders-api).
           example:
-            franchiseOrderId: '38475934875'
-        message:
-          type: string
-          description: 'String with a message explaining the code returned in the response. '
-          nullable: true
-          example: The order was integrated into VTEX successfully
+          - creditCardPaymentGroup
       example:
-        marketplaceOrderId: null
-        accountName: grocery1
-        code: SOI003
-        flow: PlaceOrder
-        success: true
-        operationId: null
-        errors: null
-        fields: null
-        message: Order successfully enqueued
-    GeoCoordinates:
-      title: GeoCoordinates
-      description: Structure with the address geocoordinates. Optional for `delivery` orders, required for `pickup-in-point` orders.
-      required:
-      - latitude
-      - longitude
-      type: object
-      properties:
-        latitude:
-          type: string
-          title: latitude
-          description: "Double value with the latitude coordinates of the address. Required only if the geoCoordinates field is defined. \n\nExample format: `-25.4158764`."
-          example: '-25.4158764'
-        longitude:
-          type: string
-          title: longitude
-          description: 'Double value with the longitude coordinates of the address. Required only if the geoCoordinates field is defined. Example format: `-49.342759`.'
-          example: '-49.342759'
-    DeliveryIds:
-      title: DeliveryIds
-      description: List of delivery IDs, used for orders where the marketplace is responsible for the fulfillment of the order, including keeping inventory at a warehouse as well as the delivery.
-      required:
-      - warehouseId
-      type: object
-      properties:
-        warehouseId:
-          type: string
-          description: String with the ID of the warehouse used for marketplace fulfillment. Required when `isFob` = `true` and `isMarketplaceFulfillment` = `true`.
-          example: AR1
-      example:
-        warehouseId: AR1
+        paymentMethods:
+        - creditCardPaymentGroup
     EnqueueNewOrderRequest:
       title: EnqueueNewOrderRequest
       required:
@@ -4327,6 +4081,346 @@ components:
             major: 1
             fields:
               marketplacePaymentMethod: credit card
+    LogisticsInfo:
+      title: LogisticsInfo
+      description: "List that references the SLAs responsible for delivering each item in the order.  \n\nThis list must contain the same number of items as the `items` list, previously defined. For example: if the order contains 3 SKUs, you must describe 3 SLAs in this list, one for each SKU (even in cases where the same SLA will deliver all of them).  \n\nThe order of the SLAs in this list must also follow the same order as in the `items` list. For example: if the SLA named **Correios Express** will be responsible for delivering the SKU with ID equal to **1015**, which is found at index 0 of the `items` list, it must be in index 0 of the `logisticsInfo` list as well."
+      required:
+      - price
+      - selectedDeliveryChannel
+      - selectedSla
+      - lockTTL
+      - shippingEstimate
+      - deliveryIds
+      type: object
+      properties:
+        price:
+          type: integer
+          title: price
+          description: Integer indicating the shipping price for this SKU. If the value is `USD20.50`, convert it to the format → `2050`.
+          example: 2050
+        selectedDeliveryChannel:
+          type: string
+          title: selectedDeliveryChannel
+          description: "String with the selected delivery channel. This field supports the following values:  \n\n- `delivery`,  \n\n- `pickup-in-point`."
+          example: delivery
+        selectedSla:
+          type: string
+          title: selectedSla
+          description: String with the selected delivery SLA.
+          example: T-G1-2-Express
+        lockTTL:
+          type: string
+          title: lockTTL
+          description: "String with the inventory reservation period in VTEX's logistics system. To fill in this field insert the number of days, followed by the letter for the chosen unit. \n\n- Days: `d` \n\n- Business days: `bd`. \n\nExample formats: `12d`, `5d`."
+          example: 5d
+        shippingEstimate:
+          type: string
+          title: shippingEstimate
+          description: "String with the order's estimated delivery time. To fill in this field, insert a number,  followed by the letter for the chosen unit. \n\n- Days: `d` \n\n- Business days: `bd`. \n\n- Hours: `h` \n\n- Minutes: `m`. \n\nExample formats: `12d`, `5bd`, `3h`, `50m`."
+          example: 7d
+        deliveryIds:
+          $ref: '#/components/schemas/DeliveryIds'
+      example:
+        price: 2050
+        selectedDeliveryChannel: delivery
+        selectedSla: Express
+        lockTTL: 1d
+        shippingEstimate: 2d
+        deliveryIds:
+          warehouseId: AR1
+    CustomApp:
+      title: CustomApp
+      required:
+      - id
+      - major
+      - fields
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+          description: App's ID.
+          example: ID
+        major:
+          type: integer
+          title: major
+          description: Integer with the major version of the app. Optional, defaulting to one.
+          example: 1
+        fields:
+          $ref: '#/components/schemas/Fields'
+      example:
+        id: marketplace-integration
+        major: 1
+        fields:
+          marketplacePaymentMethod: credit card
+    Deliverybyfranchiseseller:
+      title: Deliverybyfranchiseseller
+      required:
+      - marketplaceOrderId
+      - accountName
+      - code
+      - flow
+      - success
+      - operationId
+      - errors
+      - fields
+      - message
+      type: object
+      properties:
+        marketplaceOrderId:
+          type:
+          - string
+          - 'null'
+          description: String that indicates the order's ID in the marketplace.
+          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
+        accountName:
+          type: string
+          description: String that indicates which account made the request.
+          example: accountName
+        code:
+          type: string
+          description: String with a internal Channel Order API code that classifies the response. The possible values returned in this field are described in the [Response Codes]() section.
+          example: SOI001
+        flow:
+          type: string
+          description: "String containing the name of the flow responsible for the response. This field can contain the following values: \n\n`PlaceOrder`: when integrating new orders \n\n`ApproveOrder`: when approving existing orders \n\n`Unknown`: when we’re not able to identify the flow"
+          example: ApproveOrder
+        success:
+          type: boolean
+          description: Boolean that indicates if the response is successful or not.
+          example: true
+        operationId:
+          type:
+          - string
+          - 'null'
+          description: String GUID that identifies the operation in our service. This field can be used to help us analyze unexpected errors or behaviors.
+          example: '1234567'
+        errors:
+          type:
+          - array
+          - 'null'
+          description: List with errors related to the response, if there's any.
+          items:
+            type: object
+            title: errors
+            required:
+            - source
+            - code
+            - description
+            properties:
+              source:
+                type: string
+                title: Checkout
+                description: "Includes the following fields pointing out the context of the error: \n\n`Fulfillment` \n\n`Checkout` \n\n`Order Integration`"
+                example: Fulfillment
+              code:
+                type: string
+                title: code
+                description: 'String containing the code returned by the source. Example value: If the source is `Fulfillment`, the code can be FMT005 to indicate that the item(s) in the order are not available.'
+                example: FMT005
+              description:
+                type: string
+                title: description
+                description: String containing the error message/description returned by the source.
+                example: Message describing the error.
+            example:
+              source: Fulfillment
+              code: FMT005
+              description: Message describing the error.
+        fields:
+          type:
+          - object
+          - 'null'
+          description: "Structure with important fields for the connector. This structure is only returned if the response is successful. Includes the following fields: \n\n`mainOrderId`: String with the order's ID inside the main seller account in VTEX. \n\n`franchiseOrderId`: - String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n\n- `SLA` chosen for the order is from a franchise account."
+          properties:
+            fields:
+              type: object
+              title: fields
+              required:
+              - mainOrderId
+              properties:
+                mainOrderId:
+                  type: string
+                  title: mainOrderId
+                  description: String with the order’s ID inside the main seller account in VTEX.
+                  example: MKP-123456789
+                franchiseOrderId:
+                  type: string
+                  title: franchiseOrderId
+                  description: "String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n- SLA chosen for the order is from a franchise account"
+                  example: '432874921387409182347'
+              example:
+                mainOrderId: MKP-123456789
+                franchiseOrderId: '432874921387409182347'
+          example:
+            franchiseOrderId: '38475934875'
+        message:
+          type:
+          - string
+          - 'null'
+          description: 'String with a message explaining the code returned in the response. '
+          example: The order was integrated into VTEX successfully
+      example:
+        marketplaceOrderId: null
+        accountName: grocery1
+        code: SOI003
+        flow: PlaceOrder
+        success: true
+        operationId: null
+        errors: null
+        fields: null
+        message: Order successfully enqueued
+    DeliveryIds:
+      title: DeliveryIds
+      description: List of delivery IDs, used for orders where the marketplace is responsible for the fulfillment of the order, including keeping inventory at a warehouse as well as the delivery.
+      required:
+      - warehouseId
+      type: object
+      properties:
+        warehouseId:
+          type: string
+          description: String with the ID of the warehouse used for marketplace fulfillment. Required when `isFob` = `true` and `isMarketplaceFulfillment` = `true`.
+          example: AR1
+      example:
+        warehouseId: AR1
+    ClientProfileData:
+      title: ClientProfileData
+      description: Structure with the customer's information. An order will be identified as corporate if any of the corporate fields are filled out (`corporateDocument`, `corporatePhone`, `corporateName` or `tradeName`).
+      required:
+      - email
+      - firstName
+      - lastName
+      - phone
+      - document
+      - corporateDocument
+      - corporatePhone
+      - corporateName
+      - tradeName
+      - stateInscription
+      type: object
+      properties:
+        email:
+          type: string
+          title: email
+          description: String with the customer's email.
+          example: cirilla@cintra.com
+        firstName:
+          type: string
+          title: firstName
+          description: String with the customer's first name.
+          example: Cirilla
+        lastName:
+          type: string
+          title: lastName
+          description: String with the customer’s surname.
+          example: Cintra
+        phone:
+          type: string
+          title: phone
+          description: String with the customer’s phone number.
+          example: '99999999999'
+        document:
+          type: string
+          title: The document schema
+          description: String with the customer’s document number.
+          example: '99999999999'
+        corporateDocument:
+          type:
+          - string
+          - 'null'
+          title: corporateDocument
+          description: String with the company’s document number, in case of corporate orders.
+          example: '99999999999'
+        corporatePhone:
+          type:
+          - string
+          - 'null'
+          title: corporatePhone
+          description: String with the company’s phone number, in case of corporate orders.
+          example: '99999999999'
+        corporateName:
+          type:
+          - string
+          - 'null'
+          title: corporateName
+          description: String with the company’s name, in case of corporate orders.
+          example: The Witcher Inc.
+        tradeName:
+          type:
+          - string
+          - 'null'
+          title: tradeName
+          description: String with the company’s fantasy name, in case of corporate orders.
+          example: The Witcher
+        stateInscription:
+          type:
+          - string
+          - 'null'
+          title: stateInscription
+          description: String with the company’s state registration, in case of corporate orders.
+          example: '99999999999'
+    UpdateOrderStatusRequest:
+      title: UpdateOrderStatusRequest
+      required:
+      - marketplaceOrderId
+      - marketplaceOrderStatus
+      - connectorName
+      - connectorEndpoint
+      type: object
+      properties:
+        marketplaceOrderId:
+          type: string
+          description: String that indicates the order's ID in the marketplace.
+          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
+        marketplaceOrderStatus:
+          type: string
+          title: marketplaceOrderStatus
+          description: "Required field including a string with the order’s status in the marketplace. If you send an order with the status APPROVED to integrate, our service will automatically try to advance its status in VTEX after integrating it. This field accepts the following values:  \n\n- `new`  \n\n- `approved`."
+          example: new
+        connectorName:
+          type: string
+          title: connectorName
+          description: "String with the identifier code of the connector responsible for the order.  \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template."
+          example: connectorName
+        connectorEndpoint:
+          type: string
+          title: connectorEndpoint
+          description: "String with the connector's base endpoint that will receive notifications about the orders processing results, as well as status updates from VTEX OMS. This field does not accept query strings. You can use the models below:  \n\n- `https://{{externalconnector}}.com`  \n\n- `https://{{externalconnector.com}}/api/vtex` if you additionaly want to send a relative URL with the endpoint. \n\nThis field is optional if the connector uses the [App Template](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template) and authenticates on our request via `VtexIdclientAutCookie`.  \n\nIt is required if the connector is native or does not use the App Template."
+          example: https://{{externalconnector.com}}/api/vtex
+      example:
+        marketplaceOrderId: '{{$guid}}'
+        marketplaceOrderStatus: APPROVED
+        connectorName: Skyhub
+        connectorEndpoint: https://connector-endpoint.com/api/vtex
+    ShippingData:
+      title: ShippingData
+      required:
+      - logisticsInfo
+      - selectedAddresses
+      - isFob
+      - isMarketplaceFulfillment
+      type: object
+      properties:
+        logisticsInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogisticsInfo'
+          description: "List that references the SLAs responsible for delivering each item in the order.  \n\nThis list must contain the same number of items as the `items` list, previously defined. For example: if the order contains 3 SKUs, you must describe 3 SLAs in this list, one for each SKU (even in cases where the same SLA will deliver all of them).  \n\nThe order of the SLAs in this list must also follow the same order as in the `items` list. For example: if the SLA named **Correios Express** will be responsible for delivering the SKU with ID equal to **1015**, which is found at index 0 of the `items` list, it must be in index 0 of the `logisticsInfo` list as well."
+        selectedAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectedAddress'
+          description: ''
+        isFob:
+          type: boolean
+          title: isFob
+          description: Boolean that indicates whether the order's delivery is the marketplace responsibility. Optional, defaulting to false.
+          example: false
+        isMarketplaceFulfillment:
+          type: boolean
+          title: isMarketplaceFulfillment
+          description: Boolean that indicates whether the order's inventory in warehouse is the marketplace's responsibility. Optional, defaulting to false.
+          example: false
     SelectedAddress:
       title: SelectedAddress
       description: List with the delivery addresses selected for the order. We currently only support a single delivery address.
@@ -4395,173 +4489,337 @@ components:
           example: Complement to address
         geoCoordinates:
           $ref: '#/components/schemas/GeoCoordinates'
-    LogisticsInfo:
-      title: LogisticsInfo
-      description: "List that references the SLAs responsible for delivering each item in the order.  \n\nThis list must contain the same number of items as the `items` list, previously defined. For example: if the order contains 3 SKUs, you must describe 3 SLAs in this list, one for each SKU (even in cases where the same SLA will deliver all of them).  \n\nThe order of the SLAs in this list must also follow the same order as in the `items` list. For example: if the SLA named **Correios Express** will be responsible for delivering the SKU with ID equal to **1015**, which is found at index 0 of the `items` list, it must be in index 0 of the `logisticsInfo` list as well."
+    Approveorder:
+      title: Approveorder
       required:
-      - price
-      - selectedDeliveryChannel
-      - selectedSla
-      - lockTTL
-      - shippingEstimate
-      - deliveryIds
+      - marketplaceOrderId
+      - accountName
+      - code
+      - flow
+      - success
+      - operationId
+      - errors
+      - fields
+      - message
       type: object
       properties:
+        marketplaceOrderId:
+          type:
+          - string
+          - 'null'
+          description: String that indicates the order's ID in the marketplace.
+          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
+        accountName:
+          type:
+          - string
+          - 'null'
+          description: String that indicates which account made the request.
+          example: accountName
+        code:
+          type: string
+          description: String with a internal Channel Order API code that classifies the response. The possible values returned in this field are described in the Response Codes section of this API Reference.
+          example: SOI001
+        flow:
+          type: string
+          description: "String containing the name of the flow responsible for the response. This field can contain the following values: \n\n`PlaceOrder`: when integrating new orders. \n\n`ApproveOrder`: when approving existing orders. \n\n`Unknown`: when we’re not able to identify the flow."
+          example: ApproveOrder
+        success:
+          type: boolean
+          description: Boolean that indicates if the response is successful or not.
+          example: true
+        operationId:
+          type:
+          - string
+          - 'null'
+          description: String GUID that identifies the operation in our service. This field can be used to help us analyze unexpected errors or behaviors.
+          example: '1234567'
+        errors:
+          type:
+          - array
+          - 'null'
+          description: List with errors related to the response, if there is any.
+          items:
+            type: object
+            title: errors
+            required:
+            - source
+            - code
+            - description
+            properties:
+              source:
+                type: string
+                title: Checkout
+                description: "Includes the following fields pointing out the context of the error: \n\n`Fulfillment` \n\n`Checkout` \n\n`Order Integration`"
+                example: Fulfillment
+              code:
+                type: string
+                title: code
+                description: 'String containing the code returned by the source. Example value: If the source is `Fulfillment`, the code can be FMT005 to indicate that the item(s) in the order are not available.'
+                example: FMT005
+              description:
+                type: string
+                title: description
+                description: String containing the error message/description returned by the source.
+                example: Message describing the error.
+            example:
+              source: Fulfillment
+              code: FMT005
+              description: Message describing the error.
+        fields:
+          type:
+          - object
+          - 'null'
+          description: "Structure with important fields for the connector. This structure is only returned if the response is successful. Includes the following fields: \n\n`mainOrderId`: String with the order's ID inside the main seller account in VTEX. \n\n`franchiseOrderId`: - String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n\n- `SLA` chosen for the order is from a franchise account."
+          properties:
+            fields:
+              type: object
+              title: fields
+              required:
+              - mainOrderId
+              properties:
+                mainOrderId:
+                  type: string
+                  title: The mainOrderId Schema
+                  description: String with the order’s ID inside the main seller account in VTEX.
+                  example: MKP-123456789
+                franchiseOrderId:
+                  type: string
+                  title: The franchiseOrderId Schema
+                  description: "String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n- SLA chosen for the order is from a franchise account"
+                  example: '432874921387409182347'
+              example:
+                mainOrderId: MKP-123456789
+                franchiseOrderId: '432874921387409182347'
+          example:
+            franchiseOrderId: '38475934875'
+        message:
+          type: string
+          description: String with a message explaining the code returned in the response.
+          example: The order was integrated into VTEX successfully
+      example:
+        marketplaceOrderId: 7e62fcd3-827b-400d-be8a-f050a79c4976
+        accountName: null
+        code: SOI003
+        flow: ApproveOrder
+        success: true
+        operationId: null
+        errors: null
+        fields: null
+        message: Order successfully enqueued
+    InvoiceData:
+      title: InvoiceData
+      description: Object with the order's billing data.
+      required:
+      - userPaymentInfo
+      type: object
+      properties:
+        userPaymentInfo:
+          $ref: '#/components/schemas/UserPaymentInfo'
+      example:
+        userPaymentInfo:
+          paymentMethods:
+          - creditCardPaymentGroup
+    Item:
+      title: Item
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+          description: String with the SKU ID in VTEX’s catalog.
+          example: '1'
         price:
           type: integer
           title: price
-          description: Integer indicating the shipping price for this SKU. If the value is `USD20.50`, convert it to the format → `2050`.
-          example: 2050
-        selectedDeliveryChannel:
-          type: string
-          title: selectedDeliveryChannel
-          description: "String with the selected delivery channel. This field supports the following values:  \n\n- `delivery`,  \n\n- `pickup-in-point`."
-          example: delivery
-        selectedSla:
-          type: string
-          title: selectedSla
-          description: String with the selected delivery SLA.
-          example: T-G1-2-Express
-        lockTTL:
-          type: string
-          title: lockTTL
-          description: "String with the inventory reservation period in VTEX's logistics system. To fill in this field insert the number of days, followed by the letter for the chosen unit. \n\n- Days: `d` \n\n- Business days: `bd`. \n\nExample formats: `12d`, `5d`."
-          example: 5d
-        shippingEstimate:
-          type: string
-          title: shippingEstimate
-          description: "String with the order's estimated delivery time. To fill in this field, insert a number,  followed by the letter for the chosen unit. \n\n- Days: `d` \n\n- Business days: `bd`. \n\n- Hours: `h` \n\n- Minutes: `m`. \n\nExample formats: `12d`, `5bd`, `3h`, `50m`."
-          example: 7d
-        deliveryIds:
-          $ref: '#/components/schemas/DeliveryIds'
+          description: Integer with the SKU’s unit price. If the value is `USD110.50`, convert it to the format → `11050`.
+          example: 11050
+        quantity:
+          type: integer
+          title: quantity
+          description: Integer with the quantity of the SKU present in the order. The value should be greater than zero.
+          example: 10
       example:
-        price: 2050
-        selectedDeliveryChannel: delivery
-        selectedSla: Express
-        lockTTL: 1d
-        shippingEstimate: 2d
-        deliveryIds:
-          warehouseId: AR1
-    UserPaymentInfo:
-      title: UserPaymentInfo
-      description: Structure with the order’s payment data. Required only if `invoiceData` is defined.
+        id: '1'
+        price: 975
+        quantity: 1
+    GeoCoordinates:
+      title: GeoCoordinates
+      description: Structure with the address geocoordinates. Optional for `delivery` orders, required for `pickup-in-point` orders.
       required:
-      - paymentMethods
+      - latitude
+      - longitude
       type: object
       properties:
-        paymentMethods:
-          type: array
+        latitude:
+          type: string
+          title: latitude
+          description: "Double value with the latitude coordinates of the address. Required only if the geoCoordinates field is defined. \n\nExample format: `-25.4158764`."
+          example: '-25.4158764'
+        longitude:
+          type: string
+          title: longitude
+          description: 'Double value with the longitude coordinates of the address. Required only if the geoCoordinates field is defined. Example format: `-49.342759`.'
+          example: '-49.342759'
+    Deliverybyseller:
+      title: Deliverybyseller
+      required:
+      - marketplaceOrderId
+      - accountName
+      - code
+      - flow
+      - success
+      - operationId
+      - errors
+      - fields
+      - message
+      type: object
+      properties:
+        marketplaceOrderId:
+          type:
+          - string
+          - 'null'
+          description: String that indicates the order's ID in the marketplace.
+          example: 7e62fcd3-827b-400d-be8a-f050a79c4976
+        accountName:
+          type: string
+          description: String that indicates which account made the request.
+          example: accountName
+        code:
+          type: string
+          description: String with a internal Channel Order API code that classifies the response. The possible values returned in this field are described in the [Response Codes]() section.
+          example: SOI001
+        flow:
+          type: string
+          description: "String containing the name of the flow responsible for the response. This field can contain the following values: \n\n`PlaceOrder`: when integrating new orders \n\n`ApproveOrder`: when approving existing orders \n\n`Unknown`: when we’re not able to identify the flow"
+          example: ApproveOrder
+        success:
+          type: boolean
+          description: Boolean that indicates if the response is successful or not.
+          example: true
+        operationId:
+          type:
+          - string
+          - 'null'
+          description: String GUID that identifies the operation in our service. This field can be used to help us analyze unexpected errors or behaviors.
+          example: '1234567'
+        errors:
+          type:
+          - array
+          - 'null'
+          description: List with errors related to the response, if there's any.
           items:
-            type: string
-          description: List of strings with the payment methods used in the order. Required only if `invoiceData` is defined. The format and some possible values of payment methods accepted in this list can be found in the call [Fetching marketplace information with the Orders API](https://developers.vtex.com/vtex-rest-api/docs/get-marketplace-data-orders-api).
+            type: object
+            title: errors
+            required:
+            - source
+            - code
+            - description
+            properties:
+              source:
+                type: string
+                title: Checkout
+                description: "Includes the following fields pointing out the context of the error: \n\n`Fulfillment` \n\n`Checkout` \n\n`Order Integration`"
+                example: Fulfillment
+              code:
+                type: string
+                title: code
+                description: 'String containing the code returned by the source. Example value: If the source is `Fulfillment`, the code can be FMT005 to indicate that the item(s) in the order are not available.'
+                example: FMT005
+              description:
+                type: string
+                title: description
+                description: String containing the error message/description returned by the source.
+                example: Message describing the error.
+            example:
+              source: Fulfillment
+              code: FMT005
+              description: Message describing the error.
+        fields:
+          type:
+          - object
+          - 'null'
+          description: "Structure with important fields for the connector. This structure is only returned if the response is successful. Includes the following fields: \n\n`mainOrderId`: String with the order's ID inside the main seller account in VTEX. \n\n`franchiseOrderId`: - String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n\n- `SLA` chosen for the order is from a franchise account."
+          properties:
+            fields:
+              type: object
+              title: fields
+              required:
+              - mainOrderId
+              properties:
+                mainOrderId:
+                  type: string
+                  title: mainOrderId
+                  description: String with the order’s ID inside the main seller account in VTEX.
+                  example: MKP-123456789
+                franchiseOrderId:
+                  type: string
+                  title: franchiseOrderId
+                  description: "String with the order's ID inside the franchise seller account in VTEX. Only returned if the order was integrated using the [Multilevel Omnichannel Inventory](https://help.vtex.com/en/tutorial/multilevel-omnichannel-inventory--7M1xyCZWUyCB7PcjNtOyw4) feature, that is: \n\n- `allowFranchises` field set to `true` when integrating the order \n- SLA chosen for the order is from a franchise account"
+                  example: '432874921387409182347'
+              example:
+                mainOrderId: MKP-123456789
+                franchiseOrderId: '432874921387409182347'
           example:
-          - creditCardPaymentGroup
+            franchiseOrderId: '38475934875'
+        message:
+          type: string
+          description: 'String with a message explaining the code returned in the response. '
+          example: The order was integrated into VTEX successfully
       example:
-        paymentMethods:
-        - creditCardPaymentGroup
-    ClientProfileData:
-      title: ClientProfileData
-      description: Structure with the customer's information. An order will be identified as corporate if any of the corporate fields are filled out (`corporateDocument`, `corporatePhone`, `corporateName` or `tradeName`).
+        marketplaceOrderId: null
+        accountName: grocery1
+        code: SOI003
+        flow: PlaceOrder
+        success: true
+        operationId: null
+        errors: null
+        fields: null
+        message: Order successfully enqueued
+    CustomData:
+      title: CustomData
+      description: Structure with the order's customizable fields. To insert custom fields in the order, you must first go through the process of [Creating an app](https://developers.vtex.com/vtex-rest-api/docs/external-marketplace-integration-app-template), and then adding the app, as well as the desired fields, within the seller's `orderForm`. More information on [Creating customizable fields in the cart with Checkout API](https://developers.vtex.com/vtex-rest-api/docs/customizable-fields-with-checkout-api).
       required:
-      - email
-      - firstName
-      - lastName
-      - phone
-      - document
-      - corporateDocument
-      - corporatePhone
-      - corporateName
-      - tradeName
-      - stateInscription
+      - customApps
       type: object
       properties:
-        email:
-          type: string
-          title: email
-          description: String with the customer's email.
-          example: cirilla@cintra.com
-        firstName:
-          type: string
-          title: firstName
-          description: String with the customer's first name.
-          example: Cirilla
-        lastName:
-          type: string
-          title: lastName
-          description: String with the customer’s surname.
-          example: Cintra
-        phone:
-          type: string
-          title: phone
-          description: String with the customer’s phone number.
-          example: '99999999999'
-        document:
-          type: string
-          title: The document schema
-          description: String with the customer’s document number.
-          example: '99999999999'
-        corporateDocument:
-          type: string
-          title: corporateDocument
-          description: String with the company’s document number, in case of corporate orders.
-          nullable: true
-          example: '99999999999'
-        corporatePhone:
-          type: string
-          title: corporatePhone
-          description: String with the company’s phone number, in case of corporate orders.
-          nullable: true
-          example: '99999999999'
-        corporateName:
-          type: string
-          title: corporateName
-          description: String with the company’s name, in case of corporate orders.
-          nullable: true
-          example: The Witcher Inc.
-        tradeName:
-          type: string
-          title: tradeName
-          description: String with the company’s fantasy name, in case of corporate orders.
-          nullable: true
-          example: The Witcher
-        stateInscription:
-          type: string
-          title: stateInscription
-          description: String with the company’s state registration, in case of corporate orders.
-          nullable: true
-          example: '99999999999'
-    ShippingData:
-      title: ShippingData
+        customApps:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomApp'
+          description: Array of objects with information about custom apps.
+      example:
+        customApps:
+        - id: marketplace-integration
+          major: 1
+          fields:
+            marketplacePaymentMethod: credit card
+    Fields:
+      title: Fields
+      description: String dictionary with the names of the fields and their respective values that must be inserted into the order.
       required:
-      - logisticsInfo
-      - selectedAddresses
-      - isFob
-      - isMarketplaceFulfillment
+      - marketplacePaymentMethod
       type: object
       properties:
-        logisticsInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/LogisticsInfo'
-          description: "List that references the SLAs responsible for delivering each item in the order.  \n\nThis list must contain the same number of items as the `items` list, previously defined. For example: if the order contains 3 SKUs, you must describe 3 SLAs in this list, one for each SKU (even in cases where the same SLA will deliver all of them).  \n\nThe order of the SLAs in this list must also follow the same order as in the `items` list. For example: if the SLA named **Correios Express** will be responsible for delivering the SKU with ID equal to **1015**, which is found at index 0 of the `items` list, it must be in index 0 of the `logisticsInfo` list as well."
-        selectedAddresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectedAddress'
-          description: ''
-        isFob:
-          type: boolean
-          title: isFob
-          description: Boolean that indicates whether the order's delivery is the marketplace responsibility. Optional, defaulting to false.
-          example: false
-        isMarketplaceFulfillment:
-          type: boolean
-          title: isMarketplaceFulfillment
-          description: Boolean that indicates whether the order's inventory in warehouse is the marketplace's responsibility. Optional, defaulting to false.
-          example: false
+        marketplacePaymentMethod:
+          type: string
+          title: marketplacePaymentMethod
+          description: String with field's key and value.
+          example: credit card
+      example:
+        marketplacePaymentMethod: credit card
   securitySchemes:
-    VtexIdclientAutCookie:
+    appKey:
       type: apiKey
       in: header
-      name: VtexIdclientAutCookie
-      description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+      name: X-VTEX-API-AppKey
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+x-refined-from:
+- vtex-marketplace-protocol-external-mapper-openapi-original.yml
+- vtex-marketplace-protocol-external-orders-openapi-original.yml

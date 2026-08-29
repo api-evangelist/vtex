@@ -1,15 +1,24 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: VTex Anti-fraud Provider Account Product API
-  description: ">ℹ️ Onboarding guide\r\n>\r\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\r\n\r\nThe Anti-fraud Provider Protocol is a set of definitions to help you integrate your anti-fraud service API into VTEX platform.\r\n\r\nTo achieve this, you need to implement a web API (REST) following the specifications described in this documentation.\r\n\r\n>⚠️ You can also access our [template on GitHub](https://github.com/vtex-apps/antifraud-provider-example) to help you quickly develop your anti-fraud connector using the Anti-fraud Provider Protocol and VTEX IO.\r\n\r\nTo learn more about the Anti-fraud Provider Protocol, check our [developer guide](https://developers.vtex.com/docs/guides/how-the-integration-protocol-between-vtex-and-antifraud-companies-works).\r\n\r\n## Anti-fraud Provider API Index\r\n\r\n### Anti-fraud  Flow\r\n\r\n- `POST` [Send Anti-fraud Pre-Analysis Data (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/pre-analysis)\r\n- `POST` [Send Anti-fraud Data](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions)\r\n- `PUT` [Update Anti-fraud Transactions (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#put-/transactions/-transactionId-)\r\n- `GET` [List Anti-fraud Provider Manifest](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/manifest)\r\n- `GET` [Get Anti-fraud Status](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/transactions/-transactions.id-)\r\n- `DELETE` [Stop Anti-fraud Analysis (optional)](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#delete-/transactions/-transactions.Id-)\r\n\r\n### OAuth Flow\r\n\r\n1. `POST` [Retrieve Token](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/authorization/token)\r\n2. `GET` [Redirect](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/redirect)\r\n3. `GET` [Return to VTEX](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorizationCode)\r\n4. `GET` [Get Credentials](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#get-/authorization/credentials)"
+  title: Vtex Product API
   version: '1.0'
+  description: 'Operations tagged Product across 2 of this provider''s published API definitions: vtex-catalog-api-seller-portal-openapi-original.yml, vtex-catalog-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://{providerApiEndpoint}
-  description: Anti-fraud provider endpoint URL.
+- url: https://{accountName}.{environment}.com.br
+  description: VTEX server URL.
   variables:
-    providerApiEndpoint:
-      description: Anti-fraud provider endpoint URL.
-      default: '{providerApiEndpoint}'
+    accountName:
+      description: Name of the VTEX account. Used as part of the URL.
+      default: apiexamples
+    environment:
+      description: Environment to use. Used as part of the URL.
+      enum:
+      - vtexcommercestable
+      default: vtexcommercestable
+security:
+- appKey: []
+  appToken: []
+- VtexIdclientAutCookie: []
 tags:
 - name: Product
 paths:
@@ -18,7 +27,7 @@ paths:
       tags:
       - Product
       summary: VTex Get Product by ID
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about a product by its ID. The response also has information about the product's SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \n\n Retrieves general information about a product by its ID. The response also has information about the product's SKUs.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Read** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: GetProduct
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -287,9 +296,10 @@ paths:
                               type: number
                               description: The product's real length.
                         specs:
-                          type: array
+                          type:
+                          - array
+                          - 'null'
                           description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
-                          nullable: true
                           items:
                             type: object
                             description: SKU specification.
@@ -310,13 +320,15 @@ paths:
                             description: SKU image ID.
                             type: string
                   transportModal:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: Transport modal of the product.
-                    nullable: true
                   taxCode:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: Product tax code.
-                    nullable: true
                   origin:
                     type: string
                     description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
@@ -330,7 +342,7 @@ paths:
       tags:
       - Product
       summary: VTex Update Product
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Updates an existing product and its SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \n\n Updates an existing product and its SKUs.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Write** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: PutProduct
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -454,15 +466,17 @@ paths:
                   description: Reference of the product in the URL of the store.
                   example: /vtex-shirt
                 transportModal:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Transport modal of the product.
                   example: '1'
-                  nullable: true
                 taxCode:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Product tax code.
                   example: '123'
-                  nullable: true
                 images:
                   type: array
                   description: Information of the images of the product.
@@ -623,9 +637,10 @@ paths:
                             description: The product's real length.
                             example: 1.6
                       specs:
-                        type: array
+                        type:
+                        - array
+                        - 'null'
                         description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
-                        nullable: true
                         example:
                         - name: Color
                           value: Black
@@ -660,12 +675,24 @@ paths:
       responses:
         '204':
           description: No Content
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog-seller-portal/products/{productId}/description:
     get:
       tags:
       - Product
       summary: VTex Get Product Description by Product ID
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center.](https://support.vtex.com/hc/en-us/requests) \r\n\r\n Retrieves the description of a product given a product ID.\r\n\r\n ## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center.](https://support.vtex.com/hc/en-us/requests) \n\n Retrieves the description of a product given a product ID.\n\n ## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Read** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: GetProductDescription
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -707,7 +734,7 @@ paths:
       tags:
       - Product
       summary: VTex Update Product Description by Product ID
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Updates the description of a product given a product ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \n\n Updates the description of a product given a product ID.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Write** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: PutProductDescription
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -739,12 +766,24 @@ paths:
       responses:
         '204':
           description: No Content
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog-seller-portal/products/{param}:
     get:
       tags:
       - Product
       summary: VTex Get Product by external ID,  SKU ID, SKU external ID or slug
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Retrieves general information about a product by its external ID, SKU ID, SKU external ID or product slug. The response also has information about the product's SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Read** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \n\n Retrieves general information about a product by its external ID, SKU ID, SKU external ID or product slug. The response also has information about the product's SKUs.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Read** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: GetProductQuery
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1018,9 +1057,10 @@ paths:
                               type: number
                               description: The product's real length.
                         specs:
-                          type: array
+                          type:
+                          - array
+                          - 'null'
                           description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
-                          nullable: true
                           items:
                             type: object
                             description: SKU specification.
@@ -1055,12 +1095,24 @@ paths:
                   updatedAt:
                     type: string
                     description: Last date when the product was updated.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog-seller-portal/products:
     post:
       tags:
       - Product
       summary: VTex Create Product
-      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \r\n\r\n Creates a new product and its SKUs.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| CatalogV2 | Management | **Product Write** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: " >\U0001F4D8 This API is part of the [Seller Portal Catalog](https://help.vtex.com/en/tutorial/how-the-seller-portal-catalog-works--7pMB6YOt6YQDQQbzFB4Pxp). This functionality is in the Beta stage and can be discontinued at any moment at VTEX's discretion. VTEX will not be responsible for any instabilities caused by its use or discontinuity. If you have any questions, please contact [our Support Center](https://support.vtex.com/hc/en-us/requests). \n\n Creates a new product and its SKUs.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| CatalogV2 | Management | **Product Write** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: PostProduct
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -1330,9 +1382,10 @@ paths:
                             description: The product's real length.
                             example: 1.6
                       specs:
-                        type: array
+                        type:
+                        - array
+                        - 'null'
                         description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
-                        nullable: true
                         example:
                         - name: Color
                           value: Black
@@ -1366,15 +1419,17 @@ paths:
                   description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
                   example: vtxleo7778
                 transportModal:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Transport modal of the product.
                   example: '1'
-                  nullable: true
                 taxCode:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: Product tax code.
                   example: '123'
-                  nullable: true
       responses:
         '200':
           description: OK
@@ -1633,9 +1688,10 @@ paths:
                               type: number
                               description: The product's real length.
                         specs:
-                          type: array
+                          type:
+                          - array
+                          - 'null'
                           description: SKU specifications. This field is mandatory, but nullable if there is only one SKU.
-                          nullable: true
                           items:
                             type: object
                             description: SKU specification.
@@ -1659,13 +1715,15 @@ paths:
                     type: string
                     description: Origin account of the product. It is not possible to alter products where the origin is `marketplace`.
                   transportModal:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: Transport modal of the product.
-                    nullable: true
                   taxCode:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: Product tax code.
-                    nullable: true
                   createdAt:
                     type: string
                     description: Date when the product was created.
@@ -1674,12 +1732,24 @@ paths:
                     description: Last date when the product was updated.
         '204':
           description: No Content
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/products/GetProductAndSkuIds:
     get:
       tags:
       - Product
       summary: VTex Get product and SKU IDs
-      description: "Retrieves the IDs of products and SKUs. \r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Retrieves the IDs of products and SKUs. \n> \U0001F4D8 Onboarding guide \n>\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Catalog | Content | **Product management** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: ProductAndSkuIds
       parameters:
       - name: categoryId
@@ -1791,12 +1861,24 @@ paths:
                       to:
                         type: integer
                         description: Final product ID.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog/pvt/product/{productId}:
     get:
       tags:
       - Product
       summary: VTex Get product by ID
-      description: "Retrieves a specific product by its ID. The response body fields are exactly the inforamtion  needed to create a new product. \r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "Retrieves a specific product by its ID. The response body fields are exactly the inforamtion  needed to create a new product. \n> \U0001F4D8 Onboarding guide \n>\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Catalog | Content | **Product and SKU Management** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       operationId: GetProductbyid
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -1868,13 +1950,13 @@ paths:
                     description: Product description.
                   DescriptionShort:
                     type: string
-                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\n Store Framework: `$product.DescriptionShort`.\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
                   ReleaseDate:
                     type: string
                     description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
                   KeyWords:
                     type: string
-                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                    description: "Store Framework: Deprecated. \nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
                   Title:
                     type: string
                     description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
@@ -1888,10 +1970,11 @@ paths:
                     type: string
                     description: Brief description of the product for SEO. It is recommended not to exceed 150 characters.
                   SupplierId:
-                    type: integer
+                    type:
+                    - integer
+                    - 'null'
                     description: Deprecated field.
                     deprecated: true
-                    nullable: true
                   ShowWithoutStock:
                     type: boolean
                     description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
@@ -1911,7 +1994,26 @@ paths:
       tags:
       - Product
       summary: VTex Update product
-      description: "Updates an existing product.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Updates an existing product.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **Product and SKU Management** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
       - $ref: '#/components/parameters/Accept_2'
@@ -1966,7 +2068,7 @@ paths:
                   example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
                 DescriptionShort:
                   type: string
-                  description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                  description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\n Store Framework: `$product.DescriptionShort`.\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
                   example: The Nike Zoom Stefan Janoski is made with a premium leather.
                 ReleaseDate:
                   type: string
@@ -1974,7 +2076,7 @@ paths:
                   example: '2019-01-01T00:00:00'
                 KeyWords:
                   type: string
-                  description: "Store Framework: Deprecated. \r\nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                  description: "Store Framework: Deprecated. \nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
                   example: Zoom,Stefan,Janoski
                 Title:
                   type: string
@@ -1993,26 +2095,29 @@ paths:
                   description: Brief description of the product for SEO. It is recommended not to exceed 150 characters.
                   example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
                 SupplierId:
-                  type: integer
+                  type:
+                  - integer
+                  - 'null'
                   description: Deprecated field.
                   deprecated: true
-                  nullable: true
                   example: null
                 ShowWithoutStock:
                   type: boolean
                   description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
                   example: true
                 AdWordsRemarketingCode:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: This is a legacy field. Do not take this information into consideration.
                   deprecated: true
-                  nullable: true
                   example: null
                 LomadeeCampaignCode:
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   description: This is a legacy field. Do not take this information into consideration.
                   deprecated: true
-                  nullable: true
                   example: null
                 Score:
                   type: integer
@@ -2077,13 +2182,13 @@ paths:
                     description: Product description.
                   DescriptionShort:
                     type: string
-                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\n Store Framework: `$product.DescriptionShort`.\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
                   ReleaseDate:
                     type: string
                     description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
                   KeyWords:
                     type: string
-                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal:  Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                    description: "Store Framework: Deprecated. \nLegacy CMS Portal:  Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
                   Title:
                     type: string
                     description: Product's Title tag. Limited to 150 characters. It is presented in the browser tab and corresponds to the title of the product page. This field is important for SEO.
@@ -2097,10 +2202,11 @@ paths:
                     type: string
                     description: Brief description of the product for SEO. It's recommended that you don't exceed 150 characters.
                   SupplierId:
-                    type: integer
+                    type:
+                    - integer
+                    - 'null'
                     description: Deprecated field.
                     deprecated: true
-                    nullable: true
                   ShowWithoutStock:
                     type: boolean
                     description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
@@ -2115,12 +2221,43 @@ paths:
                   Score:
                     type: integer
                     description: Value used to set the priority on the search result page.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/products/productget/{productId}:
     get:
       tags:
       - Product
       summary: VTex Get product and its general context
-      description: "Retrieves a specific product's general information as name, description and the trade policies where it is included.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product Form** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a specific product''s general information as name, description and the trade policies where it is included.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **Product Form** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: ProductandTradePolicy
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -2234,12 +2371,43 @@ paths:
                     type: string
                     description: This is a legacy field. Do not take this information into consideration.
                     deprecated: true
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pvt/products/productgetbyrefid/{refId}:
     get:
       tags:
       - Product
       summary: VTex Get product by reference ID
-      description: "Retrieves a specific product by its Reference ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves a specific product by its Reference ID.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **Product management** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: ProductbyRefId
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -2352,12 +2520,43 @@ paths:
                     description: This is a legacy field. Do not take this information into consideration.
                     deprecated: true
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog_system/pub/products/variations/{productId}:
     get:
       tags:
       - Product
       summary: VTex Get product's SKUs by product ID
-      description: "Retrieves data about a product and all SKUs related to it given the product's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves data about a product and all SKUs related to it given the product''s ID.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **Product management** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       operationId: ProductVariations
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
@@ -2520,9 +2719,10 @@ paths:
                           type: integer
                           description: Available quantity of the SKU in stock.
                         cacheVersionUsedToCallCheckout:
-                          type: string
+                          type:
+                          - string
+                          - 'null'
                           description: Cache version used to call Checkout.
-                          nullable: true
                         listPriceFormated:
                           type: string
                           description: List price formatted according to the valid currency.
@@ -2551,9 +2751,10 @@ paths:
                           type: integer
                           description: Value of installments.
                         installmentsInsterestRate:
-                          type: integer
+                          type:
+                          - integer
+                          - 'null'
                           description: Interest rate of installments.
-                          nullable: true
                         image:
                           type: string
                           description: SKU image URL.
@@ -2586,12 +2787,43 @@ paths:
                           type: integer
                           description: Credit that the customer receives when finalizing an order that includes the SKU. By filling this field out with `1`, the customer receives credit on the site in the selected currency, e.g. U$ 1.
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/addon/pvt/review/GetProductRate/{productId}:
     get:
       tags:
       - Product
       summary: VTex Get product review rate by product ID
-      description: "Retrieves the review rate of a product given the product's ID.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Reviews list** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves the review rate of a product given the product''s ID.
+
+
+        ## Permissions
+
+
+        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Catalog | Content | **Reviews list** |
+
+
+        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
       - $ref: '#/components/parameters/Accept_2'
@@ -2613,12 +2845,24 @@ paths:
                 description: Review rate number.
               example: 3.0
       deprecated: false
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
   /api/catalog/pvt/product:
     post:
       tags:
       - Product
       summary: VTex Create product with category and brand
-      description: "This endpoint allows two types of request:\r\n\r\n**Type 1:** Creating a new product as well as a new category path (including subcategories) and a new brand by using `CategoryPath` and `BrandName` parameters.\r\n\r\n**Type 2:** Creating a new product given an existing `BrandId` and an existing `CategoryId`.\r\n\r\nWhen creating a product, regardless of the type of request, if there is a need to create a new product with a specific custom product ID, specify the `Id` (integer) in the request body. Otherwise, VTEX will generate the ID automatically.\r\n> \U0001F4D8 Onboarding guide \r\n>\r\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\r\n\r\n## Permissions\r\n\r\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\r\n\r\n| **Product** | **Category** | **Resource** |\r\n| --------------- | ----------------- | ----------------- |\r\n| Catalog | Content | **Product and SKU Management** |\r\n\r\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\r\n\r\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: "This endpoint allows two types of request:\n\n**Type 1:** Creating a new product as well as a new category path (including subcategories) and a new brand by using `CategoryPath` and `BrandName` parameters.\n\n**Type 2:** Creating a new product given an existing `BrandId` and an existing `CategoryId`.\n\nWhen creating a product, regardless of the type of request, if there is a need to create a new product with a specific custom product ID, specify the `Id` (integer) in the request body. Otherwise, VTEX will generate the ID automatically.\n> \U0001F4D8 Onboarding guide \n>\n> Check the new [Catalog onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/catalog-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Catalog and is organized by focusing on the developer's journey.\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Catalog | Content | **Product and SKU Management** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
       parameters:
       - $ref: '#/components/parameters/Content-Type_2'
       - $ref: '#/components/parameters/Accept_2'
@@ -2694,11 +2938,12 @@ paths:
                     description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
                     example: true
                   LomadeeCampaignCode:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: This is a legacy field. Do not take this information into consideration.
                     deprecated: true
                     example: null
-                    nullable: true
                   Score:
                     type: integer
                     description: Value used to set the priority on the search result page.
@@ -2747,7 +2992,7 @@ paths:
                     example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
                   DescriptionShort:
                     type: string
-                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\n Store Framework: `$product.DescriptionShort`.\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
                     example: The Nike Zoom Stefan Janoski is made with a premium leather.
                   ReleaseDate:
                     type: string
@@ -2755,7 +3000,7 @@ paths:
                     example: '2019-01-01T00:00:00'
                   KeyWords:
                     type: string
-                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                    description: "Store Framework: Deprecated. \nLegacy CMS Portal: Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
                     example: Zoom,Stefan,Janoski
                   Title:
                     type: string
@@ -2774,26 +3019,29 @@ paths:
                     description: Brief description of the product for SEO. It is recommended not to exceed 150 characters.
                     example: The Nike Zoom Stefan Janoski Men's Shoe is made with a premium leather upper for superior durability and a flexible midsole for all-day comfort. A tacky gum rubber outsole delivers outstanding traction.
                   SupplierId:
-                    type: integer
+                    type:
+                    - integer
+                    - 'null'
                     description: Deprecated field.
                     example: null
                     deprecated: true
-                    nullable: true
                   ShowWithoutStock:
                     type: boolean
                     description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
                     example: true
                   AdWordsRemarketingCode:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: This is a legacy field. Do not take this information into consideration.
                     deprecated: true
-                    nullable: true
                     example: null
                   LomadeeCampaignCode:
-                    type: string
+                    type:
+                    - string
+                    - 'null'
                     description: This is a legacy field. Do not take this information into consideration.
                     deprecated: true
-                    nullable: true
                     example: null
                   Score:
                     type: integer
@@ -2901,13 +3149,13 @@ paths:
                     description: Product description.
                   DescriptionShort:
                     type: string
-                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\r\n Store Framework: `$product.DescriptionShort`.\r\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
+                    description: "Short product description. This information can be displayed on both the product page and the shelf, using the following controls:\n Store Framework: `$product.DescriptionShort`.\n Legacy CMS Portal: `<vtex.cmc:productDescriptionShort/>`."
                   ReleaseDate:
                     type: string
                     description: Used to assist in the ordering of the search result of the site. Using the `O=OrderByReleaseDateDESC` query string, you can pull this value and show the display order by release date. This attribute is also used as a condition for dynamic collections.
                   KeyWords:
                     type: string
-                    description: "Store Framework: Deprecated. \r\nLegacy CMS Portal:  Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
+                    description: "Store Framework: Deprecated. \nLegacy CMS Portal:  Keywords or synonyms related to the product, separated by comma (`,`). \"Television\", for example, can have a substitute word like \"TV\". This field is important to make your searches more comprehensive."
                   Title:
                     type: string
                     description: Product's title tag, which corresponds to the title of the product page, presented in the browser tab. This field is important for SEO. Limited to 150 characters.
@@ -2921,9 +3169,10 @@ paths:
                     type: string
                     description: Brief description of the product for SEO. It's recommended that you don't exceed 150 characters.
                   SupplierId:
-                    type: integer
+                    type:
+                    - integer
+                    - 'null'
                     deprecated: true
-                    nullable: true
                   ShowWithoutStock:
                     type: boolean
                     description: If `true`, activates the [Notify Me](https://help.vtex.com/en/tutorial/setting-up-the-notify-me-option--2VqVifQuf6Co2KG048Yu6e) option when the product is out of stock.
@@ -2938,6 +3187,18 @@ paths:
                   Score:
                     type: integer
                     description: Value used to set the priority on the search result page.
+    servers:
+    - url: https://{accountName}.{environment}.com.br
+      description: VTEX server URL.
+      variables:
+        accountName:
+          description: Name of the VTEX account. Used as part of the URL.
+          default: apiexamples
+        environment:
+          description: Environment to use. Used as part of the URL.
+          enum:
+          - vtexcommercestable
+          default: vtexcommercestable
 components:
   parameters:
     Accept:
@@ -2977,8 +3238,21 @@ components:
         type: string
         default: application/json
   securitySchemes:
+    appKey:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppKey
+      description: Unique identifier of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
+    appToken:
+      type: apiKey
+      in: header
+      name: X-VTEX-API-AppToken
+      description: Secret token of the [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys).
     VtexIdclientAutCookie:
       type: apiKey
       in: header
       name: VtexIdclientAutCookie
       description: '[User token](https://developers.vtex.com/docs/guides/api-authentication-using-user-tokens), valid for 24 hours.'
+x-refined-from:
+- vtex-catalog-api-seller-portal-openapi-original.yml
+- vtex-catalog-openapi-original.yml
