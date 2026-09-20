@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 38
+edge_count: 44
 edges:
 - tag: Coupons
   spec_file: vtex-coupons-api-openapi.yml
@@ -299,6 +299,18 @@ edges:
     With Route Scheduling"; schemas ShippingCompanyResponse, VehicleTypeResponse, DeliveryServiceRouteResponse'
   reason: Registering delivery services with shippers, vehicle types, routes and delivery/non-delivery
     reasons is transport/delivery execution — logistics operations within the supply chain.
+- tag: Docks
+  spec_file: vtex-docks-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.72
+  evidence: POST /api/logistics/pvt/configuration/docks — 'VTex Create/update dock', 'Activate dock',
+    'Deactivate dock'
+  reason: Operations configure logistics docks (loading/dispatch points) under /api/logistics/configuration,
+    which is warehouse/transport execution setup — logistics operations within the supply chain. Not a
+    payments capability despite the misleading concatenated title.
+  recovered_from: sweep-20260828T235257Z-edges.json
 - tag: Invoices
   spec_file: vtex-invoices-api-openapi.yml
   capability_id: BC-200.30
@@ -311,6 +323,51 @@ edges:
   reason: Operations create, change, cancel, postpone and settle customer invoices against customer credit
     accounts — customer invoicing and collections, i.e. accounts receivable. Not a payment-gateway or
     POS tender surface.
+- tag: Carriers
+  spec_file: vtex-carriers-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.7
+  evidence: POST /rates — 'Calculate rates'; POST /list-carriers — 'List carriers'; schemas ShippingPrice,
+    Carrier, Package
+  reason: Operations register carriers and compute shipping rates for packages, which is transport/shipping
+    execution within the supply chain — Logistics Operations Management.
+  recovered_from: sweep-20260828T235257Z-edges.json
+- tag: Change Order (Beta)
+  spec_file: vtex-change-order-beta-api-openapi.yml
+  capability_id: BC-520.40
+  capability_id_l1: BC-520
+  capability_name: Order Fulfilment Management
+  confidence: 0.7
+  evidence: PATCH /api/order-system/orders/{changeOrderId}/changes — 'Create order change'; 'Preview order
+    change'; 'Cancel order change'
+  reason: Post-purchase modification of orders in the order system (items, shipping data, payment data)
+    is order lifecycle/fulfilment orchestration.
+  recovered_from: sweep-20260828T235257Z-edges.json
+- tag: Orders
+  spec_file: vtex-orders-api-openapi.yml
+  capability_id: BC-520.40
+  capability_id_l1: BC-520
+  capability_name: Order Fulfilment Management
+  confidence: 0.7
+  evidence: POST /api/oms/pvt/orders/{orderId}/start-handling "Start handling order"; POST /api/oms/pvt/orders/{orderId}/cancel
+    "Cancel order"; schemas Fulfillment, Marketplace, Sla
+  reason: OMS operations to retrieve, list, start handling, cancel and change orders, with Fulfillment/Sla
+    schemas — clearly order fulfilment orchestration.
+  recovered_from: sweep-20260828T235257Z-edges.json
+- tag: Pickup Points
+  spec_file: vtex-pickup-points-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.7
+  evidence: GET /api/logistics/pvt/configuration/pickuppoints 'List all pickup points'; PUT .../pickuppoints/{pickupPointId}
+    'Create/update pickup point'
+  reason: Manages physical pickup/collection locations under the logistics configuration namespace — delivery
+    network execution, i.e. logistics operations within the supply chain. Not a pure technical config
+    tag since pickup points are real fulfilment locations.
+  recovered_from: sweep-20260828T235257Z-edges.json
 - tag: Policy
   spec_file: vtex-policy-api-openapi.yml
   capability_id: BC-440.40
@@ -352,6 +409,16 @@ edges:
     schema 'SKUFileURL'
   reason: Managing SKU image files and media URLs is product content (imagery/rich media) authoring for
     the item record.
+- tag: SKU Kit
+  spec_file: vtex-sku-kit-api-openapi.yml
+  capability_id: BC-820.40
+  capability_id_l1: BC-820
+  capability_name: Product Configuration & Variant Management
+  confidence: 0.7
+  evidence: POST /api/catalog/pvt/stockkeepingunitkit — "Create SKU kit"; schema SkuKit
+  reason: Creates and deletes SKU kits (bundles composed of a parent SKU and component SKUs), which matches
+    Product Configuration & Variant Management explicitly covering "options, bundles".
+  recovered_from: sweep-20260828T235257Z-edges.json
 - tag: Seller
   spec_file: vtex-seller-api-openapi.yml
   capability_id: BC-2330.40
