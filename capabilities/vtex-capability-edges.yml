@@ -1,0 +1,396 @@
+slug: vtex
+provider: VTEX
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Retail & Consumer Goods
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 38
+edges:
+- tag: Coupons
+  spec_file: vtex-coupons-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.9
+  evidence: '''Create coupon batches'', ''Get coupon batch codes'', ''Get usage count for a single coupon'';
+    API described as ''The Promotions & Taxes API allows you to manage and retrieve all coupons from your
+    VTEX store'''
+  reason: Full lifecycle of discount coupons and coupon batches, which is promotional discount management.
+- tag: Prices and Fixed Prices
+  spec_file: vtex-prices-and-fixed-prices-api-openapi.yml
+  capability_id: BC-440.20
+  capability_id_l1: BC-440
+  capability_name: Price List Management
+  confidence: 0.9
+  evidence: PUT /pricing/prices/{itemId} 'Create or update base price or fixed prices'; 'we have the base
+    price of each SKU, optional fixed prices by trade policy'
+  reason: CRUD over base and fixed prices per SKU and price table — direct maintenance of list/fixed prices,
+    i.e. price list management.
+- tag: Roles
+  spec_file: vtex-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.9
+  evidence: '''add and remove roles from users, and create and manage appKeys''; PUT /api/license-manager/users/{userId}/roles
+    ''Add roles to user or appKey'''
+  reason: Role assignment to users and application keys in the License Manager is identity and access
+    management, not a retail business capability.
+- tag: SKU Specification
+  spec_file: vtex-sku-specification-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.88
+  evidence: GET /api/catalog/pvt/stockkeepingunit/{skuId}/specification 'Get SKU specifications'; 'Associate
+    SKU specification using specification name and group name'
+  reason: Directly manages SKU-level specification attributes on the stock-keeping-unit record — canonical
+    item master data attributes and taxonomy in the Catalog API.
+- tag: Inventory
+  spec_file: vtex-inventory-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.85
+  evidence: '''Update inventory by SKU and warehouse''; ''List inventory per warehouse''; ''Transfer supply
+    lot'''
+  reason: Reads and updates of stock quantities per SKU, warehouse and dock, plus supply lot transfer
+    — plainly inventory/stock management. Left at L1 because operations span stock levels, allocation/reservations
+    and lot movement rather than one sub-capability.
+- tag: Price Tables
+  spec_file: vtex-price-tables-api-openapi.yml
+  capability_id: BC-440.20
+  capability_id_l1: BC-440
+  capability_name: Price List Management
+  confidence: 0.85
+  evidence: GET /pricing/tables 'List price tables'; 'Get rules for a price table'; 'Pricing is the VTEX
+    module responsible for the SKU's price list'
+  reason: Operations maintain price tables and their rules per trade policy — maintenance of price books/price
+    lists.
+- tag: Product
+  spec_file: vtex-product-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.85
+  evidence: '"Create Product", "Update Product", "Get product and SKU IDs", "Get product''s SKUs by product
+    ID" from the Catalog API'
+  reason: CRUD over the retailer's canonical product/SKU records and descriptions in the catalog is item
+    master data management within Product Information Management.
+- tag: Profiles
+  spec_file: vtex-profiles-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.85
+  evidence: '"The Profile System is VTEX''s single source of truth regarding shoppers'' profile data";
+    "Create client profile", "Get unmasked profile"'
+  reason: CRUD and versioning of shopper master profile records with PII masking is customer data / golden-record
+    management.
+- tag: Reservations
+  spec_file: vtex-reservations-api-openapi.yml
+  capability_id: BC-530.30
+  capability_id_l1: BC-530
+  capability_name: Inventory Allocation Management
+  confidence: 0.85
+  evidence: POST /api/logistics/pvt/inventory/reservations 'Create reservation'; 'Confirm reservation';
+    'List reservation by warehouse and SKU'
+  reason: Operations create, confirm and cancel inventory reservations per warehouse/SKU — inventory allocation
+    and reservation management.
+- tag: SKU
+  spec_file: vtex-sku-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.85
+  evidence: POST /api/catalog/pvt/stockkeepingunit 'Create SKU'; 'Get SKU ID by reference ID'; schema
+    'SkuSpecification'
+  reason: Catalog CRUD over stock-keeping units, reference IDs and specifications is authoritative item
+    master data management.
+- tag: SKU EAN
+  spec_file: vtex-sku-ean-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.85
+  evidence: POST /api/catalog/pvt/stockkeepingunit/{skuId}/ean/{ean} 'Create SKU EAN'; 'Get SKU by EAN'
+  reason: Management of EAN/GTIN barcode identifiers on SKUs is core item master data (GTINs) management.
+- tag: Data Subject Rights
+  spec_file: vtex-data-subject-rights-api-openapi.yml
+  capability_id: BC-130.50
+  capability_id_l1: BC-130
+  capability_name: Privacy & Data Protection Management
+  confidence: 0.82
+  evidence: POST /api/user-rights/createAndProcessDeleteUserData "Erase customer data"; "PII data architecture"
+    ... "Erasing customer data"
+  reason: The single operation processes a data-subject erasure request over PII, which is exactly data-subject-rights
+    handling under privacy regulation.
+- tag: Scheduled Delivery
+  spec_file: vtex-scheduled-delivery-api-openapi.yml
+  capability_id: BC-2330.50
+  capability_id_l1: BC-2330
+  capability_name: Consumer Delivery Slot Management
+  confidence: 0.82
+  evidence: '''Retrieve blocked delivery windows''; ''Add blocked delivery windows''; ''Get capacity reservation
+    usage by window'''
+  reason: Manages carrier delivery windows, blocked days and time-frame capacity reservations — the slot/time-window
+    booking and courier capacity side of consumer home delivery.
+- tag: Sellers
+  spec_file: vtex-sellers-api-openapi.yml
+  capability_id: BC-2330.40
+  capability_id_l1: BC-2330
+  capability_name: Marketplace Seller Operations Management
+  confidence: 0.8
+  evidence: POST /seller-register/pvt/sellers 'Configure Seller Account'; schemas AvailableSalesChannel,
+    SellerCommissionConfiguration
+  reason: Registration and configuration of seller accounts, sales channels and commissions within the
+    Marketplace API — squarely managing third-party sellers on a host marketplace.
+- tag: Users
+  spec_file: vtex-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: '"The License Manager API allows you to create users, modify their names and emails, add and
+    remove [roles] from users, and create and manage [appKeys]"'
+  reason: These are platform administrative user accounts, roles and API keys — identity and access management,
+    not customer data.
+- tag: Addresses
+  spec_file: vtex-addresses-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.78
+  evidence: '"The **Profile System** is VTEX''s single source of truth regarding shoppers'' profile data";
+    operations "Create client address", "Get client addresses"'
+  reason: CRUD over shopper address records held in the store's single source of truth for consumer profile
+    data — customer master/golden-record data management, with PII masking as an implementation detail.
+- tag: External Marketplace
+  spec_file: vtex-external-marketplace-api-openapi.yml
+  capability_id: BC-2330.40
+  capability_id_l1: BC-2330
+  capability_name: Marketplace Seller Operations Management
+  confidence: 0.78
+  evidence: '"List all channels", "Register connector", "Send Category Mapping to VTEX Mapper", "Place
+    fulfillment order"'
+  reason: Channel/connector registration, marketplace category mapping and marketplace order placement/fulfilment
+    are the operating mechanics of selling through third-party marketplaces.
+- tag: External Seller
+  spec_file: vtex-external-seller-api-openapi.yml
+  capability_id: BC-2330.40
+  capability_id_l1: BC-2330
+  capability_name: Marketplace Seller Operations Management
+  confidence: 0.78
+  evidence: '"Order placement", "Authorize fulfillment", "Marketplace order cancellation", "Send invoice",
+    "Send tracking information"'
+  reason: Protocol between a host marketplace and an external seller covering order placement, fulfilment
+    authorisation, invoicing, tracking and cancellation — third-party seller operations on a marketplace.
+- tag: Product Specification
+  spec_file: vtex-product-specification-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.78
+  evidence: '"Get product specifications by product ID", "Associate product specification", "Delete all
+    product specifications by product ID"'
+  reason: Manages product attribute/specification values on catalog items — item master attribute maintenance
+    in retail Product Information Management, not engineering BOM specification.
+- tag: Specification
+  spec_file: vtex-specification-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.78
+  evidence: '"VTex Create specification" / "VTex Update specification"; Catalog API "enables the creation,
+    modification, and deletion of product details, including attributes like images and specifications"'
+  reason: Specifications are product attribute definitions in the catalog; this is canonical item/product
+    master attribute management, not a technical config surface.
+- tag: Specification Field
+  spec_file: vtex-specification-field-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.78
+  evidence: POST /api/catalog_system/pvt/specification/field "VTex Create specification field"; schema
+    SpecificationsInsertFieldRequest
+  reason: Defines the attribute fields of the product catalog record — item master attribute/taxonomy
+    definition under product information management.
+- tag: Specification Field Value
+  spec_file: vtex-specification-field-value-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.78
+  evidence: '"VTex Get specification values by specification field ID"; schema SpecificationsInsertFieldValueRequest'
+  reason: Manages the permitted/assigned values of product attribute fields in the catalog — product master
+    attribute data management.
+- tag: Seller Invite
+  spec_file: vtex-seller-invite-api-openapi.yml
+  capability_id: BC-2330.40
+  capability_id_l1: BC-2330
+  capability_name: Marketplace Seller Operations Management
+  confidence: 0.75
+  evidence: POST /seller-register/pvt/seller-leads 'Invite Seller Lead'; PUT /seller-register/pvt/seller-leads/{sellerLeadId}/seller
+    'Create Seller From Lead'
+  reason: Invitation, acceptance and conversion of seller leads into sellers is marketplace seller onboarding/operations
+    on a host marketplace.
+- tag: Shipping Updates
+  spec_file: vtex-shipping-updates-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.75
+  evidence: POST /labels/{carrierId}/{serviceId} 'Create label'; POST /cancel/{carrierId}/{serviceId}
+    'Cancel ongoing service'; 'updating shipping statuses'
+  reason: Carrier shipment lifecycle updates — labels, evidence, notes, cancel/pause/on-hold of delivery
+    services — is last-mile logistics execution.
+- tag: Specification Group
+  spec_file: vtex-specification-group-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.75
+  evidence: '"VTex List specification group by category"; schema SpecificationsGroup'
+  reason: Groups product specification attributes by category in the catalog — structuring of item master
+    attributes/taxonomy.
+- tag: Specification Value
+  spec_file: vtex-specification-value-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.75
+  evidence: POST /api/catalog/pvt/specificationvalue "VTex Create specification value"
+  reason: CRUD over product specification values in the catalog; part of authoritative item attribute
+    management.
+- tag: Brand
+  spec_file: vtex-brand-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.72
+  evidence: '"Create Brand", "Get brand list", "Update brand"; schemas BrandGet, BrandCreateUpdate within
+    the Catalog API'
+  reason: Maintenance of brand master records in the catalog, part of the canonical item master attribute/taxonomy
+    set rather than brand strategy or equity management.
+- tag: Category
+  spec_file: vtex-category-api-openapi.yml
+  capability_id: BC-2370.10
+  capability_id_l1: BC-2370
+  capability_name: Item Master Data Management
+  confidence: 0.72
+  evidence: '"Get Category Tree", "Update Category Tree", "Create Category" — "The Catalog API also supports
+    organizing products into categories"'
+  reason: Maintenance of the catalog category tree is product hierarchy/taxonomy master data, not merchandising
+    category strategy.
+- tag: Delivery Services
+  spec_file: vtex-delivery-services-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.72
+  evidence: '"consulting and registering services in the VTEX Tracking system"; "Post Delivery Service
+    With Route Scheduling"; schemas ShippingCompanyResponse, VehicleTypeResponse, DeliveryServiceRouteResponse'
+  reason: Registering delivery services with shippers, vehicle types, routes and delivery/non-delivery
+    reasons is transport/delivery execution — logistics operations within the supply chain.
+- tag: Invoices
+  spec_file: vtex-invoices-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.72
+  evidence: '"With Customer Credit your store can enable credit payments ... You can also control invoices
+    and the credit limits of your clients"; operations "Mark an invoice as paid", "Postpone an invoice",
+    "Cancel invoice" under /api/creditcontrol/accounts/{creditAccountId}/invoices'
+  reason: Operations create, change, cancel, postpone and settle customer invoices against customer credit
+    accounts — customer invoicing and collections, i.e. accounts receivable. Not a payment-gateway or
+    POS tender surface.
+- tag: Policy
+  spec_file: vtex-policy-api-openapi.yml
+  capability_id: BC-440.40
+  capability_id_l1: BC-440
+  capability_name: Price Realisation & Compliance Management
+  confidence: 0.7
+  evidence: '''create promotion alarms when selling products with undesired prices and promotions ...
+    conditions that will check if the prices and the promotions are correct'''
+  reason: The policy engine evaluates whether products are being sold at expected prices/promotions and
+    raises alarms on exceptions — price exception detection and price compliance rather than price setting.
+- tag: Pricing Hub Prices
+  spec_file: vtex-pricing-hub-prices-api-openapi.yml
+  capability_id: BC-440
+  capability_id_l1: BC-440
+  capability_name: Pricing Management
+  confidence: 0.7
+  evidence: POST /api/pricing-hub/prices "Retrieve prices"; PUT /api/pricing-hub/prices/config "Configure
+    external price source" — "personalized prices per customer and complex pricing systems"
+  reason: Operations retrieve computed prices for cart items and configure the external price-calculation
+    source, i.e. price determination for B2B customers — Pricing Management. Sub-capability ambiguous
+    between price list and pricing strategy, so L1 only.
+- tag: SKU Bindings
+  spec_file: vtex-sku-bindings-api-openapi.yml
+  capability_id: BC-2330.40
+  capability_id_l1: BC-2330
+  capability_name: Marketplace Seller Operations Management
+  confidence: 0.7
+  evidence: PUT /sku-binding/pvt/skuseller/{sellerId}/{sellerSkuId} 'Bind a seller's SKU to another SKU';
+    'Activate SKU Binding'
+  reason: Binding, activating and removing seller SKUs against marketplace SKUs is operation of third-party
+    seller listings on a host marketplace.
+- tag: SKU File
+  spec_file: vtex-sku-file-api-openapi.yml
+  capability_id: BC-2370.20
+  capability_id_l1: BC-2370
+  capability_name: Product Content Authoring Management
+  confidence: 0.7
+  evidence: POST /api/catalog/pvt/stockkeepingunit/{skuId}/file 'Create SKU file'; 'Delete SKU image file';
+    schema 'SKUFileURL'
+  reason: Managing SKU image files and media URLs is product content (imagery/rich media) authoring for
+    the item record.
+- tag: Seller
+  spec_file: vtex-seller-api-openapi.yml
+  capability_id: BC-2330.40
+  capability_id_l1: BC-2330
+  capability_name: Marketplace Seller Operations Management
+  confidence: 0.7
+  evidence: GET /api/catalog_system/pvt/seller/list 'Get Seller list'; POST /api/catalog_system/pvt/seller
+    'Create Seller'
+  reason: CRUD over seller records on a marketplace-capable commerce platform, matching 'managing third-party
+    sellers on a host marketplace'. Some ambiguity as the endpoints sit in the Catalog module, hence moderate
+    confidence.
+- tag: Seller Commissions
+  spec_file: vtex-seller-commissions-api-openapi.yml
+  capability_id: BC-2330.40
+  capability_id_l1: BC-2330
+  capability_name: Marketplace Seller Operations Management
+  confidence: 0.7
+  evidence: GET /seller-register/pvt/sellers/{sellerId}/commissions 'List Seller Commissions by seller
+    ID'; 'The Marketplace API enables marketplaces and sellers hosted on VTEX to perform their collaborative
+    operations'
+  reason: Commission configuration per seller and category is part of operating third-party sellers on
+    a host marketplace. Could arguably touch channel/commission economics, so 0.7.
+- tag: Shipping Policies
+  spec_file: vtex-shipping-policies-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.7
+  evidence: POST /api/logistics/pvt/shipping-policies 'Create shipping policy'; 'Logistics or fulfillment
+    is the module responsible for shipping calculation and inventory management'
+  reason: Configuration of shipping policies (carrier/freight rules) within the logistics module is transport/shipping
+    operations management. No richer schema detail, so 0.7.
+- tag: Transaction Process
+  spec_file: vtex-transaction-process-api-openapi.yml
+  capability_id: BC-2320.20
+  capability_id_l1: BC-2320
+  capability_name: Tender and Payment Acceptance Management
+  confidence: 0.7
+  evidence: '"VTex 1. Start a new transaction", "VTex 2.2 Send payments with saved credit card", "VTex
+    4. Authorize new transaction"'
+  reason: The surface performs the payment authorisation and capture flow for store transactions, which
+    is tender and payment acceptance; no other candidate covers card authorisation.
