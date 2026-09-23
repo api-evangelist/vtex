@@ -1,72 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex License Manager Roles API
-  description: 'The License Manager API allows you to create users, modify their names and emails, add and remove [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) from users, and create and manage [appKeys](https://help.vtex.com/en/tutorial/application-keys--2iffYzlvvz4BDMr6WGUtet).
-
-
-    ## Common parameters
-
-
-    |Attribute name | Description |
-
-    |:------------|--------------|
-
-    |`accountName` | Account name in VTEX License Manager. |
-
-    |`environment` | Environment on which you want to run the query, e.g. `vtexcommercestable`. |
-
-    |`userId`      | Unique user identification string. |
-
-    |`roleId`      | Integer that represents a role, can be obtained from the [Get List of Roles](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/site/pvt/roles/list/paged) endpoint. |
-
-
-    ## Index
-
-
-    ### User
-
-
-    - `GET` [Get user](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/users/-userId-)
-
-    - `DELETE` [Delete user](https://developers.vtex.com/docs/api-reference/license-manager-api#delete-/api/license-manager/users/-userId-)
-
-    - `POST` [Create user](https://developers.vtex.com/docs/api-reference/license-manager-api#post-/api/license-manager/users)
-
-    - `GET` [Get list of users](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/site/pvt/logins/list/paged)
-
-
-    ### Roles
-
-
-    - `PUT` [Add roles to user or appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#put-/api/license-manager/users/-userId-/roles)
-
-    - `GET` [Get roles by user or appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/users/-userId-/roles)
-
-    - `DELETE` [Remove role from user or appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#delete-/api/license-manager/users/-userId-/roles/-roleId-)
-
-    - `GET` [Get list of roles](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/license-manager/site/pvt/roles/list/paged)
-
-
-    ### App Keys
-
-
-    - `POST` [Create new appkey](https://developers.vtex.com/docs/api-reference/license-manager-api#post-/api/vlm/appkeys)
-
-    - `GET` [Get appKeys from account](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/vlm/appkeys)
-
-    - `PUT` [Update appKey](https://developers.vtex.com/docs/api-reference/license-manager-api#put-/api/vlm/appkeys/-id-)
-
-
-    ### Store
-
-
-    - `GET` [Get stores](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/vlm/account/stores)
-
-
-    ### Account
-
-
-    - `GET` [Get information about account](https://developers.vtex.com/docs/api-reference/license-manager-api#get-/api/vlm/account)'
+  description: The License Manager API allows you to create users, modify their names and emails, add and remove roles from users, and create and manage appKeys.
   version: '1.0'
 servers:
 - url: https://{accountName}.{environment}.com.br
@@ -92,7 +27,36 @@ paths:
       tags:
       - Roles
       summary: VTex Add roles to user or appKey
-      description: "Allows you to add License Manager [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) to a particular user or application key by specifying the list of role IDs on the request body. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Save user** |\n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| User Administrator - RESTRICTED | Save user |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: 'Allows you to add License Manager roles to a particular user or application key by specifying the list of role IDs on the request body.
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | License Manager | Services access control | **Save user** |
+
+
+        You can create a custom role with that resource or use one of the following predefined roles:
+
+
+        | **Role** | **Resource** |
+
+        | --------------- | ----------------- |
+
+        | User Administrator - RESTRICTED | Save user |
+
+
+        >❗ Assigning a predefined role to users or application keys usually grants permission to multiple License Manager resources. If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see Best practices for using application keys.
+
+
+        To learn more about machine authentication at VTEX, see Authentication overview.'
       operationId: PutRolesinUser
       parameters:
       - name: userId
@@ -153,7 +117,36 @@ paths:
       tags:
       - Roles
       summary: VTex Get roles by user or appKey
-      description: "Retrieves License Manager [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) of a particular user or application key. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Save user** |\n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| User Administrator - RESTRICTED | Save user |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: 'Retrieves License Manager roles of a particular user or application key.
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | License Manager | Services access control | **Save user** |
+
+
+        You can create a custom role with that resource or use one of the following predefined roles:
+
+
+        | **Role** | **Resource** |
+
+        | --------------- | ----------------- |
+
+        | User Administrator - RESTRICTED | Save user |
+
+
+        >❗ Assigning a predefined role to users or application keys usually grants permission to multiple License Manager resources. If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see Best practices for using application keys.
+
+
+        To learn more about machine authentication at VTEX, see Authentication overview.'
       operationId: GetRolesbyUser
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -196,7 +189,39 @@ paths:
       tags:
       - Roles
       summary: VTex Remove role from user or appKey
-      description: "Allows you to remove a License Manager [role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc) from a specific user or application key. This method only allows the removal of one role per request. The role's ID must be specified on the request path, not on the request body.\n\n> Note that a successful response returns a `204` response with an empty body. A deletion on a role or user that does not exist will also return a `204`. Thus, this method should not be used to verify the existence of a specific user or role. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Save user** |\n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| User Administrator - RESTRICTED | Save user |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm).\n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: 'Allows you to remove a License Manager role from a specific user or application key. This method only allows the removal of one role per request. The role''s ID must be specified on the request path, not on the request body.
+
+
+        > Note that a successful response returns a `204` response with an empty body. A deletion on a role or user that does not exist will also return a `204`. Thus, this method should not be used to verify the existence of a specific user or role.
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | License Manager | Services access control | **Save user** |
+
+
+        You can create a custom role with that resource or use one of the following predefined roles:
+
+
+        | **Role** | **Resource** |
+
+        | --------------- | ----------------- |
+
+        | User Administrator - RESTRICTED | Save user |
+
+
+        >❗ Assigning a predefined role to users or application keys usually grants permission to multiple License Manager resources. If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see Best practices for using application keys.
+
+
+        To learn more about machine authentication at VTEX, see Authentication overview.'
       operationId: RemoveRolefromUser
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -240,7 +265,26 @@ paths:
       tags:
       - Roles
       summary: VTex Get list of roles
-      description: "Returns a list of License Manager [roles](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc). The response is divided in pages. The query parameter `numItems` defines the number of items in each page, and consequently the amount of pages for the whole list. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| License Manager | Services access control | **Get paged roles** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Returns a list of License Manager roles. The response is divided in pages. The query parameter `numItems` defines the number of items in each page, and consequently the amount of pages for the whole list.
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | License Manager | Services access control | **Get paged roles** |
+
+
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see Authentication overview.
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetListRoles
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -321,6 +365,17 @@ paths:
                   pages: 1
 components:
   schemas:
+    ListRolesResponse:
+      description: Response body for listing all roles.
+      type: object
+      properties:
+        items:
+          description: Array of role objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleItems'
+        paging:
+          $ref: '#/components/schemas/Paging'
     Paging:
       description: Paging object.
       required:
@@ -436,31 +491,20 @@ components:
         name:
           description: Name of the role.
           type: string
-    ListRolesResponse:
-      description: Response body for listing all roles.
-      type: object
-      properties:
-        items:
-          description: Array of role objects.
-          type: array
-          items:
-            $ref: '#/components/schemas/RoleItems'
-        paging:
-          $ref: '#/components/schemas/Paging'
   parameters:
-    Accept:
-      name: Accept
+    Content-Type:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:
         type: string
         default: application/json
-    Content-Type:
-      name: Content-Type
+    Accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:

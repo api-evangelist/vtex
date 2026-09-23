@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Suggestions Match Received SKUs API
-  description: "\nThe **Marketplace API** enables marketplaces and sellers hosted on VTEX to perform their collaborative operations.  \n\n>⚠️ The marketplace must [create an appKey and appToken](https://developers.vtex.com/docs/guides/getting-started-authentication) for each non-VTEX seller that will use this API.\n\n## Index\n\n### Notification\n\nEndpoints used by sellers to notify marketplaces that the price or inventory language has changed for one of their SKUs.\n\n`POST` [Notify marketplace of price update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/price)\n\n`POST` [Notify marketplace of inventory update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/inventory)\n\n\n### Suggestions\n\n#### Get Suggestions\n\nSearch and filter all suggestions using specific criteria.\n\n`GET` [Get all SKU Suggestions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions)\n\n`GET` [Get SKU Suggestion by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Manage Suggestions\n\nSend or delete SKU suggestions from the seller to marketplace.\n\n`PUT` [Send SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerSkuId-)\n\n`DELETE` [Delete SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#delete-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Get Versions\n\nSearch and filter all versions of suggestions, using specific criteria.\n\n`GET` [Get all versions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions)\n\n`GET` [Get version by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions/-version-)\n\n\n#### Match Received SKUs\n\nMatch SKU suggestions received in the marketplace.\n\n`PUT` [Match Received SKUs individually](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerskuid-/versions/-version-/matches/-matchid-)\n\n`PUT` [Match Multiple Received SKUs](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/matches/action/-actionName-)\n\n\n#### SKU Approval Settings\n\nAllows marketplaces to configure rules for automatically and manually approving SKUs received from sellers.\n\n`GET`[Get autoApprove Status in Account Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/autoapproval/toggle)  \n\n`PUT`[Activate autoApprove in Marketplace's Account](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle)  \n\n`GET`[Get Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration)\n\n`PUT`[Save Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration)\n\n`GET`[Get Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Save Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Activate autoApprove Setting for a Seller](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle/seller/-sellerId-)   \n\n\n### Matched Offers\n\nOffers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured.\n\n`GET`[Get Matched Offers List](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/offers)\n\n`GET`[Get Matched Offer's Data by SKU ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-/sku/-skuId-)  \n\n`GET`[Get Matched Offer's Data by Product ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-)\n"
+  description: The **Marketplace API** enables marketplaces and sellers hosted on VTEX to perform their collaborative operations.
   contact: {}
   version: '1.0'
 servers:
@@ -19,7 +19,31 @@ paths:
       tags:
       - Match Received SKUs
       summary: VTex Match Received SKUs individually
-      description: "All SKUs sent from a seller to a marketplace must be reviewed and matched. Actions in the matching process are added in the request body through the [matchType] object. Match type actions include: \n\n1. `newproduct`: match the SKU as a new product. \n\n2. `itemMatch`: associate the received SKU to an existing SKU. \n\n3. `productMatch`: associate the received SKU to an existing product. \n\n4. `deny`: deny the received SKU. \n\n5. `pending`: the received SKU requires attention. \n\n6. `incomplete`: the received SKU is lacking information to be matched. \n\n7. `insufficientScore`: the score given by the Matcher to this received SKU doesn't qualify it to be matched. \n\nNote that  if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score."
+      description: 'All SKUs sent from a seller to a marketplace must be reviewed and matched. Actions in the matching process are added in the request body through the [matchType] object. Match type actions include:
+
+
+        1. `newproduct`: match the SKU as a new product.
+
+
+        2. `itemMatch`: associate the received SKU to an existing SKU.
+
+
+        3. `productMatch`: associate the received SKU to an existing product.
+
+
+        4. `deny`: deny the received SKU.
+
+
+        5. `pending`: the received SKU requires attention.
+
+
+        6. `incomplete`: the received SKU is lacking information to be matched.
+
+
+        7. `insufficientScore`: the score given by the Matcher to this received SKU doesn''t qualify it to be matched.
+
+
+        Note that if the autoApprove setting is enabled, the SKUs will be approved, regardless of the Score.'
       operationId: Match
       parameters:
       - name: accountName
@@ -122,7 +146,22 @@ paths:
       tags:
       - Match Received SKUs
       summary: VTex Match Multiple Received SKUs
-      description: "Allows a marketplace to bulk approve, deny, or associate up to 25 received SKUs from sellers.\n\nThrough the `actionName` attribute, you can select the operation you want to apply to the received SKU. Actions include: \n\n* `newproduct`: match the SKU as a new product. \n\n* `skuassociation`: associate the received SKU to an existing SKU. \n\n* `productassociation`: associate the received SKU to an existing product. \n\n* `deny`: deny the received SKU."
+      description: 'Allows a marketplace to bulk approve, deny, or associate up to 25 received SKUs from sellers.
+
+
+        Through the `actionName` attribute, you can select the operation you want to apply to the received SKU. Actions include:
+
+
+        * `newproduct`: match the SKU as a new product.
+
+
+        * `skuassociation`: associate the received SKU to an existing SKU.
+
+
+        * `productassociation`: associate the received SKU to an existing product.
+
+
+        * `deny`: deny the received SKU.'
       operationId: MatchMultiple
       parameters:
       - name: accountName
@@ -179,91 +218,39 @@ paths:
               deprecated: false
 components:
   schemas:
-    Sku:
-      title: SKU
-      required:
-      - name
-      - eans
-      - refId
-      - height
-      - width
-      - length
-      - weight
-      - images
-      - unitMultiplier
-      - measurementUnit
-      - specifications
-      type: object
-      properties:
-        name:
-          type: string
-          description: ''
-          default: ''
-        eans:
-          type:
-          - array
-          - 'null'
-          items:
+    responseMatchMultiple:
+      title: responseMatchMultiple
+      type: array
+      items:
+        type: object
+        properties:
+          matchId:
             type: string
-          description: SKU reference code.
-          default:
-          - '12345678901213'
-        refId:
-          type:
-          - string
-          - 'null'
-          description: SKU reference code.
-          default: '1234'
-        height:
-          type: integer
-          format: int32
-          description: Height of the SKU.
-          default: 10
-        width:
-          type: integer
-          format: int32
-          description: Width of the SKU.
-          default: 20
-        length:
-          type: integer
-          format: int32
-          description: Length of the SKU.
-          default: 10
-        weight:
-          type: integer
-          format: int32
-          description: Weight of the SKU.
-          default: 100
-        images:
-          $ref: '#/components/schemas/Images'
-        unitMultiplier:
-          type: integer
-          format: int32
-          description: Unit multiplier for this SKU. If this information doesn't apply, you should use the default value 1.
-          default: 1
-        measurementUnit:
-          type:
-          - string
-          - 'null'
-          description: Measurement unit that should be used for this SKU. If this information doesn't apply, you should use the default value un.
-          default: un
-        specifications:
-          $ref: '#/components/schemas/Specifications'
+            example: 06272023010821403
+          matcherId:
+            type: string
+            example: vtex-matcher
+          sellerId:
+            type: string
+            example: melissatestbug858
+          itemId:
+            type: string
+            example: '81'
+          isSuccess:
+            type: boolean
+            example: false
+    Images:
+      title: Images
+      required:
+      - imagem1.jpg
+      type: array
+      properties:
+        imagem1.jpg:
+          type: string
+          description: Array containing the URLs of the SKU's images.  The image must be sent through `https` protocol, otherwise it will not be rendered in VTEX Admin.
+          default: https://imageurl.example
       example:
-        name: Sku exemplo
-        eans:
-        - '12345678901213'
-        refId: null
-        height: 1
-        width: 1
-        length: 1
-        weight: 1
-        images:
-        - imagem1.jpg: imageurl.example
-        unitMultiplier: 1
-        measurementUnit: un
-        specifications:
-          Embalagem: 3 kg
+      - imagem1.jpg: imageurl.example
     MatchMultiple:
       title: MatchMultiple
       type: array
@@ -323,39 +310,6 @@ components:
             type: string
             description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
             example: seller123
-    responseMatchMultiple:
-      title: responseMatchMultiple
-      type: array
-      items:
-        type: object
-        properties:
-          matchId:
-            type: string
-            example: 06272023010821403
-          matcherId:
-            type: string
-            example: vtex-matcher
-          sellerId:
-            type: string
-            example: melissatestbug858
-          itemId:
-            type: string
-            example: '81'
-          isSuccess:
-            type: boolean
-            example: false
-    Images:
-      title: Images
-      required:
-      - imagem1.jpg
-      type: array
-      properties:
-        imagem1.jpg:
-          type: string
-          description: Array containing the URLs of the SKU's images.  The image must be sent through `https` protocol, otherwise it will not be rendered in VTEX Admin.
-          default: https://imageurl.example
-      example:
-      - imagem1.jpg: imageurl.example
     Specifications:
       title: Specifications
       required:
@@ -465,3 +419,88 @@ components:
           - 'null'
           description: This field is optional. Add here any product specifications or details.
           default: ''
+    Sku:
+      title: SKU
+      required:
+      - name
+      - eans
+      - refId
+      - height
+      - width
+      - length
+      - weight
+      - images
+      - unitMultiplier
+      - measurementUnit
+      - specifications
+      type: object
+      properties:
+        name:
+          type: string
+          description: ''
+          default: ''
+        eans:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: SKU reference code.
+          default:
+          - '12345678901213'
+        refId:
+          type:
+          - string
+          - 'null'
+          description: SKU reference code.
+          default: '1234'
+        height:
+          type: integer
+          format: int32
+          description: Height of the SKU.
+          default: 10
+        width:
+          type: integer
+          format: int32
+          description: Width of the SKU.
+          default: 20
+        length:
+          type: integer
+          format: int32
+          description: Length of the SKU.
+          default: 10
+        weight:
+          type: integer
+          format: int32
+          description: Weight of the SKU.
+          default: 100
+        images:
+          $ref: '#/components/schemas/Images'
+        unitMultiplier:
+          type: integer
+          format: int32
+          description: Unit multiplier for this SKU. If this information doesn't apply, you should use the default value 1.
+          default: 1
+        measurementUnit:
+          type:
+          - string
+          - 'null'
+          description: Measurement unit that should be used for this SKU. If this information doesn't apply, you should use the default value un.
+          default: un
+        specifications:
+          $ref: '#/components/schemas/Specifications'
+      example:
+        name: Sku exemplo
+        eans:
+        - '12345678901213'
+        refId: null
+        height: 1
+        width: 1
+        length: 1
+        weight: 1
+        images:
+        - imagem1.jpg: imageurl.example
+        unitMultiplier: 1
+        measurementUnit: un
+        specifications:
+          Embalagem: 3 kg

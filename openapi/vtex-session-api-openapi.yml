@@ -1,29 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Manager Session API
-  description: 'Session Manager tracks the current browsing sessions of all customers on the VTEX platform. Important session information is automatically captured and stored in a secure and easily accessible location. This includes data such as relevant cookies, query strings, authentication credentials, current profile and pricing information, if applicable. Session Manager API allows developers to retrieve and manage information about sessions. No authentication is required.
-
-
-    For more information, read the [Session Manager guide](https://developers.vtex.com/docs/guides/session-manager).
-
-
-    ## Index
-
-
-    ### Sessions
-
-
-    - `POST` [Create new session](https://developers.vtex.com/docs/api-reference/session-manager-api#post-/api/sessions)
-
-    - `GET` [Get session](https://developers.vtex.com/docs/api-reference/session-manager-api#get-/api/sessions)
-
-    - `PATCH` [Edit session](https://developers.vtex.com/docs/api-reference/session-manager-api#patch-/api/sessions)
-
-
-    ### Segment
-
-
-    - `GET` [Get segment](https://developers.vtex.com/docs/api-reference/session-manager-api#get-/api/segments)'
+  description: Session Manager tracks the current browsing sessions of all customers on the VTEX platform.
   contact: {}
   version: '1.0'
 servers:
@@ -156,7 +134,7 @@ paths:
       description: 'Edits information from a previously created sesssion.
 
 
-        This endpoint works the same way as the [Create new session](https://developers.vtex.com/docs/api-reference/session-manager-api#post-/api/sessions) endpoint, but when the request is sent with a `vtex_session` and the `vtex_segment` cookies in the header, it retrieves the session first and then applies the changes instead of generating a new one.
+        This endpoint works the same way as the Create new session endpoint, but when the request is sent with a `vtex_session` and the `vtex_segment` cookies in the header, it retrieves the session first and then applies the changes instead of generating a new one.
 
 
         Only keys inside the `public` namespace in the request body are considered, and query parameters are automatically added to the public namespace.
@@ -194,6 +172,34 @@ paths:
       deprecated: false
 components:
   schemas:
+    CreateEditSessionRequest:
+      title: CreateEditSessionRequest
+      required:
+      - public
+      type: object
+      properties:
+        public:
+          title: Public
+          type: object
+          properties:
+            additionalProperties:
+              type: object
+              description: Custom property.
+              properties:
+                value:
+                  type: string
+                  description: Value of the custom property.
+          example:
+            variable2:
+              value: value2
+            variable3:
+              value: value3
+      example:
+        public:
+          variable2:
+            value: value2
+          variable3:
+            value: value3
     CreateEditSessionResponse:
       type: object
       description: Object containing session token and segment token.
@@ -335,34 +341,6 @@ components:
           checkout:
             regionId:
               value: v2.1BB18CE648B5111D0933734ED83EC783
-    CreateEditSessionRequest:
-      title: CreateEditSessionRequest
-      required:
-      - public
-      type: object
-      properties:
-        public:
-          title: Public
-          type: object
-          properties:
-            additionalProperties:
-              type: object
-              description: Custom property.
-              properties:
-                value:
-                  type: string
-                  description: Value of the custom property.
-          example:
-            variable2:
-              value: value2
-            variable3:
-              value: value3
-      example:
-        public:
-          variable2:
-            value: value2
-          variable3:
-            value: value3
   securitySchemes:
     vtex_session:
       type: apiKey

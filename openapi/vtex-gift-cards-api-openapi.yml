@@ -1,7 +1,11 @@
 openapi: 3.2.0
 info:
   title: VTex Giftcard Provider Protocol Gift Cards API
-  description: ">ℹ️ Onboarding guide\n>\n> Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\n\nThe **Gift Card Provider Protocol** is a set of definitions to help you integrate your Gift Card API into VTEX platform. \n\nTo achieve this, you need to implement a web API (REST) following the specifications from this documentation and configure your provider in your store using [Gift Card Hub API](https://developers.vtex.com/docs/api-reference/giftcard-hub-api#overview).\n\n## Giftcard Provider Protocol API Index\n\n### Gift Cards\n\n- `POST` [Create a gift card](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#post-/giftcards)\n- `GET` [Get a gift card by ID](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#get-/giftcards/-giftCardId-)\n- `POST` [List all gift cards](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#post-/giftcards/_search)\n\n### Transactions\n\n- `POST` [Create a gift card transaction](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#post-/giftcards/-giftCardId-/transactions)\n- `GET` [Get a gift card transaction by ID](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#get-/giftcards/-giftCardId-/transactions/-transactionId-)\n- `GET` [List all gift card transactions](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#get-/giftcards/-giftCardId-/transactions)\n- `GET` [Get a gift card transaction authorization](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#get-/giftcards/-giftCardId-/transactions/-transactionId-/authorization)\n- `POST` [Cancel a gift card transaction](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#post-/giftcards/-giftCardId-/transactions/-transactionId-/cancellations)\n- `GET` [List all gift card transactions cancellations](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#get-/giftcards/-giftCardId-/transactions/-transactionId-/cancellations)\n- `POST` [Settle a gift card transaction](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#post-/giftcards/-giftCardId-/transactions/-tId-/settlements)\n- `GET` [List all gift card transactions settlements](https://developers.vtex.com/docs/api-reference/giftcard-provider-protocol#get-/giftcards/-giftCardId-/transactions/-tId-/settlements)"
+  description: '>ℹ️ Onboarding guide
+
+    >
+
+    > Check the new Payments onboarding guide.'
   contact: {}
   version: '1.0'
 servers:
@@ -332,50 +336,6 @@ components:
           type: integer
           description: Total items value.
           example: 200
-    Self:
-      required:
-      - href
-      type: object
-      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
-      properties:
-        href:
-          type: string
-          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
-    Item:
-      description: Items information.
-      required:
-      - productId
-      - id
-      - refId
-      - name
-      - price
-      - quantity
-      type: object
-      properties:
-        productId:
-          type: string
-          description: Product ID.
-          example: '2000000'
-        id:
-          type: string
-          description: The ID of the SKU in VTEX platform.
-          example: '2000002'
-        refId:
-          type: string
-          description: Product Reference ID.
-          example: MEV41
-        name:
-          type: string
-          description: Product name.
-          example: Shoes
-        price:
-          type: integer
-          description: Product price.
-          example: 200
-        quantity:
-          type: integer
-          description: Product quantity.
-          example: 1
     CreateGiftCardRequest:
       description: Create a gift card request body information.
       required:
@@ -420,17 +380,6 @@ components:
           type: string
           description: Currency code in ISO 4217.
           example: USD
-    ListAllGiftCardsRequest:
-      description: Gift cards information.
-      required:
-      - client
-      - cart
-      type: object
-      properties:
-        client:
-          $ref: '#/components/schemas/Client'
-        cart:
-          $ref: '#/components/schemas/Cart'
     Client:
       description: Customer information.
       required:
@@ -451,6 +400,61 @@ components:
           type: string
           description: Document number informed by the customer.
           example: '234235'
+    Self:
+      required:
+      - href
+      type: object
+      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
+      properties:
+        href:
+          type: string
+          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
+    ListAllGiftCardsRequest:
+      description: Gift cards information.
+      required:
+      - client
+      - cart
+      type: object
+      properties:
+        client:
+          $ref: '#/components/schemas/Client'
+        cart:
+          $ref: '#/components/schemas/Cart'
+    Item:
+      description: Items information.
+      required:
+      - productId
+      - id
+      - refId
+      - name
+      - price
+      - quantity
+      type: object
+      properties:
+        productId:
+          type: string
+          description: Product ID.
+          example: '2000000'
+        id:
+          type: string
+          description: The ID of the SKU in VTEX platform.
+          example: '2000002'
+        refId:
+          type: string
+          description: Product Reference ID.
+          example: MEV41
+        name:
+          type: string
+          description: Product name.
+          example: Shoes
+        price:
+          type: integer
+          description: Product price.
+          example: 200
+        quantity:
+          type: integer
+          description: Product quantity.
+          example: 1
   securitySchemes:
     appKey:
       type: apiKey

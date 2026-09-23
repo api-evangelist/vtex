@@ -2,7 +2,11 @@ openapi: 3.2.0
 info:
   version: 0.1.12
   title: VTex Intelligent Search Product List Page API
-  description: ">ℹ️ Onboarding guide\n>\n> Check the new [Search onboarding guide](https://developers.vtex.com/docs/guides/search-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Search and is organized by focusing on the developer's journey.\n\n[VTEX Intelligent Search](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/3qgT47zY08biLP3d5os3DG) is a search solution for digital commerce that simply and intuitively displays relevant results based on the catalog from the user's first interaction with the store through the search bar, browsing categories, or even through the window displays.\n\n The tool also offers features such as autocomplete, displaying search and product suggestions based on the shopper's context, and filters that help when searching for the desired product.\n\n> ℹ️ VTEX Intelligent Search is an alternative to [VTEX search](https://help.vtex.com/en/tutorial/how-does-vtex-search-work--tutorials_542).\n\n## Index\n### Autocomplete\n - `GET` [Get list of the 10 most searched terms](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/top_searches)\n - `GET` [Get list of suggested terms and attributes similar to the search term](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/autocomplete_suggestions)\n - `GET` [Get list of suggested terms similar to the search term](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/search_suggestions)\n ### Product List Page\n - `GET` [Get attempt of correction of a misspelled term](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/correction_search)\n - `GET` [Get list of banners registered for query](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/banners/-facets-)\n - `GET` [Get list of products for a query](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/product_search/-facets-)\n - `GET` [Get list of the possible facets for a given query](https://developers.vtex.com/docs/api-reference/intelligent-search-api#get-/facets/-facets-)\n ## Common parameters \n\n| **Parameter name** | **Description**   |\n| --------------- | ----------------- | \n| `{{accountName}}` | Name of the VTEX account. Used as part of the URL. |  \n| ` {{environment}}` | Environment to use. Used as part of the URL. |"
+  description: '>ℹ️ Onboarding guide
+
+    >
+
+    > Check the new Search onboarding guide.'
   license:
     name: MIT
 servers:
@@ -45,10 +49,12 @@ paths:
                   misspelled: true
                   text: mountain bike
                   highlighted: mountain <em>bike</em>
+      operationId: getCorrectionSearch
+      x-operation-id-source: derived
   /banners/{facets}:
     get:
       summary: VTex Get list of banners registered for query
-      description: 'Lists the banners registered for a given query. Check the [configuring banners documentation](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4ViKEivLJtJsvpaW0aqIQ5) for a full explanation of the banner feature.
+      description: 'Lists the banners registered for a given query. Check the configuring banners documentation for a full explanation of the banner feature.
 
 
         This endpoint does not require authentication.'
@@ -71,6 +77,8 @@ paths:
                   name: Summer Sale
                   area: '1'
                   html: <h1>This is a test</h1>
+      operationId: getBannersByFacets
+      x-operation-id-source: derived
   /product_search/{facets}:
     get:
       summary: VTex Get list of products for a query
@@ -519,6 +527,8 @@ paths:
                 fuzzy: '0'
                 operator: and
                 translated: false
+      operationId: getProductSearchByFacets
+      x-operation-id-source: derived
   /facets/{facets}:
     get:
       summary: VTex Get list of the possible facets for a given query
@@ -647,96 +657,10 @@ paths:
                   - key: ft
                     value: shirt
                 translated: false
+      operationId: getFacetsByFacets
+      x-operation-id-source: derived
 components:
-  parameters:
-    facetsPath:
-      in: path
-      name: facets
-      required: true
-      description: '## Format
-
-
-        The `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.
-
-
-        The order in which the terms appear is not relevant to the search.
-
-
-        You can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.
-
-
-        ## General filters
-
-
-        The `facets` parameter also allows the following general filters:
-
-
-        | `facetKey` | Description | Example |
-
-        | - | - | - |
-
-        | `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |
-
-        | `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |
-
-        | `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |
-
-        | `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|
-
-        '
-      example: category-1/clothing/category-2/shirt/category-3/man
-      schema:
-        type:
-        - string
-        - 'null'
-        default: /
-        example: color/blue
-    query:
-      in: query
-      name: query
-      description: Search term. It can contain any character.
-      schema:
-        type: string
-        example: shirt
-    hideUnavailableItems:
-      in: query
-      name: hideUnavailableItems
-      description: Defines whether the result should hide unavailable items (`true`), or not (`false`).
-      schema:
-        type: boolean
-        default: false
-    locale:
-      in: query
-      name: locale
-      description: Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language.
-      example: en-US
-      schema:
-        type:
-        - string
-        - 'null'
   schemas:
-    Banners:
-      type: object
-      description: Response body object.
-      properties:
-        banners:
-          type: array
-          description: List of banners.
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: Banner ID.
-              name:
-                type: string
-                description: Banner name.
-              area:
-                type: string
-                description: Banner area, which can be a number between 1 and 4, to be used in the store's [Banner](https://developers.vtex.com/docs/guides/vtex-search-banner) block.
-              html:
-                type: string
-                description: Banner HTML, which can be an image or text.
     Facets:
       type: object
       description: Response body object.
@@ -833,6 +757,28 @@ components:
         translated:
           type: boolean
           description: Defines whether the facets were translated by Intelligent Search (`true`) or not (`false`).
+    Banners:
+      type: object
+      description: Response body object.
+      properties:
+        banners:
+          type: array
+          description: List of banners.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Banner ID.
+              name:
+                type: string
+                description: Banner name.
+              area:
+                type: string
+                description: Banner area, which can be a number between 1 and 4, to be used in the store's [Banner](https://developers.vtex.com/docs/guides/vtex-search-banner) block.
+              html:
+                type: string
+                description: Banner HTML, which can be an image or text.
     ProductSearch:
       type: object
       description: Response body object.
@@ -1490,3 +1436,69 @@ components:
             highlighted:
               type: string
               description: The same as `text`, but it highlights the corrected word. Useful when there is more than one word.
+  parameters:
+    locale:
+      in: query
+      name: locale
+      description: Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language.
+      example: en-US
+      schema:
+        type:
+        - string
+        - 'null'
+    query:
+      in: query
+      name: query
+      description: Search term. It can contain any character.
+      schema:
+        type: string
+        example: shirt
+    facetsPath:
+      in: path
+      name: facets
+      required: true
+      description: '## Format
+
+
+        The `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.
+
+
+        The order in which the terms appear is not relevant to the search.
+
+
+        You can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.
+
+
+        ## General filters
+
+
+        The `facets` parameter also allows the following general filters:
+
+
+        | `facetKey` | Description | Example |
+
+        | - | - | - |
+
+        | `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |
+
+        | `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |
+
+        | `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |
+
+        | `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|
+
+        '
+      example: category-1/clothing/category-2/shirt/category-3/man
+      schema:
+        type:
+        - string
+        - 'null'
+        default: /
+        example: color/blue
+    hideUnavailableItems:
+      in: query
+      name: hideUnavailableItems
+      description: Defines whether the result should hide unavailable items (`true`), or not (`false`).
+      schema:
+        type: boolean
+        default: false

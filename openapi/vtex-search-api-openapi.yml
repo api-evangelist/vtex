@@ -24,7 +24,18 @@ paths:
       tags:
       - Search
       summary: VTex Search for Products
-      description: "Retrieves general information about the products related to the term searched. \nThis is the main search used by the store. The user can type anything to be searched.  \n\nFor example, if they search for a \"decanter\", this is the URL: `https://{{accountName}}.{{environment}}.com.br/api/catalog_system/pub/products/search/decanter`. \n\nNote that maybe the response can be HTTP 200 or 206, 206 means that it's a partial content response.\n\nIf it is a 206 take a look at the Headers, will be an entry called resources. E.g.: resources → 0-9/19. This means that the response is showing items from 0 to 9, 10 items, but there were 19 items found. See more information at the paging route example."
+      description: 'Retrieves general information about the products related to the term searched.
+
+        This is the main search used by the store. The user can type anything to be searched.
+
+
+        For example, if they search for a "decanter", this is the URL: `https://{{accountName}}.{{environment}}.com.br/api/catalog_system/pub/products/search/decanter`.
+
+
+        Note that maybe the response can be HTTP 200 or 206, 206 means that it''s a partial content response.
+
+
+        If it is a 206 take a look at the Headers, will be an entry called resources. E.g.: resources → 0-9/19. This means that the response is showing items from 0 to 9, 10 items, but there were 19 items found. See more information at the paging route example.'
       operationId: ProductSearch
       parameters:
       - name: Accept
@@ -2605,7 +2616,133 @@ paths:
       tags:
       - Search
       summary: VTex Search for Products with Filter, Order and Pagination
-      description: "Retrieves general information about the store's products. This information can be filtered and ordered by a number of options. It also can be paginated, filtered and ordered. \n\n## Filters  \n\n- **Filter by full text** - `ft={searchWord}`  \nE.g.: `ft=television`\n\n- **Filter by category** - `fq=C:/{a}/{b}`  \n`{a}` and `{b}` are Category IDs   \nE.g.: `fq=C:/1000041/1000049/`\n\n- **Filter by brand** - `fq=B:/{a}/{b}`  \n`{a}` and `{b}` are Brand IDs\nE.g.: `fq=B:/189385/189387/`\n\n- **Filter by specification** - `fq=specificationFilter_{a}:{b}`  \n`{a}` is the specification ID\n`{b}` is the specification value\nE.g.: To filter products where the color is Blue, find the specification ID for color. Suppose it is 123, then the query will be: `fq=specificationFilter_123:Blue`\n\n- **Filter by price range** - `fq=P:[{a} TO {b}]`  \n`{a}`  is the minimum price \"from\"\n`{b}` is the highest price \"to\"  \nE.g.: `fq=P:[0 TO 20]` will search products between 0.00 and 20.00.  \n\n- **Filter by collection** - `fq=productClusterIds:{{productClusterId}}` \n`productClusterId` is the same as `collectionId`  \nFor more information about collections, read [Creating a product collection](https://help.vtex.com/en/tutorial/creating-a-product-collection).\n\n- **Filter by product ID** - `fq=productId:{{productId}}`\n\n- **Filter by SKU ID** - `fq=skuId:{{skuId}}`\n\n- **Filter by referenceId** - `fq=alternateIds_RefId:{{referenceId}}`\n\n- **Filter by EAN13** - `fq=alternateIds_Ean:{{ean13}}`\n\n- **Filter by availability at a specific sales channel** - `fq=isAvailablePerSalesChannel_{{sc}}:{{bool}}`  \n`{{sc}}` is the desired sales channel  \n`{{bool}}` is true ou false, 1 or 0.  \nE.g.: seaching available products for the sales channel 4 would be `fq=isAvailablePerSalesChannel_4:1`\n\n- **Filter by available at a specific seller** - `fq=sellerId:{{sellerId}}`\nThe search does not include White Label Sellers.\n\n## Pagination\n\n- **Initial item number** - `_from={{first}}`\n- **Final item number** - `_to={{last}}`\n\n>⚠️ This endpoint returns a maximum of 50 items per response, so the difference between `_from` and `_to` should not exceed this number. The result order is descending, from the highest product ID to the lowest.\n\n## Sorting\n\n- **Price**  \n`O=OrderByPriceDESC`  \n`O=OrderByPriceASC`\n\n- **Top Selling Products**  \n`O=OrderByTopSaleDESC`\n\n- **Best Reviews**  \n`O=OrderByReviewRateDESC`\n\n- **Name**  \n`O=OrderByNameASC`  \n`O=OrderByNameDESC`\n\n- **Release Date**  \n`O=OrderByReleaseDateDESC`\n\n- **Best Discounts**  \n`O=OrderByBestDiscountDESC`\n\n- **Score**  \n`O=OrderByScoreDESC`"
+      description: 'Retrieves general information about the store''s products. This information can be filtered and ordered by a number of options. It also can be paginated, filtered and ordered.
+
+
+        ## Filters
+
+
+        - **Filter by full text** - `ft={searchWord}`
+
+        E.g.: `ft=television`
+
+
+        - **Filter by category** - `fq=C:/{a}/{b}`
+
+        `{a}` and `{b}` are Category IDs
+
+        E.g.: `fq=C:/1000041/1000049/`
+
+
+        - **Filter by brand** - `fq=B:/{a}/{b}`
+
+        `{a}` and `{b}` are Brand IDs
+
+        E.g.: `fq=B:/189385/189387/`
+
+
+        - **Filter by specification** - `fq=specificationFilter_{a}:{b}`
+
+        `{a}` is the specification ID
+
+        `{b}` is the specification value
+
+        E.g.: To filter products where the color is Blue, find the specification ID for color. Suppose it is 123, then the query will be: `fq=specificationFilter_123:Blue`
+
+
+        - **Filter by price range** - `fq=P:[{a} TO {b}]`
+
+        `{a}` is the minimum price "from"
+
+        `{b}` is the highest price "to"
+
+        E.g.: `fq=P:[0 TO 20]` will search products between 0.00 and 20.00.
+
+
+        - **Filter by collection** - `fq=productClusterIds:{{productClusterId}}`
+
+        `productClusterId` is the same as `collectionId`
+
+        For more information about collections, read Creating a product collection.
+
+
+        - **Filter by product ID** - `fq=productId:{{productId}}`
+
+
+        - **Filter by SKU ID** - `fq=skuId:{{skuId}}`
+
+
+        - **Filter by referenceId** - `fq=alternateIds_RefId:{{referenceId}}`
+
+
+        - **Filter by EAN13** - `fq=alternateIds_Ean:{{ean13}}`
+
+
+        - **Filter by availability at a specific sales channel** - `fq=isAvailablePerSalesChannel_{{sc}}:{{bool}}`
+
+        `{{sc}}` is the desired sales channel
+
+        `{{bool}}` is true ou false, 1 or 0.
+
+        E.g.: seaching available products for the sales channel 4 would be `fq=isAvailablePerSalesChannel_4:1`
+
+
+        - **Filter by available at a specific seller** - `fq=sellerId:{{sellerId}}`
+
+        The search does not include White Label Sellers.
+
+
+        ## Pagination
+
+
+        - **Initial item number** - `_from={{first}}`
+
+        - **Final item number** - `_to={{last}}`
+
+
+        >⚠️ This endpoint returns a maximum of 50 items per response, so the difference between `_from` and `_to` should not exceed this number. The result order is descending, from the highest product ID to the lowest.
+
+
+        ## Sorting
+
+
+        - **Price**
+
+        `O=OrderByPriceDESC`
+
+        `O=OrderByPriceASC`
+
+
+        - **Top Selling Products**
+
+        `O=OrderByTopSaleDESC`
+
+
+        - **Best Reviews**
+
+        `O=OrderByReviewRateDESC`
+
+
+        - **Name**
+
+        `O=OrderByNameASC`
+
+        `O=OrderByNameDESC`
+
+
+        - **Release Date**
+
+        `O=OrderByReleaseDateDESC`
+
+
+        - **Best Discounts**
+
+        `O=OrderByBestDiscountDESC`
+
+
+        - **Score**
+
+        `O=OrderByScoreDESC`'
       operationId: ProductSearchFilteredandOrdered
       parameters:
       - name: Accept
@@ -7800,7 +7937,107 @@ paths:
       tags:
       - Search
       summary: VTex Search documents
-      description: "Retrieves documents' information, while choosing which fields will be returned and filtering documents by specific fields.\n\n> The response header `REST-Content-Range` indicates the total amount of results for that specific search. For example, it may return `resources 0-100/136108`, which indicates it has returned results from 0 to 100 of a total 136108.\n\nBelow you can see some query examples and learn more about each query parameter.\n\n> Avoid sending too many requests with wildcards (`*`) in the search parameters or that use the `keyword` parameter. This may lead to this endpoint being temporarily blocked for your account. If this happens you will receive an error with status code `503`.\n\n## Query examples\n\n### Simple filter\n\n```\n/dataentities/Newsletter/search?email=my@email.com\n```\n\n### Complex filter\n\n```\n/dataentities/Newsletter/search?_where=(firstName=Jon OR lastName=Smith) OR (createdIn between 2001-01-01 AND 2016-01-01)\n```\n\n### Date Range\n\n```\n/dataentities/Newsletter/search?_where=createdIn between 2001-01-01 AND 2016-01-01\n```\n\n### Range numeric fields\n\n```\n/dataentities/Newsletter/search?_where=age between 18 AND 25\n```\n\n### Partial filter\n\n```\n/dataentities/Newsletter/search?firstName=*Maria*\n```\n\n### Filter for null values\n\n```\n/dataentities/Newsletter/search?_where=firstName is null\n```\n\n### Filter for non-null values\n\n```\n/dataentities/Newsletter/search?_where=firstName is not null\n```\n\n### Filter for difference\n```\n/dataentities/Newsletter/search?_where=firstName<>maria\n```\n\n### Filter greater than or less than\n```\n/dataentities/Newsletter/search?_where=number>5\n/dataentities/Newsletter/search?_where=date<2001-01-01\n``` \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Dynamic Storage | Dynamic storage generic resources | **Read only documents** |\n| Dynamic Storage | Dynamic storage generic resources | **Insert or update document (not remove)** |\n| Dynamic Storage | Dynamic storage generic resources | **Full access to all documents** |\n| Dynamic Storage | Dynamic storage generic resources | **Master Data administrator** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves documents'' information, while choosing which fields will be returned and filtering documents by specific fields.
+
+
+        > The response header `REST-Content-Range` indicates the total amount of results for that specific search. For example, it may return `resources 0-100/136108`, which indicates it has returned results from 0 to 100 of a total 136108.
+
+
+        Below you can see some query examples and learn more about each query parameter.
+
+
+        > Avoid sending too many requests with wildcards (`*`) in the search parameters or that use the `keyword` parameter. This may lead to this endpoint being temporarily blocked for your account. If this happens you will receive an error with status code `503`.
+
+
+        ## Query examples
+
+
+        ### Simple filter
+
+
+        ```
+
+        /dataentities/Newsletter/search?email=my@email.com
+
+        ```
+
+
+        ### Complex filter
+
+
+        ```
+
+        /dataentities/Newsletter/search?_where=(firstName=Jon OR lastName=Smith) OR (createdIn between 2001-01-01 AND 2016-01-01)
+
+        ```
+
+
+        ### Date Range
+
+
+        ```
+
+        /dataentities/Newsletter/search?_where=createdIn between 2001-01-01 AND 2016-01-01
+
+        ```
+
+
+        ### Range numeric fields
+
+
+        ```
+
+        /dataentities/Newsletter/search?_where=age between 18 AND 25
+
+        ```
+
+
+        ### Partial filter
+
+
+        ```
+
+        /dataentities/Newsletter/search?firstName=*Maria*
+
+        ```
+
+
+        ### Filter for null values
+
+
+        ```
+
+        /dataentities/Newsletter/search?_where=firstName is null
+
+        ```
+
+
+        ### Filter for non-null values
+
+
+        ```
+
+        /dataentities/Newsletter/search?_where=firstName is not null
+
+        ```
+
+
+        ### Filter for difference
+
+        ```
+
+        /dataentities/Newsletter/search?_where=firstName<>maria
+
+        ```
+
+
+        ### Filter greater than or less than
+
+        ```
+
+        /dataentities/Newsletter/search?_where=number>5
+
+        /dataentities/Newsletter/search?_where=date❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: Searchdocuments
       parameters:
       - $ref: '#/components/parameters/dataEntityName'
@@ -7873,6 +8110,59 @@ paths:
           default: vtexcommercestable
 components:
   parameters:
+    _fields:
+      name: _fields
+      in: query
+      description: Fields that should be returned by document. Separate fields' names with commas. For example `_fields=email,firstName,document`. You can also use `_fields=_all` to fetch all fields.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: email,firstName,document
+    REST-Range:
+      name: REST-Range
+      in: header
+      description: Defines the collection of documents to be returned. A range within the collection limited by 100 documents per query.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: resources=0-10
+    _sort:
+      name: _sort
+      in: query
+      description: Sets sorting mode in two parts. The first part is the name of the field you want to sort by. In the second part, use `ASC` for ascending or `DESC` for descending.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: firstName ASC
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    dataEntityName:
+      name: dataEntityName
+      in: path
+      required: true
+      description: Name of the data entity.
+      schema:
+        type: string
+        example: Newsletter
     _where:
       name: _where
       in: query
@@ -7891,59 +8181,6 @@ components:
       schema:
         type: string
         example: schema
-    dataEntityName:
-      name: dataEntityName
-      in: path
-      required: true
-      description: Name of the data entity.
-      schema:
-        type: string
-        example: Newsletter
-    _fields:
-      name: _fields
-      in: query
-      description: Fields that should be returned by document. Separate fields' names with commas. For example `_fields=email,firstName,document`. You can also use `_fields=_all` to fetch all fields.
-      required: false
-      style: form
-      schema:
-        type: string
-        example: email,firstName,document
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    _sort:
-      name: _sort
-      in: query
-      description: Sets sorting mode in two parts. The first part is the name of the field you want to sort by. In the second part, use `ASC` for ascending or `DESC` for descending.
-      required: false
-      style: form
-      schema:
-        type: string
-        example: firstName ASC
-    REST-Range:
-      name: REST-Range
-      in: header
-      description: Defines the collection of documents to be returned. A range within the collection limited by 100 documents per query.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: resources=0-10
   schemas:
     Using_fields_all:
       title: Using_fields=_all

@@ -29,7 +29,88 @@ paths:
       tags:
       - Invoice
       summary: VTex Order invoice notification
-      description: "This request is used for [invoicing an order](https://help.vtex.com/en/tracks/orders--2xkTisx4SXOWXQel8Jg8sa/2WgQrlHTyVo4hLjhUs1LMT). Entering the order's invoice means it was successfully completed, and the order status can be changed to the `invoiced` in the [order flow](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196). Once an order is `invoiced`, its status cannot be changed. \n\nAfter the insertion of the invoice, the order's total value will be updated, even in [partial invoice](https://help.vtex.com/en/tracks/orders--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe) scenarios. \n\n>❗ To avoid rounding errors, we recommend always sending the object of items being invoiced. \n\n## Partial invoices \n\nAfter adding a [partial invoice](https://help.vtex.com/en/tracks/orders--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe), the order's value will be updated, corresponding to a partial settled value in the VTEX payment gateway. \n\nPartially invoiced orders cannot be canceled, and cancellation attempts will result in a `400` status code error. If the customer wants to replace or remove items, it is possible to [change the order](https://developers.vtex.com/docs/guides/change-order). \n\n> The partial invoices feature is available for all VTEX stores. The partial settlement in the gateway is in Beta, and requires a connector with the Payment Provider Protocol. \n\n## Returning items \n\nBesides using this endpoint for generating invoices for sold items, you can use it for generating invoices for returned items. You determine this in the request body `type` field by choosing one of the following values: \n\n- `output`: selling order invoice. \n\n- `input`: returning items invoice. \n\nBe aware of generating return invoices only after the full order amount was invoiced, otherwise, no refund will occur. \n\n## Changing the receipt code \n\nEvery time this endpoint is called using the same `invoiceNumber`, a new `receipt` code is generated, and it overrides the previous one. By doing this, you cannot change other information, only the `receipt` code.\n\n## Integration with marketplaces \n\nThe invoice should be pushed to the fulfillment account, not to the marketplace account. Once the order is invoiced, the seller should use this request to send the invoice information to the marketplace. \n\nThis endpoint is also used by the seller to send the order tracking information. However, this only should be done after the seller has the tracking information. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| OMS | OMS access | **Notify invoice** |\n| OMS | OMS access | **Notify refund** | \n\nYou can [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) with that resource or use one of the following [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy):\n\n| **Role** | **Resource** | \n| --------------- | ----------------- | \n| OMS - Full access | Cancel order |\n| IntegrationProfile - Fulfillment Oms | Cancel order |\n\n>❗ Assigning a [predefined role](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) to users or application keys usually grants permission to multiple [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3). If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see [Best practices for using application keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm). \n\nTo learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication)."
+      description: 'This request is used for invoicing an order. Entering the order''s invoice means it was successfully completed, and the order status can be changed to the `invoiced` in the order flow. Once an order is `invoiced`, its status cannot be changed.
+
+
+        After the insertion of the invoice, the order''s total value will be updated, even in partial invoice scenarios.
+
+
+        >❗ To avoid rounding errors, we recommend always sending the object of items being invoiced.
+
+
+        ## Partial invoices
+
+
+        After adding a partial invoice, the order''s value will be updated, corresponding to a partial settled value in the VTEX payment gateway.
+
+
+        Partially invoiced orders cannot be canceled, and cancellation attempts will result in a `400` status code error. If the customer wants to replace or remove items, it is possible to change the order.
+
+
+        > The partial invoices feature is available for all VTEX stores. The partial settlement in the gateway is in Beta, and requires a connector with the Payment Provider Protocol.
+
+
+        ## Returning items
+
+
+        Besides using this endpoint for generating invoices for sold items, you can use it for generating invoices for returned items. You determine this in the request body `type` field by choosing one of the following values:
+
+
+        - `output`: selling order invoice.
+
+
+        - `input`: returning items invoice.
+
+
+        Be aware of generating return invoices only after the full order amount was invoiced, otherwise, no refund will occur.
+
+
+        ## Changing the receipt code
+
+
+        Every time this endpoint is called using the same `invoiceNumber`, a new `receipt` code is generated, and it overrides the previous one. By doing this, you cannot change other information, only the `receipt` code.
+
+
+        ## Integration with marketplaces
+
+
+        The invoice should be pushed to the fulfillment account, not to the marketplace account. Once the order is invoiced, the seller should use this request to send the invoice information to the marketplace.
+
+
+        This endpoint is also used by the seller to send the order tracking information. However, this only should be done after the seller has the tracking information.
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | OMS | OMS access | **Notify invoice** |
+
+        | OMS | OMS access | **Notify refund** |
+
+
+        You can create a custom role with that resource or use one of the following predefined roles:
+
+
+        | **Role** | **Resource** |
+
+        | --------------- | ----------------- |
+
+        | OMS - Full access | Cancel order |
+
+        | IntegrationProfile - Fulfillment Oms | Cancel order |
+
+
+        >❗ Assigning a predefined role to users or application keys usually grants permission to multiple License Manager resources. If some of these permissions are not necessary, consider creating a custom role instead. For more information regarding security, see Best practices for using application keys.
+
+
+        To learn more about machine authentication at VTEX, see Authentication overview.'
       operationId: InvoiceNotification
       parameters:
       - name: Accept
@@ -102,13 +183,13 @@ paths:
       tags:
       - Invoice
       summary: VTex Update order's partial invoice (send tracking number)
-      description: 'Update a given order, adding its tracking number to its [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe).
+      description: 'Update a given order, adding its tracking number to its Partial invoice.
 
 
-        After using this call to add a tracking number to an order, you can use the [Update order tracking status](https://developers.vtex.com/docs/api-reference/orders-api#put-/api/oms/pvt/orders/-orderId-/invoice/-invoiceNumber-/tracking) API request to add tracking events.
+        After using this call to add a tracking number to an order, you can use the Update order tracking status API request to add tracking events.
 
 
-        > The `Notify invoice` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc).'
+        > The `Notify invoice` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the License manager roles and resources.'
       operationId: Updatepartialinvoice.SendTrackingNumber
       parameters:
       - name: Content-Type
@@ -197,7 +278,7 @@ paths:
         Be aware that this endpoint is also used by the seller to send the order tracking information. This, however, should be done in a separate moment, once the seller has the tracking information.
 
 
-        > The `Notify invoice` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#).'
+        > The `Notify invoice` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the License manager roles and resources.'
       operationId: InvoiceNotification2
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -924,32 +1005,6 @@ components:
         - id: '1234'
           price: 10000
           quantity: 1
-    Item1_2:
-      title: Item1
-      required:
-      - itemIndex
-      - price
-      - quantity
-      type: object
-      properties:
-        itemIndex:
-          type: string
-          description: Index of the SKU being invoiced.
-          example: 67
-        price:
-          type: integer
-          format: int32
-          description: Total price of the SKU being invoiced in cents. Do not use any decimal separator. For instance, `$24.99` should be represented as `2499`.
-          example: 2499
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity cof the SKU being invoiced.
-          example: 3
-      example:
-        id: '1234'
-        price: 10000
-        quantity: 1
     InvoiceNotificationRequest_2:
       title: InvoiceNotificationRequest
       required:
@@ -1037,7 +1092,42 @@ components:
         - id: '1234'
           price: 10000
           quantity: 1
+    Item1_2:
+      title: Item1
+      required:
+      - itemIndex
+      - price
+      - quantity
+      type: object
+      properties:
+        itemIndex:
+          type: string
+          description: Index of the SKU being invoiced.
+          example: 67
+        price:
+          type: integer
+          format: int32
+          description: Total price of the SKU being invoiced in cents. Do not use any decimal separator. For instance, `$24.99` should be represented as `2499`.
+          example: 2499
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity cof the SKU being invoiced.
+          example: 3
+      example:
+        id: '1234'
+        price: 10000
+        quantity: 1
   parameters:
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
     Accept:
       name: Accept
       in: header
@@ -1056,15 +1146,6 @@ components:
       schema:
         type: string
         example: 70caf3941s6df1
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

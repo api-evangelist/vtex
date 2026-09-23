@@ -1,149 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Checkout Shopping Cart API
-  description: '>ℹ️ Check the new [Checkout onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/checkout-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about the Checkout and is organized by focusing on the developer''s journey.
-
-
-    The Checkout API allows you to obtain and configure information about the shopping cart and its attachments, personalization of custom fields, orderForm structure, fulfillment data, order management, and identification of the sellers delivery region.
-
-
-    >ℹ️ Data modification operations (`POST`, `PATCH`, `PUT` or `DELETE` endpoints) shall not be performed in parallel in the Checkout APIs. They need to be enqueued by the client/requester. Otherwise, old values ​​can be overwritten incorrectly or competition errors may occur.
-
-
-    >⚠️ All endpoints that consult or edit the orderForm can change the authentication depending on the customer context. If you are handling information from a customer with a complete profile on the store, authentication will be required. You can only access or modify the customer data for these profiles with an authenticated request.
-
-
-    ## Shopping cart
-
-
-    Allows merchants to simulate, configure and customize shopping cart information.
-
-
-    - [POST - Cart Simulation](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForms/simulation): simulate a cart in VTEX Checkout.
-
-    - [GET - Get current or create a new cart](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm): get your current shopping cart information or to create a new cart.
-
-    - [GET - Get cart information by ID](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm/-orderFormId-): get all information associated to a given shopping cart.
-
-    - [POST - Add cart items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items): add a new item to the shopping cart.
-
-    - [POST - Update cart items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/update): change the quantity of one or more items in a specific cart or remove an item from the cart.
-
-    - [PATCH - Handle cart items](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/items): change the quantity or price of one or more items to the shopping cart or add a new item to the shopping cart.
-
-    - [POST - Remove all items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/removeAll): removes all items from a given cart, leaving it empty.
-
-    - [PUT - Change price](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orderForm/-orderFormId-/items/-itemIndex-/price): changes the price of an SKU in a cart.
-
-    - [GET - Cart installments](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm/-orderFormId-/installments): retrieves possible amount of installments and respective values for a given cart with a given payment method.
-
-
-    ## Cart attachments
-
-
-    Allows merchants to obtain client profiles and add information to a given shopping cart.
-
-
-    - [GET - Get client profile by email](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/profiles): retrieve a client''s profile information by providing an email address.
-
-    - [POST - Add client profile](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/clientProfileData): include client profile information to a given shopping cart.
-
-    - [Patch - Ignore profile data](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/profile): disable the automatic inclusion of profile information in a shopping cart when a shopper provides an email address at checkout.
-
-    - [GET - Remove all personal data](https://developers.vtex.com/docs/api-reference/checkout-api#get-/checkout/changeToAnonymousUser/-orderFormId-): removes all user information, making a cart anonymous while leaving the items.
-
-    - [POST - Add client preferences](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/items): include client preferences information to a given shopping cart.
-
-    - [POST - Add shipping address and select delivery option](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/shippingData): include shipping information and/or selected delivery option to a given shopping cart.
-
-    - [POST - Add marketing data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/marketingData): include marketing information to a given shopping cart.
-
-    - [POST - Add payment data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/paymentData): include payment information to a given shopping cart.
-
-    - [POST - Add merchant context data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/merchantContextData): add to the cart any relevant information that is related to the context of a specific order.
-
-    - [POST - Add coupons to the cart](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/coupons): add coupons to a given shopping cart.
-
-
-    ## Custom data
-
-
-    Allows merchants to manage custom fields that were created by an app in their account.
-
-
-    - [PUT - Set multiple custom field values](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/coupons): allows you to update the values of custom fields created in your account''s apps.
-
-    - [PUT - Set single custom field value](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orderForm/-orderFormId-/customData/-appId-/-appFieldName-): allows you to update the value of a specific custom field created in your account''s apps.
-
-    - [DELETE - Remove single custom field value](https://developers.vtex.com/docs/api-reference/checkout-api#delete-/api/checkout/pub/orderForm/-orderFormId-/customData/-appId-/-appFieldName-): allows you to remove the value of a specific custom field created in your account''s apps.
-
-
-    ## Configuration
-
-
-    Allows merchants to configure orderForm in the account and seller exchange on a given order.
-
-
-    - [GET - Get orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/orderForm): retrieves the settings that are currently applied to every [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) in the account.
-
-    - [POST - Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm): determines settings that will apply to every [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) in the account.
-
-    - [GET - Get window to change seller](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/window-to-change-seller): retrieves a marketplace’s window to change seller.
-
-    - [POST - Update window to change seller](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/window-to-change-seller): updates a marketplace’s window to change seller.
-
-    - [POST - Clear orderForm messages](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/messages/clear): removes all messages from the `messages` field of the [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields).
-
-
-    ## Fulfillment
-
-
-    Allows merchants to obtain pickup points and address information.
-
-
-    - [GET - List pickup points by location](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/pickup-points): retrieves information on pickup points close to a given location determined by geocoordinates or postal code.
-
-    - [GET - Get address by postal code](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/postal-code/-countryCode-/-postalCode-): retrieves address information for a given postal code and country.
-
-
-    ## Order placement
-
-
-    Allows merchants to place and process orders by creating a new cart or using an existing cart.
-
-
-    - [POST - Place order from an existing cart](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/transaction): places an order from an existing [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) object, meaning an existing cart.
-
-    - [PUT - Place order](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orders): places order without having any prior cart information.
-
-    - [POST - Process order](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/gatewayCallback/-orderGroup-): order processing callback request, which is made after an order''s payment is approved.
-
-
-    ## Region
-
-
-    Allows merchants to obtain a list of sellers serving a specific delivery region.
-
-
-    - [GET - Get sellers by region or address](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/regions/-regionId-)": retrieves a list of sellers that cater to a specific region or address.
-
-
-    ## Common parameters in the documentation
-
-
-    | Parameter name            | Description                                                                             |
-
-    |---------------------------|-----------------------------------------------------------------------------------------|
-
-    | `{{accountName}}`         | Store account name                                                                      |
-
-    | `{{environment}}`         | The environment that will be called. Change for vtexcommercestable or vtexcommmercebeta |
-
-    | `{{X-VTEX-API-AppKey}}`   | Located in the headers of the requests, user authentication key                         |
-
-    | `{{X-VTEX-API-AppToken}}` | Located in the headers of the requests, authentication password                         |
-
-    '
+  description: '>ℹ️ Check the new Checkout onboarding guide.'
   contact: {}
   version: '1.0'
 servers:
@@ -182,13 +40,13 @@ paths:
         This request is useful whenever you need to know the availability of fulfilling an order for a specific cart setting, since the API response will let you know the updated price, inventory and shipping data.
 
 
-        >⚠️ The fields (`sku id`, `quantity`, `seller`, `country`, `postalCode` and `geoCoordinates`) are just examples of content that you can simulate in your cart. You can add more fields to the request as per your need. Access the [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) guide to check the available fields.
+        >⚠️ The fields (`sku id`, `quantity`, `seller`, `country`, `postalCode` and `geoCoordinates`) are just examples of content that you can simulate in your cart. You can add more fields to the request as per your need. Access the orderForm guide to check the available fields.
 
 
         ## Permissions
 
 
-        This endpoint does not require [authentication](https://developers.vtex.com/docs/guides/authentication) or [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).'
+        This endpoint does not require authentication or permissions.'
       operationId: CartSimulation
       security: []
       parameters:
@@ -1407,7 +1265,7 @@ paths:
         **Important**: To create a new empty shopping cart you need to send this request with the query param `forceNewCart=true`.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` obtained in response is the identification code of the newly created cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` obtained in response is the identification code of the newly created cart.
 
 
         > This request has a time out of 45 seconds.
@@ -1416,7 +1274,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -1426,10 +1284,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: CreateANewCart
       security: []
       parameters:
@@ -1550,10 +1408,10 @@ paths:
       tags:
       - Shopping Cart
       summary: VTex Get cart information by ID
-      description: 'Retrieves all information associated to a given shopping  cart.
+      description: 'Retrieves all information associated to a given shopping cart.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         > This request has a time out of 45 seconds.
@@ -1562,7 +1420,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -1572,10 +1430,10 @@ paths:
         | Checkout | Checkout | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint.To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetCartInformationById
       security: []
       parameters:
@@ -1837,7 +1695,7 @@ paths:
         You must send an empty JSON in the body of the request.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         >ℹ️ Request body must always be sent with empty value "{ }" in this endpoint.
@@ -1846,7 +1704,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -1856,10 +1714,10 @@ paths:
         | Checkout | CheckoutResources | **Shopping Cart Full Access** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: RemoveAllItems
       security: []
       parameters:
@@ -2029,7 +1887,7 @@ paths:
       description: 'This call removes all user information, making a cart anonymous while leaving the items.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure that represents a shopping cart and contains all information about it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure that represents a shopping cart and contains all information about it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         This call works by creating a new orderForm, setting a new cookie, and returning a redirect 302 to the cart URL (`/checkout/#/orderform`).
@@ -2038,7 +1896,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -2048,10 +1906,10 @@ paths:
         | Checkout | CheckoutResources | **Save OrderForm Configuration** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: Removeallpersonaldata
       security: []
       parameters:
@@ -2088,10 +1946,10 @@ paths:
         2. Remove an item from the cart (by sending the `quantity` value = `0` in the request body).
 
 
-        >ℹ️ To remove all items from the cart at the same time, use the [Remove all items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/removeAll?endpoint=post-/api/checkout/pub/orderForm/-orderFormId-/items/removeAll) endpoint.
+        >ℹ️ To remove all items from the cart at the same time, use the Remove all items endpoint.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure that represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure that represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         > This request has a time out of 45 seconds.
@@ -2100,7 +1958,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -2110,10 +1968,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: ItemsUpdate
       security: []
       parameters:
@@ -2512,7 +2370,7 @@ paths:
       description: 'Use this request to add a new item to the shopping cart.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         > This request has a time out of 45 seconds.
@@ -2521,7 +2379,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -2531,10 +2389,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: Items
       security: []
       parameters:
@@ -2957,7 +2815,7 @@ paths:
         **Important**: To add a new item to the shopping cart, do not send the string `index` in the request body.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure that represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure that represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         > This request has a time out of 45 seconds.
@@ -2966,7 +2824,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -2976,10 +2834,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: ItemsHandle
       security: []
       parameters:
@@ -3411,7 +3269,7 @@ paths:
       description: 'This request changes the price of an SKU in a cart.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         You need to inform which cart you are referring to, by sending its `orderFormId` and what is the item whose price you want to change, by sending its `itemIndex`.
@@ -3420,7 +3278,7 @@ paths:
         You also need to pass the new price value in the body.
 
 
-        Remember that, to use this endpoint, the feature of *manual price* must be active. To check if it''s active, use the [Get orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/orderForm) endpoint. To make it active, use the [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm) endpoint, making the `allowManualPrice` field `true`.
+        Remember that, to use this endpoint, the feature of *manual price* must be active. To check if it''s active, use the Get orderForm configuration endpoint. To make it active, use the Update orderForm configuration endpoint, making the `allowManualPrice` field `true`.
 
 
         > Whenever you use this request to change the price of an item, all items in that cart with the same SKU are affected by this change. This applies even to items that share the SKU but have been separated into different objects in the `items` array due to customizations or attachments, for example.
@@ -3429,7 +3287,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -3439,10 +3297,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: PriceChange
       parameters:
       - name: orderFormId
@@ -3700,7 +3558,7 @@ paths:
       description: 'When a shopper provides an email address at Checkout, the platform tries to retrieve existing profile information for that email and add it to the shopping cart information. Use this request if you want to change this behavior for a given cart, meaning profile information will not be included in the order automatically.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         Note that this request will only work if you have not sent the `clientProfileData` to the cart yet. Sending it to a cart that already has a `clientProfileData` should return a status `403 Forbidden` error, with an `Access denied` message.
@@ -3709,7 +3567,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -3719,10 +3577,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: IgnoreProfileData
       security: []
       parameters:
@@ -3860,7 +3718,7 @@ paths:
       description: 'Retrieves possible amount of installments and respective values for a given cart with a given payment method.
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         This endpoint can be used to get the installment options for only one payment method at a time.
@@ -3872,7 +3730,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -3882,10 +3740,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetCartInstallments
       security: []
       parameters:
@@ -4038,18 +3896,18 @@ paths:
         To add multiple coupons to the same cart, you need to:
 
 
-        1. Request the activation of this feature through the [Support VTEX](https://help.vtex.com/support) if this is the first time you perform this action on your store.
+        1. Request the activation of this feature through the Support VTEX if this is the first time you perform this action on your store.
 
         2. Submit all coupon codes in the same requisition separated by commas. E.g.: {"text": "freeshipping, discount10, holiday30"}.
 
 
-        For more information on multiple coupons, access the [coupons tutorial](https://help.vtex.com/en/tutorial/creating-a-coupon-beta--7lMk3MmhNp2IEccyGApxU).
+        For more information on multiple coupons, access the coupons tutorial.
 
 
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -4059,10 +3917,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: AddCoupons
       security: []
       parameters:
@@ -5377,37 +5235,7 @@ paths:
                   ascending: true
       deprecated: false
 components:
-  parameters:
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
   schemas:
-    PriceChangeRequest:
-      required:
-      - price
-      type: object
-      properties:
-        price:
-          type: integer
-          format: int32
-          description: The new price of the item.
-      example:
-        price: 10000
     orderForm:
       type: object
       properties:
@@ -6430,6 +6258,36 @@ components:
             ascending:
               type: boolean
               description: Indicates whether the ordering is ascending.
+    PriceChangeRequest:
+      required:
+      - price
+      type: object
+      properties:
+        price:
+          type: integer
+          format: int32
+          description: The new price of the item.
+      example:
+        price: 10000
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   securitySchemes:
     appKey:
       type: apiKey

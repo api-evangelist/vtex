@@ -29,7 +29,10 @@ paths:
       tags:
       - Payment
       summary: VTex Retrieve payment transaction
-      description: "Retrieves transaction details by order ID. All events in the transaction will be registered in this call's response body. \n\nIn scenarios of [order changes](https://developers.vtex.com/vtex-rest-api/reference/registerchange), it is possible to insert a [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe). The total value of the order will be updated after the insertion of the invoice, even when there is a [Partial invoice](https://help.vtex.com/en/tracks/pedidos--2xkTisx4SXOWXQel8Jg8sa/q9GPspTb9cHlMeAZfdEUe) scenario. The updated value is settled by VTEX's Payment Gateway. The reimbursement for the shopper is automatic."
+      description: 'Retrieves transaction details by order ID. All events in the transaction will be registered in this call''s response body.
+
+
+        In scenarios of order changes, it is possible to insert a Partial invoice. The total value of the order will be updated after the insertion of the invoice, even when there is a Partial invoice scenario. The updated value is settled by VTEX''s Payment Gateway. The reimbursement for the shopper is automatic.'
       operationId: GetPaymenttransaction
       parameters:
       - name: Accept
@@ -117,7 +120,7 @@ paths:
       description: 'Send a payment notification of a given order, by order ID.
 
 
-        > The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#).'
+        > The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the License manager roles and resources.'
       operationId: SendPaymentNotification
       parameters:
       - name: Accept
@@ -186,17 +189,16 @@ paths:
       description: 'Send a payment notification of a given order, by order ID and payment ID.
 
 
-        > The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the [License manager roles and resources](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#).
+        > The `Notify payment` resource is needed to use this API request. This is included in `OMS - Full access` and `IntegrationProfile - Fulfillment Oms`, among other default roles available in the Admin. Learn more about the License manager roles and resources.
 
 
-        > Learn more about [Transaction Details](https://help.vtex.com/en/tutorial/how-to-view-the-orders-details).
-
+        > Learn more about Transaction Details.
 
 
         ## Request body properties
 
 
-        | Attribute    | Type        | Description |
+        | Attribute | Type | Description |
 
         | --------------- |:---------:| --------------------------------------:|
 
@@ -265,6 +267,65 @@ components:
         ReturnCode: null
         Message: null
         authId: '170852'
+    GetPaymenttransaction:
+      title: GetPaymenttransaction
+      required:
+      - status
+      - isActive
+      - transactionId
+      - merchantName
+      - payments
+      type: object
+      properties:
+        status:
+          type: string
+          description: Transaction status.
+        isActive:
+          type: boolean
+          description: If it is an active transaction (`true`) or not (`false`).
+        transactionId:
+          type: string
+          description: Transaction ID.
+        merchantName:
+          type: string
+          description: Transaction merchant's name.
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment1'
+          description: Payments' details object.
+      example:
+        status: Finished
+        isActive: true
+        transactionId: CB452D77E7D04099A4DB0479087B1D2C
+        merchantName: LUXSTORE
+        payments:
+        - id: 721CBE1090324D12ABE301FE33DE775A
+          paymentSystem: '4'
+          paymentSystemName: Mastercard
+          value: 10150
+          installments: 1
+          referenceValue: 10150
+          cardHolder: null
+          cardNumber: null
+          firstDigits: '412341'
+          lastDigits: '4123'
+          cvv2: null
+          expireMonth: null
+          expireYear: null
+          url: null
+          giftCardId: null
+          giftCardName: null
+          giftCardCaption: null
+          redemptionCode: null
+          group: creditCard
+          tid: '101770752'
+          dueDate: null
+          connectorResponses:
+            Tid: '101770752'
+            ReturnCode: '200'
+            Message: logMessage
+            authId: '170852'
     Payment1:
       title: Payment1
       required:
@@ -406,84 +467,7 @@ components:
           ReturnCode: '200'
           Message: logMessage
           authId: '170852'
-    GetPaymenttransaction:
-      title: GetPaymenttransaction
-      required:
-      - status
-      - isActive
-      - transactionId
-      - merchantName
-      - payments
-      type: object
-      properties:
-        status:
-          type: string
-          description: Transaction status.
-        isActive:
-          type: boolean
-          description: If it is an active transaction (`true`) or not (`false`).
-        transactionId:
-          type: string
-          description: Transaction ID.
-        merchantName:
-          type: string
-          description: Transaction merchant's name.
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment1'
-          description: Payments' details object.
-      example:
-        status: Finished
-        isActive: true
-        transactionId: CB452D77E7D04099A4DB0479087B1D2C
-        merchantName: LUXSTORE
-        payments:
-        - id: 721CBE1090324D12ABE301FE33DE775A
-          paymentSystem: '4'
-          paymentSystemName: Mastercard
-          value: 10150
-          installments: 1
-          referenceValue: 10150
-          cardHolder: null
-          cardNumber: null
-          firstDigits: '412341'
-          lastDigits: '4123'
-          cvv2: null
-          expireMonth: null
-          expireYear: null
-          url: null
-          giftCardId: null
-          giftCardName: null
-          giftCardCaption: null
-          redemptionCode: null
-          group: creditCard
-          tid: '101770752'
-          dueDate: null
-          connectorResponses:
-            Tid: '101770752'
-            ReturnCode: '200'
-            Message: logMessage
-            authId: '170852'
   parameters:
-    orderId:
-      name: orderId
-      in: path
-      description: ID of the order.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 70caf3941s6df1
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     paymentId:
       name: paymentId
       in: path
@@ -493,10 +477,28 @@ components:
       schema:
         type: string
         example: 45hsfg5jkyu1384jdsfgh654sfgj1
+    orderId:
+      name: orderId
+      in: path
+      description: ID of the order.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf3941s6df1
     Content-Type:
       name: Content-Type
       in: header
       description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:

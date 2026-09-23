@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Pick and Pack Last Mile Protocol Carriers API
-  description: "The Pick and Pack Last Mile Protocol API enables seamless integration between the [Pick and Pack](https://help.vtex.com/en/tutorial/vtex-pick-and-pack--1OOops3WrUyz7e0bnhkfXU) app and delivery services. This API allows carriers and brokers to securely and efficiently exchange shipment information with the Pick and Pack app. It streamlines the process of managing orders, updating shipping statuses, and handling various service-related tasks, ensuring timely and accurate delivery updates. \n\n>ℹ️ Blank fields are included as `null` instead of being omitted.\n## Authentication\n- [`POST` Create an access token](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/token)\n\n## Service integration\n-  [`POST` Create a service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/create-service)\n\n## Carriers\n-  [`POST` Calculate rates](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/rates)\n-  [`POST` List carriers](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/list-carriers)\n\n## Shipping updates\n-  [`GET` Get a service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#get-/-carrierId-/-serviceId-)\n-  [`PATCH` Update service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#patch-/-carrierId-/-serviceId-)\n-  [`POST` Create notes](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/notes/-carrierId-/-serviceId-)\n-  [`POST` Create evidence](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/evidences/-carrierId-/-serviceId-)\n-  [`POST` Create labels](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/labels/-carrierId-/-serviceId-)\n-  [`POST` Cancel service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/cancel-service)\n-  [`POST` Cancel ongoing service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/cancel/service/-carrierId-/-serviceId-)\n-  [`POST` Pause and resume service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/pause-service)\n-  [`POST` Create on hold service](https://developers.vtex.com/docs/api-reference/pick-and-pack-protocol-api#post-/on-hold/-carrierId-/-serviceId-)"
+  description: The Pick and Pack Last Mile Protocol API enables seamless integration between the Pick and Pack app and delivery services.
   version: '1.0'
 servers:
 - url: https://auth.pickingnpacking.com/{environment}
@@ -27,7 +27,7 @@ paths:
       tags:
       - Carriers
       summary: VTex Calculate rates
-      description: 'Retrieves all rates from the carriers. To understand how to integrate with a carrier, check the [VTEX Pick and Pack Carriers Integration Protocol](https://developers.vtex.com/docs/guides/vtex-pick-and-pack) guide.
+      description: 'Retrieves all rates from the carriers. To understand how to integrate with a carrier, check the VTEX Pick and Pack Carriers Integration Protocol guide.
 
 
         This endpoint must be developed by the carriers or brokers to integrate into the protocol.
@@ -36,7 +36,7 @@ paths:
         ## Permissions
 
 
-        This endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).'
+        This endpoint does not require permissions.'
       operationId: Createservice
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -161,7 +161,7 @@ paths:
         ## Permissions
 
 
-        This endpoint does not require [permissions](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3).'
+        This endpoint does not require permissions.'
       operationId: Createservice
       parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -196,167 +196,47 @@ paths:
             description: Server from the store.
 components:
   schemas:
-    ShippingPrice:
+    InsurancePrice:
       required:
       - value
       - currency
       type: object
-      description: Shipping cost information.
+      description: Insurance cost information.
       properties:
         value:
           type: integer
           format: int32
-          description: Shipping cost in cents.
+          description: Insurance cost in cents.
         currency:
           type: string
           description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
       example:
         value: 0
         currency: USD
-    ListRequest:
-      type: object
+    Timezone:
       required:
-      - settings
-      properties:
-        settings:
-          type: array
-          items:
-            type: object
-            properties:
-              label:
-                type: string
-                example: Api key
-                description: Custom label.
-              key:
-                type: string
-                example: aftership-api-key
-                description: Custom key.
-              value:
-                type: string
-                example: 8f_XXXXXXXXX_db79
-                description: Custom value.
-    ResponseService:
+      - offset
+      - value
+      - label
       type: object
-      required:
-      - status
-      - serviceId
-      - shippingPrice
-      - metaData
-      - shippingEstimatedDate
-      - labels
+      description: Time zone information.
       properties:
-        status:
-          type: string
-          example: PENDING
-          description: Status of the service.
-          enum:
-          - PENDING
-          - ASSIGNED
-          - PICKED
-          - ON_ROUTE
-          - INCIDENT
-          - RETURNED
-          - DELIVERED
-          - CANCELED
-          - ON_HOLD
-        serviceId:
-          type: string
-          example: ASDF23324KDSF2
-          description: Service ID.
-        shippingPrice:
-          type: number
-          example: 20000.09
-          description: Service shipping price.
-        metaData:
-          type: object
-          properties:
-            '{keyValue}':
-              description: Carrier additional information.
-              type: string
-          example:
-            anyKey: anyValue
-        shippingEstimatedDate:
-          type: string
-          example: '2024-05-29T22:36:37.589Z'
-          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-          description: Shipping labels, there may be more than one per order due to breakage in packages.
-    Package:
-      required:
-      - id
-      - orderId
-      - envelope
-      - dimensions
-      - weight
-      - totalValue
-      - items
-      - categories
-      - description
-      type: object
-      description: Package information.
-      properties:
-        id:
-          type: string
-          description: Package ID.
-        orderId:
-          type: string
-          description: Order ID.
-        envelope:
-          type: string
-          description: Name of the envelope used.
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-          description: Package dimensions.
-        weight:
-          type: string
-          description: Package weight in grams.
-        totalValue:
+        offset:
           type: integer
           format: int32
-          description: Total value of the order.
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-            description: Product general information.
-          description: Array containing information about the order's products.
-        categories:
-          type: array
-          items:
-            type: string
-            description: Category name.
-          description: Array of categories.
-        description:
+          description: Time zone offset.
+        value:
           type: string
-          description: Package description.
+          description: Time zone.
+        label:
+          type:
+          - string
+          - 'null'
+          description: Label.
       example:
-        id: a46e5bc1-8959-459f-a094-b6e699f7214c
-        orderId: 46369545534253-01
-        envelope: Foam or Plastic Containers
-        dimensions:
-          height: '5'
-          length: '11'
-          width: '7'
-        weight: '48'
-        totalValue: 5352
-        items:
-        - id: '184'
-          name: Chicken
-          ean: EAN354
-          quantity: 8
-          price: 669
-          refId: '314'
-          image: https://picsum.photos/seed/YtoZ9/128/480
-          type: other
-          weight: '6'
-        categories:
-        - Movies
-        - Garden
-        - Books
-        description: Unde deserunt libero cupiditate illum.
+        offset: 300
+        value: America/Bogota
+        label: null
     MetaData1:
       required:
       - integrationResponse
@@ -445,373 +325,6 @@ components:
         image: https://picsum.photos/seed/YtoZ9/128/480
         type: other
         weight: '6'
-    Rate1:
-      required:
-      - shippingPrice
-      - insurancePrice
-      type: object
-      description: Rate cost information.
-      properties:
-        shippingPrice:
-          $ref: '#/components/schemas/ShippingPrice1'
-        insurancePrice:
-          $ref: '#/components/schemas/InsurancePrice'
-      example:
-        shippingPrice:
-          value: 284.02
-          currency: USD
-        insurancePrice:
-          value: 0
-          currency: USD
-    Note:
-      required:
-      - type
-      - date
-      - content
-      - author
-      type: object
-      description: Notes with delivery information.
-      properties:
-        type:
-          type: string
-          description: Type of note.
-        date:
-          type: string
-          description: Date of creation of the note in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        content:
-          type: string
-          description: Content of the note.
-        author:
-          type: string
-          description: Author of the note.
-      example:
-        type: COMMENT
-        date: '2024-03-09T01:43:16.280Z'
-        content: 'Tracking Number: 10001709948594168'
-        author: afterShip
-    Timezone:
-      required:
-      - offset
-      - value
-      - label
-      type: object
-      description: Time zone information.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: Time zone offset.
-        value:
-          type: string
-          description: Time zone.
-        label:
-          type:
-          - string
-          - 'null'
-          description: Label.
-      example:
-        offset: 300
-        value: America/Bogota
-        label: null
-    ShippingPrice1:
-      required:
-      - value
-      - currency
-      type: object
-      description: Shipping cost information.
-      properties:
-        value:
-          type: integer
-          format: int32
-          description: Shipping cost in cents.
-        currency:
-          type: string
-          description: Cost currency code in [ISO 4217](https://www.iban.com/currency-codes) format..
-      example:
-        value: 284.02
-        currency: USD
-    Rate:
-      required:
-      - shippingPrice
-      - insurancePrice
-      type: object
-      description: Rate cost information.
-      properties:
-        shippingPrice:
-          $ref: '#/components/schemas/ShippingPrice'
-        insurancePrice:
-          $ref: '#/components/schemas/InsurancePrice'
-      example:
-        shippingPrice:
-          value: 0
-          currency: USD
-        insurancePrice:
-          value: 0
-          currency: USD
-    Label:
-      required:
-      - id
-      - name
-      - url
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          description: Label ID.
-        name:
-          type: string
-          description: Name of the label.
-        url:
-          type: string
-          description: Label URL.
-        type:
-          type: string
-          description: Label's type of file.
-      example:
-        id: 78c83922-d658-48bf-89d5-0658a6a94e27
-        name: Shipping label
-        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-        type: PDF
-    Dimensions:
-      required:
-      - height
-      - length
-      - width
-      type: object
-      properties:
-        height:
-          type: string
-          description: Package height in centimeters.
-        length:
-          type: string
-          description: Package length in centimeters.
-        width:
-          type: string
-          description: Package width in centimeters.
-      example:
-        height: '5'
-        length: '11'
-        width: '7'
-    CreateServiceBody:
-      type: object
-      properties:
-        orderId:
-          type: string
-          description: Order ID.
-        carrierId:
-          type: string
-          description: Carrier ID.
-        seller:
-          type: string
-          description: Identifier representing the seller associated with the order.
-        sender:
-          description: Sender personal information.
-          type: object
-          properties:
-            name:
-              description: Sender name.
-              type: string
-            phone:
-              description: Sender phone number.
-              type: string
-            email:
-              description: Sender email.
-              type: string
-            city:
-              description: Sender city of residence.
-              type: string
-            state:
-              description: Sender state of residence.
-              type: string
-            country:
-              description: Sender country of residence.
-              type: string
-            address:
-              description: Sender address.
-              type: string
-            addressComplement:
-              description: Sender address complement, as apartment number.
-              type: string
-            number:
-              description: Sender residence number.
-              type: string
-            reference:
-              description: Reference to the sender's address to facilitate localization.
-              type: string
-            location:
-              description: Object containing specific latitude and longitude of the sender's address.
-              type: object
-              properties:
-                latitude:
-                  description: Sender address' latitude.
-                  type: number
-                longitude:
-                  description: Sender address' longitude.
-                  type: number
-            pickupDate:
-              description: Package pickup date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-              type: string
-        receiver:
-          description: Receiver personal information.
-          type: object
-          properties:
-            name:
-              description: Receiver name.
-              type: string
-            phone:
-              description: Receiver phone number.
-              type: string
-            email:
-              description: Receiver email.
-              type: string
-            city:
-              description: Receiver city of residence.
-              type: string
-            state:
-              description: Receiver state of residence.
-              type: string
-            country:
-              description: Receiver country of residence.
-              type: string
-            address:
-              description: Receiver address.
-              type: string
-            addressComplement:
-              description: Receiver address complement, as apartment number.
-              type: string
-            number:
-              description: Receiver residence number.
-              type: string
-            reference:
-              description: Reference to the receiver's address to facilitate localization.
-              type: string
-            location:
-              description: Object containing specific latitude and longitude of the receiver's address.
-              type: object
-              properties:
-                latitude:
-                  description: Receiver address' latitude.
-                  type: number
-                longitude:
-                  description: Receiver address' longitude.
-                  type: number
-            identification:
-              description: Receiver identification code.
-              type: string
-            deliveryDate:
-              description: Delivery estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-              type: string
-            contactName:
-              description: Receiver contact name.
-              type: string
-            deliveryWindow:
-              description: Object containing information about package delivery window.
-              type: object
-              properties:
-                name:
-                  description: Carrier name.
-                  type: string
-                initialDate:
-                  description: Delivery initial date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-                  type: string
-                finalDate:
-                  description: Delivery final date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-                  type: string
-        packages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Package'
-          description: Array containing information about all order's packages.
-        carrierServiceType:
-          type: string
-          description: Carrier service type. The `carrierServiceType` value is not limited to these specific values. It will be defined by the carrier integrating with the Pick and Pack Last Mile Protocol API.
-          enum:
-          - BROKER
-          - PICKUP_IN_STORE
-          - NATIONAL
-          - INTERNATIONAL
-          - EXPRESS
-          - SPECIALIZED
-          - OTHERS
-        type:
-          type: string
-          description: Order's type of delivery, `Delivery` or [`Pickup`](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R).
-        paymentMethod:
-          type: string
-          description: Payment method.
-        comments:
-          type: string
-          description: Comments.
-        orderValue:
-          type: integer
-          description: Total value of the order.
-        settings:
-          description: Array of objects with additional custom fields defined by the carrier.
-          type: array
-          items:
-            description: Object containing information about a custom field.
-            type: object
-            properties:
-              label:
-                description: Custom field description.
-                type: string
-              value:
-                description: Custom field value.
-                type: string
-              key:
-                description: Custom field key.
-                type: string
-        timezone:
-          $ref: '#/components/schemas/Timezone'
-    Carrier:
-      required:
-      - name
-      - image
-      - metaData
-      - id
-      - type
-      type: object
-      description: Object containing information about a carrier.
-      properties:
-        name:
-          type: string
-          description: Carrier name.
-        image:
-          type:
-          - string
-          - 'null'
-          description: Carrier logo.
-        metaData:
-          type: object
-          description: Carrier metadata.
-        id:
-          type: string
-          description: Carrier ID.
-        type:
-          $ref: '#/components/schemas/Type'
-          description: Carrier type.
-      example:
-        name: '[FedEx] Postmen Testing Account'
-        image: null
-        metaData: {}
-        id: fedex
-        type:
-          metaData: {}
-          terms: ''
-          rate:
-            shippingPrice:
-              value: 284.02
-              currency: USD
-            insurancePrice:
-              value: 0
-              currency: USD
-          name: FedEx First Overnight®
-          transitTime: 0
-          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-          description: FedEx
-          id: fedex_first_overnight
-          international: false
     generatedObject:
       required:
       - type
@@ -832,131 +345,6 @@ components:
         type: COMMENT
         note: The package is delivered at the door
         author: afterShip
-    ServiceBody:
-      required:
-      - message
-      - data
-      type: object
-      properties:
-        message:
-          type: string
-          description: Status message about the request.
-        data:
-          $ref: '#/components/schemas/Data'
-          type: object
-          description: Service general information.
-    Timeline:
-      required:
-      - id
-      - date
-      - createdAt
-      - updatedAt
-      - type
-      - description
-      - author
-      - metaData
-      type: object
-      properties:
-        id:
-          type: string
-          description: Timeline ID.
-        date:
-          type: string
-          description: Timeline actual date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        createdAt:
-          type: string
-          description: Order's creation date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        updatedAt:
-          type: string
-          description: Date of the order's last update in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        type:
-          type: string
-          description: Order status.
-        description:
-          type: string
-          description: Description of the status.
-        author:
-          type: string
-          description: Status author.
-        metaData:
-          $ref: '#/components/schemas/MetaData'
-          description: Metadata about the delivery information.
-      example:
-        id: 77263f59-0ac5-4b0c-bfe5-f17a1648474d
-        date: '2024-03-09T01:33:14.917Z'
-        createdAt: '2024-03-09T01:33:14.917Z'
-        updatedAt: '2024-03-09T01:33:14.917Z'
-        type: STATUS
-        description: Service pending in DEV
-        author: System
-        metaData:
-          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-          metaData: null
-          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
-          shippingPrice: 284.02
-          status: PENDING
-          labels:
-          - name: Shipping label
-            id: 78c83922-d658-48bf-89d5-0658a6a94e27
-            type: PDF
-            url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-    MetaData:
-      title: MetaData
-      type: object
-      properties:
-        '0':
-          $ref: '#/components/schemas/generatedObject'
-          description: Item ID in the cart.
-        shippingEstimatedDate:
-          type:
-          - string
-          - 'null'
-          description: Order's Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        metaData:
-          type:
-          - string
-          - 'null'
-          description: Metadata.
-        serviceId:
-          type: string
-          description: Service ID.
-        shippingPrice:
-          type: number
-          description: Order's shipping price in cents.
-        status:
-          type: string
-          description: Shipping status.
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-          description: Shipping labels, there may be more than one per order due to breakage in packages.
-        trackingUrl:
-          type: string
-          description: Carrier's tracking URL of the order.
-        name:
-          type: string
-          description: Carrier name.
-        id:
-          type: string
-          description: Tracking ID.
-        type:
-          type: string
-          description: Type of transportation.
-        url:
-          type: string
-          description: Carrier URL.
-      example:
-        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-        metaData: null
-        serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
-        shippingPrice: 284.02
-        status: PENDING
-        labels:
-        - name: Shipping label
-          id: 78c83922-d658-48bf-89d5-0658a6a94e27
-          type: PDF
-          url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
     Type:
       title: Type
       required:
@@ -1017,23 +405,6 @@ components:
         description: ''
         id: fedex_first_overnight
         international: false
-    InsurancePrice:
-      required:
-      - value
-      - currency
-      type: object
-      description: Insurance cost information.
-      properties:
-        value:
-          type: integer
-          format: int32
-          description: Insurance cost in cents.
-        currency:
-          type: string
-          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
-      example:
-        value: 0
-        currency: USD
     Data:
       required:
       - id
@@ -1369,16 +740,636 @@ components:
               description: FedEx
               id: fedex_first_overnight
               international: false
+    ShippingPrice1:
+      required:
+      - value
+      - currency
+      type: object
+      description: Shipping cost information.
+      properties:
+        value:
+          type: integer
+          format: int32
+          description: Shipping cost in cents.
+        currency:
+          type: string
+          description: Cost currency code in [ISO 4217](https://www.iban.com/currency-codes) format..
+      example:
+        value: 284.02
+        currency: USD
+    Dimensions:
+      required:
+      - height
+      - length
+      - width
+      type: object
+      properties:
+        height:
+          type: string
+          description: Package height in centimeters.
+        length:
+          type: string
+          description: Package length in centimeters.
+        width:
+          type: string
+          description: Package width in centimeters.
+      example:
+        height: '5'
+        length: '11'
+        width: '7'
+    MetaData:
+      title: MetaData
+      type: object
+      properties:
+        '0':
+          $ref: '#/components/schemas/generatedObject'
+          description: Item ID in the cart.
+        shippingEstimatedDate:
+          type:
+          - string
+          - 'null'
+          description: Order's Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        metaData:
+          type:
+          - string
+          - 'null'
+          description: Metadata.
+        serviceId:
+          type: string
+          description: Service ID.
+        shippingPrice:
+          type: number
+          description: Order's shipping price in cents.
+        status:
+          type: string
+          description: Shipping status.
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          description: Shipping labels, there may be more than one per order due to breakage in packages.
+        trackingUrl:
+          type: string
+          description: Carrier's tracking URL of the order.
+        name:
+          type: string
+          description: Carrier name.
+        id:
+          type: string
+          description: Tracking ID.
+        type:
+          type: string
+          description: Type of transportation.
+        url:
+          type: string
+          description: Carrier URL.
+      example:
+        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+        metaData: null
+        serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
+        shippingPrice: 284.02
+        status: PENDING
+        labels:
+        - name: Shipping label
+          id: 78c83922-d658-48bf-89d5-0658a6a94e27
+          type: PDF
+          url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+    Rate1:
+      required:
+      - shippingPrice
+      - insurancePrice
+      type: object
+      description: Rate cost information.
+      properties:
+        shippingPrice:
+          $ref: '#/components/schemas/ShippingPrice1'
+        insurancePrice:
+          $ref: '#/components/schemas/InsurancePrice'
+      example:
+        shippingPrice:
+          value: 284.02
+          currency: USD
+        insurancePrice:
+          value: 0
+          currency: USD
+    Package:
+      required:
+      - id
+      - orderId
+      - envelope
+      - dimensions
+      - weight
+      - totalValue
+      - items
+      - categories
+      - description
+      type: object
+      description: Package information.
+      properties:
+        id:
+          type: string
+          description: Package ID.
+        orderId:
+          type: string
+          description: Order ID.
+        envelope:
+          type: string
+          description: Name of the envelope used.
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+          description: Package dimensions.
+        weight:
+          type: string
+          description: Package weight in grams.
+        totalValue:
+          type: integer
+          format: int32
+          description: Total value of the order.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+            description: Product general information.
+          description: Array containing information about the order's products.
+        categories:
+          type: array
+          items:
+            type: string
+            description: Category name.
+          description: Array of categories.
+        description:
+          type: string
+          description: Package description.
+      example:
+        id: a46e5bc1-8959-459f-a094-b6e699f7214c
+        orderId: 46369545534253-01
+        envelope: Foam or Plastic Containers
+        dimensions:
+          height: '5'
+          length: '11'
+          width: '7'
+        weight: '48'
+        totalValue: 5352
+        items:
+        - id: '184'
+          name: Chicken
+          ean: EAN354
+          quantity: 8
+          price: 669
+          refId: '314'
+          image: https://picsum.photos/seed/YtoZ9/128/480
+          type: other
+          weight: '6'
+        categories:
+        - Movies
+        - Garden
+        - Books
+        description: Unde deserunt libero cupiditate illum.
+    ServiceBody:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Status message about the request.
+        data:
+          $ref: '#/components/schemas/Data'
+          type: object
+          description: Service general information.
+    ShippingPrice:
+      required:
+      - value
+      - currency
+      type: object
+      description: Shipping cost information.
+      properties:
+        value:
+          type: integer
+          format: int32
+          description: Shipping cost in cents.
+        currency:
+          type: string
+          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
+      example:
+        value: 0
+        currency: USD
+    Rate:
+      required:
+      - shippingPrice
+      - insurancePrice
+      type: object
+      description: Rate cost information.
+      properties:
+        shippingPrice:
+          $ref: '#/components/schemas/ShippingPrice'
+        insurancePrice:
+          $ref: '#/components/schemas/InsurancePrice'
+      example:
+        shippingPrice:
+          value: 0
+          currency: USD
+        insurancePrice:
+          value: 0
+          currency: USD
+    ResponseService:
+      type: object
+      required:
+      - status
+      - serviceId
+      - shippingPrice
+      - metaData
+      - shippingEstimatedDate
+      - labels
+      properties:
+        status:
+          type: string
+          example: PENDING
+          description: Status of the service.
+          enum:
+          - PENDING
+          - ASSIGNED
+          - PICKED
+          - ON_ROUTE
+          - INCIDENT
+          - RETURNED
+          - DELIVERED
+          - CANCELED
+          - ON_HOLD
+        serviceId:
+          type: string
+          example: ASDF23324KDSF2
+          description: Service ID.
+        shippingPrice:
+          type: number
+          example: 20000.09
+          description: Service shipping price.
+        metaData:
+          type: object
+          properties:
+            '{keyValue}':
+              description: Carrier additional information.
+              type: string
+          example:
+            anyKey: anyValue
+        shippingEstimatedDate:
+          type: string
+          example: '2024-05-29T22:36:37.589Z'
+          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          description: Shipping labels, there may be more than one per order due to breakage in packages.
+    ListRequest:
+      type: object
+      required:
+      - settings
+      properties:
+        settings:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+                example: Api key
+                description: Custom label.
+              key:
+                type: string
+                example: aftership-api-key
+                description: Custom key.
+              value:
+                type: string
+                example: 8f_XXXXXXXXX_db79
+                description: Custom value.
+    Carrier:
+      required:
+      - name
+      - image
+      - metaData
+      - id
+      - type
+      type: object
+      description: Object containing information about a carrier.
+      properties:
+        name:
+          type: string
+          description: Carrier name.
+        image:
+          type:
+          - string
+          - 'null'
+          description: Carrier logo.
+        metaData:
+          type: object
+          description: Carrier metadata.
+        id:
+          type: string
+          description: Carrier ID.
+        type:
+          $ref: '#/components/schemas/Type'
+          description: Carrier type.
+      example:
+        name: '[FedEx] Postmen Testing Account'
+        image: null
+        metaData: {}
+        id: fedex
+        type:
+          metaData: {}
+          terms: ''
+          rate:
+            shippingPrice:
+              value: 284.02
+              currency: USD
+            insurancePrice:
+              value: 0
+              currency: USD
+          name: FedEx First Overnight®
+          transitTime: 0
+          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+          description: FedEx
+          id: fedex_first_overnight
+          international: false
+    Label:
+      required:
+      - id
+      - name
+      - url
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Label ID.
+        name:
+          type: string
+          description: Name of the label.
+        url:
+          type: string
+          description: Label URL.
+        type:
+          type: string
+          description: Label's type of file.
+      example:
+        id: 78c83922-d658-48bf-89d5-0658a6a94e27
+        name: Shipping label
+        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+        type: PDF
+    Timeline:
+      required:
+      - id
+      - date
+      - createdAt
+      - updatedAt
+      - type
+      - description
+      - author
+      - metaData
+      type: object
+      properties:
+        id:
+          type: string
+          description: Timeline ID.
+        date:
+          type: string
+          description: Timeline actual date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        createdAt:
+          type: string
+          description: Order's creation date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        updatedAt:
+          type: string
+          description: Date of the order's last update in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        type:
+          type: string
+          description: Order status.
+        description:
+          type: string
+          description: Description of the status.
+        author:
+          type: string
+          description: Status author.
+        metaData:
+          $ref: '#/components/schemas/MetaData'
+          description: Metadata about the delivery information.
+      example:
+        id: 77263f59-0ac5-4b0c-bfe5-f17a1648474d
+        date: '2024-03-09T01:33:14.917Z'
+        createdAt: '2024-03-09T01:33:14.917Z'
+        updatedAt: '2024-03-09T01:33:14.917Z'
+        type: STATUS
+        description: Service pending in DEV
+        author: System
+        metaData:
+          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+          metaData: null
+          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
+          shippingPrice: 284.02
+          status: PENDING
+          labels:
+          - name: Shipping label
+            id: 78c83922-d658-48bf-89d5-0658a6a94e27
+            type: PDF
+            url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+    Note:
+      required:
+      - type
+      - date
+      - content
+      - author
+      type: object
+      description: Notes with delivery information.
+      properties:
+        type:
+          type: string
+          description: Type of note.
+        date:
+          type: string
+          description: Date of creation of the note in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        content:
+          type: string
+          description: Content of the note.
+        author:
+          type: string
+          description: Author of the note.
+      example:
+        type: COMMENT
+        date: '2024-03-09T01:43:16.280Z'
+        content: 'Tracking Number: 10001709948594168'
+        author: afterShip
+    CreateServiceBody:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Order ID.
+        carrierId:
+          type: string
+          description: Carrier ID.
+        seller:
+          type: string
+          description: Identifier representing the seller associated with the order.
+        sender:
+          description: Sender personal information.
+          type: object
+          properties:
+            name:
+              description: Sender name.
+              type: string
+            phone:
+              description: Sender phone number.
+              type: string
+            email:
+              description: Sender email.
+              type: string
+            city:
+              description: Sender city of residence.
+              type: string
+            state:
+              description: Sender state of residence.
+              type: string
+            country:
+              description: Sender country of residence.
+              type: string
+            address:
+              description: Sender address.
+              type: string
+            addressComplement:
+              description: Sender address complement, as apartment number.
+              type: string
+            number:
+              description: Sender residence number.
+              type: string
+            reference:
+              description: Reference to the sender's address to facilitate localization.
+              type: string
+            location:
+              description: Object containing specific latitude and longitude of the sender's address.
+              type: object
+              properties:
+                latitude:
+                  description: Sender address' latitude.
+                  type: number
+                longitude:
+                  description: Sender address' longitude.
+                  type: number
+            pickupDate:
+              description: Package pickup date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+              type: string
+        receiver:
+          description: Receiver personal information.
+          type: object
+          properties:
+            name:
+              description: Receiver name.
+              type: string
+            phone:
+              description: Receiver phone number.
+              type: string
+            email:
+              description: Receiver email.
+              type: string
+            city:
+              description: Receiver city of residence.
+              type: string
+            state:
+              description: Receiver state of residence.
+              type: string
+            country:
+              description: Receiver country of residence.
+              type: string
+            address:
+              description: Receiver address.
+              type: string
+            addressComplement:
+              description: Receiver address complement, as apartment number.
+              type: string
+            number:
+              description: Receiver residence number.
+              type: string
+            reference:
+              description: Reference to the receiver's address to facilitate localization.
+              type: string
+            location:
+              description: Object containing specific latitude and longitude of the receiver's address.
+              type: object
+              properties:
+                latitude:
+                  description: Receiver address' latitude.
+                  type: number
+                longitude:
+                  description: Receiver address' longitude.
+                  type: number
+            identification:
+              description: Receiver identification code.
+              type: string
+            deliveryDate:
+              description: Delivery estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+              type: string
+            contactName:
+              description: Receiver contact name.
+              type: string
+            deliveryWindow:
+              description: Object containing information about package delivery window.
+              type: object
+              properties:
+                name:
+                  description: Carrier name.
+                  type: string
+                initialDate:
+                  description: Delivery initial date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+                  type: string
+                finalDate:
+                  description: Delivery final date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+                  type: string
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Package'
+          description: Array containing information about all order's packages.
+        carrierServiceType:
+          type: string
+          description: Carrier service type. The `carrierServiceType` value is not limited to these specific values. It will be defined by the carrier integrating with the Pick and Pack Last Mile Protocol API.
+          enum:
+          - BROKER
+          - PICKUP_IN_STORE
+          - NATIONAL
+          - INTERNATIONAL
+          - EXPRESS
+          - SPECIALIZED
+          - OTHERS
+        type:
+          type: string
+          description: Order's type of delivery, `Delivery` or [`Pickup`](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R).
+        paymentMethod:
+          type: string
+          description: Payment method.
+        comments:
+          type: string
+          description: Comments.
+        orderValue:
+          type: integer
+          description: Total value of the order.
+        settings:
+          description: Array of objects with additional custom fields defined by the carrier.
+          type: array
+          items:
+            description: Object containing information about a custom field.
+            type: object
+            properties:
+              label:
+                description: Custom field description.
+                type: string
+              value:
+                description: Custom field value.
+                type: string
+              key:
+                description: Custom field key.
+                type: string
+        timezone:
+          $ref: '#/components/schemas/Timezone'
   parameters:
-    Authorization:
-      name: Authorization
-      in: header
-      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{token}'
     Accept:
       name: Accept
       in: header
@@ -1397,3 +1388,12 @@ components:
       schema:
         type: string
         example: application/json
+    Authorization:
+      name: Authorization
+      in: header
+      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{token}'

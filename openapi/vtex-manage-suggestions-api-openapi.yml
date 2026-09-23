@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Suggestions Manage Suggestions API
-  description: "\nThe **Marketplace API** enables marketplaces and sellers hosted on VTEX to perform their collaborative operations.  \n\n>⚠️ The marketplace must [create an appKey and appToken](https://developers.vtex.com/docs/guides/getting-started-authentication) for each non-VTEX seller that will use this API.\n\n## Index\n\n### Notification\n\nEndpoints used by sellers to notify marketplaces that the price or inventory language has changed for one of their SKUs.\n\n`POST` [Notify marketplace of price update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/price)\n\n`POST` [Notify marketplace of inventory update](https://developers.vtex.com/docs/api-reference/marketplace-apis#post-/notificator/-sellerId-/changenotification/-skuId-/inventory)\n\n\n### Suggestions\n\n#### Get Suggestions\n\nSearch and filter all suggestions using specific criteria.\n\n`GET` [Get all SKU Suggestions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions)\n\n`GET` [Get SKU Suggestion by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Manage Suggestions\n\nSend or delete SKU suggestions from the seller to marketplace.\n\n`PUT` [Send SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerSkuId-)\n\n`DELETE` [Delete SKU Suggestion](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#delete-/suggestions/-sellerId-/-sellerSkuId-)\n\n\n#### Get Versions\n\nSearch and filter all versions of suggestions, using specific criteria.\n\n`GET` [Get all versions](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions)\n\n`GET` [Get version by ID](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/-sellerId-/-sellerskuid-/versions/-version-)\n\n\n#### Match Received SKUs\n\nMatch SKU suggestions received in the marketplace.\n\n`PUT` [Match Received SKUs individually](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/-sellerId-/-sellerskuid-/versions/-version-/matches/-matchid-)\n\n`PUT` [Match Multiple Received SKUs](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/matches/action/-actionName-)\n\n\n#### SKU Approval Settings\n\nAllows marketplaces to configure rules for automatically and manually approving SKUs received from sellers.\n\n`GET`[Get autoApprove Status in Account Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/autoapproval/toggle)  \n\n`PUT`[Activate autoApprove in Marketplace's Account](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle)  \n\n`GET`[Get Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration)\n\n`PUT`[Save Account's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration)\n\n`GET`[Get Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#get-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Save Seller's Approval Settings](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/seller/-sellerId-)\n\n`PUT`[Activate autoApprove Setting for a Seller](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/autoapproval/toggle/seller/-sellerId-)   \n\n\n### Matched Offers\n\nOffers are seller products and SKUs that were sent to the marketplace, and already have their price and inventory level configured.\n\n`GET`[Get Matched Offers List](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/offers)\n\n`GET`[Get Matched Offer's Data by SKU ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-/sku/-skuId-)  \n\n`GET`[Get Matched Offer's Data by Product ID](https://developers.vtex.com/docs/api-reference/marketplace-apis#get-/offer-manager/pvt/product/-productId-)\n"
+  description: The **Marketplace API** enables marketplaces and sellers hosted on VTEX to perform their collaborative operations.
   contact: {}
   version: '1.0'
 servers:
@@ -22,10 +22,10 @@ paths:
       description: 'This request is used by the seller when it wants to suggest that one of their SKUs is sold in the marketplace.
 
 
-        Before using this request, the seller should always use the [Change Notification](https://developers.vtex.com/vtex-rest-api/reference/catalog-api-get-seller-sku-notification) request in order to check if the SKU already exists in the marketplace. If it doesn''t, then this is the next call in the SKU integration flow.
+        Before using this request, the seller should always use the Change Notification request in order to check if the SKU already exists in the marketplace. If it doesn''t, then this is the next call in the SKU integration flow.
 
 
-        In the Send Suggestion request, the seller must send information about the SKU, such as the product and SKU name, the seller ID, and the image URL. All parameters are explained below. '
+        In the Send Suggestion request, the seller must send information about the SKU, such as the product and SKU name, the seller ID, and the image URL. All parameters are explained below.'
       operationId: SaveSuggestion
       parameters:
       - name: accountName
@@ -170,23 +170,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Image:
-      title: Image
-      required:
-      - imageName
-      - imageUrl
-      type: object
-      properties:
-        imageName:
-          type: string
-          description: Name of the SKU image.
-        imageUrl:
-          type: string
-          description: URL of the SKU image. The image must be sent through `https` protocol, otherwise it will not be rendered in VTEX Admin.
-          default: https://imageurl.example
-      example:
-        imageName: Principal
-        imageUrl: https://i.pinimg.com/originals/2d/96/4a/2d964a6bf37d9224d0615dc85fccdd62.jpg
     ProductSpecification:
       title: Product Specification
       type: object
@@ -203,28 +186,6 @@ components:
             default: Cotton
             description: Value of the product specification field.
       example:
-        fieldName: Color
-        fieldValues:
-        - Red
-        - Green
-    SkuSpecification:
-      title: skuSpecification
-      type: object
-      properties:
-        fieldName:
-          type: string
-          description: 'Name of the SKU specification field. Example: ''Color''.'
-          default: color
-        fieldValues:
-          type: array
-          items:
-            type: string
-            default: Red
-            description: Value of the SKU specification field.
-          default:
-          - Red
-          description: 'Array with values of the SKU specification field. Example: ''Red''.'
-      default:
         fieldName: Color
         fieldValues:
         - Red
@@ -381,3 +342,42 @@ components:
           Currency: BRL
           SalePrice: 399
           CurrencySymbol: R$
+    Image:
+      title: Image
+      required:
+      - imageName
+      - imageUrl
+      type: object
+      properties:
+        imageName:
+          type: string
+          description: Name of the SKU image.
+        imageUrl:
+          type: string
+          description: URL of the SKU image. The image must be sent through `https` protocol, otherwise it will not be rendered in VTEX Admin.
+          default: https://imageurl.example
+      example:
+        imageName: Principal
+        imageUrl: https://i.pinimg.com/originals/2d/96/4a/2d964a6bf37d9224d0615dc85fccdd62.jpg
+    SkuSpecification:
+      title: skuSpecification
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: 'Name of the SKU specification field. Example: ''Color''.'
+          default: color
+        fieldValues:
+          type: array
+          items:
+            type: string
+            default: Red
+            description: Value of the SKU specification field.
+          default:
+          - Red
+          description: 'Array with values of the SKU specification field. Example: ''Red''.'
+      default:
+        fieldName: Color
+        fieldValues:
+        - Red
+        - Green

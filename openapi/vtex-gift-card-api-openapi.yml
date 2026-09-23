@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex GiftCard Gift Card API
-  description: ">ℹ️ Check the new [Payments onboarding guide](https://developers.vtex.com/docs/guides/payments-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Payments and is organized by focusing on the developer's journey.\n\nThe Gift Card is a payment method configured as a cash value associated with a client. It is used to grant a discount on the value of the order at the store. A Gift Card works as a **payment method**, **not a promotion**.\n\nIn VTEX's native gift card system, you can choose to create a new gift card either through [Admin VTEX](https://help.vtex.com/en/tutorial/gift-card--tutorials_995) or [API](https://developers.vtex.com/docs/api-reference/giftcard-api#post-/giftcards). However, there are specific conditions to be observed when generating gift cards by one of these two methods.\n\n<table>\n    <tr>\n        <th>Specifications</th>\n        <th>Admin VTEX</th>\n        <th>GiftCard API</th>\n    </tr>\n    <tr>\n        <td><b>Initial value</b></td>\n        <td>You can create gift cards value with any value.</td>\n        <td>All gift cards are generated with no value (balance = 0). After its creation, you need to use <b>Admin VTEX</b> or the <b>Create a gift card transaction</b> to add any balance amount.</td>\n    </tr>\n    <tr>\n        <td><b>Ownership restriction</b></td>\n        <td>You can create gift cards with or without a user assigned to them.</td>\n        <td>All gift cards must be created with a <code>profileId</code> associated to them.</td>\n    </tr>\n    <tr>\n        <td><b>User data identification</b></td>\n        <td>Customer ID (data that identifies a specific client, such as CPF/CNPJ in Brazil).</td>\n        <td><code>profileId</code> (data that identifies a specific client)</td>\n    </tr>\n    <tr>\n        <td><b>Additional Settings</b></td>\n        <td>You can use checkboxes to select whether a gift card will be: <b>Restricted</b> (only a specific customer ID can use this gift card), <b>Reloadable</b> (balance can be changed while it is still active), or <b>Reusable</b> (available for making new purchases with this gift card until its value is completely used up).</td>\n        <td>You can use the following fields to configure the same conditions applied in Admin: <code>restrictedToOwner</code>, <code>multipleCredits</code>, and <code>multipleRedemptions</code>.</td>\n    </tr>\n</table>\n\n>⚠️ All GiftCard API endpoints are limited to 500 concurrent requests and 5000 requests per minute.\n\n## GiftCard API Index\n\n### Gift Card\n\n- `POST` [Create a gift card](https://developers.vtex.com/docs/api-reference/giftcard-api#post-/giftcards)\n- `GET` [Get a gift card by ID](https://developers.vtex.com/docs/api-reference/giftcard-api#get-/giftcards/-giftCardId-)\n- `POST` [List all gift cards](https://developers.vtex.com/docs/api-reference/giftcard-api#post-/giftcards/_search)\n\n### Transaction\n\n- `POST` [Create a gift card transaction](https://developers.vtex.com/docs/api-reference/giftcard-api#post-/giftcards/-giftCardId-/transactions)\n- `GET` [Get a gift card transaction by ID](https://developers.vtex.com/docs/api-reference/giftcard-api#get-/giftcards/-giftCardId-/transactions/-transactionId-)\n- `GET` [List all gift card transactions](https://developers.vtex.com/docs/api-reference/giftcard-api#get-/giftcards/-giftCardId-/transactions)\n- `GET` [Get a gift card transaction authorization](https://developers.vtex.com/docs/api-reference/giftcard-api#get-/giftcards/-giftCardId-/transactions/-transactionId-/authorization)\n- `POST` [Cancel a gift card transaction](https://developers.vtex.com/docs/api-reference/giftcard-api#post-/giftcards/-giftCardId-/transactions/-transactionId-/cancellations)\n- `GET` [List all gift card transactions cancellations](https://developers.vtex.com/docs/api-reference/giftcard-api#get-/giftcards/-giftCardId-/transactions/-transactionId-/cancellations)\n- `POST` [Settle a gift card transaction](https://developers.vtex.com/docs/api-reference/giftcard-api#post-/giftcards/-giftCardId-/transactions/-transactionId-/settlements)\n- `GET` [List all gift card transactions settlements](https://developers.vtex.com/docs/api-reference/giftcard-api#get-/giftcards/-giftCardId-/transactions/-transactionId-/settlements)"
+  description: '>ℹ️ Check the new Payments onboarding guide.'
   contact: {}
   version: '1.0'
 servers:
@@ -37,7 +37,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -47,10 +47,10 @@ paths:
         | GiftCard | GiftCard | **Gift card full access** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: CreateGiftCard
       parameters:
       - name: Content-Type
@@ -106,7 +106,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -116,10 +116,10 @@ paths:
         | GiftCard | GiftCard | **Gift card full access** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetGiftCardbyID
       parameters:
       - name: Content-Type
@@ -207,7 +207,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/authentication-overview#application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -217,10 +217,10 @@ paths:
         | GiftCard | GiftCard | **Gift card full access** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: SearchGiftCardsfromcartdata
       parameters:
       - name: Content-Type
@@ -282,28 +282,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Item1:
-      type: object
-      required:
-      - id
-      - _self
-      properties:
-        id:
-          type: string
-          description: Item identification.
-          example: '589'
-        _self:
-          $ref: '#/components/schemas/Self'
-    Transactions:
-      type: object
-      description: Transactions information.
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: Gift card resource URL. The number described in the URL refers to the gift card identification.
-          example: cards/954/transactions
     Paging:
       type: object
       required:
@@ -328,73 +306,6 @@ components:
           type: integer
           description: Total number of pages.
           example: 1
-    Cart:
-      type: object
-      required:
-      - grandTotal
-      - relationName
-      - redemptionCode
-      - discounts
-      - shipping
-      - taxes
-      - items
-      - itemsTotal
-      properties:
-        grandTotal:
-          type: integer
-          description: Total payment value.
-          example: 182
-        relationName:
-          type:
-          - string
-          - 'null'
-          description: Represents the relationship between the client and the store.
-          example: null
-        redemptionCode:
-          type: string
-          description: Gift card identification code used at checkout. Minimum of 6 characters.
-          example: BAHD-ASDB-ADQW-ASDQ
-        discounts:
-          type: integer
-          description: Discounts value.
-          example: 20
-        shipping:
-          type: integer
-          description: Shipping value.
-          example: 2
-        taxes:
-          type: integer
-          description: Taxes value.
-          example: 0
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-          description: Items information.
-        itemsTotal:
-          type: integer
-          description: Total items value.
-          example: 200
-    GetGiftCardusingJSONRequest:
-      type: object
-      required:
-      - cart
-      - client
-      properties:
-        cart:
-          $ref: '#/components/schemas/Cart'
-        client:
-          $ref: '#/components/schemas/Client'
-    Self:
-      type: object
-      description: Object that carries an auto reference of the transaction (on its API).
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
-          example: cards/890/transactions/268
     Item:
       type: object
       required:
@@ -429,46 +340,6 @@ components:
           type: integer
           description: Product quantity.
           example: 1
-    CreateGiftCardRequest:
-      type: object
-      required:
-      - relationName
-      - expiringDate
-      - caption
-      - profileId
-      properties:
-        relationName:
-          type: string
-          description: Represents the relationship between the client and the store.
-          example: loyalty-program
-        expiringDate:
-          type: string
-          description: It must be in the format `YYYY-MM-DDThh:mm:ss.fff` (ISO 8601 format).
-          example: '2020-09-01T13:15:30Z'
-        caption:
-          type: string
-          description: Field to be filled in if a loyalty program must be created for the gift card.
-          example: rewards program
-        profileId:
-          type: string
-          description: Client ID. You can use the customer's registered email or the `userId` parameter which can be found in the [Master Data](https://help.vtex.com/en/tutorial/master-data--4otjBnR27u4WUIciQsmkAw).
-          example: 92de2449-0e02-4ca9-a4aa-a09cc9d8f7ff
-        currencyCode:
-          type: string
-          description: Currency code in ISO 4217.
-          example: USD
-        restrictedToOwner:
-          type: boolean
-          description: The gift card can only be used for a specified client's ID.
-          example: false
-        multipleCredits:
-          type: boolean
-          description: The gift card balance can be changed.
-          example: false
-        multipleRedemptions:
-          type: boolean
-          description: The gift card can be used to make new purchases until its value is completely used.
-          example: false
     response:
       type: object
       required:
@@ -520,6 +391,16 @@ components:
           example: USD
         transactions:
           $ref: '#/components/schemas/Transactions'
+    GetGiftCardusingJSONRequest:
+      type: object
+      required:
+      - cart
+      - client
+      properties:
+        cart:
+          $ref: '#/components/schemas/Cart'
+        client:
+          $ref: '#/components/schemas/Client'
     response2:
       type: object
       required:
@@ -552,6 +433,125 @@ components:
           type: string
           description: Document number informed by the customer.
           example: '234235'
+    CreateGiftCardRequest:
+      type: object
+      required:
+      - relationName
+      - expiringDate
+      - caption
+      - profileId
+      properties:
+        relationName:
+          type: string
+          description: Represents the relationship between the client and the store.
+          example: loyalty-program
+        expiringDate:
+          type: string
+          description: It must be in the format `YYYY-MM-DDThh:mm:ss.fff` (ISO 8601 format).
+          example: '2020-09-01T13:15:30Z'
+        caption:
+          type: string
+          description: Field to be filled in if a loyalty program must be created for the gift card.
+          example: rewards program
+        profileId:
+          type: string
+          description: Client ID. You can use the customer's registered email or the `userId` parameter which can be found in the [Master Data](https://help.vtex.com/en/tutorial/master-data--4otjBnR27u4WUIciQsmkAw).
+          example: 92de2449-0e02-4ca9-a4aa-a09cc9d8f7ff
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217.
+          example: USD
+        restrictedToOwner:
+          type: boolean
+          description: The gift card can only be used for a specified client's ID.
+          example: false
+        multipleCredits:
+          type: boolean
+          description: The gift card balance can be changed.
+          example: false
+        multipleRedemptions:
+          type: boolean
+          description: The gift card can be used to make new purchases until its value is completely used.
+          example: false
+    Cart:
+      type: object
+      required:
+      - grandTotal
+      - relationName
+      - redemptionCode
+      - discounts
+      - shipping
+      - taxes
+      - items
+      - itemsTotal
+      properties:
+        grandTotal:
+          type: integer
+          description: Total payment value.
+          example: 182
+        relationName:
+          type:
+          - string
+          - 'null'
+          description: Represents the relationship between the client and the store.
+          example: null
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: BAHD-ASDB-ADQW-ASDQ
+        discounts:
+          type: integer
+          description: Discounts value.
+          example: 20
+        shipping:
+          type: integer
+          description: Shipping value.
+          example: 2
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: Items information.
+        itemsTotal:
+          type: integer
+          description: Total items value.
+          example: 200
+    Self:
+      type: object
+      description: Object that carries an auto reference of the transaction (on its API).
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+          example: cards/890/transactions/268
+    Item1:
+      type: object
+      required:
+      - id
+      - _self
+      properties:
+        id:
+          type: string
+          description: Item identification.
+          example: '589'
+        _self:
+          $ref: '#/components/schemas/Self'
+    Transactions:
+      type: object
+      description: Transactions information.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: Gift card resource URL. The number described in the URL refers to the gift card identification.
+          example: cards/954/transactions
   securitySchemes:
     appKey:
       type: apiKey

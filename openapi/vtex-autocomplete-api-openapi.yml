@@ -35,7 +35,7 @@ paths:
       description: 'Lists the 10 most searched terms in the past 14 days.
 
 
-        For more information, check the Intelligent Search [Autocomplete](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4gXFsEWjF7QF7UtI2GAvhL) guide.
+        For more information, check the Intelligent Search Autocomplete guide.
 
 
         This endpoint does not require authentication.'
@@ -78,6 +78,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      operationId: getTopSearches
+      x-operation-id-source: derived
     servers:
     - url: https://{accountName}.{environment}.com.br/api/io/_v/api/intelligent-search
       description: VTEX IO Intelligent Search server URL.
@@ -96,7 +98,7 @@ paths:
       description: 'Lists the suggested terms and attributes similar to the search term.
 
 
-        For more information, check the Intelligent Search [Autocomplete](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4gXFsEWjF7QF7UtI2GAvhL) guide.
+        For more information, check the Intelligent Search Autocomplete guide.
 
 
         This endpoint does not require authentication.'
@@ -141,6 +143,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      operationId: getAutocompleteSuggestions
+      x-operation-id-source: derived
     servers:
     - url: https://{accountName}.{environment}.com.br/api/io/_v/api/intelligent-search
       description: VTEX IO Intelligent Search server URL.
@@ -159,7 +163,7 @@ paths:
       description: 'Lists suggested terms similar to the search term.
 
 
-        For more information, check the Intelligent Search [Autocomplete](https://help.vtex.com/en/tracks/vtex-intelligent-search--19wrbB7nEQcmwzDPl1l4Cb/4gXFsEWjF7QF7UtI2GAvhL) guide.
+        For more information, check the Intelligent Search Autocomplete guide.
 
 
         This endpoint does not require authentication.'
@@ -193,6 +197,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      operationId: getSearchSuggestions
+      x-operation-id-source: derived
     servers:
     - url: https://{accountName}.{environment}.com.br/api/io/_v/api/intelligent-search
       description: VTEX IO Intelligent Search server URL.
@@ -406,19 +412,42 @@ paths:
           default: vtexcommercestable
 components:
   schemas:
-    Error:
+    SearchSuggestions:
       type: object
       description: Response body object.
-      required:
-      - stack
-      - message
       properties:
-        message:
-          type: string
-          description: Error message.
-        stack:
-          type: string
-          description: Error stack trace.
+        searches:
+          type: array
+          description: List of suggested terms.
+          items:
+            type: object
+            description: Suggested term.
+            properties:
+              term:
+                type: string
+                description: Search term.
+              count:
+                type: number
+                description: Number of times the term was searched.
+    TopSearches:
+      type: object
+      description: Response body object.
+      properties:
+        searches:
+          type: array
+          description: List of the 10 most searched terms in the past 14 days.
+          minItems: 10
+          maxItems: 10
+          items:
+            type: object
+            description: Term information.
+            properties:
+              term:
+                type: string
+                description: Search term.
+              count:
+                type: number
+                description: Number of times the term was searched.
     AutocompleteSearchSuggestions:
       type: object
       description: Response body object.
@@ -457,50 +486,20 @@ components:
                     labelValue:
                       type: string
                       description: Human-readable format of the facet value.
-    SearchSuggestions:
+    Error:
       type: object
       description: Response body object.
+      required:
+      - stack
+      - message
       properties:
-        searches:
-          type: array
-          description: List of suggested terms.
-          items:
-            type: object
-            description: Suggested term.
-            properties:
-              term:
-                type: string
-                description: Search term.
-              count:
-                type: number
-                description: Number of times the term was searched.
-    TopSearches:
-      type: object
-      description: Response body object.
-      properties:
-        searches:
-          type: array
-          description: List of the 10 most searched terms in the past 14 days.
-          minItems: 10
-          maxItems: 10
-          items:
-            type: object
-            description: Term information.
-            properties:
-              term:
-                type: string
-                description: Search term.
-              count:
-                type: number
-                description: Number of times the term was searched.
+        message:
+          type: string
+          description: Error message.
+        stack:
+          type: string
+          description: Error stack trace.
   parameters:
-    query:
-      in: query
-      name: query
-      description: Search term. It can contain any character.
-      schema:
-        type: string
-        example: shirt
     locale:
       in: query
       name: locale
@@ -510,6 +509,13 @@ components:
         type:
         - string
         - 'null'
+    query:
+      in: query
+      name: query
+      description: Search term. It can contain any character.
+      schema:
+        type: string
+        example: shirt
   securitySchemes:
     appKey:
       type: apiKey

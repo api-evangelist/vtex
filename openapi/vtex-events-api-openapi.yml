@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTEX Intelligent Search API - Headless Events API
-  description: "Intelligent Search Events API is responsible for collecting the search events to improve your search results, such as page interactions and conversion, in a headless implementation. Some of the features improved by this collection are the possibility to sort the products by clicks or record the top search in the autocomplete.\n\n>⚠️ **This API applies only to Headless scenarios**. It doesn't apply to stores using Store Framework, since they are already integrated with all Intelligent Search features.\n\n## Building the request body\n\nIn the following sections, we detail the required structure for the request body of the `POST`[Save events](https://developers.vtex.com/docs/api-reference/intelligent-search-events-api-headless#post-/event) endpoint.\n\n### User identification\n\nTo identify the user, there are two required identifiers according to the [nanoid](https://github.com/ai/nanoid) pattern: `session` and `anonymous`. Read the API reference for more information on each field.\n\n> ⚠️ The `session` and `anonymous` identifiers need to be sent in every request.\n\n### Event type\n\nTo identify the events that occur in our search, the `type` field is required in the request. The most common event types are the following:\n\n| Event type | Value | Description |\n| - | - | - |\n| Session Ping | `session.ping` | Sends an ACK to the API to renew the session server-side. It should be sent every 1 minute. |\n| Page Cart | `page.cart` | Sends an event every time the shopper enters the cart page. Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. |\n| Empty Cart | `page.empty_cart` | Sends an event if there are no products in the shopping cart at that time. | \n| Page Confirmation |`page.confirmation` | Sends a confirmation informing the products that were bought. |\n| Search Click | `search.click` |  Sends an event every time a shopper clicks on a product from a search page. |\n| Search Query | `search.query` | Sends a query event every time the shopper makes a full-text search. |\n\n### Finding search query information\n\nSearch query information is possible to find in the Intelligent Search GraphQL response. To retrieve the information above, add operator, fuzzy, and correction attributes in the GraphQL query. Example:\n\n```graphql\nquery {\n  productSearch(fullText: \"id:43534\") {\n    products {\n      productId\n      productName\n      ...\n    }\n    operator\n    fuzzy\n    correction{ \n      misspelled\n    }\n  }\n}\n```\n\n### Optional fields\n\nInformation to identify where the context of that request came from: `agent` and `URL`. Read the API reference for more information on each field.\n\n### Request body examples\n\nThe body is built by combining the user information, the event type, and add the optional fields. Below there is an example for each type of event.\n\n#### Session Ping\n\n```json\n{\n\t\"session\":\"zZlNhqz1vFJP6iPG5Oqdf\",\n\t\"anonymous\":\"Om1TNluGvgmSgU5OOTvdfg\",\n\t\"url\":\"https://example.com/search/?query=zapatilha\",\n\t\"agent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0\",\n\t\"type\":\"session.ping\"\n}\n``` \n\n#### Page Cart \n\n```json\n{\n  \"session\":\"zZlNhqz1vFJP6iPG5Oqtt\",\n  \"anonymous\":\"Om1TNluGvgmSgU5OOTvkkd\",\n  \"products\": [\n    {\n      \"productId\": \"ABC123\",\n      \"quantity\": 2\n    },\n    {\n      \"productId\": \"XYZ789\",\n      \"quantity\": 1\n    }\n  ],\n  \"type\": \"page.cart\"\n}\n```\n\n#### Empty Cart \n\n```json\n{\n  \"session\":\"zZlNhqz1vFJP6iPG5Oqtt\",\n  \"anonymous\":\"Om1TNluGvgmSgU5OOTvkkd\",\n  \"products\": [],\n  \"type\": \"page.empty_cart\"\n}\n```\n\n#### Page Confirmation\n\n```json\n{\n  \"session\":\"zZlNhqz1vFJP6iPG5Oqtt\",\n  \"anonymous\":\"Om1TNluGvgmSgU5OOTvkkd\",\n  \"products\": [\n    {\n      \"productId\": \"ABC123\",\n      \"price\": 9.99,\n      \"quantity\": 3\n    },\n    {\n      \"productId\": \"XYZ789\",\n      \"price\": 5.99,\n      \"quantity\": 2\n    }\n  ],\n  \"order\": \"123ABC\",\n  \"type\": \"page.confirmation\"\n}\n```\n\n#### Search Click\n\n```json\n{\n\t\"type\": \"search.click\",\n\t\"productId\": \"12345\",\n\t\"position\": 1,\n\t\"url\": \"https://example.com/s?q=pneu&sort=score_desc&page=0\",\n\t\"text\": \"pneu\",\n\t\"agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36\",\n\t\"anonymous\": \"1ce47e50-3f10-4556-95d3-57d4881c03a4\",\n\t\"session\": \"51a53ce3-096d-4740-a6d0-3cf86085ba13\"\n}\n```\n\n#### Search Query\n\n```json\n{\n\t\"session\":\"zZlNhqz1vFJP6iPG5Oqtt\",\n\t\"anonymous\":\"Om1TNluGvgmSgU5OOTvkkd\",\n\t\"url\":\"https://example.com/search/?query=zapatilha\",\n\t\"agent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0\",\n\t\"type\":\"search.query\",\n\t\"text\":\"zapatilha\",\n\t\"misspelled\":true,\n\t\"match\":392,\n\t\"operator\":\"and\"\n}\n```\n"
+  description: Intelligent Search Events API is responsible for collecting the search events to improve your search results, such as page interactions and conversion, in a headless implementation.
   contact: {}
   version: '1.0'
 servers:
@@ -17,7 +17,10 @@ paths:
   /event:
     post:
       summary: VTex Save events
-      description: "Creates search events to integrate with VTEX Intelligent Search using a headless implementation. \n\n >⚠️ **This API applies only to Headless scenarios**. It doesn't apply to stores using VTEX's storefront solution, natively integrated with Intelligent Search."
+      description: 'Creates search events to integrate with VTEX Intelligent Search using a headless implementation.
+
+
+        >⚠️ **This API applies only to Headless scenarios**. It doesn''t apply to stores using VTEX''s storefront solution, natively integrated with Intelligent Search.'
       parameters:
       - name: accountName
         in: path
@@ -104,8 +107,25 @@ paths:
       responses:
         '204':
           description: No content
+      operationId: postEvent
+      x-operation-id-source: derived
 components:
   schemas:
+    UserIdentification:
+      required:
+      - anonymous
+      - session
+      properties:
+        anonymous:
+          type: string
+          title: anonymous
+          description: Identifier related to related to the user, according to the [nanoid](https://github.com/ai/nanoid) pattern. This information is kept in storage for one year.
+          example: Om1TNluGvgmSgU5OOTvkkd
+        session:
+          type: string
+          title: session
+          description: Identifier related to the current navigation, according to the [nanoid](https://github.com/ai/nanoid) pattern. It is a cookie that lasts for 30 minutes, changing if the user opens another tab in private navigation mode.
+          example: zZlNhqz1vFJP6iPG5Oqtt
     PageConfirmation:
       title: Page Confirmation
       description: Sends a confirmation informing the products that were bought.
@@ -137,21 +157,51 @@ components:
           title: type
           description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
           example: page.confirmation
-    CartProduct:
+    Click:
+      title: Search Click
+      description: Sends an event every time a shopper clicks on a product from a search page.
       type: object
-      description: Product information.
       required:
+      - type
       - productId
-      - quantity
+      - position
+      - text
+      - anonymous
+      - session
       properties:
+        type:
+          type: string
+          title: type
+          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
+          example: search.click
         productId:
           type: string
-          description: Unique identifier of the product.
-          example: ABC123
-        quantity:
-          type: number
-          description: Quantity of the product.
-          example: 2
+          description: Unique identifier of the clicked product.
+          example: '12345'
+        position:
+          type: integer
+          description: Position of the clicked product on the search results page.
+          example: 1
+        url:
+          type: string
+          title: url
+          description: URL that identifies from which page the event occurred.
+          example: https://example.com/s?q=pneu&sort=score_desc&page=0
+        text:
+          type: string
+          title: text
+          description: Query used in the search.
+          example: tv
+        agent:
+          type: string
+          title: agent
+          description: Identifies whether the request came from a mobile or desktop application. It's used as a filter in the search report.
+          default: desktop
+          example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0
+        anonymous:
+          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
+        session:
+          $ref: '#/components/schemas/UserIdentification/properties/session'
     OrderProduct:
       type: object
       description: Product information.
@@ -172,46 +222,6 @@ components:
           type: number
           description: Quantity of the product.
           example: 3
-    UserIdentification:
-      required:
-      - anonymous
-      - session
-      properties:
-        anonymous:
-          type: string
-          title: anonymous
-          description: Identifier related to related to the user, according to the [nanoid](https://github.com/ai/nanoid) pattern. This information is kept in storage for one year.
-          example: Om1TNluGvgmSgU5OOTvkkd
-        session:
-          type: string
-          title: session
-          description: Identifier related to the current navigation, according to the [nanoid](https://github.com/ai/nanoid) pattern. It is a cookie that lasts for 30 minutes, changing if the user opens another tab in private navigation mode.
-          example: zZlNhqz1vFJP6iPG5Oqtt
-    SessionPing:
-      title: SessionPing
-      description: Sends an ACK to the API to renew the session server-side. It should be sent every 1 minute.
-      type: object
-      required:
-      - session
-      - anonymous
-      - type
-      - agent
-      properties:
-        session:
-          $ref: '#/components/schemas/UserIdentification/properties/session'
-        anonymous:
-          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
-        type:
-          type: string
-          title: type
-          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
-          example: session.ping
-        agent:
-          type: string
-          title: agent
-          description: Identifies whether the request came from a mobile or desktop application. It's used as a filter in the search report.
-          default: desktop
-          example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0
     Query:
       title: Search Query
       description: Sends a query event every time the shopper makes a full-text search.
@@ -265,76 +275,6 @@ components:
           title: operator
           description: 'Identifies the type of operator used on the search. The possible values are: `and`, `or`. Find more details in [this Elastic Search guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html).'
           example: and
-    PageCart:
-      title: PageCart
-      description: Sends an event every time the shopper enters the cart page. Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card.
-      type: object
-      required:
-      - session
-      - anonymous
-      - type
-      - products
-      properties:
-        session:
-          $ref: '#/components/schemas/UserIdentification/properties/session'
-        anonymous:
-          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
-        products:
-          type: array
-          title: products
-          description: Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.
-          items:
-            $ref: '#/components/schemas/CartProduct'
-        type:
-          type: string
-          title: type
-          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
-          example: page.cart
-    Click:
-      title: Search Click
-      description: Sends an event every time a shopper clicks on a product from a search page.
-      type: object
-      required:
-      - type
-      - productId
-      - position
-      - text
-      - anonymous
-      - session
-      properties:
-        type:
-          type: string
-          title: type
-          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
-          example: search.click
-        productId:
-          type: string
-          description: Unique identifier of the clicked product.
-          example: '12345'
-        position:
-          type: integer
-          description: Position of the clicked product on the search results page.
-          example: 1
-        url:
-          type: string
-          title: url
-          description: URL that identifies from which page the event occurred.
-          example: https://example.com/s?q=pneu&sort=score_desc&page=0
-        text:
-          type: string
-          title: text
-          description: Query used in the search.
-          example: tv
-        agent:
-          type: string
-          title: agent
-          description: Identifies whether the request came from a mobile or desktop application. It's used as a filter in the search report.
-          default: desktop
-          example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0
-        anonymous:
-          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
-        session:
-          $ref: '#/components/schemas/UserIdentification/properties/session'
     PageEmptyCart:
       title: Empty Cart
       description: Sends an event if there are no products in the shopping cart at that time.
@@ -360,3 +300,68 @@ components:
           title: type
           description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
           example: page.empty_cart
+    CartProduct:
+      type: object
+      description: Product information.
+      required:
+      - productId
+      - quantity
+      properties:
+        productId:
+          type: string
+          description: Unique identifier of the product.
+          example: ABC123
+        quantity:
+          type: number
+          description: Quantity of the product.
+          example: 2
+    PageCart:
+      title: PageCart
+      description: Sends an event every time the shopper enters the cart page. Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card.
+      type: object
+      required:
+      - session
+      - anonymous
+      - type
+      - products
+      properties:
+        session:
+          $ref: '#/components/schemas/UserIdentification/properties/session'
+        anonymous:
+          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
+        products:
+          type: array
+          title: products
+          description: Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.
+          items:
+            $ref: '#/components/schemas/CartProduct'
+        type:
+          type: string
+          title: type
+          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
+          example: page.cart
+    SessionPing:
+      title: SessionPing
+      description: Sends an ACK to the API to renew the session server-side. It should be sent every 1 minute.
+      type: object
+      required:
+      - session
+      - anonymous
+      - type
+      - agent
+      properties:
+        session:
+          $ref: '#/components/schemas/UserIdentification/properties/session'
+        anonymous:
+          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
+        type:
+          type: string
+          title: type
+          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
+          example: session.ping
+        agent:
+          type: string
+          title: agent
+          description: Identifies whether the request came from a mobile or desktop application. It's used as a filter in the search report.
+          default: desktop
+          example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0

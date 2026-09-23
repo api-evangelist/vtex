@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Pricing Prices and Fixed Prices API
-  description: "Check the new [Pricing onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/pricing-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about Pricing and is organized by focusing on the developer's journey.\n\nPricing is the VTEX module responsible for the SKU's price list. In this module, we have the base price of each SKU, optional fixed prices by trade policy, and rules that can be applied to dynamically generate different final prices according to the purchase context and the trade policy. \n\nFind more information on how to use this module and its business logic at our [Pricing onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/pricing-overview).\n\n## Rate limits per route\nThe rate limits per route revolve around the following values:\n\n\n| Operation | Rate | Burst credits  |\n| - | - | - |\n| `GET` | No rate limits | No rate limits |\n| `POST` and `PUT` | 2000 per minute<br>33 per second | 500 |\n| `DELETE` | 1000 per minute<br>16 per second | 300 |\n\n### Burst credits\nIn case the account exceeds the limit frequency for a Rate Limiter (for instance, when one account makes 34 requests per second in any price insert/update route), we decrease from the Burst Credit count the exceeding (in this example, 1 Credit).\n\nIn the event of the Burst Credits reaching 0 (zero), the request is blocked with a Status 429 response.\n\nThe credits fill up over time when the route is not being used, at the same rate as the route's Rate Limiter. In our example, for each second not sending a PUT or POST request, we increase 40 Burst Credits to this Rate Limiter.\n\n### Response Headers for rate limits\nIn the response of any request to the Pricing API, there are headers indicating the current status of the Rate Limiting. This information may be useful to evaluate the ideal frequency to send requests to a route, and when to send a new request in the event of reaching a Rate Limit.\n\n- `Ratelimit-Limit`: Total Burst Credits offered to a route\n- `Ratelimit-Remaining`: How many Burst Credits are still available to use\n- `Ratelimit-Reset`: How long (in seconds) it will take for Burst Credits to fill up completely (it will fill up to the *Ratelimit-Limit*)\n- `Retry-After`: Indicates how many seconds you will need to wait until the Rate Limiter accepts a new request to this route again. If this header response exists, this means your current request has been rate-limited and has not been processed.\n\n\n### Integrating with Pricing v2 considering rate limits\nWhen developing an integration, consider the requests/route/account limits specified in the [Rate Limits per route](#rate-limits-per-route) section, and avoid surpassing this frequency.\n\nIf you happen to be rate limited, please await the time in seconds specified in `Retry-After` before making another request to the service, and reduce the rate of requests per second that your integration is making.\n\n\n\n## Index\n\n### Prices and Fixed Prices\n- `GET` [Get Price](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-)\n- `DELETE` [Delete Price](https://developers.vtex.com/docs/api-reference/pricing-api/#delete-/pricing/prices/-itemId-)\n- `PUT` [Create or Update Base Price or Fixed Prices](https://developers.vtex.com/docs/api-reference/pricing-api/#put-/pricing/prices/-itemId-)\n- `GET` [Get Fixed Prices](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-/fixed)\n- `POST` [Create or Update Fixed Prices on a price table or trade policy](https://developers.vtex.com/docs/api-reference/pricing-api/#post-/pricing/prices/-itemId-/fixed/-priceTableId-)\n- `GET` [Get Fixed Prices on a price table policy](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-/fixed/-priceTableId-)\n- `DELETE` [Delete Fixed Prices on a price table or trade policy](https://developers.vtex.com/docs/api-reference/pricing-api/#delete-/pricing/prices/-itemId-/fixed/-priceTableId-)\n- `GET` [GET Computed Price by price table or trade policy](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/prices/-itemId-/computed/-priceTableId-)\n\n\n### Pricing Configuration\n- `GET` [Get Pricing Configuration](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/config)\n- `GET` [Get Pricing v2 Status](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/migration)\n\n\n### Price Tables\n- `GET` [Get rules for a price table](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/pipeline/catalog/-priceTableId-)\n- `PUT` [Update rules for a price table](https://developers.vtex.com/docs/api-reference/pricing-api/#put-/pricing/pipeline/catalog/-priceTableId-)\n- `GET` [Get all price tables and their rules](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/pipeline/catalog)\n- `GET` [List price tables](https://developers.vtex.com/docs/api-reference/pricing-api/#get-/pricing/tables)\n\n## Common parameters in the documentation\n\n| Parameter name | Description |\n| - | - |\n| `{{accountName}}` | Store account name. |\n| `{{environment}}` | The environment that will be called. |\n| `{{X-VTEX-API-AppKey}}`   | Located in the headers of the requests, user authentication key. |\n| `{{X-VTEX-API-AppToken}}` | Located in the headers of the requests, authentication password. |"
+  description: Check the new Pricing onboarding guide.
   contact: {}
   version: '1.0'
 servers:
@@ -26,12 +26,10 @@ paths:
       description: 'Retrieves price data given a specific SKU ID. Within the `fixedPrices` object, there might be a list of prices for specific Trade Policies and Minimium Quantities of the SKU. Fixed Prices may also be scheduled.
 
 
-
-
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -41,10 +39,10 @@ paths:
         | Pricing | Price List | **Read prices** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetPrice
       parameters:
       - name: Content-Type
@@ -133,7 +131,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -143,10 +141,10 @@ paths:
         | Pricing | Price List | **Delete all prices from account** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: DeletePrice
       parameters:
       - name: Content-Type
@@ -187,12 +185,10 @@ paths:
         You may optionally set a list price. Additionally, you may set either a cost price or a markup value. By defining either one of them, the other will be calculated to conform to the formula`costPrice * (1 + markup) = basePrice`.
 
 
-
-
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -202,10 +198,10 @@ paths:
         | Pricing | Price List | **Modify prices** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: CreateUpdatePriceOrFixedPrice
       parameters:
       - name: Accept
@@ -321,7 +317,35 @@ paths:
       tags:
       - Prices and Fixed Prices
       summary: VTex Get fixed prices
-      description: "The **fixed price** is an optional price of the SKU for a specific trade policy with a specific minimum quantity to be activated. This method retrieves an array of Fixed Prices for an SKU in a Trade Policy with Minimum Quantities.\n\nThe default value for a Minimum Quantity is `1`. This means a Fixed Price will be valid for a SKU in a Trade Policy for orders containing the specified number of Minimum Quantity or above, unless a higher Minimum Quantity is specified.\n\nFixed prices may, optionally, be scheduled. If so, these objects will contain the `dateRange` object with `from` and `to` properties, indicating the start and end time of the scheduled fixed price in the RFC3339 timestamp format (`YYYY-MM-DDT23:59:60Z`).\n\n Note that the 'Z', at the end, represents the UTC time (GMT+00:00). If it was in GMT-03:00, for example, it would be (`YYYY-MM-DDT23:59:60-03:00`).\n\n\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Pricing | Price List | **Read prices** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'The **fixed price** is an optional price of the SKU for a specific trade policy with a specific minimum quantity to be activated. This method retrieves an array of Fixed Prices for an SKU in a Trade Policy with Minimum Quantities.
+
+
+        The default value for a Minimum Quantity is `1`. This means a Fixed Price will be valid for a SKU in a Trade Policy for orders containing the specified number of Minimum Quantity or above, unless a higher Minimum Quantity is specified.
+
+
+        Fixed prices may, optionally, be scheduled. If so, these objects will contain the `dateRange` object with `from` and `to` properties, indicating the start and end time of the scheduled fixed price in the RFC3339 timestamp format (`YYYY-MM-DDT23:59:60Z`).
+
+
+        Note that the ''Z'', at the end, represents the UTC time (GMT+00:00). If it was in GMT-03:00, for example, it would be (`YYYY-MM-DDT23:59:60-03:00`).
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Pricing | Price List | **Read prices** |
+
+
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetFixedPrices
       parameters:
       - name: Accept
@@ -384,7 +408,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -394,10 +418,10 @@ paths:
         | Pricing | Price List | **Modify prices** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        > ❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        > ❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: createorupdatefixedpricesonpricetableortradepolicy
       parameters:
       - name: Content-Type
@@ -479,7 +503,26 @@ paths:
       tags:
       - Prices and Fixed Prices
       summary: VTex Get fixed prices on a price table or trade policy
-      description: "Retrieves all Fixed Prices on a price table or trade policy. \n\n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:\n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Pricing | Price List | **Read prices** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Retrieves all Fixed Prices on a price table or trade policy.
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Pricing | Price List | **Read prices** |
+
+
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
+
+
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetFixedPricesonapricetable
       parameters:
       - name: Content-Type
@@ -546,7 +589,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -556,10 +599,10 @@ paths:
         | Pricing | Price List | **Delete all prices from account** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: Deletefixedpricesonapricetableortradepolicy
       parameters:
       - name: Content-Type
@@ -603,7 +646,26 @@ paths:
       tags:
       - Prices and Fixed Prices
       summary: VTex Get computed price by price table or trade policy
-      description: "Gets the Computed Price, which is the price after all the steps in the Pricing pipeline, for an SKU in a specific price table or trade policy. \n\n## Permissions\n\nAny user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint: \n\n| **Product** | **Category** | **Resource** |\n| --------------- | ----------------- | ----------------- |\n| Pricing | Price List | **Read prices** |\n\nThere are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).\n\n>u2757 To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations."
+      description: 'Gets the Computed Price, which is the price after all the steps in the Pricing pipeline, for an SKU in a specific price table or trade policy.
+
+
+        ## Permissions
+
+
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+
+
+        | **Product** | **Category** | **Resource** |
+
+        | --------------- | ----------------- | ----------------- |
+
+        | Pricing | Price List | **Read prices** |
+
+
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
+
+
+        >u2757 To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: GetComputedPricebypricetable
       parameters:
       - name: categoryIds
@@ -686,32 +748,6 @@ paths:
             default: DefaultParameterValue
 components:
   schemas:
-    FixedPrice:
-      required:
-      - tradePolicyId
-      - value
-      - listPrice
-      - minQuantity
-      type: object
-      description: Fixed price request body information.
-      properties:
-        tradePolicyId:
-          type: string
-          description: Trade Policy ID.
-        value:
-          type: number
-          description: Trade Policy Fixed Price Value.
-        listPrice:
-          type:
-          - number
-          - 'null'
-          description: Trade Policy List Price Value.
-        minQuantity:
-          type: integer
-          format: int32
-          description: Trade Policy Fixed Price Minimum Item Quantity.
-        dateRange:
-          $ref: '#/components/schemas/DateRange'
     DateRange:
       description: Trade Policy Fixed Price Validity Period Object.
       required:
@@ -725,31 +761,6 @@ components:
         to:
           type: string
           description: Indicates the date and time from which the fixed price will no longer be valid.
-    Getcomputedprice:
-      required:
-      - tradePolicyId
-      - listPrice
-      - sellingPrice
-      - priceValidUntil
-      type: object
-      description: Computed price request body information.
-      properties:
-        tradePolicyId:
-          type: string
-          description: Trade Policy ID ou `priceTableId`.
-        listPrice:
-          type: integer
-          format: int32
-          description: Trade Policy List Price, also known as "from" price.
-        costPrice:
-          type: number
-          description: Cost price.
-        sellingPrice:
-          type: number
-          description: Computed Price before applying coupons, promotions and taxes. This price may change before reaching the shelf.
-        priceValidUntil:
-          type: string
-          description: Date until when the computed price will be valid, due to price scheduling. If no price scheduling applies, this will be set a year from the current time.
     Getprice:
       required:
       - itemId
@@ -785,6 +796,57 @@ components:
           items:
             $ref: '#/components/schemas/FixedPrice'
           description: The fixed price is a price that overlaps all other existing price configurations of a price table.
+    Getcomputedprice:
+      required:
+      - tradePolicyId
+      - listPrice
+      - sellingPrice
+      - priceValidUntil
+      type: object
+      description: Computed price request body information.
+      properties:
+        tradePolicyId:
+          type: string
+          description: Trade Policy ID ou `priceTableId`.
+        listPrice:
+          type: integer
+          format: int32
+          description: Trade Policy List Price, also known as "from" price.
+        costPrice:
+          type: number
+          description: Cost price.
+        sellingPrice:
+          type: number
+          description: Computed Price before applying coupons, promotions and taxes. This price may change before reaching the shelf.
+        priceValidUntil:
+          type: string
+          description: Date until when the computed price will be valid, due to price scheduling. If no price scheduling applies, this will be set a year from the current time.
+    FixedPrice:
+      required:
+      - tradePolicyId
+      - value
+      - listPrice
+      - minQuantity
+      type: object
+      description: Fixed price request body information.
+      properties:
+        tradePolicyId:
+          type: string
+          description: Trade Policy ID.
+        value:
+          type: number
+          description: Trade Policy Fixed Price Value.
+        listPrice:
+          type:
+          - number
+          - 'null'
+          description: Trade Policy List Price Value.
+        minQuantity:
+          type: integer
+          format: int32
+          description: Trade Policy Fixed Price Minimum Item Quantity.
+        dateRange:
+          $ref: '#/components/schemas/DateRange'
   securitySchemes:
     appKey:
       type: apiKey

@@ -1,9 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Subscriptions API (v3) Reports API
-  description: '
-
-    A **Subscription** is a list of items (SKUs) tied to certain recurring purchase settings:
+  description: 'A **Subscription** is a list of items (SKUs) tied to certain recurring purchase settings:
 
 
     - User profile
@@ -17,13 +15,13 @@ info:
     - Cycle
 
 
-    Once you have [configured subscriptions](https://help.vtex.com/tutorial/how-to-configure-subscriptions%20--1FA9dfE7vJqxBna9Nft5Sj) in your store, the Subscriptions API allows you to create, manage and monitor your customers'' subscriptions.
+    Once you have configured subscriptions in your store, the Subscriptions API allows you to create, manage and monitor your customers'' subscriptions.
 
 
-    ![image](https://user-images.githubusercontent.com/77292838/213024675-9407863b-0c55-4282-9442-306352716abe.png)
+    !image
 
 
-    To read more about the Subscriptions feature, check our article [How Subscription works](https://help.vtex.com/tutorial/how-subscriptions-work--frequentlyAskedQuestions_4453).'
+    To read more about the Subscriptions feature, check our article How Subscription works.'
   contact: {}
   version: '1.0'
 servers:
@@ -86,6 +84,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SubscriptionReport'
+      operationId: getApiRnsPvtReports
+      x-operation-id-source: derived
   /api/rns/pvt/reports/{reportName}/documents/{documentId}:
     get:
       tags:
@@ -138,12 +138,29 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ReportResponse'
+      operationId: getApiRnsPvtReportsByReportNameDocumentsByDocumentId
+      x-operation-id-source: derived
   /api/rns/pvt/reports/{reportName}/documents:
     post:
       tags:
       - Reports
       summary: VTex Generate report
-      description: "This endpoint creates a new report in the format of a CSV file and sends it via email. You can generate one of the following reports: \n\n - subscriptionsWithStatus \n\n - subscriptionsScheduledBetweenDate \n\n - subscriptionsUpdatedBetweenDate \n\n - subscriptionsCreatedBetweenDate \n\n - executionsBetweenDate"
+      description: 'This endpoint creates a new report in the format of a CSV file and sends it via email. You can generate one of the following reports:
+
+
+        - subscriptionsWithStatus
+
+
+        - subscriptionsScheduledBetweenDate
+
+
+        - subscriptionsUpdatedBetweenDate
+
+
+        - subscriptionsCreatedBetweenDate
+
+
+        - executionsBetweenDate'
       parameters:
       - name: reportName
         in: path
@@ -200,8 +217,52 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ReportResponse'
+      operationId: postApiRnsPvtReportsByReportNameDocuments
+      x-operation-id-source: derived
 components:
   schemas:
+    SubscriptionReport:
+      type: object
+      properties:
+        account:
+          type:
+          - string
+          - 'null'
+        key:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        requesterEmail:
+          type:
+          - string
+          - 'null'
+        entity:
+          type:
+          - string
+          - 'null'
+        schema:
+          type:
+          - string
+          - 'null'
+        query:
+          type:
+          - string
+          - 'null'
+        params:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SubscriptionReportParam'
+      additionalProperties: false
     ReportResponse:
       type: object
       properties:
@@ -286,48 +347,6 @@ components:
           - string
           - 'null'
         value: {}
-      additionalProperties: false
-    SubscriptionReport:
-      type: object
-      properties:
-        account:
-          type:
-          - string
-          - 'null'
-        key:
-          type:
-          - string
-          - 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        requesterEmail:
-          type:
-          - string
-          - 'null'
-        entity:
-          type:
-          - string
-          - 'null'
-        schema:
-          type:
-          - string
-          - 'null'
-        query:
-          type:
-          - string
-          - 'null'
-        params:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/SubscriptionReportParam'
       additionalProperties: false
   securitySchemes:
     appKey:

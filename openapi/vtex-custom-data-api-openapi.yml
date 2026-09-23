@@ -1,149 +1,7 @@
 openapi: 3.2.0
 info:
   title: VTex Checkout Custom Data API
-  description: '>ℹ️ Check the new [Checkout onboarding guide](https://developers.vtex.com/vtex-rest-api/docs/checkout-overview). We created this guide to improve the onboarding experience for developers at VTEX. It assembles all documentation on our Developer Portal about the Checkout and is organized by focusing on the developer''s journey.
-
-
-    The Checkout API allows you to obtain and configure information about the shopping cart and its attachments, personalization of custom fields, orderForm structure, fulfillment data, order management, and identification of the sellers delivery region.
-
-
-    >ℹ️ Data modification operations (`POST`, `PATCH`, `PUT` or `DELETE` endpoints) shall not be performed in parallel in the Checkout APIs. They need to be enqueued by the client/requester. Otherwise, old values ​​can be overwritten incorrectly or competition errors may occur.
-
-
-    >⚠️ All endpoints that consult or edit the orderForm can change the authentication depending on the customer context. If you are handling information from a customer with a complete profile on the store, authentication will be required. You can only access or modify the customer data for these profiles with an authenticated request.
-
-
-    ## Shopping cart
-
-
-    Allows merchants to simulate, configure and customize shopping cart information.
-
-
-    - [POST - Cart Simulation](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForms/simulation): simulate a cart in VTEX Checkout.
-
-    - [GET - Get current or create a new cart](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm): get your current shopping cart information or to create a new cart.
-
-    - [GET - Get cart information by ID](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm/-orderFormId-): get all information associated to a given shopping cart.
-
-    - [POST - Add cart items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items): add a new item to the shopping cart.
-
-    - [POST - Update cart items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/update): change the quantity of one or more items in a specific cart or remove an item from the cart.
-
-    - [PATCH - Handle cart items](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/items): change the quantity or price of one or more items to the shopping cart or add a new item to the shopping cart.
-
-    - [POST - Remove all items](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/items/removeAll): removes all items from a given cart, leaving it empty.
-
-    - [PUT - Change price](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orderForm/-orderFormId-/items/-itemIndex-/price): changes the price of an SKU in a cart.
-
-    - [GET - Cart installments](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/orderForm/-orderFormId-/installments): retrieves possible amount of installments and respective values for a given cart with a given payment method.
-
-
-    ## Cart attachments
-
-
-    Allows merchants to obtain client profiles and add information to a given shopping cart.
-
-
-    - [GET - Get client profile by email](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/profiles): retrieve a client''s profile information by providing an email address.
-
-    - [POST - Add client profile](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/clientProfileData): include client profile information to a given shopping cart.
-
-    - [Patch - Ignore profile data](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/profile): disable the automatic inclusion of profile information in a shopping cart when a shopper provides an email address at checkout.
-
-    - [GET - Remove all personal data](https://developers.vtex.com/docs/api-reference/checkout-api#get-/checkout/changeToAnonymousUser/-orderFormId-): removes all user information, making a cart anonymous while leaving the items.
-
-    - [POST - Add client preferences](https://developers.vtex.com/docs/api-reference/checkout-api#patch-/api/checkout/pub/orderForm/-orderFormId-/items): include client preferences information to a given shopping cart.
-
-    - [POST - Add shipping address and select delivery option](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/shippingData): include shipping information and/or selected delivery option to a given shopping cart.
-
-    - [POST - Add marketing data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/marketingData): include marketing information to a given shopping cart.
-
-    - [POST - Add payment data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/paymentData): include payment information to a given shopping cart.
-
-    - [POST - Add merchant context data](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/attachments/merchantContextData): add to the cart any relevant information that is related to the context of a specific order.
-
-    - [POST - Add coupons to the cart](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/coupons): add coupons to a given shopping cart.
-
-
-    ## Custom data
-
-
-    Allows merchants to manage custom fields that were created by an app in their account.
-
-
-    - [PUT - Set multiple custom field values](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/coupons): allows you to update the values of custom fields created in your account''s apps.
-
-    - [PUT - Set single custom field value](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orderForm/-orderFormId-/customData/-appId-/-appFieldName-): allows you to update the value of a specific custom field created in your account''s apps.
-
-    - [DELETE - Remove single custom field value](https://developers.vtex.com/docs/api-reference/checkout-api#delete-/api/checkout/pub/orderForm/-orderFormId-/customData/-appId-/-appFieldName-): allows you to remove the value of a specific custom field created in your account''s apps.
-
-
-    ## Configuration
-
-
-    Allows merchants to configure orderForm in the account and seller exchange on a given order.
-
-
-    - [GET - Get orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/orderForm): retrieves the settings that are currently applied to every [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) in the account.
-
-    - [POST - Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm): determines settings that will apply to every [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) in the account.
-
-    - [GET - Get window to change seller](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pvt/configuration/window-to-change-seller): retrieves a marketplace’s window to change seller.
-
-    - [POST - Update window to change seller](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/window-to-change-seller): updates a marketplace’s window to change seller.
-
-    - [POST - Clear orderForm messages](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/messages/clear): removes all messages from the `messages` field of the [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields).
-
-
-    ## Fulfillment
-
-
-    Allows merchants to obtain pickup points and address information.
-
-
-    - [GET - List pickup points by location](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/pickup-points): retrieves information on pickup points close to a given location determined by geocoordinates or postal code.
-
-    - [GET - Get address by postal code](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/postal-code/-countryCode-/-postalCode-): retrieves address information for a given postal code and country.
-
-
-    ## Order placement
-
-
-    Allows merchants to place and process orders by creating a new cart or using an existing cart.
-
-
-    - [POST - Place order from an existing cart](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/orderForm/-orderFormId-/transaction): places an order from an existing [`orderForm`](https://developers.vtex.com/docs/guides/orderform-fields) object, meaning an existing cart.
-
-    - [PUT - Place order](https://developers.vtex.com/docs/api-reference/checkout-api#put-/api/checkout/pub/orders): places order without having any prior cart information.
-
-    - [POST - Process order](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pub/gatewayCallback/-orderGroup-): order processing callback request, which is made after an order''s payment is approved.
-
-
-    ## Region
-
-
-    Allows merchants to obtain a list of sellers serving a specific delivery region.
-
-
-    - [GET - Get sellers by region or address](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/regions/-regionId-)": retrieves a list of sellers that cater to a specific region or address.
-
-
-    ## Common parameters in the documentation
-
-
-    | Parameter name            | Description                                                                             |
-
-    |---------------------------|-----------------------------------------------------------------------------------------|
-
-    | `{{accountName}}`         | Store account name                                                                      |
-
-    | `{{environment}}`         | The environment that will be called. Change for vtexcommercestable or vtexcommmercebeta |
-
-    | `{{X-VTEX-API-AppKey}}`   | Located in the headers of the requests, user authentication key                         |
-
-    | `{{X-VTEX-API-AppToken}}` | Located in the headers of the requests, authentication password                         |
-
-    '
+  description: '>ℹ️ Check the new Checkout onboarding guide.'
   contact: {}
   version: '1.0'
 servers:
@@ -170,7 +28,7 @@ paths:
       tags:
       - Custom Data
       summary: VTex Set multiple custom field values
-      description: 'Your account may create `apps`, which contain custom fields, through the [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm) request. The values of these custom fields can then be updated by this request.
+      description: 'Your account may create `apps`, which contain custom fields, through the Update orderForm configuration request. The values of these custom fields can then be updated by this request.
 
 
         To do that, you need to inform the ID of the app you created with the configuration API (`appId`).
@@ -179,13 +37,13 @@ paths:
         In the body of the request, for each field created in this app (`appFieldName`) you will inform a value (`appFieldValue`).
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -195,10 +53,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: SetMultipleCustomFieldValues
       security: []
       parameters:
@@ -460,7 +318,7 @@ paths:
       tags:
       - Custom Data
       summary: VTex Set single custom field value
-      description: 'Your account may create `apps`, which contain custom fields, through the [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm) request. The value of a specific custom field can then be updated by this request.
+      description: 'Your account may create `apps`, which contain custom fields, through the Update orderForm configuration request. The value of a specific custom field can then be updated by this request.
 
 
         To do that, you need to inform in the URL the ID of the app you created with the configuration API (`appId`).
@@ -469,13 +327,13 @@ paths:
         In the body of the request, you will inform the new value (`appFieldValue`, passed through the body) of the specific field created in this app (identified by the `appFieldName` parameter, passed through the URL).
 
 
-        The [orderForm](https://developers.vtex.com/docs/guides/orderform-fields) is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
+        The orderForm is the data structure which represents a shopping cart and contains all information pertaining to it. Hence, the `orderFormId` is the identification code of a given cart.
 
 
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -485,10 +343,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: SetSingleCustomFieldValue
       security: []
       parameters:
@@ -756,7 +614,7 @@ paths:
       tags:
       - Custom Data
       summary: VTex Remove single custom field value
-      description: 'Your account may create `apps`, which contain custom fields, through the [Update orderForm configuration](https://developers.vtex.com/docs/api-reference/checkout-api#post-/api/checkout/pvt/configuration/orderForm) request. The value of a specific custom field can be removed by this request.
+      description: 'Your account may create `apps`, which contain custom fields, through the Update orderForm configuration request. The value of a specific custom field can be removed by this request.
 
 
         To do that, you need to inform in the URL the ID of the app you created with the configuration API (`appId`).
@@ -768,7 +626,7 @@ paths:
         ## Permissions
 
 
-        Any user or [application key](https://developers.vtex.com/docs/guides/api-authentication-using-application-keys) must have at least one of the appropriate [License Manager resources](https://help.vtex.com/en/tutorial/license-manager-resources--3q6ztrC8YynQf6rdc6euk3) to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
+        Any user or application key must have at least one of the appropriate License Manager resources to be able to successfully run this request. Otherwise they will receive a status code `403` error. These are the applicable resources for this endpoint:
 
 
         | **Product** | **Category** | **Resource** |
@@ -778,10 +636,10 @@ paths:
         | Checkout | CheckoutResources | **Read Shopping Cart** |
 
 
-        There are no applicable [predefined roles](https://help.vtex.com/en/tutorial/predefined-roles--jGDurZKJHvHJS13LnO7Dy) for this resource list. You must [create a custom role](https://help.vtex.com/en/tutorial/roles--7HKK5Uau2H6wxE1rH5oRbc#creating-a-role) and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see [Authentication overview](https://developers.vtex.com/docs/guides/authentication).
+        There are no applicable predefined roles for this resource list. You must create a custom role and add at least one of the resources above in order to use this endpoint. To learn more about machine authentication at VTEX, see Authentication overview.
 
 
-        >❗ To prevent integrations from having excessive permissions, consider the [best practices for managing app keys](https://help.vtex.com/en/tutorial/best-practices-application-keys--7b6nD1VMHa49aI5brlOvJm) when assigning License Manager roles to integrations.'
+        >❗ To prevent integrations from having excessive permissions, consider the best practices for managing app keys when assigning License Manager roles to integrations.'
       operationId: Removesinglecustomfieldvalue
       security: []
       parameters:
@@ -1037,34 +895,7 @@ paths:
                 $ref: '#/components/schemas/orderForm'
       deprecated: false
 components:
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
   schemas:
-    SetsinglecustomfieldvalueRequest:
-      required:
-      - value
-      type: object
-      properties:
-        value:
-          type: string
-          description: The value you want to set to the specified field.
     orderForm:
       type: object
       properties:
@@ -2087,6 +1918,33 @@ components:
             ascending:
               type: boolean
               description: Indicates whether the ordering is ascending.
+    SetsinglecustomfieldvalueRequest:
+      required:
+      - value
+      type: object
+      properties:
+        value:
+          type: string
+          description: The value you want to set to the specified field.
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   securitySchemes:
     appKey:
       type: apiKey
