@@ -790,202 +790,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Payments:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction payments.
-      properties:
-        href:
-          type: string
-          description: Transaction payment reference route.
-    Fields:
-      required:
-      - holderName
-      - cardNumber
-      - validationCode
-      - dueDate
-      - document
-      - accountId
-      - address
-      - callbackUrl
-      type: object
-      description: Fields information.
-      properties:
-        holderName:
-          type:
-          - string
-          - 'null'
-          description: Card holder name.
-          example: UserTest
-        cardNumber:
-          type:
-          - number
-          - 'null'
-          description: Card number information.
-          example: 111111111111
-        validationCode:
-          type:
-          - number
-          - 'null'
-          description: CVV code.
-          example: 231
-        dueDate:
-          type:
-          - string
-          - 'null'
-          description: Due date information. The date format is `mm/yy`.
-          example: 10/19
-        document:
-          type:
-          - string
-          - 'null'
-          description: Card holder documentation.
-          example: '8041734561'
-        accountId:
-          type:
-          - string
-          - 'null'
-          description: Account identification.
-          example: 08134AF761A148B9A5DCE14A81F31DD9
-        address:
-          type: array
-          description: Array containing customer address information.
-          items:
-            type: object
-            description: Customer address information.
-            properties:
-              addressType:
-                type: string
-                description: Address type.
-                example: Residential
-              receiverName:
-                type: string
-                description: Name of the receiver.
-                example: Clark Kent
-              postalCode:
-                type: string
-                description: Postal code information.
-                example: '5555555'
-              city:
-                type: string
-                description: City of the address.
-                example: Sao Paulo
-              state:
-                type: string
-                description: State of the address.
-                example: SP
-              country:
-                type:
-                - string
-                - 'null'
-                description: Country of the address. ISO three-letter code.
-                example: BRA
-              street:
-                type: string
-                description: Street of the address.
-                example: Avenue Splendor Garden
-              number:
-                type: number
-                description: Number of the address.
-                example: 111
-              neighborhood:
-                type: string
-                description: Neighborhood of the address.
-                example: Sumare
-              complement:
-                type:
-                - string
-                - 'null'
-                description: Complement to the address.
-                example: House
-              reference:
-                type:
-                - string
-                - 'null'
-                description: Reference that may help in the location of the address.
-                example: Close to the bank.
-              geoCoordinates:
-                type: array
-                description: Array containing two floats with geocoordinates, first longitude, then latitude.
-                example:
-                - -47.924747467041016
-                - -15.832582473754883
-                items:
-                  type: number
-                  description: Geocoordinates information.
-                  example: -47.924747467041016
-        callbackUrl:
-          type: string
-          description: Callback URL information.
-          example: https://coinshop.vtexpayments.com.br/payment-provider/transactions/900BA26FEAC84332A53AE1007E740DE3/payments/E713830E32764BF99028A0A275841BFC/notification
-    Cancellations:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction cancellations.
-      properties:
-        href:
-          type: string
-          description: Transaction cancellation reference route.
-    Transaction:
-      required:
-      - id
-      - merchantName
-      type: object
-      description: Transaction information.
-      properties:
-        id:
-          type: string
-          description: Transaction identification.
-          example: 72E84719BDF14B2FB170B38AD12598C9
-        merchantName:
-          type: string
-          description: Merchant name.
-          example: cosmetics2
-    TransactionSettlementDetails:
-      required:
-      - requests
-      - actions
-      type: object
-      description: Transaction settlement details response body information.
-      properties:
-        requests:
-          type: array
-          items:
-            $ref: '#/components/schemas/Request'
-          description: Array containing requests information.
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-          description: Array containing actions information.
-    Payment1:
-      required:
-      - href
-      type: object
-      description: Object containing the transaction settlement reference route.
-      properties:
-        href:
-          type: string
-          description: Transaction reference settlement route.
-    Request:
-      required:
-      - id
-      - date
-      - value
-      type: object
-      description: Requests information.
-      properties:
-        id:
-          type: string
-          description: Transaction identification. This is the same `transactionId` value sent in the request path.
-        date:
-          type: string
-          description: Transaction settlement date.
-        value:
-          type: number
-          description: Transaction settlement value.
     TransactionDetailsResponse:
       required:
       - id
@@ -1239,7 +1043,7 @@ components:
             phone:
               type: string
               description: Buyer phone number.
-    Fields3:
+    Fields:
       required:
       - holderName
       - cardNumber
@@ -1253,23 +1057,33 @@ components:
       description: Fields information.
       properties:
         holderName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Card holder name.
           example: UserTest
         cardNumber:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Card number information.
           example: 111111111111
         validationCode:
-          type: number
+          type:
+          - number
+          - 'null'
           description: CVV code.
           example: 231
         dueDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Due date information. The date format is `mm/yy`.
           example: 10/19
         document:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Card holder documentation.
           example: '8041734561'
         accountId:
@@ -1279,52 +1093,77 @@ components:
           description: Account identification.
           example: 08134AF761A148B9A5DCE14A81F31DD9
         address:
-          type:
-          - array
-          - 'null'
+          type: array
           description: Array containing customer address information.
           items:
-            type: string
+            type: object
             description: Customer address information.
-            example: Customer address data
+            properties:
+              addressType:
+                type: string
+                description: Address type.
+                example: Residential
+              receiverName:
+                type: string
+                description: Name of the receiver.
+                example: Clark Kent
+              postalCode:
+                type: string
+                description: Postal code information.
+                example: '5555555'
+              city:
+                type: string
+                description: City of the address.
+                example: Sao Paulo
+              state:
+                type: string
+                description: State of the address.
+                example: SP
+              country:
+                type:
+                - string
+                - 'null'
+                description: Country of the address. ISO three-letter code.
+                example: BRA
+              street:
+                type: string
+                description: Street of the address.
+                example: Avenue Splendor Garden
+              number:
+                type: number
+                description: Number of the address.
+                example: 111
+              neighborhood:
+                type: string
+                description: Neighborhood of the address.
+                example: Sumare
+              complement:
+                type:
+                - string
+                - 'null'
+                description: Complement to the address.
+                example: House
+              reference:
+                type:
+                - string
+                - 'null'
+                description: Reference that may help in the location of the address.
+                example: Close to the bank.
+              geoCoordinates:
+                type: array
+                description: Array containing two floats with geocoordinates, first longitude, then latitude.
+                example:
+                - -47.924747467041016
+                - -15.832582473754883
+                items:
+                  type: number
+                  description: Geocoordinates information.
+                  example: -47.924747467041016
         callbackUrl:
-          type:
-          - string
-          - 'null'
+          type: string
           description: Callback URL information.
-          example: https://payment-test.myvtex.com/checkout/gatewayCallback/1336650505288/Success
-    Field:
-      required:
-      - name
-      - value
-      type: object
-      description: Transaction parameters information.
-      properties:
-        name:
-          type: string
-          description: Transaction parameter name.
-        value:
-          type: string
-          description: Transaction parameter value.
-    Settlements:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction settlements.
-      properties:
-        href:
-          type: string
-          description: Transaction settlement reference route.
-    Capabilities:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction capabilities.
-      properties:
-        href:
-          type: string
-          description: Transaction capabilities reference route.
-    2.SendPaymentsWithSavedCreditCardRequest:
+          example: https://coinshop.vtexpayments.com.br/payment-provider/transactions/900BA26FEAC84332A53AE1007E740DE3/payments/E713830E32764BF99028A0A275841BFC/notification
+    2.SendPaymentsPublicRequest:
       required:
       - paymentSystem
       - installments
@@ -1336,12 +1175,12 @@ components:
       - fields
       - transaction
       type: object
-      description: Send payments with saved credit card request body information.
+      description: Send payments information public request body information.
       properties:
         paymentSystem:
           type: number
           description: Payment system identification.
-          example: 4
+          example: 17
         installments:
           type: number
           description: Number of installments.
@@ -1353,7 +1192,7 @@ components:
         value:
           type: number
           description: Payment value.
-          example: 30000
+          example: 15000
         installmentsInterestRate:
           type: number
           description: The interest rate.
@@ -1365,262 +1204,11 @@ components:
         referenceValue:
           type: number
           description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
-          example: 30000
+          example: 15000
         fields:
-          $ref: '#/components/schemas/Fields3'
+          $ref: '#/components/schemas/Fields'
         transaction:
           $ref: '#/components/schemas/Transaction'
-    Refunds:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction refunds.
-      properties:
-        href:
-          type: string
-          description: Transaction refund reference route.
-    PaymentDetailsResponse:
-      required:
-      - id
-      - paymentSystem
-      - paymentSystemName
-      - merchantName
-      - group
-      - userProfileId
-      - isCustom
-      - allowInstallments
-      - requiresAuthentication
-      - allowIssuer
-      - allowNotification
-      - isAvailable
-      - description
-      - authorizationDate
-      - self
-      - tid
-      - returnCode
-      - returnMessage
-      - status
-      - connector
-      - ConnectorResponses
-      - connectorResponse
-      - ShowConnectorResponses
-      - value
-      - installmentsInterestRate
-      - installmentsValue
-      - referenceValue
-      - installments
-      - currencyCode
-      - provider
-      - isBillingAddressDifferent
-      - isRegexValid
-      - isLuhnValid
-      - fields
-      - sheets
-      - originalPaymentId
-      type: object
-      description: Payment details information.
-      items:
-        type: object
-        description: Payment details information.
-        properties:
-          id:
-            type: string
-            description: Payment identification.
-          paymentSystem:
-            type: number
-            description: Payment system identification.
-          paymentSystemName:
-            type: string
-            description: Payment system name.
-          merchantName:
-            type:
-            - string
-            - 'null'
-            description: Merchant name.
-          group:
-            type: string
-            description: Payment group name.
-          userProfileId:
-            type:
-            - string
-            - 'null'
-            description: Unique ID associated with the customer profile.
-          isCustom:
-            type: boolean
-            description: Indicates whether it is custom.
-          allowInstallments:
-            type: boolean
-            description: Indicates whether the payment method allows installments.
-          requiresAuthentication:
-            type: boolean
-            description: Indicates whether it is necessary to log in to make the payment.
-          allowIssuer:
-            type: boolean
-            description: Indicates whether it is possible to identify the name of the bank responsible for issuing the card.
-          allowNotification:
-            type: boolean
-            description: Indicates the possibility of payment notification (used by bank invoices and notes payable).
-          isAvailable:
-            type: boolean
-            description: Indicates whether the payment method is available for use.
-          description:
-            type:
-            - string
-            - 'null'
-            description: Description of the payment method.
-          authorizationDate:
-            type:
-            - string
-            - 'null'
-            description: Payment authorization date.
-          self:
-            $ref: '#/components/schemas/Self'
-          tid:
-            type:
-            - string
-            - 'null'
-            description: Provider's unique identifier for the transaction.
-          nsu:
-            type:
-            - string
-            - 'null'
-            description: Provider's unique sequential number for the transaction.
-          returnCode:
-            type:
-            - string
-            - 'null'
-            description: Connector return code.
-          returnMessage:
-            type:
-            - string
-            - 'null'
-            description: Connector return message.
-          status:
-            type: string
-            description: Payment status.
-          connector:
-            type:
-            - string
-            - 'null'
-            description: Connector name.
-          ConnectorResponses:
-            type:
-            - array
-            - 'null'
-            description: Array containing connector responses information.
-            items:
-              type: object
-              description: Connector responses information.
-              properties:
-                Tid:
-                  type: string
-                  description: Provider's unique identifier for the transaction.
-                ReturnCode:
-                  type:
-                  - string
-                  - 'null'
-                  description: Connector return code.
-                Message:
-                  type:
-                  - string
-                  - 'null'
-                  description: Connector return message.
-                authId:
-                  type:
-                  - string
-                  - 'null'
-                  description: Authorization identification.
-                nsu:
-                  type: string
-                  description: Provider's unique sequential number for the transaction.
-          connectorResponse:
-            type:
-            - array
-            - 'null'
-            description: Array containing connector response information.
-            items:
-              type: object
-              description: Connector response information.
-              properties:
-                Tid:
-                  type: string
-                  description: Provider's unique identifier for the transaction.
-                ReturnCode:
-                  type:
-                  - string
-                  - 'null'
-                  description: Connector return code.
-                Message:
-                  type:
-                  - string
-                  - 'null'
-                  description: Connector return message.
-                authId:
-                  type:
-                  - string
-                  - 'null'
-                  description: Authorization identification.
-                nsu:
-                  type: string
-                  description: Provider's unique sequential number for the transaction.
-          ShowConnectorResponses:
-            type: boolean
-            description: Indicates whether to display connector responses.
-          value:
-            type: number
-            description: Payment value.
-          installmentsInterestRate:
-            type: number
-            description: The interest rate.
-          installmentsValue:
-            type: number
-            description: The value of each installment.
-          referenceValue:
-            type: number
-            description: Value amount of the payment without interest applied. This value is the same as the {value` field when `installmentsInterestRate` is 0.0.
-          installments:
-            type: number
-            description: Number of installments.
-          currencyCode:
-            type:
-            - string
-            - 'null'
-            description: Currency Code in ISO 4217 standard.
-          provider:
-            type:
-            - string
-            - 'null'
-            description: Provider name.
-          isBillingAddressDifferent:
-            type:
-            - boolean
-            - 'null'
-            description: Indicates whether the invoice address is different from the purchase delivery address.
-          isRegexValid:
-            type:
-            - boolean
-            - 'null'
-            description: Confirms that the [Regex](https://regexr.com/) rule is valid.
-          isLuhnValid:
-            type:
-            - boolean
-            - 'null'
-            description: Confirms that the [Luhn](https://en.wikipedia.org/wiki/Luhn_algorithm) rule is valid.
-          fields:
-            type: array
-            items:
-              $ref: '#/components/schemas/Fields1'
-            description: Field containing information and values ​​of payment parameters.
-          sheets:
-            type:
-            - string
-            - 'null'
-            description: Sheets information.
-          originalPaymentId:
-            type:
-            - string
-            - 'null'
-            description: Original payment identification, if applicable.
     StartTransactionResponse:
       required:
       - id
@@ -1876,19 +1464,367 @@ components:
             phone:
               type: string
               description: Buyer phone number.
-    Fields1:
+    Capabilities:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction capabilities.
+      properties:
+        href:
+          type: string
+          description: Transaction capabilities reference route.
+    1.CreateanewtransactionRequest:
+      required:
+      - value
+      - referenceId
+      - channel
+      - salesChannel
+      type: object
+      description: New transaction request body information.
+      properties:
+        value:
+          type: number
+          description: Transaction value. The value must be described without using separation for decimals, e.g. for a transaction with a value equal to 201.50, send 20150.
+          example: 20000
+        referenceId:
+          type: string
+          description: Identification number that relates the transaction to a purchase order.
+          example: '1234567'
+        channel:
+          type: string
+          description: Store where the transaction was initiated.
+          example: cosmetics2
+        urn:
+          type:
+          - string
+          - 'null'
+          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
+          example: urn:amazon:webservices:clientvpn
+        salesChannel:
+          type: string
+          description: Sales channel information.
+          example: '1'
+    Self:
+      required:
+      - href
+      type: object
+      description: Object containing the payment system reference route.
+      properties:
+        href:
+          type: string
+          description: Payment system reference route.
+    Refunds:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction refunds.
+      properties:
+        href:
+          type: string
+          description: Transaction refund reference route.
+    PaymentDetailsResponse:
+      required:
+      - id
+      - paymentSystem
+      - paymentSystemName
+      - merchantName
+      - group
+      - userProfileId
+      - isCustom
+      - allowInstallments
+      - requiresAuthentication
+      - allowIssuer
+      - allowNotification
+      - isAvailable
+      - description
+      - authorizationDate
+      - self
+      - tid
+      - returnCode
+      - returnMessage
+      - status
+      - connector
+      - ConnectorResponses
+      - connectorResponse
+      - ShowConnectorResponses
+      - value
+      - installmentsInterestRate
+      - installmentsValue
+      - referenceValue
+      - installments
+      - currencyCode
+      - provider
+      - isBillingAddressDifferent
+      - isRegexValid
+      - isLuhnValid
+      - fields
+      - sheets
+      - originalPaymentId
+      type: object
+      description: Payment details information.
+      items:
+        type: object
+        description: Payment details information.
+        properties:
+          id:
+            type: string
+            description: Payment identification.
+          paymentSystem:
+            type: number
+            description: Payment system identification.
+          paymentSystemName:
+            type: string
+            description: Payment system name.
+          merchantName:
+            type:
+            - string
+            - 'null'
+            description: Merchant name.
+          group:
+            type: string
+            description: Payment group name.
+          userProfileId:
+            type:
+            - string
+            - 'null'
+            description: Unique ID associated with the customer profile.
+          isCustom:
+            type: boolean
+            description: Indicates whether it is custom.
+          allowInstallments:
+            type: boolean
+            description: Indicates whether the payment method allows installments.
+          requiresAuthentication:
+            type: boolean
+            description: Indicates whether it is necessary to log in to make the payment.
+          allowIssuer:
+            type: boolean
+            description: Indicates whether it is possible to identify the name of the bank responsible for issuing the card.
+          allowNotification:
+            type: boolean
+            description: Indicates the possibility of payment notification (used by bank invoices and notes payable).
+          isAvailable:
+            type: boolean
+            description: Indicates whether the payment method is available for use.
+          description:
+            type:
+            - string
+            - 'null'
+            description: Description of the payment method.
+          authorizationDate:
+            type:
+            - string
+            - 'null'
+            description: Payment authorization date.
+          self:
+            $ref: '#/components/schemas/Self'
+          tid:
+            type:
+            - string
+            - 'null'
+            description: Provider's unique identifier for the transaction.
+          nsu:
+            type:
+            - string
+            - 'null'
+            description: Provider's unique sequential number for the transaction.
+          returnCode:
+            type:
+            - string
+            - 'null'
+            description: Connector return code.
+          returnMessage:
+            type:
+            - string
+            - 'null'
+            description: Connector return message.
+          status:
+            type: string
+            description: Payment status.
+          connector:
+            type:
+            - string
+            - 'null'
+            description: Connector name.
+          ConnectorResponses:
+            type:
+            - array
+            - 'null'
+            description: Array containing connector responses information.
+            items:
+              type: object
+              description: Connector responses information.
+              properties:
+                Tid:
+                  type: string
+                  description: Provider's unique identifier for the transaction.
+                ReturnCode:
+                  type:
+                  - string
+                  - 'null'
+                  description: Connector return code.
+                Message:
+                  type:
+                  - string
+                  - 'null'
+                  description: Connector return message.
+                authId:
+                  type:
+                  - string
+                  - 'null'
+                  description: Authorization identification.
+                nsu:
+                  type: string
+                  description: Provider's unique sequential number for the transaction.
+          connectorResponse:
+            type:
+            - array
+            - 'null'
+            description: Array containing connector response information.
+            items:
+              type: object
+              description: Connector response information.
+              properties:
+                Tid:
+                  type: string
+                  description: Provider's unique identifier for the transaction.
+                ReturnCode:
+                  type:
+                  - string
+                  - 'null'
+                  description: Connector return code.
+                Message:
+                  type:
+                  - string
+                  - 'null'
+                  description: Connector return message.
+                authId:
+                  type:
+                  - string
+                  - 'null'
+                  description: Authorization identification.
+                nsu:
+                  type: string
+                  description: Provider's unique sequential number for the transaction.
+          ShowConnectorResponses:
+            type: boolean
+            description: Indicates whether to display connector responses.
+          value:
+            type: number
+            description: Payment value.
+          installmentsInterestRate:
+            type: number
+            description: The interest rate.
+          installmentsValue:
+            type: number
+            description: The value of each installment.
+          referenceValue:
+            type: number
+            description: Value amount of the payment without interest applied. This value is the same as the {value` field when `installmentsInterestRate` is 0.0.
+          installments:
+            type: number
+            description: Number of installments.
+          currencyCode:
+            type:
+            - string
+            - 'null'
+            description: Currency Code in ISO 4217 standard.
+          provider:
+            type:
+            - string
+            - 'null'
+            description: Provider name.
+          isBillingAddressDifferent:
+            type:
+            - boolean
+            - 'null'
+            description: Indicates whether the invoice address is different from the purchase delivery address.
+          isRegexValid:
+            type:
+            - boolean
+            - 'null'
+            description: Confirms that the [Regex](https://regexr.com/) rule is valid.
+          isLuhnValid:
+            type:
+            - boolean
+            - 'null'
+            description: Confirms that the [Luhn](https://en.wikipedia.org/wiki/Luhn_algorithm) rule is valid.
+          fields:
+            type: array
+            items:
+              $ref: '#/components/schemas/Fields1'
+            description: Field containing information and values ​​of payment parameters.
+          sheets:
+            type:
+            - string
+            - 'null'
+            description: Sheets information.
+          originalPaymentId:
+            type:
+            - string
+            - 'null'
+            description: Original payment identification, if applicable.
+    Interactions:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction interactions.
+      properties:
+        href:
+          type: string
+          description: Transaction interaction reference route.
+    Payment1:
+      required:
+      - href
+      type: object
+      description: Object containing the transaction settlement reference route.
+      properties:
+        href:
+          type: string
+          description: Transaction reference settlement route.
+    Field:
       required:
       - name
       - value
       type: object
-      description: Payment parameters information.
+      description: Transaction parameters information.
       properties:
         name:
           type: string
-          description: Payment parameter name.
+          description: Transaction parameter name.
         value:
           type: string
-          description: Payment parameter value.
+          description: Transaction parameter value.
+    Action:
+      required:
+      - paymentId
+      - payment
+      - date
+      - type
+      - value
+      - connectorResponse
+      type: object
+      description: Actions information.
+      properties:
+        paymentId:
+          type: string
+          description: Payment identification.
+        payment:
+          $ref: '#/components/schemas/Payment1'
+        date:
+          type: string
+          description: Transaction settlement date.
+        type:
+          type: string
+          description: Settlement action date.
+        value:
+          type: integer
+          description: Transaction settlement value.
+        connectorResponse:
+          type:
+          - string
+          - 'null'
+          description: Connector transaction response information. This object can return different fields according to the internal configuration of each connector (payment provider), for example, `Tid`, `ReturnCode`, `authId`, among others).
     4.DoauthorizationRequest:
       required:
       - transactionId
@@ -1911,15 +1847,180 @@ components:
           type: boolean
           description: Indicates whether the transaction supports recurrence.
           example: false
-    Interactions:
+    Fields3:
+      required:
+      - holderName
+      - cardNumber
+      - validationCode
+      - dueDate
+      - document
+      - accountId
+      - address
+      - callbackUrl
+      type: object
+      description: Fields information.
+      properties:
+        holderName:
+          type: string
+          description: Card holder name.
+          example: UserTest
+        cardNumber:
+          type: number
+          description: Card number information.
+          example: 111111111111
+        validationCode:
+          type: number
+          description: CVV code.
+          example: 231
+        dueDate:
+          type: string
+          description: Due date information. The date format is `mm/yy`.
+          example: 10/19
+        document:
+          type: string
+          description: Card holder documentation.
+          example: '8041734561'
+        accountId:
+          type:
+          - string
+          - 'null'
+          description: Account identification.
+          example: 08134AF761A148B9A5DCE14A81F31DD9
+        address:
+          type:
+          - array
+          - 'null'
+          description: Array containing customer address information.
+          items:
+            type: string
+            description: Customer address information.
+            example: Customer address data
+        callbackUrl:
+          type:
+          - string
+          - 'null'
+          description: Callback URL information.
+          example: https://payment-test.myvtex.com/checkout/gatewayCallback/1336650505288/Success
+    Request:
+      required:
+      - id
+      - date
+      - value
+      type: object
+      description: Requests information.
+      properties:
+        id:
+          type: string
+          description: Transaction identification. This is the same `transactionId` value sent in the request path.
+        date:
+          type: string
+          description: Transaction settlement date.
+        value:
+          type: number
+          description: Transaction settlement value.
+    Cancellations:
       required:
       - href
       type: object
-      description: Object containing the reference route of transaction interactions.
+      description: Object containing the reference route of transaction cancellations.
       properties:
         href:
           type: string
-          description: Transaction interaction reference route.
+          description: Transaction cancellation reference route.
+    TransactionSettlementDetails:
+      required:
+      - requests
+      - actions
+      type: object
+      description: Transaction settlement details response body information.
+      properties:
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+          description: Array containing requests information.
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+          description: Array containing actions information.
+    2.SendPaymentsWithSavedCreditCardRequest:
+      required:
+      - paymentSystem
+      - installments
+      - currencyCode
+      - value
+      - installmentsInterestRate
+      - installmentsValue
+      - referenceValue
+      - fields
+      - transaction
+      type: object
+      description: Send payments with saved credit card request body information.
+      properties:
+        paymentSystem:
+          type: number
+          description: Payment system identification.
+          example: 4
+        installments:
+          type: number
+          description: Number of installments.
+          example: 1
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217 standard.
+          example: BRL
+        value:
+          type: number
+          description: Payment value.
+          example: 30000
+        installmentsInterestRate:
+          type: number
+          description: The interest rate.
+          example: 0
+        installmentsValue:
+          type: number
+          description: The value of each installment.
+          example: 0
+        referenceValue:
+          type: number
+          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
+          example: 30000
+        fields:
+          $ref: '#/components/schemas/Fields3'
+        transaction:
+          $ref: '#/components/schemas/Transaction'
+    Settlements:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction settlements.
+      properties:
+        href:
+          type: string
+          description: Transaction settlement reference route.
+    Payments:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction payments.
+      properties:
+        href:
+          type: string
+          description: Transaction payment reference route.
+    Fields1:
+      required:
+      - name
+      - value
+      type: object
+      description: Payment parameters information.
+      properties:
+        name:
+          type: string
+          description: Payment parameter name.
+        value:
+          type: string
+          description: Payment parameter value.
     SettleResponse:
       required:
       - id
@@ -1977,123 +2078,31 @@ components:
         cancelledValue:
           type: integer
           description: Cancelled value.
-    1.CreateanewtransactionRequest:
+    Transaction:
       required:
-      - value
-      - referenceId
-      - channel
-      - salesChannel
+      - id
+      - merchantName
       type: object
-      description: New transaction request body information.
+      description: Transaction information.
       properties:
-        value:
-          type: number
-          description: Transaction value. The value must be described without using separation for decimals, e.g. for a transaction with a value equal to 201.50, send 20150.
-          example: 20000
-        referenceId:
+        id:
           type: string
-          description: Identification number that relates the transaction to a purchase order.
-          example: '1234567'
-        channel:
+          description: Transaction identification.
+          example: 72E84719BDF14B2FB170B38AD12598C9
+        merchantName:
           type: string
-          description: Store where the transaction was initiated.
+          description: Merchant name.
           example: cosmetics2
-        urn:
-          type:
-          - string
-          - 'null'
-          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
-          example: urn:amazon:webservices:clientvpn
-        salesChannel:
-          type: string
-          description: Sales channel information.
-          example: '1'
-    2.SendPaymentsPublicRequest:
-      required:
-      - paymentSystem
-      - installments
-      - currencyCode
-      - value
-      - installmentsInterestRate
-      - installmentsValue
-      - referenceValue
-      - fields
-      - transaction
-      type: object
-      description: Send payments information public request body information.
-      properties:
-        paymentSystem:
-          type: number
-          description: Payment system identification.
-          example: 17
-        installments:
-          type: number
-          description: Number of installments.
-          example: 1
-        currencyCode:
-          type: string
-          description: Currency code in ISO 4217 standard.
-          example: BRL
-        value:
-          type: number
-          description: Payment value.
-          example: 15000
-        installmentsInterestRate:
-          type: number
-          description: The interest rate.
-          example: 0
-        installmentsValue:
-          type: number
-          description: The value of each installment.
-          example: 0
-        referenceValue:
-          type: number
-          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
-          example: 15000
-        fields:
-          $ref: '#/components/schemas/Fields'
-        transaction:
-          $ref: '#/components/schemas/Transaction'
-    Self:
-      required:
-      - href
-      type: object
-      description: Object containing the payment system reference route.
-      properties:
-        href:
-          type: string
-          description: Payment system reference route.
-    Action:
-      required:
-      - paymentId
-      - payment
-      - date
-      - type
-      - value
-      - connectorResponse
-      type: object
-      description: Actions information.
-      properties:
-        paymentId:
-          type: string
-          description: Payment identification.
-        payment:
-          $ref: '#/components/schemas/Payment1'
-        date:
-          type: string
-          description: Transaction settlement date.
-        type:
-          type: string
-          description: Settlement action date.
-        value:
-          type: integer
-          description: Transaction settlement value.
-        connectorResponse:
-          type:
-          - string
-          - 'null'
-          description: Connector transaction response information. This object can return different fields according to the internal configuration of each connector (payment provider), for example, `Tid`, `ReturnCode`, `authId`, among others).
   parameters:
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
     transactionId:
       name: transactionId
       in: path
@@ -2107,15 +2116,6 @@ components:
       name: Accept
       in: header
       description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
       required: true
       style: simple
       schema:

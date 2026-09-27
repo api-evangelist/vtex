@@ -909,7 +909,7 @@ paths:
 
 
         This endpoint does not require permissions.'
-      operationId: Createservice
+      operationId: postPauseService
       parameters:
       - $ref: '#/components/parameters/Content-Type'
       - $ref: '#/components/parameters/Accept'
@@ -941,6 +941,8 @@ paths:
           your_endpoint:
             default: storeapi.com
             description: Server from the store.
+      x-operation-id-source: normalized
+      x-operation-id-original: Createservice
   /on-hold/{carrierId}/{serviceId}:
     post:
       tags:
@@ -1037,242 +1039,27 @@ paths:
             default: DefaultParameterValue
 components:
   schemas:
-    InsurancePrice:
+    Data1:
       required:
-      - value
-      - currency
+      - '0'
+      - carrierId
+      - serviceId
       type: object
-      description: Insurance cost information.
+      description: Request data.
       properties:
-        value:
-          type: integer
-          format: int32
-          description: Insurance cost in cents.
-        currency:
+        '0':
           type: string
-          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
+          description: Request item.
+        carrierId:
+          type: string
+          description: Carrier ID.
+        serviceId:
+          type: string
+          description: Service ID.
       example:
-        value: 0
-        currency: USD
-    ServiceBody4:
-      required:
-      - message
-      - data
-      type: object
-      properties:
-        message:
-          type: string
-          description: Service message.
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Data12'
-          description: Service data.
-      example:
-        message: Evidences saved successfully
-        data:
-        - type: IMAGE
-          content: https://parkers-images.bauersecure.com/wp-images/18727/courier-van-insurance-01.jpg
-          author: Felipe Cardenas
-        - type: TEXT
-          content: The package was delivered
-          author: Felipe Cardenas
-    Data3:
-      required:
-      - status
-      - agent
-      - trackingUrl
-      - totalDistanceTraveled
-      - rating
-      - shippingPrice
-      - shippingEstimatedDate
-      type: object
-      properties:
-        status:
-          type: string
-          description: Service status.
-        agent:
-          $ref: '#/components/schemas/Agent'
-          description: Service agent.
-        trackingUrl:
-          type: string
-          description: Service tracking URL.
-        totalDistanceTraveled:
-          type: integer
-          format: int32
-          description: Delivery total distance traveled in kilometers.
-        rating:
-          type: integer
-          format: int32
-          description: Rating.
-        shippingPrice:
-          type: integer
-          format: int32
-          description: Shipping price.
-        shippingEstimatedDate:
-          type: string
-          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-      example:
-        status: PENDING
-        agent:
-          id: '27327489234'
-          name: Pedro
-          identification: 020323809
-          phone: '+57314855674'
-          email: pedro434234@gmailc.om
-          vehicle: SCOOTER
-        trackingUrl: https://localhost.com
-        totalDistanceTraveled: 2
-        rating: 5
-        shippingPrice: 150000
-        shippingEstimatedDate: '2024-04-27T20:25:45.067Z'
-    Timezone:
-      required:
-      - offset
-      - value
-      - label
-      type: object
-      description: Time zone information.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: Time zone offset.
-        value:
-          type: string
-          description: Time zone.
-        label:
-          type:
-          - string
-          - 'null'
-          description: Label.
-      example:
-        offset: 300
-        value: America/Bogota
-        label: null
-    ServiceBody3:
-      required:
-      - message
-      - data
-      type: object
-      properties:
-        message:
-          type: string
-          description: Service message.
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Data9'
-          description: Service data.
-      example:
-        message: Notes saved successfully
-        data:
-        - type: ERROR
-          note: The package takes time to be shipped
-          author: Oscar Rojas
-        - type: COMMENT
-          note: The package was picked up
-          author: Oscar Rojas
-    ServiceBody1:
-      required:
-      - message
-      - data
-      type: object
-      properties:
-        message:
-          type: string
-          description: Service message.
-        data:
-          $ref: '#/components/schemas/Data3'
-          description: Service data.
-      example:
-        message: Service updated successfully
-        data:
-          status: PENDING
-          agent:
-            id: '27327489234'
-            name: Pedro
-            identification: 020323809
-            phone: '+57314855674'
-            email: pedro434234@gmailc.om
-            vehicle: SCOOTER
-          trackingUrl: https://localhost.com
-          totalDistanceTraveled: 2
-          rating: 5
-          shippingPrice: 150000
-          shippingEstimatedDate: '2024-04-27T20:25:45.067Z'
-    ServiceBody6:
-      required:
-      - message
-      - data
-      type: object
-      properties:
-        message:
-          type: string
-          description: Service message.
-        data:
-          $ref: '#/components/schemas/Data18'
-          description: Service data.
-      example:
-        message: Service canceled successfully
-        data:
-          comment: The delivery address was changed
-          type: END_CLIENT_CANCELED
-    MetaData1:
-      required:
-      - integrationResponse
-      - carrier
-      type: object
-      description: Metadata about the Carrier.
-      properties:
-        integrationResponse:
-          type: object
-          description: Carrier integration information.
-        carrier:
-          $ref: '#/components/schemas/Carrier'
-      example:
-        integrationResponse: {}
-        carrier:
-          name: '[FedEx] Postmen Testing Account'
-          image: null
-          metaData: {}
-          id: fedex
-          type:
-            metaData: {}
-            terms: ''
-            rate:
-              shippingPrice:
-                value: 284.02
-                currency: USD
-              insurancePrice:
-                value: 0
-                currency: USD
-            name: FedEx First Overnight®
-            transitTime: 0
-            shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-            description: FedEx
-            id: fedex_first_overnight
-            international: false
-    Data12:
-      required:
-      - type
-      - content
-      - author
-      type: object
-      properties:
-        type:
-          type: string
-          description: Note's type.
-        note:
-          type: string
-          description: Note's text.
-        author:
-          type: string
-          description: Note's author.
-      example:
-        type: IMAGE
-        content: https://parkers-images.bauersecure.com/wp-images/18727/courier-van-insurance-01.jpg
-        author: Felipe Cardenas
+        '0': '1'
+        carrierId: MTEyMjMtQWZ0ZXJTaGlwLWRldmVsb3BtZW50
+        serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
     Item:
       title: Item
       required:
@@ -1326,107 +1113,138 @@ components:
         image: https://picsum.photos/seed/YtoZ9/128/480
         type: other
         weight: '6'
-    CreatelabelsRequest:
+    CreateevidenceRequest:
       required:
-      - id
-      - url
-      - name
       - type
+      - content
+      - author
       type: object
       properties:
-        id:
-          type: string
-          description: Label ID.
-        url:
-          type: string
-          description: Label URL.
-        name:
-          type: string
-          description: Label name.
         type:
           type: string
-          description: Label type.
+          description: Note's type.
+        note:
+          type: string
+          description: Note's text.
+        author:
+          type: string
+          description: Note's author.
       example:
-        id: JADF8ADF89-7AD7AF-78ADFASDF
-        url: http://s3://mybucket-alpha/orc/2013-10-04-custdata/label-pickup.pdf
-        name: Delivery label
-        type: PDF
-    Data1:
+        type: IMAGE
+        content: https://parkers-images.bauersecure.com/wp-images/18727/courier-van-insurance-01.jpg
+        author: Felipe Cardenas
+    ShippingPrice:
       required:
-      - '0'
-      - carrierId
-      - serviceId
+      - value
+      - currency
       type: object
-      description: Request data.
+      description: Shipping cost information.
       properties:
-        '0':
+        value:
+          type: integer
+          format: int32
+          description: Shipping cost in cents.
+        currency:
           type: string
-          description: Request item.
-        carrierId:
+          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
+      example:
+        value: 0
+        currency: USD
+    ShippingPrice1:
+      required:
+      - value
+      - currency
+      type: object
+      description: Shipping cost information.
+      properties:
+        value:
+          type: integer
+          format: int32
+          description: Shipping cost in cents.
+        currency:
           type: string
-          description: Carrier ID.
+          description: Cost currency code in [ISO 4217](https://www.iban.com/currency-codes) format..
+      example:
+        value: 284.02
+        currency: USD
+    CancelServiceRequest:
+      type: object
+      required:
+      - serviceId
+      - carrierId
+      - settings
+      - reason
+      - metaData
+      properties:
         serviceId:
           type: string
+          example: apknieot924892jaf-1231
           description: Service ID.
-      example:
-        '0': '1'
-        carrierId: MTEyMjMtQWZ0ZXJTaGlwLWRldmVsb3BtZW50
-        serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
-    ServiceBody5:
+        carrierId:
+          type: string
+          example: servientrega9234jaf
+          description: Carrier ID.
+        settings:
+          type: array
+          description: Array of custom fields.
+          items:
+            type: object
+            required:
+            - label
+            - key
+            - value
+            properties:
+              label:
+                type: string
+                example: Cliente ID
+                description: Custom label.
+              key:
+                type: string
+                example: clientId
+                description: Custom key.
+              value:
+                type: string
+                example: HUR123
+                description: Custom value.
+        reason:
+          type: string
+          example: La dirección de entrega esta mal registrada
+          description: Reason for the cancelation.
+        metaData:
+          type: object
+          description: Object containing service metadata.
+          properties:
+            myFieldCustom:
+              type: string
+              example: custom value
+              description: Custom value.
+    Note:
       required:
-      - message
-      - data
+      - type
+      - date
+      - content
+      - author
       type: object
+      description: Notes with delivery information.
       properties:
-        message:
+        type:
           type: string
-          description: Service message.
-        data:
-          $ref: '#/components/schemas/Data15'
-          description: Service data.
+          description: Type of note.
+        date:
+          type: string
+          description: Date of creation of the note in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        content:
+          type: string
+          description: Content of the note.
+        author:
+          type: string
+          description: Author of the note.
       example:
-        message: Label saved successfully
-        data:
-          id: JADF8ADF89-7AD7AF-78ADFASDF
-          url: http://s3://mybucket-alpha/orc/2013-10-04-custdata/label-pickup.pdf
-          name: Delivery label
-          type: PDF
-    Agent:
-      required:
-      - id
-      - name
-      - identification
-      - phone
-      - email
-      - vehicle
-      type: object
-      properties:
-        id:
-          type: string
-          description: Agent ID.
-        name:
-          type: string
-          description: Agent name.
-        identification:
-          type: string
-          description: Agent identification.
-        phone:
-          type: string
-          description: Agent phone number.
-        email:
-          type: string
-          description: Agent email.
-        vehicle:
-          type: string
-          description: Agent vehicle.
-      example:
-        id: '27327489234'
-        name: Pedro
-        identification: 020323809
-        phone: '+57314855674'
-        email: pedro434234@gmailc.om
-        vehicle: SCOOTER
-    generatedObject:
+        type: COMMENT
+        date: '2024-03-09T01:43:16.280Z'
+        content: 'Tracking Number: 10001709948594168'
+        author: afterShip
+    CreatenotesRequest:
       required:
       - type
       - note
@@ -1435,42 +1253,32 @@ components:
       properties:
         type:
           type: string
-          description: Type of extra information about the item's shipping.
+          description: Note's type.
         note:
           type: string
-          description: Text with extra information about the item's shipping.
+          description: Note's text.
         author:
           type: string
-          description: Author.
+          description: Note's author.
       example:
-        type: COMMENT
-        note: The package is delivered at the door
-        author: afterShip
-    Data15:
+        type: ERROR
+        note: The package takes time to be shipped
+        author: Oscar Rojas
+    OnholdserviceRequest:
       required:
-      - id
-      - url
-      - name
+      - comment
       - type
       type: object
       properties:
-        id:
+        comment:
           type: string
-          description: Label ID.
-        url:
-          type: string
-          description: Label URL.
-        name:
-          type: string
-          description: Label name.
+          description: Service comment.
         type:
           type: string
-          description: Label type.
+          description: Service type.
       example:
-        id: JADF8ADF89-7AD7AF-78ADFASDF
-        url: http://s3://mybucket-alpha/orc/2013-10-04-custdata/label-pickup.pdf
-        name: Delivery label
-        type: PDF
+        comment: The delivery address was changed
+        type: END_CLIENT_PAUSE
     Type:
       title: Type
       required:
@@ -1531,6 +1339,874 @@ components:
         description: ''
         id: fedex_first_overnight
         international: false
+    Dimensions:
+      required:
+      - height
+      - length
+      - width
+      type: object
+      properties:
+        height:
+          type: string
+          description: Package height in centimeters.
+        length:
+          type: string
+          description: Package length in centimeters.
+        width:
+          type: string
+          description: Package width in centimeters.
+      example:
+        height: '5'
+        length: '11'
+        width: '7'
+    m4031:
+      required:
+      - message
+      - requestId
+      type: object
+      description: Request information.
+      properties:
+        message:
+          type: string
+          description: Request message.
+        requestId:
+          type: string
+          description: Request ID.
+      example:
+        message: Invalid token
+        requestId: 09563f82-fe06-4004-b623-85e3aa4c92c9
+    Timeline:
+      required:
+      - id
+      - date
+      - createdAt
+      - updatedAt
+      - type
+      - description
+      - author
+      - metaData
+      type: object
+      properties:
+        id:
+          type: string
+          description: Timeline ID.
+        date:
+          type: string
+          description: Timeline actual date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        createdAt:
+          type: string
+          description: Order's creation date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        updatedAt:
+          type: string
+          description: Date of the order's last update in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        type:
+          type: string
+          description: Order status.
+        description:
+          type: string
+          description: Description of the status.
+        author:
+          type: string
+          description: Status author.
+        metaData:
+          $ref: '#/components/schemas/MetaData'
+          description: Metadata about the delivery information.
+      example:
+        id: 77263f59-0ac5-4b0c-bfe5-f17a1648474d
+        date: '2024-03-09T01:33:14.917Z'
+        createdAt: '2024-03-09T01:33:14.917Z'
+        updatedAt: '2024-03-09T01:33:14.917Z'
+        type: STATUS
+        description: Service pending in DEV
+        author: System
+        metaData:
+          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+          metaData: null
+          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
+          shippingPrice: 284.02
+          status: PENDING
+          labels:
+          - name: Shipping label
+            id: 78c83922-d658-48bf-89d5-0658a6a94e27
+            type: PDF
+            url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+    ServiceBody:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Status message about the request.
+        data:
+          $ref: '#/components/schemas/Data'
+          type: object
+          description: Service general information.
+    Rate:
+      required:
+      - shippingPrice
+      - insurancePrice
+      type: object
+      description: Rate cost information.
+      properties:
+        shippingPrice:
+          $ref: '#/components/schemas/ShippingPrice'
+        insurancePrice:
+          $ref: '#/components/schemas/InsurancePrice'
+      example:
+        shippingPrice:
+          value: 0
+          currency: USD
+        insurancePrice:
+          value: 0
+          currency: USD
+    Timezone:
+      required:
+      - offset
+      - value
+      - label
+      type: object
+      description: Time zone information.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: Time zone offset.
+        value:
+          type: string
+          description: Time zone.
+        label:
+          type:
+          - string
+          - 'null'
+          description: Label.
+      example:
+        offset: 300
+        value: America/Bogota
+        label: null
+    CancelServiceResponse:
+      type: object
+      required:
+      - message
+      - data
+      properties:
+        message:
+          type: string
+          example: Service executed successfully
+          description: Message of successful cancelation.
+        data:
+          type: object
+          description: Object containing service information.
+          required:
+          - serviceId
+          - carrierId
+          - reason
+          properties:
+            serviceId:
+              type: string
+              description: Service ID.
+              example: apknieot924892jaf-1231
+            carrierId:
+              type: string
+              description: Carrier ID.
+              example: servientrega9234jaf
+            reason:
+              type: string
+              example: En el lugar de residencia no hay quien reciba el paquete
+              description: Reason for the cancelation.
+    ServiceBody4:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Service message.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Data12'
+          description: Service data.
+      example:
+        message: Evidences saved successfully
+        data:
+        - type: IMAGE
+          content: https://parkers-images.bauersecure.com/wp-images/18727/courier-van-insurance-01.jpg
+          author: Felipe Cardenas
+        - type: TEXT
+          content: The package was delivered
+          author: Felipe Cardenas
+    generatedObject:
+      required:
+      - type
+      - note
+      - author
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of extra information about the item's shipping.
+        note:
+          type: string
+          description: Text with extra information about the item's shipping.
+        author:
+          type: string
+          description: Author.
+      example:
+        type: COMMENT
+        note: The package is delivered at the door
+        author: afterShip
+    Data9:
+      required:
+      - type
+      - note
+      - author
+      type: object
+      properties:
+        type:
+          type: string
+          description: Note's type.
+        note:
+          type: string
+          description: Note's text.
+        author:
+          type: string
+          description: Note's author.
+      example:
+        type: ERROR
+        note: The package takes time to be shipped
+        author: Oscar Rojas
+    Label:
+      required:
+      - id
+      - name
+      - url
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Label ID.
+        name:
+          type: string
+          description: Name of the label.
+        url:
+          type: string
+          description: Label URL.
+        type:
+          type: string
+          description: Label's type of file.
+      example:
+        id: 78c83922-d658-48bf-89d5-0658a6a94e27
+        name: Shipping label
+        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+        type: PDF
+    Data3:
+      required:
+      - status
+      - agent
+      - trackingUrl
+      - totalDistanceTraveled
+      - rating
+      - shippingPrice
+      - shippingEstimatedDate
+      type: object
+      properties:
+        status:
+          type: string
+          description: Service status.
+        agent:
+          $ref: '#/components/schemas/Agent'
+          description: Service agent.
+        trackingUrl:
+          type: string
+          description: Service tracking URL.
+        totalDistanceTraveled:
+          type: integer
+          format: int32
+          description: Delivery total distance traveled in kilometers.
+        rating:
+          type: integer
+          format: int32
+          description: Rating.
+        shippingPrice:
+          type: integer
+          format: int32
+          description: Shipping price.
+        shippingEstimatedDate:
+          type: string
+          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+      example:
+        status: PENDING
+        agent:
+          id: '27327489234'
+          name: Pedro
+          identification: 020323809
+          phone: '+57314855674'
+          email: pedro434234@gmailc.om
+          vehicle: SCOOTER
+        trackingUrl: https://localhost.com
+        totalDistanceTraveled: 2
+        rating: 5
+        shippingPrice: 150000
+        shippingEstimatedDate: '2024-04-27T20:25:45.067Z'
+    Data15:
+      required:
+      - id
+      - url
+      - name
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Label ID.
+        url:
+          type: string
+          description: Label URL.
+        name:
+          type: string
+          description: Label name.
+        type:
+          type: string
+          description: Label type.
+      example:
+        id: JADF8ADF89-7AD7AF-78ADFASDF
+        url: http://s3://mybucket-alpha/orc/2013-10-04-custdata/label-pickup.pdf
+        name: Delivery label
+        type: PDF
+    ServiceBody1:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Service message.
+        data:
+          $ref: '#/components/schemas/Data3'
+          description: Service data.
+      example:
+        message: Service updated successfully
+        data:
+          status: PENDING
+          agent:
+            id: '27327489234'
+            name: Pedro
+            identification: 020323809
+            phone: '+57314855674'
+            email: pedro434234@gmailc.om
+            vehicle: SCOOTER
+          trackingUrl: https://localhost.com
+          totalDistanceTraveled: 2
+          rating: 5
+          shippingPrice: 150000
+          shippingEstimatedDate: '2024-04-27T20:25:45.067Z'
+    InsurancePrice:
+      required:
+      - value
+      - currency
+      type: object
+      description: Insurance cost information.
+      properties:
+        value:
+          type: integer
+          format: int32
+          description: Insurance cost in cents.
+        currency:
+          type: string
+          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
+      example:
+        value: 0
+        currency: USD
+    Package:
+      required:
+      - id
+      - orderId
+      - envelope
+      - dimensions
+      - weight
+      - totalValue
+      - items
+      - categories
+      - description
+      type: object
+      description: Package information.
+      properties:
+        id:
+          type: string
+          description: Package ID.
+        orderId:
+          type: string
+          description: Order ID.
+        envelope:
+          type: string
+          description: Name of the envelope used.
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+          description: Package dimensions.
+        weight:
+          type: string
+          description: Package weight in grams.
+        totalValue:
+          type: integer
+          format: int32
+          description: Total value of the order.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+            description: Product general information.
+          description: Array containing information about the order's products.
+        categories:
+          type: array
+          items:
+            type: string
+            description: Category name.
+          description: Array of categories.
+        description:
+          type: string
+          description: Package description.
+      example:
+        id: a46e5bc1-8959-459f-a094-b6e699f7214c
+        orderId: 46369545534253-01
+        envelope: Foam or Plastic Containers
+        dimensions:
+          height: '5'
+          length: '11'
+          width: '7'
+        weight: '48'
+        totalValue: 5352
+        items:
+        - id: '184'
+          name: Chicken
+          ean: EAN354
+          quantity: 8
+          price: 669
+          refId: '314'
+          image: https://picsum.photos/seed/YtoZ9/128/480
+          type: other
+          weight: '6'
+        categories:
+        - Movies
+        - Garden
+        - Books
+        description: Unde deserunt libero cupiditate illum.
+    UpdateserviceRequest:
+      required:
+      - status
+      - agent
+      - trackingUrl
+      - totalDistanceTraveled
+      - rating
+      - shippingPrice
+      - shippingEstimatedDate
+      type: object
+      properties:
+        status:
+          type: string
+          description: Delivery status.
+        agent:
+          type:
+          - string
+          - 'null'
+          description: Delivery agent.
+        trackingUrl:
+          type: string
+          description: Delivery tracking URL.
+        totalDistanceTraveled:
+          type:
+          - string
+          - 'null'
+          description: Delivery total distance traveled in kilometers.
+        rating:
+          type:
+          - string
+          - 'null'
+          description: Rating.
+        shippingPrice:
+          type:
+          - string
+          - 'null'
+          description: Delivery shipping price in cents.
+        shippingEstimatedDate:
+          type:
+          - string
+          - 'null'
+          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+      example:
+        status: DELIVERED
+        agent: null
+        trackingUrl: https://localhost.com
+        totalDistanceTraveled: null
+        rating: null
+        shippingPrice: null
+        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+    Rate1:
+      required:
+      - shippingPrice
+      - insurancePrice
+      type: object
+      description: Rate cost information.
+      properties:
+        shippingPrice:
+          $ref: '#/components/schemas/ShippingPrice1'
+        insurancePrice:
+          $ref: '#/components/schemas/InsurancePrice'
+      example:
+        shippingPrice:
+          value: 284.02
+          currency: USD
+        insurancePrice:
+          value: 0
+          currency: USD
+    PauseResumeServiceRequest:
+      type: object
+      required:
+      - serviceId
+      - carrierId
+      - settings
+      - reason
+      - metaData
+      properties:
+        serviceId:
+          type: string
+          example: apknieot924892jaf-1231
+          description: Service ID.
+        carrierId:
+          type: string
+          example: servientrega9234jaf
+          description: Carrier ID.
+        pause:
+          type: boolean
+          description: Condition that the service is paused (`false`) or not (`true`).
+          example: false
+        settings:
+          type: array
+          description: Array of custom fields.
+          items:
+            type: object
+            required:
+            - label
+            - key
+            - value
+            properties:
+              label:
+                type: string
+                example: Cliente ID
+                description: Custom label.
+              key:
+                type: string
+                example: clientId
+                description: Custom key.
+              value:
+                type: string
+                example: HUR123
+                description: Custom value.
+        reason:
+          type: string
+          example: La dirección de entrega esta mal registrada
+          description: Reason for the pause or resume.
+        metaData:
+          type: object
+          description: Object containing service metadata.
+          properties:
+            myFieldCustom:
+              type: string
+              example: custom value
+              description: Custom value.
+    m4041:
+      required:
+      - type
+      - code
+      - data
+      - requestId
+      - date
+      - message
+      type: object
+      description: Request information.
+      properties:
+        type:
+          type: string
+          description: Type of request.
+        code:
+          type: string
+          description: Request code.
+        data:
+          $ref: '#/components/schemas/Data1'
+        requestId:
+          type: string
+          description: Request ID.
+        date:
+          type: string
+          description: Request date.
+        message:
+          type: string
+          description: Request message.
+      example:
+        type: exception
+        code: TRP0005E
+        data:
+          '0': '1'
+          carrierId: MTEyMjMtQWZ0ZXJTaGlwLWRldmVsb3BtZW50
+          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
+        requestId: 9e3ce442-458c-4861-99aa-23b2cd2da9cf
+        date: '2024-03-15T06:00:21.009Z'
+        message: 'Service not found: ''MTEyMjMtQWZ0ZXJTaGlwLWRldmVsb3BtZW50&78c83922-d658-48bf-89d5-0658a6a94e27'''
+    ServiceBody5:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Service message.
+        data:
+          $ref: '#/components/schemas/Data15'
+          description: Service data.
+      example:
+        message: Label saved successfully
+        data:
+          id: JADF8ADF89-7AD7AF-78ADFASDF
+          url: http://s3://mybucket-alpha/orc/2013-10-04-custdata/label-pickup.pdf
+          name: Delivery label
+          type: PDF
+    MetaData1:
+      required:
+      - integrationResponse
+      - carrier
+      type: object
+      description: Metadata about the Carrier.
+      properties:
+        integrationResponse:
+          type: object
+          description: Carrier integration information.
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+      example:
+        integrationResponse: {}
+        carrier:
+          name: '[FedEx] Postmen Testing Account'
+          image: null
+          metaData: {}
+          id: fedex
+          type:
+            metaData: {}
+            terms: ''
+            rate:
+              shippingPrice:
+                value: 284.02
+                currency: USD
+              insurancePrice:
+                value: 0
+                currency: USD
+            name: FedEx First Overnight®
+            transitTime: 0
+            shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+            description: FedEx
+            id: fedex_first_overnight
+            international: false
+    Data18:
+      required:
+      - comment
+      - type
+      type: object
+      properties:
+        comment:
+          type: string
+          description: Service comment.
+        type:
+          type: string
+          description: Service type.
+      example:
+        comment: The delivery address was changed
+        type: END_CLIENT_CANCELED
+    PauseResumeServiceResponse:
+      type: object
+      required:
+      - message
+      - data
+      properties:
+        message:
+          type: string
+          example: Service executed successfully
+          description: Message of successful cancelation.
+        data:
+          type: object
+          description: Object containing service information.
+          required:
+          - serviceId
+          - carrierId
+          - reason
+          properties:
+            serviceId:
+              type: string
+              description: Service ID.
+              example: apknieot924892jaf-1231
+            carrierId:
+              type: string
+              description: Carrier ID.
+              example: servientrega9234jaf
+            cancel:
+              type: boolean
+              description: Condition that the service is paused (`false`) or not (`true`).
+              example: false
+            reason:
+              type: string
+              example: En el lugar de residencia no hay quien reciba el paquete
+              description: Reason for the cancelation.
+    Agent:
+      required:
+      - id
+      - name
+      - identification
+      - phone
+      - email
+      - vehicle
+      type: object
+      properties:
+        id:
+          type: string
+          description: Agent ID.
+        name:
+          type: string
+          description: Agent name.
+        identification:
+          type: string
+          description: Agent identification.
+        phone:
+          type: string
+          description: Agent phone number.
+        email:
+          type: string
+          description: Agent email.
+        vehicle:
+          type: string
+          description: Agent vehicle.
+      example:
+        id: '27327489234'
+        name: Pedro
+        identification: 020323809
+        phone: '+57314855674'
+        email: pedro434234@gmailc.om
+        vehicle: SCOOTER
+    ServiceBody6:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Service message.
+        data:
+          $ref: '#/components/schemas/Data18'
+          description: Service data.
+      example:
+        message: Service canceled successfully
+        data:
+          comment: The delivery address was changed
+          type: END_CLIENT_CANCELED
+    CreatelabelsRequest:
+      required:
+      - id
+      - url
+      - name
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Label ID.
+        url:
+          type: string
+          description: Label URL.
+        name:
+          type: string
+          description: Label name.
+        type:
+          type: string
+          description: Label type.
+      example:
+        id: JADF8ADF89-7AD7AF-78ADFASDF
+        url: http://s3://mybucket-alpha/orc/2013-10-04-custdata/label-pickup.pdf
+        name: Delivery label
+        type: PDF
+    ServiceBody3:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Service message.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Data9'
+          description: Service data.
+      example:
+        message: Notes saved successfully
+        data:
+        - type: ERROR
+          note: The package takes time to be shipped
+          author: Oscar Rojas
+        - type: COMMENT
+          note: The package was picked up
+          author: Oscar Rojas
+    Carrier:
+      required:
+      - name
+      - image
+      - metaData
+      - id
+      - type
+      type: object
+      description: Object containing information about a carrier.
+      properties:
+        name:
+          type: string
+          description: Carrier name.
+        image:
+          type:
+          - string
+          - 'null'
+          description: Carrier logo.
+        metaData:
+          type: object
+          description: Carrier metadata.
+        id:
+          type: string
+          description: Carrier ID.
+        type:
+          $ref: '#/components/schemas/Type'
+          description: Carrier type.
+      example:
+        name: '[FedEx] Postmen Testing Account'
+        image: null
+        metaData: {}
+        id: fedex
+        type:
+          metaData: {}
+          terms: ''
+          rate:
+            shippingPrice:
+              value: 284.02
+              currency: USD
+            insurancePrice:
+              value: 0
+              currency: USD
+          name: FedEx First Overnight®
+          transitTime: 0
+          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+          description: FedEx
+          id: fedex_first_overnight
+          international: false
     Data:
       required:
       - id
@@ -1866,128 +2542,6 @@ components:
               description: FedEx
               id: fedex_first_overnight
               international: false
-    ShippingPrice1:
-      required:
-      - value
-      - currency
-      type: object
-      description: Shipping cost information.
-      properties:
-        value:
-          type: integer
-          format: int32
-          description: Shipping cost in cents.
-        currency:
-          type: string
-          description: Cost currency code in [ISO 4217](https://www.iban.com/currency-codes) format..
-      example:
-        value: 284.02
-        currency: USD
-    UpdateserviceRequest:
-      required:
-      - status
-      - agent
-      - trackingUrl
-      - totalDistanceTraveled
-      - rating
-      - shippingPrice
-      - shippingEstimatedDate
-      type: object
-      properties:
-        status:
-          type: string
-          description: Delivery status.
-        agent:
-          type:
-          - string
-          - 'null'
-          description: Delivery agent.
-        trackingUrl:
-          type: string
-          description: Delivery tracking URL.
-        totalDistanceTraveled:
-          type:
-          - string
-          - 'null'
-          description: Delivery total distance traveled in kilometers.
-        rating:
-          type:
-          - string
-          - 'null'
-          description: Rating.
-        shippingPrice:
-          type:
-          - string
-          - 'null'
-          description: Delivery shipping price in cents.
-        shippingEstimatedDate:
-          type:
-          - string
-          - 'null'
-          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-      example:
-        status: DELIVERED
-        agent: null
-        trackingUrl: https://localhost.com
-        totalDistanceTraveled: null
-        rating: null
-        shippingPrice: null
-        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-    Dimensions:
-      required:
-      - height
-      - length
-      - width
-      type: object
-      properties:
-        height:
-          type: string
-          description: Package height in centimeters.
-        length:
-          type: string
-          description: Package length in centimeters.
-        width:
-          type: string
-          description: Package width in centimeters.
-      example:
-        height: '5'
-        length: '11'
-        width: '7'
-    OnholdserviceRequest:
-      required:
-      - comment
-      - type
-      type: object
-      properties:
-        comment:
-          type: string
-          description: Service comment.
-        type:
-          type: string
-          description: Service type.
-      example:
-        comment: The delivery address was changed
-        type: END_CLIENT_PAUSE
-    CreatenotesRequest:
-      required:
-      - type
-      - note
-      - author
-      type: object
-      properties:
-        type:
-          type: string
-          description: Note's type.
-        note:
-          type: string
-          description: Note's text.
-        author:
-          type: string
-          description: Note's author.
-      example:
-        type: ERROR
-        note: The package takes time to be shipped
-        author: Oscar Rojas
     MetaData:
       title: MetaData
       type: object
@@ -2045,264 +2599,7 @@ components:
           id: 78c83922-d658-48bf-89d5-0658a6a94e27
           type: PDF
           url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-    CancelOngoingServiceRequest:
-      required:
-      - comment
-      - type
-      type: object
-      properties:
-        comment:
-          type: string
-          description: Service comment.
-        type:
-          type: string
-          description: Service type.
-      example:
-        comment: The delivery address was changed
-        type: END_CLIENT_CANCELED
-    Rate1:
-      required:
-      - shippingPrice
-      - insurancePrice
-      type: object
-      description: Rate cost information.
-      properties:
-        shippingPrice:
-          $ref: '#/components/schemas/ShippingPrice1'
-        insurancePrice:
-          $ref: '#/components/schemas/InsurancePrice'
-      example:
-        shippingPrice:
-          value: 284.02
-          currency: USD
-        insurancePrice:
-          value: 0
-          currency: USD
-    CancelServiceResponse:
-      type: object
-      required:
-      - message
-      - data
-      properties:
-        message:
-          type: string
-          example: Service executed successfully
-          description: Message of successful cancelation.
-        data:
-          type: object
-          description: Object containing service information.
-          required:
-          - serviceId
-          - carrierId
-          - reason
-          properties:
-            serviceId:
-              type: string
-              description: Service ID.
-              example: apknieot924892jaf-1231
-            carrierId:
-              type: string
-              description: Carrier ID.
-              example: servientrega9234jaf
-            reason:
-              type: string
-              example: En el lugar de residencia no hay quien reciba el paquete
-              description: Reason for the cancelation.
-    Data18:
-      required:
-      - comment
-      - type
-      type: object
-      properties:
-        comment:
-          type: string
-          description: Service comment.
-        type:
-          type: string
-          description: Service type.
-      example:
-        comment: The delivery address was changed
-        type: END_CLIENT_CANCELED
-    ServiceBody:
-      required:
-      - message
-      - data
-      type: object
-      properties:
-        message:
-          type: string
-          description: Status message about the request.
-        data:
-          $ref: '#/components/schemas/Data'
-          type: object
-          description: Service general information.
-    ShippingPrice:
-      required:
-      - value
-      - currency
-      type: object
-      description: Shipping cost information.
-      properties:
-        value:
-          type: integer
-          format: int32
-          description: Shipping cost in cents.
-        currency:
-          type: string
-          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
-      example:
-        value: 0
-        currency: USD
-    Package:
-      required:
-      - id
-      - orderId
-      - envelope
-      - dimensions
-      - weight
-      - totalValue
-      - items
-      - categories
-      - description
-      type: object
-      description: Package information.
-      properties:
-        id:
-          type: string
-          description: Package ID.
-        orderId:
-          type: string
-          description: Order ID.
-        envelope:
-          type: string
-          description: Name of the envelope used.
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-          description: Package dimensions.
-        weight:
-          type: string
-          description: Package weight in grams.
-        totalValue:
-          type: integer
-          format: int32
-          description: Total value of the order.
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-            description: Product general information.
-          description: Array containing information about the order's products.
-        categories:
-          type: array
-          items:
-            type: string
-            description: Category name.
-          description: Array of categories.
-        description:
-          type: string
-          description: Package description.
-      example:
-        id: a46e5bc1-8959-459f-a094-b6e699f7214c
-        orderId: 46369545534253-01
-        envelope: Foam or Plastic Containers
-        dimensions:
-          height: '5'
-          length: '11'
-          width: '7'
-        weight: '48'
-        totalValue: 5352
-        items:
-        - id: '184'
-          name: Chicken
-          ean: EAN354
-          quantity: 8
-          price: 669
-          refId: '314'
-          image: https://picsum.photos/seed/YtoZ9/128/480
-          type: other
-          weight: '6'
-        categories:
-        - Movies
-        - Garden
-        - Books
-        description: Unde deserunt libero cupiditate illum.
-    m4041:
-      required:
-      - type
-      - code
-      - data
-      - requestId
-      - date
-      - message
-      type: object
-      description: Request information.
-      properties:
-        type:
-          type: string
-          description: Type of request.
-        code:
-          type: string
-          description: Request code.
-        data:
-          $ref: '#/components/schemas/Data1'
-        requestId:
-          type: string
-          description: Request ID.
-        date:
-          type: string
-          description: Request date.
-        message:
-          type: string
-          description: Request message.
-      example:
-        type: exception
-        code: TRP0005E
-        data:
-          '0': '1'
-          carrierId: MTEyMjMtQWZ0ZXJTaGlwLWRldmVsb3BtZW50
-          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
-        requestId: 9e3ce442-458c-4861-99aa-23b2cd2da9cf
-        date: '2024-03-15T06:00:21.009Z'
-        message: 'Service not found: ''MTEyMjMtQWZ0ZXJTaGlwLWRldmVsb3BtZW50&78c83922-d658-48bf-89d5-0658a6a94e27'''
-    Data9:
-      required:
-      - type
-      - note
-      - author
-      type: object
-      properties:
-        type:
-          type: string
-          description: Note's type.
-        note:
-          type: string
-          description: Note's text.
-        author:
-          type: string
-          description: Note's author.
-      example:
-        type: ERROR
-        note: The package takes time to be shipped
-        author: Oscar Rojas
-    Rate:
-      required:
-      - shippingPrice
-      - insurancePrice
-      type: object
-      description: Rate cost information.
-      properties:
-        shippingPrice:
-          $ref: '#/components/schemas/ShippingPrice'
-        insurancePrice:
-          $ref: '#/components/schemas/InsurancePrice'
-      example:
-        shippingPrice:
-          value: 0
-          currency: USD
-        insurancePrice:
-          value: 0
-          currency: USD
-    CreateevidenceRequest:
+    Data12:
       required:
       - type
       - content
@@ -2322,326 +2619,22 @@ components:
         type: IMAGE
         content: https://parkers-images.bauersecure.com/wp-images/18727/courier-van-insurance-01.jpg
         author: Felipe Cardenas
-    Carrier:
+    CancelOngoingServiceRequest:
       required:
-      - name
-      - image
-      - metaData
-      - id
-      - type
-      type: object
-      description: Object containing information about a carrier.
-      properties:
-        name:
-          type: string
-          description: Carrier name.
-        image:
-          type:
-          - string
-          - 'null'
-          description: Carrier logo.
-        metaData:
-          type: object
-          description: Carrier metadata.
-        id:
-          type: string
-          description: Carrier ID.
-        type:
-          $ref: '#/components/schemas/Type'
-          description: Carrier type.
-      example:
-        name: '[FedEx] Postmen Testing Account'
-        image: null
-        metaData: {}
-        id: fedex
-        type:
-          metaData: {}
-          terms: ''
-          rate:
-            shippingPrice:
-              value: 284.02
-              currency: USD
-            insurancePrice:
-              value: 0
-              currency: USD
-          name: FedEx First Overnight®
-          transitTime: 0
-          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-          description: FedEx
-          id: fedex_first_overnight
-          international: false
-    Label:
-      required:
-      - id
-      - name
-      - url
+      - comment
       - type
       type: object
       properties:
-        id:
+        comment:
           type: string
-          description: Label ID.
-        name:
-          type: string
-          description: Name of the label.
-        url:
-          type: string
-          description: Label URL.
+          description: Service comment.
         type:
           type: string
-          description: Label's type of file.
+          description: Service type.
       example:
-        id: 78c83922-d658-48bf-89d5-0658a6a94e27
-        name: Shipping label
-        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-        type: PDF
-    m4031:
-      required:
-      - message
-      - requestId
-      type: object
-      description: Request information.
-      properties:
-        message:
-          type: string
-          description: Request message.
-        requestId:
-          type: string
-          description: Request ID.
-      example:
-        message: Invalid token
-        requestId: 09563f82-fe06-4004-b623-85e3aa4c92c9
-    Timeline:
-      required:
-      - id
-      - date
-      - createdAt
-      - updatedAt
-      - type
-      - description
-      - author
-      - metaData
-      type: object
-      properties:
-        id:
-          type: string
-          description: Timeline ID.
-        date:
-          type: string
-          description: Timeline actual date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        createdAt:
-          type: string
-          description: Order's creation date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        updatedAt:
-          type: string
-          description: Date of the order's last update in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        type:
-          type: string
-          description: Order status.
-        description:
-          type: string
-          description: Description of the status.
-        author:
-          type: string
-          description: Status author.
-        metaData:
-          $ref: '#/components/schemas/MetaData'
-          description: Metadata about the delivery information.
-      example:
-        id: 77263f59-0ac5-4b0c-bfe5-f17a1648474d
-        date: '2024-03-09T01:33:14.917Z'
-        createdAt: '2024-03-09T01:33:14.917Z'
-        updatedAt: '2024-03-09T01:33:14.917Z'
-        type: STATUS
-        description: Service pending in DEV
-        author: System
-        metaData:
-          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-          metaData: null
-          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
-          shippingPrice: 284.02
-          status: PENDING
-          labels:
-          - name: Shipping label
-            id: 78c83922-d658-48bf-89d5-0658a6a94e27
-            type: PDF
-            url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-    Note:
-      required:
-      - type
-      - date
-      - content
-      - author
-      type: object
-      description: Notes with delivery information.
-      properties:
-        type:
-          type: string
-          description: Type of note.
-        date:
-          type: string
-          description: Date of creation of the note in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        content:
-          type: string
-          description: Content of the note.
-        author:
-          type: string
-          description: Author of the note.
-      example:
-        type: COMMENT
-        date: '2024-03-09T01:43:16.280Z'
-        content: 'Tracking Number: 10001709948594168'
-        author: afterShip
-    PauseResumeServiceResponse:
-      type: object
-      required:
-      - message
-      - data
-      properties:
-        message:
-          type: string
-          example: Service executed successfully
-          description: Message of successful cancelation.
-        data:
-          type: object
-          description: Object containing service information.
-          required:
-          - serviceId
-          - carrierId
-          - reason
-          properties:
-            serviceId:
-              type: string
-              description: Service ID.
-              example: apknieot924892jaf-1231
-            carrierId:
-              type: string
-              description: Carrier ID.
-              example: servientrega9234jaf
-            cancel:
-              type: boolean
-              description: Condition that the service is paused (`false`) or not (`true`).
-              example: false
-            reason:
-              type: string
-              example: En el lugar de residencia no hay quien reciba el paquete
-              description: Reason for the cancelation.
-    CancelServiceRequest:
-      type: object
-      required:
-      - serviceId
-      - carrierId
-      - settings
-      - reason
-      - metaData
-      properties:
-        serviceId:
-          type: string
-          example: apknieot924892jaf-1231
-          description: Service ID.
-        carrierId:
-          type: string
-          example: servientrega9234jaf
-          description: Carrier ID.
-        settings:
-          type: array
-          description: Array of custom fields.
-          items:
-            type: object
-            required:
-            - label
-            - key
-            - value
-            properties:
-              label:
-                type: string
-                example: Cliente ID
-                description: Custom label.
-              key:
-                type: string
-                example: clientId
-                description: Custom key.
-              value:
-                type: string
-                example: HUR123
-                description: Custom value.
-        reason:
-          type: string
-          example: La dirección de entrega esta mal registrada
-          description: Reason for the cancelation.
-        metaData:
-          type: object
-          description: Object containing service metadata.
-          properties:
-            myFieldCustom:
-              type: string
-              example: custom value
-              description: Custom value.
-    PauseResumeServiceRequest:
-      type: object
-      required:
-      - serviceId
-      - carrierId
-      - settings
-      - reason
-      - metaData
-      properties:
-        serviceId:
-          type: string
-          example: apknieot924892jaf-1231
-          description: Service ID.
-        carrierId:
-          type: string
-          example: servientrega9234jaf
-          description: Carrier ID.
-        pause:
-          type: boolean
-          description: Condition that the service is paused (`false`) or not (`true`).
-          example: false
-        settings:
-          type: array
-          description: Array of custom fields.
-          items:
-            type: object
-            required:
-            - label
-            - key
-            - value
-            properties:
-              label:
-                type: string
-                example: Cliente ID
-                description: Custom label.
-              key:
-                type: string
-                example: clientId
-                description: Custom key.
-              value:
-                type: string
-                example: HUR123
-                description: Custom value.
-        reason:
-          type: string
-          example: La dirección de entrega esta mal registrada
-          description: Reason for the pause or resume.
-        metaData:
-          type: object
-          description: Object containing service metadata.
-          properties:
-            myFieldCustom:
-              type: string
-              example: custom value
-              description: Custom value.
+        comment: The delivery address was changed
+        type: END_CLIENT_CANCELED
   parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     Content-Type:
       name: Content-Type
       in: header
@@ -2660,3 +2653,12 @@ components:
       schema:
         type: string
         example: '{token}'
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json

@@ -339,20 +339,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    CommititemfeedorderstatusRequest:
-      title: CommititemfeedorderstatusRequest
-      required:
-      - handles
-      type: object
-      properties:
-        handles:
-          type: array
-          items:
-            type: string
-          description: List of item handles to commit.
-      example:
-        handles:
-        - AQEBSM/bSqonHYtx+UrHdbuJ0i7M9yMbI2jtYwMIPdEc4BenuneaCTC9VEJ3dgAy1XtfQvHBvgwZTO8LvGObIKNqiKXDZiMKY25vK+pblZEqf1pWdLMugu5XoHA5ZAd4IcBcXrBcrlr1GU8uvPEBoVLOsVBP9IAxIZkkeEedIDg3K6GPyEXVuPlTEYb/0OCunEGxWF+AZ1frFdXh7ulORTcuqO5oDlBGbpD+QYzCmF4mUZtQ0VVWh9icM1QBVh6PlJ0D/lfwnJKWpBn3jf8c+DTm7sD7wb1Lcz9uWMLhDtPwvH9vue4MvKU9sCahEQe7K5jWuwwb54szGbFKdfcACsTSQ9WlyBfMdbV83c27k68G3cnaBFExkC1MLHHE9UzpQ6l4s43BT4k95ocgMXffnj/HMUYXn+OCvlvjytY59x1OCRE=
     Getfeedorderstatus:
       title: Getfeedorderstatus
       required:
@@ -391,6 +377,47 @@ components:
         orderId: 953712004126-01
         lastChange: '2019-08-12T20:54:01.134057Z'
         currentChange: '2019-08-12T20:54:23.7153839Z'
+    Queue:
+      title: Queue
+      description: Object with information about timeout and message retention.
+      required:
+      - visibilityTimeoutInSeconds
+      - MessageRetentionPeriodInSeconds
+      type: object
+      properties:
+        visibilityTimeoutInSeconds:
+          type: integer
+          description: Period of time for which an item becomes invisible after it has been [retrieved](https://developers.vtex.com/vtex-rest-api/reference/feed-v3#getfeedorderstatus1). Measured in seconds.
+          example: 250
+        MessageRetentionPeriodInSeconds:
+          type: integer
+          description: Maximum life span of an order update in the feed. When a feed item is on the feed for this period of time, it is removed from the feed. Measured in seconds.
+          example: 3456000
+    CommititemfeedorderstatusRequest:
+      title: CommititemfeedorderstatusRequest
+      required:
+      - handles
+      type: object
+      properties:
+        handles:
+          type: array
+          items:
+            type: string
+          description: List of item handles to commit.
+      example:
+        handles:
+        - AQEBSM/bSqonHYtx+UrHdbuJ0i7M9yMbI2jtYwMIPdEc4BenuneaCTC9VEJ3dgAy1XtfQvHBvgwZTO8LvGObIKNqiKXDZiMKY25vK+pblZEqf1pWdLMugu5XoHA5ZAd4IcBcXrBcrlr1GU8uvPEBoVLOsVBP9IAxIZkkeEedIDg3K6GPyEXVuPlTEYb/0OCunEGxWF+AZ1frFdXh7ulORTcuqO5oDlBGbpD+QYzCmF4mUZtQ0VVWh9icM1QBVh6PlJ0D/lfwnJKWpBn3jf8c+DTm7sD7wb1Lcz9uWMLhDtPwvH9vue4MvKU9sCahEQe7K5jWuwwb54szGbFKdfcACsTSQ9WlyBfMdbV83c27k68G3cnaBFExkC1MLHHE9UzpQ6l4s43BT4k95ocgMXffnj/HMUYXn+OCvlvjytY59x1OCRE=
+    FeedConfigurationRequest:
+      title: FeedConfigurationRequest
+      required:
+      - filter
+      - queue
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/FeedFilter'
+        queue:
+          $ref: '#/components/schemas/Queue'
     TestJSONataExpression:
       type: object
       required:
@@ -432,33 +459,6 @@ components:
           type: boolean
           description: Sets a limit to how many times a specific order shows on the feed, after it first meets filtering conditions. Using the `FromOrders` type configuration with JSONata filtering expressions might cause orders to appear more than once on a feed, whenever changes are made to that order. If this field is `false` orders will appear in the feed only once.
           example: false
-    FeedConfigurationRequest:
-      title: FeedConfigurationRequest
-      required:
-      - filter
-      - queue
-      type: object
-      properties:
-        filter:
-          $ref: '#/components/schemas/FeedFilter'
-        queue:
-          $ref: '#/components/schemas/Queue'
-    Queue:
-      title: Queue
-      description: Object with information about timeout and message retention.
-      required:
-      - visibilityTimeoutInSeconds
-      - MessageRetentionPeriodInSeconds
-      type: object
-      properties:
-        visibilityTimeoutInSeconds:
-          type: integer
-          description: Period of time for which an item becomes invisible after it has been [retrieved](https://developers.vtex.com/vtex-rest-api/reference/feed-v3#getfeedorderstatus1). Measured in seconds.
-          example: 250
-        MessageRetentionPeriodInSeconds:
-          type: integer
-          description: Maximum life span of an order update in the feed. When a feed item is on the feed for this period of time, it is removed from the feed. Measured in seconds.
-          example: 3456000
   securitySchemes:
     appKey:
       type: apiKey

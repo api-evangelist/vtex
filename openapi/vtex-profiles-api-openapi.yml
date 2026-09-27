@@ -531,77 +531,33 @@ paths:
                   lastUpdate: '2022-01-17T15:41:37.5009471+00:00'
       deprecated: false
 components:
-  parameters:
-    alternativeKey:
-      name: alternativeKey
-      in: query
-      description: 'The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.
-
-
-        > Currently, there are two possible values for this parameter: `email` and `document`.'
-      required: false
-      style: form
-      schema:
-        type: string
-        example: email
-    ttl:
-      name: ttl
-      in: query
-      description: 'This parameter sets the the Time To Live (TTL), in days, of the specific document being created or updated with this request. After this period of time from the moment of the request, the document is deleted. By sending this parameter you override the TTL set for the schema.
-
-
-        > Currently, the available default document schemas have no TTL. This means that documents are stored indefinitely, unless a TTL is sent when creating or updating.'
-      required: false
-      style: form
-      schema:
-        type: integer
-        example: 365
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    profileVersionId:
-      name: profileVersionId
-      in: path
-      description: ID of the version of the client's profile as returned by endpoints that create or update profile information in the `version` field.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 70caf394-8534-447e-a0ca-1803c669c771
-    profileId:
-      name: profileId
-      in: path
-      description: ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 70caf394-8534-447e-a0ca-1803c669c771
-    reason:
-      name: reason
-      in: query
-      description: Reason for requesting unmasked data.
-      required: true
-      style: form
-      schema:
-        type: string
-        example: data-validation
   schemas:
+    ProfileMeta:
+      title: Profile metadata
+      type: object
+      description: Profile metadata.
+      required:
+      - version
+      - author
+      - creationDate
+      - lastUpdate
+      properties:
+        version:
+          type: string
+          description: Unique identifier of the profile version.
+          example: 27112371-a71b-45d6-b3bc-93436a3a0b4f
+        author:
+          type: string
+          description: Unique identifier of the user who created the profile.
+          example: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
+        creationDate:
+          type: string
+          description: Date when the profile was created in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
+        lastUpdate:
+          type: string
+          description: Date when the profile was last updated in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
     MaskedProfileResponse:
       title: Masked profile response
       type: array
@@ -655,6 +611,11 @@ components:
           type: string
           description: 'Name of custom field defined in [Create or delete custom fields](https://developers.vtex.com/docs/api-reference/profile-system#put-/api/storage/profile-system/schemas/profileSystem/custom). Can be of any type: string, number, boolean, array or object.'
           example: '{value}'
+    ProfileId:
+      title: id
+      type: string
+      description: ID of the client's profile.
+      example: c2cbebba-214e-40b2-b68f-98f862e755d5
     MaskedProfileResponseByVersion:
       title: Masked profile response
       type: array
@@ -669,37 +630,6 @@ components:
             $ref: '#/components/schemas/Profile'
           meta:
             $ref: '#/components/schemas/ProfileMeta'
-    ProfileMeta:
-      title: Profile metadata
-      type: object
-      description: Profile metadata.
-      required:
-      - version
-      - author
-      - creationDate
-      - lastUpdate
-      properties:
-        version:
-          type: string
-          description: Unique identifier of the profile version.
-          example: 27112371-a71b-45d6-b3bc-93436a3a0b4f
-        author:
-          type: string
-          description: Unique identifier of the user who created the profile.
-          example: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
-        creationDate:
-          type: string
-          description: Date when the profile was created in ISO 8601 format.
-          example: '2022-01-05T15:41:37.5009471+00:00'
-        lastUpdate:
-          type: string
-          description: Date when the profile was last updated in ISO 8601 format.
-          example: '2022-01-05T15:41:37.5009471+00:00'
-    ProfileId:
-      title: id
-      type: string
-      description: ID of the client's profile.
-      example: c2cbebba-214e-40b2-b68f-98f862e755d5
     UnmaskedProfileResponse:
       title: Unmasked profile response
       type: object
@@ -711,6 +641,76 @@ components:
           $ref: '#/components/schemas/Profile'
         meta:
           $ref: '#/components/schemas/ProfileMeta'
+  parameters:
+    profileId:
+      name: profileId
+      in: path
+      description: ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf394-8534-447e-a0ca-1803c669c771
+    alternativeKey:
+      name: alternativeKey
+      in: query
+      description: 'The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.
+
+
+        > Currently, there are two possible values for this parameter: `email` and `document`.'
+      required: false
+      style: form
+      schema:
+        type: string
+        example: email
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    reason:
+      name: reason
+      in: query
+      description: Reason for requesting unmasked data.
+      required: true
+      style: form
+      schema:
+        type: string
+        example: data-validation
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    ttl:
+      name: ttl
+      in: query
+      description: 'This parameter sets the the Time To Live (TTL), in days, of the specific document being created or updated with this request. After this period of time from the moment of the request, the document is deleted. By sending this parameter you override the TTL set for the schema.
+
+
+        > Currently, the available default document schemas have no TTL. This means that documents are stored indefinitely, unless a TTL is sent when creating or updating.'
+      required: false
+      style: form
+      schema:
+        type: integer
+        example: 365
+    profileVersionId:
+      name: profileVersionId
+      in: path
+      description: ID of the version of the client's profile as returned by endpoints that create or update profile information in the `version` field.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf394-8534-447e-a0ca-1803c669c771
   securitySchemes:
     appKey:
       type: apiKey

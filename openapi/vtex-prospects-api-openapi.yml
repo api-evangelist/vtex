@@ -755,33 +755,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    ProspectId:
-      title: id
-      type: string
-      description: ID of the prospect.
-      example: c2cbebba-214e-40b2-b68f-98f862e755d5
-    MaskedProspectResponse:
-      title: Masked prospect information.
-      type: object
-      description: Masked prospect information.
-      properties:
-        id:
-          $ref: '#/components/schemas/ProspectId'
-        document:
-          $ref: '#/components/schemas/Prospect'
-        meta:
-          $ref: '#/components/schemas/ProspectMeta'
-    UnmaskedProspectResponse:
-      title: Unmasked prospect information.
-      type: object
-      description: Unmasked prospect information.
-      properties:
-        id:
-          $ref: '#/components/schemas/ProspectId'
-        document:
-          $ref: '#/components/schemas/Prospect'
-        meta:
-          $ref: '#/components/schemas/ProspectMeta'
     ProspectMeta:
       title: Prospect information metadata.
       description: Prospect information metadata.
@@ -814,6 +787,136 @@ components:
           - 'null'
           description: Date when the prospect information expires in ISO 8601 format.
           example: '2022-01-05T15:41:37.5009471+00:00'
+    MaskedProspectResponse:
+      title: Masked prospect information.
+      type: object
+      description: Masked prospect information.
+      properties:
+        id:
+          $ref: '#/components/schemas/ProspectId'
+        document:
+          $ref: '#/components/schemas/Prospect'
+        meta:
+          $ref: '#/components/schemas/ProspectMeta'
+    PaymentData:
+      title: paymentData
+      type: object
+      description: Payment data.
+      properties:
+        availableAccounts:
+          type: array
+          description: List of available payment accounts.
+          items:
+            type: object
+            description: Information about an available payment account.
+            properties:
+              accountId:
+                type: string
+                description: Payment account ID.
+                example: D09F5E3F01054C959CFC4CB357961ADE
+              paymentSystem:
+                type: string
+                description: Payment system code.
+                example: '2'
+              paymentSystemName:
+                type: string
+                description: Payment system name.
+                example: Visa
+              cardNumber:
+                type: string
+                description: Masked card number.
+                example: '************1111'
+              bin:
+                type: string
+                description: Card bin.
+                example: '44443334'
+              availableAddresses:
+                type: array
+                description: List of available addresses.
+                items:
+                  type: string
+                  description: Available address ID.
+                  example: db267dcc53c14fb2b9a985532dd287bc
+              expirationDate:
+                type: string
+                description: Card expiration date, in `MM/YYYY` format.
+                example: 01/2032
+              isExpired:
+                type: boolean
+                description: Defines if the card is expired (`true`) or not (`false`).
+                example: false
+              accountStatus:
+                type:
+                - string
+                - 'null'
+                description: Account status.
+                example: null
+        availableTokens:
+          type: array
+          description: Available tokens.
+          items:
+            type: string
+            description: Available token.
+            example: '12345'
+        transactions:
+          type:
+          - array
+          - 'null'
+          description: List of transactions.
+          items:
+            type: object
+            description: Transaction information.
+            required:
+            - isActive
+            - transactionId
+            - merchantName
+            - payments
+            properties:
+              isActive:
+                type: boolean
+                description: Indicates whether the transaction is active (`true`) or not (`false`).
+                example: true
+              transactionId:
+                type: string
+                description: Transaction ID.
+                example: 418213DE29634837A63DD693A937A696
+              merchantName:
+                type: string
+                description: Merchant name.
+                example: luxstore
+              payments:
+                type: array
+                description: List of payments information.
+                items:
+                  $ref: '#/components/schemas/Payment'
+        giftCards:
+          type: array
+          description: Gift card IDs.
+          items:
+            type: string
+            description: Gift card ID.
+            example: '12345'
+        giftCardMessages:
+          type: array
+          description: Gift card messages.
+          items:
+            type: string
+            description: Gift card message.
+            example: Message.
+        numberOfPaymentErrors:
+          type: number
+          description: Amount of payment errors.
+          example: 0
+        numberOfDeniedTransactions:
+          type: number
+          description: Amount of denied transactions.
+          example: 0
+        lastDeniedTransaction:
+          type:
+          - string
+          - 'null'
+          description: Last denied transaction.
+          example: null
     Prospect:
       title: Prospect information.
       type: object
@@ -957,125 +1060,11 @@ components:
           type: string
           description: Prospect's customer code.
           example: 5397eefe-f237-41d4-976e-bdf772cc42e0
-    PaymentData:
-      title: paymentData
-      type: object
-      description: Payment data.
-      properties:
-        availableAccounts:
-          type: array
-          description: List of available payment accounts.
-          items:
-            type: object
-            description: Information about an available payment account.
-            properties:
-              accountId:
-                type: string
-                description: Payment account ID.
-                example: D09F5E3F01054C959CFC4CB357961ADE
-              paymentSystem:
-                type: string
-                description: Payment system code.
-                example: '2'
-              paymentSystemName:
-                type: string
-                description: Payment system name.
-                example: Visa
-              cardNumber:
-                type: string
-                description: Masked card number.
-                example: '************1111'
-              bin:
-                type: string
-                description: Card bin.
-                example: '44443334'
-              availableAddresses:
-                type: array
-                description: List of available addresses.
-                items:
-                  type: string
-                  description: Available address ID.
-                  example: db267dcc53c14fb2b9a985532dd287bc
-              expirationDate:
-                type: string
-                description: Card expiration date, in `MM/YYYY` format.
-                example: 01/2032
-              isExpired:
-                type: boolean
-                description: Defines if the card is expired (`true`) or not (`false`).
-                example: false
-              accountStatus:
-                type:
-                - string
-                - 'null'
-                description: Account status.
-                example: null
-        availableTokens:
-          type: array
-          description: Available tokens.
-          items:
-            type: string
-            description: Available token.
-            example: '12345'
-        transactions:
-          type:
-          - array
-          - 'null'
-          description: List of transactions.
-          items:
-            type: object
-            description: Transaction information.
-            required:
-            - isActive
-            - transactionId
-            - merchantName
-            - payments
-            properties:
-              isActive:
-                type: boolean
-                description: Indicates whether the transaction is active (`true`) or not (`false`).
-                example: true
-              transactionId:
-                type: string
-                description: Transaction ID.
-                example: 418213DE29634837A63DD693A937A696
-              merchantName:
-                type: string
-                description: Merchant name.
-                example: luxstore
-              payments:
-                type: array
-                description: List of payments information.
-                items:
-                  $ref: '#/components/schemas/Payment'
-        giftCards:
-          type: array
-          description: Gift card IDs.
-          items:
-            type: string
-            description: Gift card ID.
-            example: '12345'
-        giftCardMessages:
-          type: array
-          description: Gift card messages.
-          items:
-            type: string
-            description: Gift card message.
-            example: Message.
-        numberOfPaymentErrors:
-          type: number
-          description: Amount of payment errors.
-          example: 0
-        numberOfDeniedTransactions:
-          type: number
-          description: Amount of denied transactions.
-          example: 0
-        lastDeniedTransaction:
-          type:
-          - string
-          - 'null'
-          description: Last denied transaction.
-          example: null
+    ProspectId:
+      title: id
+      type: string
+      description: ID of the prospect.
+      example: c2cbebba-214e-40b2-b68f-98f862e755d5
     Payment:
       title: Payment
       required:
@@ -1220,16 +1209,18 @@ components:
         tid: null
         dueDate: '2019-02-02'
         connectorResponses: {}
+    UnmaskedProspectResponse:
+      title: Unmasked prospect information.
+      type: object
+      description: Unmasked prospect information.
+      properties:
+        id:
+          $ref: '#/components/schemas/ProspectId'
+        document:
+          $ref: '#/components/schemas/Prospect'
+        meta:
+          $ref: '#/components/schemas/ProspectMeta'
   parameters:
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     Accept:
       name: Accept
       in: header
@@ -1248,6 +1239,15 @@ components:
       schema:
         type: string
         example: data-validation
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
     prospectId:
       name: prospectId
       in: path

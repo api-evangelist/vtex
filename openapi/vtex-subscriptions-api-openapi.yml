@@ -718,135 +718,80 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    LogisticsInfoDeliveryWindow:
+    LogisticsInfoSLA:
       type: object
       properties:
-        startDateUtc:
-          type: string
-          format: date-time
-        endDateUtc:
-          type: string
-          format: date-time
+        id:
+          type:
+          - string
+          - 'null'
+        pickupPointId:
+          type:
+          - string
+          - 'null'
+        deliveryChannel:
+          type:
+          - string
+          - 'null'
         price:
           type: integer
-          format: int64
-      additionalProperties: false
-    SubscriptionGroupRequest:
-      title: SubscriptionRequest
-      required:
-      - customerEmail
-      - items
-      - plan
-      - purchaseSettings
-      - shippingAddress
-      type: object
-      properties:
-        customerEmail:
+          format: int32
+        shippingEstimate:
           type:
           - string
           - 'null'
-        title:
+        lockTtl:
           type:
           - string
           - 'null'
-        status:
-          type:
-          - string
-          - 'null'
-        nextPurchaseDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        catalogAttachment:
-          type:
-          - string
-          - 'null'
-        plan:
-          $ref: '#/components/schemas/PlanThinRequest'
-        shippingAddress:
-          $ref: '#/components/schemas/shippingAddress'
-        purchaseSettings:
-          $ref: '#/components/schemas/PurchaseSettingsThinRequest'
-        items:
+        deliveryWindows:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/SubscriptionThinItemRequest'
+            $ref: '#/components/schemas/LogisticsInfoDeliveryWindow'
+        availableDeliveryWindows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LogisticsInfoDeliveryWindow'
       additionalProperties: false
-    Transaction:
+    PaymentData:
       type: object
       properties:
-        isActive:
-          type: boolean
         payments:
           type:
           - array
           - 'null'
           items:
             $ref: '#/components/schemas/Payment'
+        transactions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Transaction'
       additionalProperties: false
-    SimulateMessageResponse:
+    SimulateResponseVO:
       type: object
       properties:
-        code:
+        simulateResponse:
+          $ref: '#/components/schemas/SimulateResponse'
+        shippingEstimate:
+          $ref: '#/components/schemas/ShippingEstimate'
+        simulationItems:
           type:
-          - string
+          - array
           - 'null'
-        status:
+          items:
+            $ref: '#/components/schemas/SimulationItemResult'
+        totals:
           type:
-          - string
+          - array
           - 'null'
-        text:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    SubscriptionUpdateRequestV3:
-      title: SubscriptionUpdateRequest
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-          description: Name of the subscription.
-          example: catFood
-        status:
-          type:
-          - string
-          - 'null'
-          description: "Status to which you wish to update the subscription. The accepted values are: \n- `ACTIVE` \n- `PAUSED` \n- `CANCELED` \n- `EXPIRED` \n- `MISSING`"
-          example: ACTIVE
-        isSkipped:
-          type:
-          - boolean
-          - 'null'
-          description: When set as `true`, it means the shopper asked to skip the next subscription order, and when set as `false`, no subscription order is going to be skipped.
-          example: false
-        plan:
-          $ref: '#/components/schemas/PlanThinRequest'
-        shippingAddress:
-          $ref: '#/components/schemas/shippingAddress'
-        purchaseSettings:
-          $ref: '#/components/schemas/PurchaseSettingsThinRequest'
-      additionalProperties: false
-    ShippingAddressResponse:
-      title: Address
-      required:
-      - addressId
-      - addressType
-      type: object
-      properties:
-        addressId:
-          type:
-          - string
-          - 'null'
-        addressType:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/Totalization'
       additionalProperties: false
     SubscriptionItemResponse:
       title: SubscriptionItem
@@ -895,77 +840,103 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    FrequencyRequest:
+    PaymentMethodResponse:
+      title: PaymentMethod
       required:
-      - interval
-      - periodicity
+      - paymentSystem
       type: object
-      description: Information about subscriptions' recurrence.
       properties:
-        periodicity:
+        paymentAccountId:
           type:
           - string
           - 'null'
-          description: "Defines the subscriptions recurrence period. The possible values are: \n- `DAILY` \n- `WEEKLY` \n- `MONTHLY` \n- `YEARLY`"
-          example: MONTHLY
-        interval:
-          type: integer
-          format: int32
-          description: Time interval configured between subscription orders, which depends on the periodicity. For a `DAILY` periodicity, the value will be days, for `MONTHLY` it will be months, and so on.
-          example: 3
-      additionalProperties: false
-    ItemSimulationStatus:
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      type: integer
-      format: int32
-    UpdateItemInput:
-      type: object
-      properties:
-        status:
+        paymentSystem:
           type:
           - string
           - 'null'
-        isSkipped:
-          type:
-          - boolean
-          - 'null'
-        quantity:
-          type: integer
-          format: int32
-          title: quantity
-          description: Amount of units in the cart.
-          example: 5
-        manualPrice:
+        installments:
           type:
           - integer
           - 'null'
           format: int32
-          title: manualPrice
-          description: Manual price.
-          default: null
-          example: 40
       additionalProperties: false
-    PurchaseContextSelectableGiftsResponse:
+    PaymentMethodThinRequest:
+      title: PaymentMethodRequest
+      description: Object containing information about the payment method.
+      required:
+      - paymentSystem
+      type: object
+      properties:
+        paymentAccountId:
+          type:
+          - string
+          - 'null'
+          description: Data about shoppers' profiles and documents. For example, their credit card number. To obtain that information, use the endpoint [Get client profile by email](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/profiles).
+          example: '340357032569595'
+        paymentSystem:
+          type:
+          - string
+          - 'null'
+          description: Payment system's ID.
+          example: '4'
+        installments:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          description: Number of payment installments.
+          example: 3
+      additionalProperties: false
+    Payment:
       type: object
       properties:
         id:
           type:
           - string
           - 'null'
-        availableQuantity:
+        paymentSystem:
+          type:
+          - string
+          - 'null'
+        group:
+          type:
+          - string
+          - 'null'
+        bin:
+          type:
+          - string
+          - 'null'
+        accountId:
+          type:
+          - string
+          - 'null'
+        parentAccountId:
+          type:
+          - string
+          - 'null'
+        referenceValue:
+          type: integer
+          format: int64
+        value:
+          type: integer
+          format: int64
+        installments:
           type: integer
           format: int32
-        availableGifts:
+        url:
+          type:
+          - string
+          - 'null'
+        cardNumber:
+          type:
+          - string
+          - 'null'
+        fields:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/PurchaseContextAvailableGiftResponse'
+            $ref: '#/components/schemas/PaymentField'
       additionalProperties: false
     PurchaseDay:
       enum:
@@ -1010,27 +981,91 @@ components:
       - -1
       type: integer
       format: int32
-    ShippingEstimate:
+    ValidityResponse:
+      title: Validity
+      required:
+      - begin
       type: object
       properties:
-        name:
-          type:
-          - string
-          - 'null'
-        estimate:
-          type:
-          - string
-          - 'null'
-        estimateDeliveryDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        nextPurchaseDate:
+        begin:
           type: string
           format: date-time
-        allItemsMatched:
-          type: boolean
+        end:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      additionalProperties: false
+    SubscriptionUpdateRequestV3:
+      title: SubscriptionUpdateRequest
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+          description: Name of the subscription.
+          example: catFood
+        status:
+          type:
+          - string
+          - 'null'
+          description: "Status to which you wish to update the subscription. The accepted values are: \n- `ACTIVE` \n- `PAUSED` \n- `CANCELED` \n- `EXPIRED` \n- `MISSING`"
+          example: ACTIVE
+        isSkipped:
+          type:
+          - boolean
+          - 'null'
+          description: When set as `true`, it means the shopper asked to skip the next subscription order, and when set as `false`, no subscription order is going to be skipped.
+          example: false
+        plan:
+          $ref: '#/components/schemas/PlanThinRequest'
+        shippingAddress:
+          $ref: '#/components/schemas/shippingAddress'
+        purchaseSettings:
+          $ref: '#/components/schemas/PurchaseSettingsThinRequest'
+      additionalProperties: false
+    UpdateItemInput:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+        isSkipped:
+          type:
+          - boolean
+          - 'null'
+        quantity:
+          type: integer
+          format: int32
+          title: quantity
+          description: Amount of units in the cart.
+          example: 5
+        manualPrice:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          title: manualPrice
+          description: Manual price.
+          default: null
+          example: 40
+      additionalProperties: false
+    FrequencyResponse:
+      title: Frequency
+      required:
+      - interval
+      - periodicity
+      type: object
+      properties:
+        periodicity:
+          type:
+          - string
+          - 'null'
+        interval:
+          type: integer
+          format: int32
       additionalProperties: false
     SimulateResponse:
       type: object
@@ -1081,278 +1116,6 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/SimulationItemResult'
-      additionalProperties: false
-    SimulateResponseVO:
-      type: object
-      properties:
-        simulateResponse:
-          $ref: '#/components/schemas/SimulateResponse'
-        shippingEstimate:
-          $ref: '#/components/schemas/ShippingEstimate'
-        simulationItems:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/SimulationItemResult'
-        totals:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Totalization'
-      additionalProperties: false
-    Totalization:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        value:
-          type: number
-          format: double
-      additionalProperties: false
-    PlanThinRequest:
-      title: PlanRequest
-      description: Information about the plan.
-      required:
-      - frequency
-      - id
-      - purchaseDay
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: ID of the plan.
-          example: store.subscription
-        frequency:
-          $ref: '#/components/schemas/FrequencyRequest'
-        validity:
-          $ref: '#/components/schemas/ValidityRequest'
-        purchaseDay:
-          type:
-          - string
-          - 'null'
-          description: Day in which recurrent orders will be created.
-          example: '15'
-      additionalProperties: false
-    PriceTag:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        valueAsInt:
-          type: integer
-          format: int64
-        rawValue:
-          type: number
-          format: double
-        isPercentual:
-          type: boolean
-        identifier:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    PaymentMethodResponse:
-      title: PaymentMethod
-      required:
-      - paymentSystem
-      type: object
-      properties:
-        paymentAccountId:
-          type:
-          - string
-          - 'null'
-        paymentSystem:
-          type:
-          - string
-          - 'null'
-        installments:
-          type:
-          - integer
-          - 'null'
-          format: int32
-      additionalProperties: false
-    PaymentField:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    shippingAddress:
-      title: shippingAddress
-      required:
-      - addressId
-      - addressType
-      type: object
-      properties:
-        addressId:
-          type:
-          - string
-          - 'null'
-          description: Shipping address ID.
-          example: '8109266555005'
-        addressType:
-          type:
-          - string
-          - 'null'
-          description: Type of the address. Possible values are `residential` or `pickup`.
-          example: residential
-      additionalProperties: false
-    SubscriptionThinItemRequest:
-      type: object
-      properties:
-        skuId:
-          type:
-          - string
-          - 'null'
-          title: skuId
-          description: SKU ID.
-          example: '12'
-        quantity:
-          type: integer
-          format: int32
-          title: quantity
-          description: Amount of units in the cart.
-          example: 5
-        manualPrice:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          title: manualPrice
-          description: Manual price.
-          default: null
-          example: 40
-      additionalProperties: false
-    PlanResponse:
-      title: Plan
-      required:
-      - frequency
-      - id
-      - purchaseDay
-      - validity
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        frequency:
-          $ref: '#/components/schemas/FrequencyResponse'
-        validity:
-          $ref: '#/components/schemas/ValidityResponse'
-        purchaseDay:
-          $ref: '#/components/schemas/PurchaseDay'
-      additionalProperties: false
-    ValidityRequest:
-      type: object
-      description: Information about the period during which the subscription will be valid.
-      properties:
-        begin:
-          type:
-          - string
-          - 'null'
-          description: Subscription's beginning date with the format `yyyy-mm-ddThh:mm:ss`.
-          example: '2022-06-10T00:00:00'
-        end:
-          type:
-          - string
-          - 'null'
-          description: Subscription's ending date with the format `yyyy-mm-ddThh:mm:ss`.
-          example: '2023-06-10T00:00:00'
-      additionalProperties: false
-    PurchaseContextAvailableGiftResponse:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        seller:
-          type:
-          - string
-          - 'null'
-        quantity:
-          type: integer
-          format: int32
-          title: quantity
-          description: Amount of units in the cart.
-          example: 5
-        price:
-          type:
-          - integer
-          - 'null'
-          format: int64
-        sellingPrice:
-          type:
-          - integer
-          - 'null'
-          format: int64
-        unitMultiplier:
-          type:
-          - number
-          - 'null'
-          format: double
-        attachments:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ItemAttachment'
-        name:
-          type:
-          - string
-          - 'null'
-        isGift:
-          type: boolean
-        priceTags:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PriceTag'
-        isSelected:
-          type: boolean
-      additionalProperties: false
-    PaymentMethodThinRequest:
-      title: PaymentMethodRequest
-      description: Object containing information about the payment method.
-      required:
-      - paymentSystem
-      type: object
-      properties:
-        paymentAccountId:
-          type:
-          - string
-          - 'null'
-          description: Data about shoppers' profiles and documents. For example, their credit card number. To obtain that information, use the endpoint [Get client profile by email](https://developers.vtex.com/docs/api-reference/checkout-api#get-/api/checkout/pub/profiles).
-          example: '340357032569595'
-        paymentSystem:
-          type:
-          - string
-          - 'null'
-          description: Payment system's ID.
-          example: '4'
-        installments:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          description: Number of payment installments.
-          example: 3
       additionalProperties: false
     SubscriptionGroupResponse:
       title: Subscription
@@ -1424,6 +1187,20 @@ components:
           items:
             $ref: '#/components/schemas/SubscriptionItemResponse'
       additionalProperties: false
+    ItemAttachment:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        content:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+      additionalProperties: false
     LogisticsInfo:
       type: object
       properties:
@@ -1472,30 +1249,127 @@ components:
           items:
             $ref: '#/components/schemas/LogisticsInfoSLA'
       additionalProperties: false
-    SimulationItemResult:
+    PlanThinRequest:
+      title: PlanRequest
+      description: Information about the plan.
+      required:
+      - frequency
+      - id
+      - purchaseDay
       type: object
       properties:
         id:
           type:
           - string
           - 'null'
+          description: ID of the plan.
+          example: store.subscription
+        frequency:
+          $ref: '#/components/schemas/FrequencyRequest'
+        validity:
+          $ref: '#/components/schemas/ValidityRequest'
+        purchaseDay:
+          type:
+          - string
+          - 'null'
+          description: Day in which recurrent orders will be created.
+          example: '15'
+      additionalProperties: false
+    LogisticsInfoDeliveryWindow:
+      type: object
+      properties:
+        startDateUtc:
+          type: string
+          format: date-time
+        endDateUtc:
+          type: string
+          format: date-time
+        price:
+          type: integer
+          format: int64
+      additionalProperties: false
+    PriceTag:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        valueAsInt:
+          type: integer
+          format: int64
+        rawValue:
+          type: number
+          format: double
+        isPercentual:
+          type: boolean
+        identifier:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PurchaseContextSelectableGiftsResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        availableQuantity:
+          type: integer
+          format: int32
+        availableGifts:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PurchaseContextAvailableGiftResponse'
+      additionalProperties: false
+    PlanResponse:
+      title: Plan
+      required:
+      - frequency
+      - id
+      - purchaseDay
+      - validity
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        frequency:
+          $ref: '#/components/schemas/FrequencyResponse'
+        validity:
+          $ref: '#/components/schemas/ValidityResponse'
+        purchaseDay:
+          $ref: '#/components/schemas/PurchaseDay'
+      additionalProperties: false
+    SubscriptionThinItemRequest:
+      type: object
+      properties:
+        skuId:
+          type:
+          - string
+          - 'null'
+          title: skuId
+          description: SKU ID.
+          example: '12'
         quantity:
           type: integer
           format: int32
           title: quantity
           description: Amount of units in the cart.
           example: 5
-        unitPrice:
+        manualPrice:
           type:
           - integer
           - 'null'
-          format: int64
-        status:
-          $ref: '#/components/schemas/ItemSimulationStatus'
-        statusName:
-          type:
-          - string
-          - 'null'
+          format: int32
+          title: manualPrice
+          description: Manual price.
+          default: null
+          example: 40
       additionalProperties: false
     OrderItem:
       type: object
@@ -1548,6 +1422,135 @@ components:
           items:
             $ref: '#/components/schemas/PriceTag'
       additionalProperties: false
+    SimulationItemResult:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        quantity:
+          type: integer
+          format: int32
+          title: quantity
+          description: Amount of units in the cart.
+          example: 5
+        unitPrice:
+          type:
+          - integer
+          - 'null'
+          format: int64
+        status:
+          $ref: '#/components/schemas/ItemSimulationStatus'
+        statusName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ShippingAddressResponse:
+      title: Address
+      required:
+      - addressId
+      - addressType
+      type: object
+      properties:
+        addressId:
+          type:
+          - string
+          - 'null'
+        addressType:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaymentField:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PurchaseContextAvailableGiftResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        seller:
+          type:
+          - string
+          - 'null'
+        quantity:
+          type: integer
+          format: int32
+          title: quantity
+          description: Amount of units in the cart.
+          example: 5
+        price:
+          type:
+          - integer
+          - 'null'
+          format: int64
+        sellingPrice:
+          type:
+          - integer
+          - 'null'
+          format: int64
+        unitMultiplier:
+          type:
+          - number
+          - 'null'
+          format: double
+        attachments:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ItemAttachment'
+        name:
+          type:
+          - string
+          - 'null'
+        isGift:
+          type: boolean
+        priceTags:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PriceTag'
+        isSelected:
+          type: boolean
+      additionalProperties: false
+    PurchaseSettingsResponse:
+      title: PurchaseSettings
+      required:
+      - currencyCode
+      - paymentMethod
+      type: object
+      properties:
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethodResponse'
+        currencyCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ItemSimulationStatus:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      format: int32
     TotalizationResponse:
       type: object
       properties:
@@ -1563,51 +1566,66 @@ components:
           type: integer
           format: int64
       additionalProperties: false
-    FrequencyResponse:
-      title: Frequency
+    shippingAddress:
+      title: shippingAddress
+      required:
+      - addressId
+      - addressType
+      type: object
+      properties:
+        addressId:
+          type:
+          - string
+          - 'null'
+          description: Shipping address ID.
+          example: '8109266555005'
+        addressType:
+          type:
+          - string
+          - 'null'
+          description: Type of the address. Possible values are `residential` or `pickup`.
+          example: residential
+      additionalProperties: false
+    FrequencyRequest:
       required:
       - interval
       - periodicity
       type: object
+      description: Information about subscriptions' recurrence.
       properties:
         periodicity:
           type:
           - string
           - 'null'
+          description: "Defines the subscriptions recurrence period. The possible values are: \n- `DAILY` \n- `WEEKLY` \n- `MONTHLY` \n- `YEARLY`"
+          example: MONTHLY
         interval:
           type: integer
           format: int32
+          description: Time interval configured between subscription orders, which depends on the periodicity. For a `DAILY` periodicity, the value will be days, for `MONTHLY` it will be months, and so on.
+          example: 3
       additionalProperties: false
-    PaymentData:
+    ShippingEstimate:
       type: object
       properties:
-        payments:
+        name:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Payment'
-        transactions:
+        estimate:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Transaction'
-      additionalProperties: false
-    ValidityResponse:
-      title: Validity
-      required:
-      - begin
-      type: object
-      properties:
-        begin:
-          type: string
-          format: date-time
-        end:
+        estimateDeliveryDate:
           type:
           - string
           - 'null'
           format: date-time
+        nextPurchaseDate:
+          type: string
+          format: date-time
+        allItemsMatched:
+          type: boolean
       additionalProperties: false
     PurchaseSettingsThinRequest:
       title: PurchaseSettingsRequest
@@ -1624,123 +1642,105 @@ components:
           description: Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) applied to the subscription being created. You can associate only one sales channel to each subscription. The default value is the main sales channel, which corresponds to `1`.
           default: '1'
       additionalProperties: false
-    Payment:
+    SimulateMessageResponse:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        text:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Totalization:
       type: object
       properties:
         id:
           type:
           - string
           - 'null'
-        paymentSystem:
-          type:
-          - string
-          - 'null'
-        group:
-          type:
-          - string
-          - 'null'
-        bin:
-          type:
-          - string
-          - 'null'
-        accountId:
-          type:
-          - string
-          - 'null'
-        parentAccountId:
-          type:
-          - string
-          - 'null'
-        referenceValue:
-          type: integer
-          format: int64
         value:
-          type: integer
-          format: int64
-        installments:
-          type: integer
-          format: int32
-        url:
-          type:
-          - string
-          - 'null'
-        cardNumber:
-          type:
-          - string
-          - 'null'
-        fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PaymentField'
+          type: number
+          format: double
       additionalProperties: false
-    LogisticsInfoSLA:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        pickupPointId:
-          type:
-          - string
-          - 'null'
-        deliveryChannel:
-          type:
-          - string
-          - 'null'
-        price:
-          type: integer
-          format: int32
-        shippingEstimate:
-          type:
-          - string
-          - 'null'
-        lockTtl:
-          type:
-          - string
-          - 'null'
-        deliveryWindows:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LogisticsInfoDeliveryWindow'
-        availableDeliveryWindows:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LogisticsInfoDeliveryWindow'
-      additionalProperties: false
-    ItemAttachment:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        content:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-      additionalProperties: false
-    PurchaseSettingsResponse:
-      title: PurchaseSettings
+    SubscriptionGroupRequest:
+      title: SubscriptionRequest
       required:
-      - currencyCode
-      - paymentMethod
+      - customerEmail
+      - items
+      - plan
+      - purchaseSettings
+      - shippingAddress
       type: object
       properties:
-        paymentMethod:
-          $ref: '#/components/schemas/PaymentMethodResponse'
-        currencyCode:
+        customerEmail:
           type:
           - string
           - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        nextPurchaseDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        catalogAttachment:
+          type:
+          - string
+          - 'null'
+        plan:
+          $ref: '#/components/schemas/PlanThinRequest'
+        shippingAddress:
+          $ref: '#/components/schemas/shippingAddress'
+        purchaseSettings:
+          $ref: '#/components/schemas/PurchaseSettingsThinRequest'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SubscriptionThinItemRequest'
+      additionalProperties: false
+    ValidityRequest:
+      type: object
+      description: Information about the period during which the subscription will be valid.
+      properties:
+        begin:
+          type:
+          - string
+          - 'null'
+          description: Subscription's beginning date with the format `yyyy-mm-ddThh:mm:ss`.
+          example: '2022-06-10T00:00:00'
+        end:
+          type:
+          - string
+          - 'null'
+          description: Subscription's ending date with the format `yyyy-mm-ddThh:mm:ss`.
+          example: '2023-06-10T00:00:00'
+      additionalProperties: false
+    Transaction:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+        payments:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Payment'
       additionalProperties: false
   securitySchemes:
     appKey:

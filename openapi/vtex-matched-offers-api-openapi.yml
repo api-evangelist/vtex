@@ -339,6 +339,98 @@ components:
                       type: integer
                       description: The available quantity of the product.
                       example: 0
+    MainImage:
+      title: MainImage
+      required:
+      - ImageId
+      - ImageLabel
+      - ImageTag
+      - ImagePath
+      - IsMain
+      - IsZoomSize
+      - ImageText
+      - LastModified
+      type: object
+      properties:
+        ImageId:
+          type: string
+          description: Code identifying the image's file.
+          default: '53878805'
+        ImageLabel:
+          type:
+          - string
+          - 'null'
+          description: Image's label.
+          default: Image 1
+        ImageTag:
+          type: string
+          description: HTML tag for the selected image.
+          default: <img src="~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg" width="#width#" height="#height#" alt="Image name and description" id="" />
+        ImagePath:
+          type: string
+          description: Path for the image's file.
+          default: ~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg
+        IsMain:
+          type: boolean
+          description: Whether the image is the main one or not.
+          default: true
+        IsZoomSize:
+          type: boolean
+          description: If zoom can be applied to the image.
+          default: true
+        ImageText:
+          type: string
+          description: Alt text for the image.
+          default: Image name and description
+        LastModified:
+          type: string
+          description: Date of the last changed made to the offer.
+          default: '2021-05-06T21:37:24.262529'
+      example:
+        ImageId: '53878805'
+        ImageLabel: null
+        ImageTag: <img src="~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg" width="#width#" height="#height#" alt="image-8b4364782e664d76a6ebc8702008e478" id="" />
+        ImagePath: ~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg
+        IsMain: true
+        IsZoomSize: true
+        ImageText: image-8b4364782e664d76a6ebc8702008e478
+        LastModified: '2021-04-06T03:01:30.747'
+    OffersPerSalesChannel:
+      title: OffersPerSalesChannel
+      required:
+      - SaleChannel
+      - Price
+      - ListPrice
+      - PriceWithoutDiscount
+      - AvailableQuantity
+      type: object
+      properties:
+        SaleChannel:
+          type: integer
+          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) of the SKU.
+          default: 1
+        Price:
+          type: integer
+          description: SKU's price.
+          default: 1300
+        ListPrice:
+          type: integer
+          description: SKU's suggested selling price
+          default: 1200
+        PriceWithoutDiscount:
+          type: integer
+          description: SKU's price without discount applied.
+          default: 1400
+        AvailableQuantity:
+          type: integer
+          description: Available SKU stock quantity
+          default: 30
+      example:
+        SaleChannel: 1
+        Price: 0
+        ListPrice: 0
+        PriceWithoutDiscount: 0
+        AvailableQuantity: 0
     responseGetMatchedOffersDataBySKU:
       description: Array of matched offers data by SKU.
       type: array
@@ -414,42 +506,37 @@ components:
                         type: integer
                         description: The available quantity of the product.
                         example: 8
-    OffersPerSalesChannel:
-      title: OffersPerSalesChannel
-      required:
-      - SaleChannel
-      - Price
-      - ListPrice
-      - PriceWithoutDiscount
-      - AvailableQuantity
-      type: object
-      properties:
-        SaleChannel:
-          type: integer
-          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) of the SKU.
-          default: 1
-        Price:
-          type: integer
-          description: SKU's price.
-          default: 1300
-        ListPrice:
-          type: integer
-          description: SKU's suggested selling price
-          default: 1200
-        PriceWithoutDiscount:
-          type: integer
-          description: SKU's price without discount applied.
-          default: 1400
-        AvailableQuantity:
-          type: integer
-          description: Available SKU stock quantity
-          default: 30
-      example:
-        SaleChannel: 1
-        Price: 0
-        ListPrice: 0
-        PriceWithoutDiscount: 0
-        AvailableQuantity: 0
+    responseGetMatchedOffersList:
+      type: array
+      description: Response with the list of offers available on the Marketplace.
+      items:
+        type: object
+        description: Array of SKUs in the offer.
+        properties:
+          LastModified:
+            type: string
+            description: Last date the offer was modified.
+            example: '2021-05-06T21:37:24.262529'
+          ProductId:
+            type: string
+            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
+            example: '941947'
+          CategoryId:
+            type: integer
+            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
+            example: 1563
+          BrandId:
+            type: integer
+            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
+            example: 2004291
+          ProductName:
+            type: string
+            description: Name of the offer's product.
+            example: Name of the Product - 123
+          Skus:
+            type: array
+            items:
+              $ref: '#/components/schemas/Sku2'
     Offer:
       title: Offer
       required:
@@ -488,37 +575,6 @@ components:
           PriceWithoutDiscount: 0
           AvailableQuantity: 0
         AvailableSalesChannels: null
-    responseGetMatchedOffersList:
-      type: array
-      description: Response with the list of offers available on the Marketplace.
-      items:
-        type: object
-        description: Array of SKUs in the offer.
-        properties:
-          LastModified:
-            type: string
-            description: Last date the offer was modified.
-            example: '2021-05-06T21:37:24.262529'
-          ProductId:
-            type: string
-            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
-            example: '941947'
-          CategoryId:
-            type: integer
-            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
-            example: 1563
-          BrandId:
-            type: integer
-            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
-            example: 2004291
-          ProductName:
-            type: string
-            description: Name of the offer's product.
-            example: Name of the Product - 123
-          Skus:
-            type: array
-            items:
-              $ref: '#/components/schemas/Sku2'
     Sku2:
       title: Sku
       required:
@@ -605,62 +661,6 @@ components:
             PriceWithoutDiscount: 1200
             AvailableQuantity: 10000000
           AvailableSalesChannels: null
-    MainImage:
-      title: MainImage
-      required:
-      - ImageId
-      - ImageLabel
-      - ImageTag
-      - ImagePath
-      - IsMain
-      - IsZoomSize
-      - ImageText
-      - LastModified
-      type: object
-      properties:
-        ImageId:
-          type: string
-          description: Code identifying the image's file.
-          default: '53878805'
-        ImageLabel:
-          type:
-          - string
-          - 'null'
-          description: Image's label.
-          default: Image 1
-        ImageTag:
-          type: string
-          description: HTML tag for the selected image.
-          default: <img src="~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg" width="#width#" height="#height#" alt="Image name and description" id="" />
-        ImagePath:
-          type: string
-          description: Path for the image's file.
-          default: ~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg
-        IsMain:
-          type: boolean
-          description: Whether the image is the main one or not.
-          default: true
-        IsZoomSize:
-          type: boolean
-          description: If zoom can be applied to the image.
-          default: true
-        ImageText:
-          type: string
-          description: Alt text for the image.
-          default: Image name and description
-        LastModified:
-          type: string
-          description: Date of the last changed made to the offer.
-          default: '2021-05-06T21:37:24.262529'
-      example:
-        ImageId: '53878805'
-        ImageLabel: null
-        ImageTag: <img src="~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg" width="#width#" height="#height#" alt="image-8b4364782e664d76a6ebc8702008e478" id="" />
-        ImagePath: ~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg
-        IsMain: true
-        IsZoomSize: true
-        ImageText: image-8b4364782e664d76a6ebc8702008e478
-        LastModified: '2021-04-06T03:01:30.747'
   parameters:
     accept:
       name: Accept
@@ -671,6 +671,41 @@ components:
       schema:
         type: string
         default: application/json
+    accountName:
+      name: accountName
+      in: path
+      required: true
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
+      schema:
+        type: string
+        example: apiexamples
+    contentType:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    environment:
+      name: environment
+      in: path
+      required: true
+      description: Environment to use. Used as part of the URL.
+      schema:
+        type: string
+        default: vtexcommercestable
+    sort:
+      name: sort
+      in: query
+      description: "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: availability,desc
     productId:
       name: productId
       in: path
@@ -690,25 +725,6 @@ components:
       schema:
         type: string
         example: skuId:172
-    rows:
-      name: rows
-      in: query
-      description: Number of rows included in the response. Each row corresponds to a single offer. The default amount of rows in the response is 1, and the maximum amount is 50. To have more than one offer listed in the response, please add the `rows` parameter with a number greater than 1.
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: integer
-        example: 20
-    contentType:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
     skuId:
       name: skuId
       in: path
@@ -718,32 +734,6 @@ components:
       schema:
         type: string
         example: '1234'
-    environment:
-      name: environment
-      in: path
-      required: true
-      description: Environment to use. Used as part of the URL.
-      schema:
-        type: string
-        default: vtexcommercestable
-    sort:
-      name: sort
-      in: query
-      description: "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: availability,desc
-    accountName:
-      name: accountName
-      in: path
-      required: true
-      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
-      schema:
-        type: string
-        example: apiexamples
     start:
       name: start
       in: query
@@ -754,6 +744,16 @@ components:
       schema:
         type: integer
         default: 0
+    rows:
+      name: rows
+      in: query
+      description: Number of rows included in the response. Each row corresponds to a single offer. The default amount of rows in the response is 1, and the maximum amount is 50. To have more than one offer listed in the response, please add the `rows` parameter with a number greater than 1.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        example: 20
   securitySchemes:
     appKey:
       type: apiKey

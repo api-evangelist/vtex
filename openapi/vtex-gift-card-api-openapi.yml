@@ -282,64 +282,16 @@ paths:
       deprecated: false
 components:
   schemas:
-    Paging:
+    Self:
       type: object
+      description: Object that carries an auto reference of the transaction (on its API).
       required:
-      - page
-      - perPage
-      - total
-      - pages
+      - href
       properties:
-        page:
-          type: integer
-          description: Page number of the gift card list.
-          example: 0
-        perPage:
-          type: integer
-          description: Quantity of gift cards per page.
-          example: 10
-        total:
-          type: integer
-          description: Total of gift cards in the store.
-          example: 4
-        pages:
-          type: integer
-          description: Total number of pages.
-          example: 1
-    Item:
-      type: object
-      required:
-      - productId
-      - id
-      - refId
-      - name
-      - price
-      - quantity
-      properties:
-        productId:
+        href:
           type: string
-          description: Product ID.
-          example: '2000000'
-        id:
-          type: string
-          description: The ID of the SKU in VTEX platform.
-          example: '2000002'
-        refId:
-          type: string
-          description: Product Reference ID.
-          example: MEV41
-        name:
-          type: string
-          description: Product name.
-          example: Shoes
-        price:
-          type: integer
-          description: Product price.
-          example: 200
-        quantity:
-          type: integer
-          description: Product quantity.
-          example: 1
+          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+          example: cards/890/transactions/268
     response:
       type: object
       required:
@@ -391,6 +343,40 @@ components:
           example: USD
         transactions:
           $ref: '#/components/schemas/Transactions'
+    Item:
+      type: object
+      required:
+      - productId
+      - id
+      - refId
+      - name
+      - price
+      - quantity
+      properties:
+        productId:
+          type: string
+          description: Product ID.
+          example: '2000000'
+        id:
+          type: string
+          description: The ID of the SKU in VTEX platform.
+          example: '2000002'
+        refId:
+          type: string
+          description: Product Reference ID.
+          example: MEV41
+        name:
+          type: string
+          description: Product name.
+          example: Shoes
+        price:
+          type: integer
+          description: Product price.
+          example: 200
+        quantity:
+          type: integer
+          description: Product quantity.
+          example: 1
     GetGiftCardusingJSONRequest:
       type: object
       required:
@@ -401,19 +387,6 @@ components:
           $ref: '#/components/schemas/Cart'
         client:
           $ref: '#/components/schemas/Client'
-    response2:
-      type: object
-      required:
-      - items
-      - paging
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item1'
-          description: Items information.
-        paging:
-          $ref: '#/components/schemas/Paging'
     Client:
       type: object
       required:
@@ -433,46 +406,6 @@ components:
           type: string
           description: Document number informed by the customer.
           example: '234235'
-    CreateGiftCardRequest:
-      type: object
-      required:
-      - relationName
-      - expiringDate
-      - caption
-      - profileId
-      properties:
-        relationName:
-          type: string
-          description: Represents the relationship between the client and the store.
-          example: loyalty-program
-        expiringDate:
-          type: string
-          description: It must be in the format `YYYY-MM-DDThh:mm:ss.fff` (ISO 8601 format).
-          example: '2020-09-01T13:15:30Z'
-        caption:
-          type: string
-          description: Field to be filled in if a loyalty program must be created for the gift card.
-          example: rewards program
-        profileId:
-          type: string
-          description: Client ID. You can use the customer's registered email or the `userId` parameter which can be found in the [Master Data](https://help.vtex.com/en/tutorial/master-data--4otjBnR27u4WUIciQsmkAw).
-          example: 92de2449-0e02-4ca9-a4aa-a09cc9d8f7ff
-        currencyCode:
-          type: string
-          description: Currency code in ISO 4217.
-          example: USD
-        restrictedToOwner:
-          type: boolean
-          description: The gift card can only be used for a specified client's ID.
-          example: false
-        multipleCredits:
-          type: boolean
-          description: The gift card balance can be changed.
-          example: false
-        multipleRedemptions:
-          type: boolean
-          description: The gift card can be used to make new purchases until its value is completely used.
-          example: false
     Cart:
       type: object
       required:
@@ -520,16 +453,53 @@ components:
           type: integer
           description: Total items value.
           example: 200
-    Self:
+    response2:
       type: object
-      description: Object that carries an auto reference of the transaction (on its API).
+      required:
+      - items
+      - paging
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item1'
+          description: Items information.
+        paging:
+          $ref: '#/components/schemas/Paging'
+    Paging:
+      type: object
+      required:
+      - page
+      - perPage
+      - total
+      - pages
+      properties:
+        page:
+          type: integer
+          description: Page number of the gift card list.
+          example: 0
+        perPage:
+          type: integer
+          description: Quantity of gift cards per page.
+          example: 10
+        total:
+          type: integer
+          description: Total of gift cards in the store.
+          example: 4
+        pages:
+          type: integer
+          description: Total number of pages.
+          example: 1
+    Transactions:
+      type: object
+      description: Transactions information.
       required:
       - href
       properties:
         href:
           type: string
-          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
-          example: cards/890/transactions/268
+          description: Gift card resource URL. The number described in the URL refers to the gift card identification.
+          example: cards/954/transactions
     Item1:
       type: object
       required:
@@ -542,16 +512,46 @@ components:
           example: '589'
         _self:
           $ref: '#/components/schemas/Self'
-    Transactions:
+    CreateGiftCardRequest:
       type: object
-      description: Transactions information.
       required:
-      - href
+      - relationName
+      - expiringDate
+      - caption
+      - profileId
       properties:
-        href:
+        relationName:
           type: string
-          description: Gift card resource URL. The number described in the URL refers to the gift card identification.
-          example: cards/954/transactions
+          description: Represents the relationship between the client and the store.
+          example: loyalty-program
+        expiringDate:
+          type: string
+          description: It must be in the format `YYYY-MM-DDThh:mm:ss.fff` (ISO 8601 format).
+          example: '2020-09-01T13:15:30Z'
+        caption:
+          type: string
+          description: Field to be filled in if a loyalty program must be created for the gift card.
+          example: rewards program
+        profileId:
+          type: string
+          description: Client ID. You can use the customer's registered email or the `userId` parameter which can be found in the [Master Data](https://help.vtex.com/en/tutorial/master-data--4otjBnR27u4WUIciQsmkAw).
+          example: 92de2449-0e02-4ca9-a4aa-a09cc9d8f7ff
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217.
+          example: USD
+        restrictedToOwner:
+          type: boolean
+          description: The gift card can only be used for a specified client's ID.
+          example: false
+        multipleCredits:
+          type: boolean
+          description: The gift card balance can be changed.
+          example: false
+        multipleRedemptions:
+          type: boolean
+          description: The gift card can be used to make new purchases until its value is completely used.
+          example: false
   securitySchemes:
     appKey:
       type: apiKey

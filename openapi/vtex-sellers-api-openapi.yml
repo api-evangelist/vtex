@@ -143,47 +143,14 @@ paths:
       deprecated: false
 components:
   parameters:
-    from:
-      name: from
-      in: query
-      description: The start number of pagination, being `0` the default value.
-      required: false
-      schema:
-        type: number
-        default: 0
-    isBetterScope:
-      name: isBetterScope
-      in: query
-      description: The flag `isBetterScope` is used by the VTEX Checkout to simulate shopping carts, products, and shipping only in sellers with the field set as `true`, avoiding performance issues. When used as a query param, `isBetterScope` filters sellers that have the flag set as `true` or `false`.
-      required: false
-      schema:
-        type: boolean
-        default: false
-    accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+    accountName:
+      name: accountName
+      in: path
       required: true
-      style: simple
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
       schema:
         type: string
-        default: application/json
-    group:
-      name: 'group '
-      in: query
-      description: Groups are defined by keywords that group sellers into categories defined by the marketplace.
-      required: false
-      schema:
-        type: string
-        default: Group
-    sellerType:
-      name: sellerType
-      in: query
-      description: Filters sellers by their type, which can be regular seller (`1`) or whitelabel seller (`2`).
-      required: false
-      schema:
-        type: integer
-        default: 1
+        example: apiexamples
     to:
       name: to
       in: query
@@ -192,6 +159,14 @@ components:
       schema:
         type: number
         default: 100
+    isBetterScope:
+      name: isBetterScope
+      in: query
+      description: The flag `isBetterScope` is used by the VTEX Checkout to simulate shopping carts, products, and shipping only in sellers with the field set as `true`, avoiding performance issues. When used as a query param, `isBetterScope` filters sellers that have the flag set as `true` or `false`.
+      required: false
+      schema:
+        type: boolean
+        default: false
     sellerId:
       name: sellerId
       in: path
@@ -201,10 +176,96 @@ components:
       schema:
         type: string
         example: seller123
+    sort:
+      name: sort
+      in: query
+      description: "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: availability,desc
+    sellerType:
+      name: sellerType
+      in: query
+      description: Filters sellers by their type, which can be regular seller (`1`) or whitelabel seller (`2`).
+      required: false
+      schema:
+        type: integer
+        default: 1
+    environment:
+      name: environment
+      in: path
+      required: true
+      description: Environment to use. Used as part of the URL.
+      schema:
+        type: string
+        default: vtexcommercestable
+    sc:
+      name: sc
+      in: query
+      description: Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) associated to the seller account created.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        default: '1'
+    from:
+      name: from
+      in: query
+      description: The start number of pagination, being `0` the default value.
+      required: false
+      schema:
+        type: number
+        default: 0
     isActive:
       name: isActive
       in: query
       description: Enables to filter sellers that are active (`true`) or unactive (`false`) in the marketplace.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    contentType:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    integration:
+      name: integration
+      in: query
+      description: 'Filters sellers by the name of who made the integration, if VTEX or an external hub. The possible values for VTEX integrations are: `vtex-sellerportal`, `vtex-seller` and `vtex-franchise`.'
+      required: false
+      schema:
+        type: string
+        default: vtex-seller
+    group:
+      name: 'group '
+      in: query
+      description: Groups are defined by keywords that group sellers into categories defined by the marketplace.
+      required: false
+      schema:
+        type: string
+        default: Group
+    isVtex:
+      name: isVtex
+      in: query
+      description: When set as `true`, the list returned will be of sellers who have a VTEX store configured. When set as `false`, the list will be of sellers who do not have a VTEX store configured.
       required: false
       schema:
         type: boolean
@@ -217,113 +278,7 @@ components:
       schema:
         type: string
         default: keyword
-    contentType:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    environment:
-      name: environment
-      in: path
-      required: true
-      description: Environment to use. Used as part of the URL.
-      schema:
-        type: string
-        default: vtexcommercestable
-    isVtex:
-      name: isVtex
-      in: query
-      description: When set as `true`, the list returned will be of sellers who have a VTEX store configured. When set as `false`, the list will be of sellers who do not have a VTEX store configured.
-      required: false
-      schema:
-        type: boolean
-        default: false
-    sc:
-      name: sc
-      in: query
-      description: Sales channel (or [trade policy](https://help.vtex.com/en/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) associated to the seller account created.
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: string
-        default: '1'
-    integration:
-      name: integration
-      in: query
-      description: 'Filters sellers by the name of who made the integration, if VTEX or an external hub. The possible values for VTEX integrations are: `vtex-sellerportal`, `vtex-seller` and `vtex-franchise`.'
-      required: false
-      schema:
-        type: string
-        default: vtex-seller
-    sort:
-      name: sort
-      in: query
-      description: "Criteria used to sort the list of offers. For sorting values in ascending order, use `asc`, while for descending order, use `desc`. To fill in the field, insert the sorting criteria, followed by 'asc', or 'desc', separated by a comma. You can sort by the following criteria: \n\n- **price:** sorts offers by price. *Ascending* goes from lowest to highest price, while *Descending* goes from highest to lowest price. \n\n- **name:** sorts offers by *productName*, in alphabetical order. *Ascending* goes from *A* to *Z*, while *Descending* goes from *Z* to *A*. \n\n- **availability:** availability in the sales channel (sc). The default value is 1. \n\nEx. sort=availability,desc \n\nEx. sort=name,asc \n\nEx. price,desc"
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: availability,desc
-    accountName:
-      name: accountName
-      in: path
-      required: true
-      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
-      schema:
-        type: string
-        example: apiexamples
   schemas:
-    Groups:
-      title: groups
-      description: Array of groups attached to the seller. Groups are defined by key-words that group sellers into categories defined by the marketplace when adding a new seller through the [Configure Seller Account](https://developers.vtex.com/vtex-rest-api/reference/sellers#putupsertseller) endpoint. It is possible to filter sellers by group in the Seller Management page in your VTEX Admin. Know more about groups through our [Seller Management](https://help.vtex.com/en/tutorial/gerenciamento-de-sellers-beta--6eEiOISwxuAWJ8w6MtK7iv#groups) documentation.
-      required:
-      - groups
-      type: object
-      properties:
-        id:
-          type: string
-          description: Group's unique identifier code.
-          default: 8d845239bf1448dc8bc3ed3121837511
-        name:
-          type: string
-          description: Name of the tag chosen to identify the group.
-          default: franchise Accounts
-      example:
-        groups:
-        - id: 8d845239bf1448dc8bc3ed3121837511
-          name: long tail
-        - id: b9bcd348ab9c4cec8285ff9485c27a72
-          name: franchise accounts
-    AvailableSalesChannel:
-      title: Available Sales Channel
-      required:
-      - isSelected
-      - id
-      - name
-      type: object
-      properties:
-        isSelected:
-          type: boolean
-          description: Flag defining if the sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) is selected or not.
-          default: true
-        id:
-          type: integer
-          description: Sales Channel's ID.
-          default: 1
-        name:
-          type: string
-          description: Name of the Sales Channel.
-          default: Main Store
-      example:
-        isSelected: true
-        id: 1
-        name: Loja Principal
     SellerCommissionConfiguration:
       title: Seller Commission Configuration
       required:
@@ -548,6 +503,51 @@ components:
             name: long tail
           - id: b9bcd348ab9c4cec8285ff9485c27a72
             name: franchise accounts
+    AvailableSalesChannel:
+      title: Available Sales Channel
+      required:
+      - isSelected
+      - id
+      - name
+      type: object
+      properties:
+        isSelected:
+          type: boolean
+          description: Flag defining if the sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) is selected or not.
+          default: true
+        id:
+          type: integer
+          description: Sales Channel's ID.
+          default: 1
+        name:
+          type: string
+          description: Name of the Sales Channel.
+          default: Main Store
+      example:
+        isSelected: true
+        id: 1
+        name: Loja Principal
+    Groups:
+      title: groups
+      description: Array of groups attached to the seller. Groups are defined by key-words that group sellers into categories defined by the marketplace when adding a new seller through the [Configure Seller Account](https://developers.vtex.com/vtex-rest-api/reference/sellers#putupsertseller) endpoint. It is possible to filter sellers by group in the Seller Management page in your VTEX Admin. Know more about groups through our [Seller Management](https://help.vtex.com/en/tutorial/gerenciamento-de-sellers-beta--6eEiOISwxuAWJ8w6MtK7iv#groups) documentation.
+      required:
+      - groups
+      type: object
+      properties:
+        id:
+          type: string
+          description: Group's unique identifier code.
+          default: 8d845239bf1448dc8bc3ed3121837511
+        name:
+          type: string
+          description: Name of the tag chosen to identify the group.
+          default: franchise Accounts
+      example:
+        groups:
+        - id: 8d845239bf1448dc8bc3ed3121837511
+          name: long tail
+        - id: b9bcd348ab9c4cec8285ff9485c27a72
+          name: franchise accounts
   securitySchemes:
     appKey:
       type: apiKey

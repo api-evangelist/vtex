@@ -219,34 +219,6 @@ paths:
                 cancelledValue: 74269
       deprecated: false
 components:
-  parameters:
-    transactionId:
-      name: transactionId
-      in: path
-      description: Transaction identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: A3BDE325F76B4B758B398D900DF06150
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   schemas:
     RefundthetransactionRequest:
       required:
@@ -293,6 +265,25 @@ components:
                   type: integer
                   description: Discount applied on item.
                   example: 50
+    CancelthetransactionRequest:
+      required:
+      - value
+      type: object
+      description: Cancel transaction request body information.
+      properties:
+        value:
+          type: number
+          description: Value of the purchase that will be cancelled.
+    SettlethetransactionRequest:
+      required:
+      - value
+      type: object
+      description: Settle transaction request body information.
+      properties:
+        value:
+          type: number
+          description: Value to be settled. The value must be described without using separation for decimals, e.g. to capture a value of 320.50, send 32050.
+          example: 10050
     SettleResponse:
       required:
       - id
@@ -350,25 +341,34 @@ components:
         cancelledValue:
           type: integer
           description: Cancelled value.
-    SettlethetransactionRequest:
-      required:
-      - value
-      type: object
-      description: Settle transaction request body information.
-      properties:
-        value:
-          type: number
-          description: Value to be settled. The value must be described without using separation for decimals, e.g. to capture a value of 320.50, send 32050.
-          example: 10050
-    CancelthetransactionRequest:
-      required:
-      - value
-      type: object
-      description: Cancel transaction request body information.
-      properties:
-        value:
-          type: number
-          description: Value of the purchase that will be cancelled.
+  parameters:
+    transactionId:
+      name: transactionId
+      in: path
+      description: Transaction identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: A3BDE325F76B4B758B398D900DF06150
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

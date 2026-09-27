@@ -176,122 +176,7 @@ paths:
                   exception: null
       deprecated: false
 components:
-  parameters:
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   schemas:
-    ValidRequest:
-      required:
-      - value
-      - installments
-      type: object
-      description: Installments options response body information.
-      properties:
-        value:
-          type: number
-          description: Value to be paid in installments.
-        installments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Installment'
-          description: Installments information.
-    Installment:
-      required:
-      - payment
-      - options
-      type: object
-      description: Installment options information.
-      properties:
-        payment:
-          $ref: '#/components/schemas/Payment'
-        options:
-          type: array
-          description: Array containing information about installment options.
-          items:
-            $ref: '#/components/schemas/Option'
-    InvalidRequestValue:
-      required:
-      - error
-      type: object
-      description: Installments options response body information.
-      properties:
-        error:
-          required:
-          - code
-          - message
-          - exception
-          type: object
-          description: Error information.
-          properties:
-            code:
-              type: string
-              description: Error code.
-            message:
-              type: string
-              description: Error message.
-            exception:
-              type:
-              - string
-              - 'null'
-              description: Exception information.
-    Self:
-      required:
-      - href
-      type: object
-      description: Object containing the payment system reference route.
-      properties:
-        href:
-          type: string
-          description: Payment system reference route.
-    Payment:
-      required:
-      - id
-      - name
-      - bin
-      - value
-      - isDefault
-      - self
-      type: object
-      description: Payment system information.
-      properties:
-        id:
-          type: integer
-          description: Payment system identification.
-        name:
-          type:
-          - string
-          - 'null'
-          description: Payment system name.
-        bin:
-          type:
-          - string
-          - 'null'
-          description: First six digits of the card number.
-        value:
-          type: number
-          description: Value to be paid in installments.
-        isDefault:
-          type: boolean
-          description: Indicates whether the payment system is automatically applied by default.
-          default: false
-        self:
-          $ref: '#/components/schemas/Self'
     Option:
       required:
       - ruleId
@@ -327,6 +212,121 @@ components:
           - number
           - 'null'
           description: Interest tax (percent 0.1 = 10%).
+    Self:
+      required:
+      - href
+      type: object
+      description: Object containing the payment system reference route.
+      properties:
+        href:
+          type: string
+          description: Payment system reference route.
+    InvalidRequestValue:
+      required:
+      - error
+      type: object
+      description: Installments options response body information.
+      properties:
+        error:
+          required:
+          - code
+          - message
+          - exception
+          type: object
+          description: Error information.
+          properties:
+            code:
+              type: string
+              description: Error code.
+            message:
+              type: string
+              description: Error message.
+            exception:
+              type:
+              - string
+              - 'null'
+              description: Exception information.
+    ValidRequest:
+      required:
+      - value
+      - installments
+      type: object
+      description: Installments options response body information.
+      properties:
+        value:
+          type: number
+          description: Value to be paid in installments.
+        installments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Installment'
+          description: Installments information.
+    Payment:
+      required:
+      - id
+      - name
+      - bin
+      - value
+      - isDefault
+      - self
+      type: object
+      description: Payment system information.
+      properties:
+        id:
+          type: integer
+          description: Payment system identification.
+        name:
+          type:
+          - string
+          - 'null'
+          description: Payment system name.
+        bin:
+          type:
+          - string
+          - 'null'
+          description: First six digits of the card number.
+        value:
+          type: number
+          description: Value to be paid in installments.
+        isDefault:
+          type: boolean
+          description: Indicates whether the payment system is automatically applied by default.
+          default: false
+        self:
+          $ref: '#/components/schemas/Self'
+    Installment:
+      required:
+      - payment
+      - options
+      type: object
+      description: Installment options information.
+      properties:
+        payment:
+          $ref: '#/components/schemas/Payment'
+        options:
+          type: array
+          description: Array containing information about installment options.
+          items:
+            $ref: '#/components/schemas/Option'
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

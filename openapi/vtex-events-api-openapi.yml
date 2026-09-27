@@ -126,37 +126,6 @@ components:
           title: session
           description: Identifier related to the current navigation, according to the [nanoid](https://github.com/ai/nanoid) pattern. It is a cookie that lasts for 30 minutes, changing if the user opens another tab in private navigation mode.
           example: zZlNhqz1vFJP6iPG5Oqtt
-    PageConfirmation:
-      title: Page Confirmation
-      description: Sends a confirmation informing the products that were bought.
-      type: object
-      required:
-      - session
-      - anonymous
-      - type
-      - order
-      - products
-      properties:
-        session:
-          $ref: '#/components/schemas/UserIdentification/properties/session'
-        anonymous:
-          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
-        products:
-          type: array
-          title: products
-          description: Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.
-          items:
-            $ref: '#/components/schemas/OrderProduct'
-        order:
-          type: string
-          title: order
-          description: Order ID.
-          example: 123ABC
-        type:
-          type: string
-          title: type
-          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
-          example: page.confirmation
     Click:
       title: Search Click
       description: Sends an event every time a shopper clicks on a product from a search page.
@@ -275,14 +244,15 @@ components:
           title: operator
           description: 'Identifies the type of operator used on the search. The possible values are: `and`, `or`. Find more details in [this Elastic Search guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html).'
           example: and
-    PageEmptyCart:
-      title: Empty Cart
-      description: Sends an event if there are no products in the shopping cart at that time.
+    PageConfirmation:
+      title: Page Confirmation
+      description: Sends a confirmation informing the products that were bought.
       type: object
       required:
       - session
       - anonymous
       - type
+      - order
       - products
       properties:
         session:
@@ -294,52 +264,17 @@ components:
           title: products
           description: Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.
           items:
-            $ref: '#/components/schemas/CartProduct'
+            $ref: '#/components/schemas/OrderProduct'
+        order:
+          type: string
+          title: order
+          description: Order ID.
+          example: 123ABC
         type:
           type: string
           title: type
           description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
-          example: page.empty_cart
-    CartProduct:
-      type: object
-      description: Product information.
-      required:
-      - productId
-      - quantity
-      properties:
-        productId:
-          type: string
-          description: Unique identifier of the product.
-          example: ABC123
-        quantity:
-          type: number
-          description: Quantity of the product.
-          example: 2
-    PageCart:
-      title: PageCart
-      description: Sends an event every time the shopper enters the cart page. Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card.
-      type: object
-      required:
-      - session
-      - anonymous
-      - type
-      - products
-      properties:
-        session:
-          $ref: '#/components/schemas/UserIdentification/properties/session'
-        anonymous:
-          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
-        products:
-          type: array
-          title: products
-          description: Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.
-          items:
-            $ref: '#/components/schemas/CartProduct'
-        type:
-          type: string
-          title: type
-          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
-          example: page.cart
+          example: page.confirmation
     SessionPing:
       title: SessionPing
       description: Sends an ACK to the API to renew the session server-side. It should be sent every 1 minute.
@@ -365,3 +300,68 @@ components:
           description: Identifies whether the request came from a mobile or desktop application. It's used as a filter in the search report.
           default: desktop
           example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0
+    PageCart:
+      title: PageCart
+      description: Sends an event every time the shopper enters the cart page. Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card.
+      type: object
+      required:
+      - session
+      - anonymous
+      - type
+      - products
+      properties:
+        session:
+          $ref: '#/components/schemas/UserIdentification/properties/session'
+        anonymous:
+          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
+        products:
+          type: array
+          title: products
+          description: Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.
+          items:
+            $ref: '#/components/schemas/CartProduct'
+        type:
+          type: string
+          title: type
+          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
+          example: page.cart
+    CartProduct:
+      type: object
+      description: Product information.
+      required:
+      - productId
+      - quantity
+      properties:
+        productId:
+          type: string
+          description: Unique identifier of the product.
+          example: ABC123
+        quantity:
+          type: number
+          description: Quantity of the product.
+          example: 2
+    PageEmptyCart:
+      title: Empty Cart
+      description: Sends an event if there are no products in the shopping cart at that time.
+      type: object
+      required:
+      - session
+      - anonymous
+      - type
+      - products
+      properties:
+        session:
+          $ref: '#/components/schemas/UserIdentification/properties/session'
+        anonymous:
+          $ref: '#/components/schemas/UserIdentification/properties/anonymous'
+        products:
+          type: array
+          title: products
+          description: Array of objects containing products. If the event type is `page.cart`, the array contains all the products in the cart, with their ID and quantity.  Each interaction should include all products inside the shopping cart at that time. In case a product is removed, sent the updated card. If there are no products in the cart (page.`empty_cart`), the array is empty. If the event type is `page.confirmation`, the array contains all the products that were purchased, with their ID, price and quantity.
+          items:
+            $ref: '#/components/schemas/CartProduct'
+        type:
+          type: string
+          title: type
+          description: 'Type of event, which can be one of the following: `page.cart`, `page.empty_cart`, `search.query`, `page.confirmation`, `session.ping`, `search.click`.'
+          example: page.empty_cart

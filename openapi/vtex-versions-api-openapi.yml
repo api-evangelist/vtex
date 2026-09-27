@@ -224,51 +224,6 @@ paths:
           description: Not Modified
       deprecated: false
 components:
-  parameters:
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    versionId:
-      name: versionId
-      in: path
-      description: ID of the version to update.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: _8sZcvyj4nng7FgA2RgtVVZmkIxb4Pbfe_
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    id:
-      name: id
-      in: path
-      description: ID of the Document.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: b818cbda-e489-11e6-94f4-0ac138d2d42e
-    dataEntityName:
-      name: dataEntityName
-      in: path
-      required: true
-      description: Name of the data entity.
-      schema:
-        type: string
-        example: Newsletter
   schemas:
     Getversion:
       title: Getversion
@@ -287,19 +242,39 @@ components:
           description: ID of the user who created the version.
         document:
           $ref: '#/components/schemas/Document'
-    documentResponse:
+    Listversion:
+      title: Listversion
       required:
-      - Id
-      - Href
+      - id
+      - date
       type: object
-      description: Response body object.
+      description: Version information.
       properties:
-        Id:
+        id:
           type: string
-          description: ID of the document that was created or updated.
-        Href:
+          description: Version ID.
+        date:
           type: string
-          description: Document reference URL.
+          description: Date when the version was created in ISO 8601 format.
+        document:
+          type: object
+          description: Information about the document.
+          properties:
+            id:
+              type: string
+              description: Document ID.
+            dataEntityId:
+              type: string
+              description: Data entity name.
+            isNewsletterOptIn:
+              type:
+              - boolean
+              - 'null'
+              description: Indicates whether client otped to receive the store newsletter (`true`) or not (`false`).
+              example: false
+            createdBy:
+              type: string
+              description: ID of the user who created the document.
     Document:
       title: Document
       required:
@@ -339,39 +314,64 @@ components:
         email:
           type: string
           description: User email.
-    Listversion:
-      title: Listversion
+    documentResponse:
       required:
-      - id
-      - date
+      - Id
+      - Href
       type: object
-      description: Version information.
+      description: Response body object.
       properties:
-        id:
+        Id:
           type: string
-          description: Version ID.
-        date:
+          description: ID of the document that was created or updated.
+        Href:
           type: string
-          description: Date when the version was created in ISO 8601 format.
-        document:
-          type: object
-          description: Information about the document.
-          properties:
-            id:
-              type: string
-              description: Document ID.
-            dataEntityId:
-              type: string
-              description: Data entity name.
-            isNewsletterOptIn:
-              type:
-              - boolean
-              - 'null'
-              description: Indicates whether client otped to receive the store newsletter (`true`) or not (`false`).
-              example: false
-            createdBy:
-              type: string
-              description: ID of the user who created the document.
+          description: Document reference URL.
+  parameters:
+    id:
+      name: id
+      in: path
+      description: ID of the Document.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: b818cbda-e489-11e6-94f4-0ac138d2d42e
+    dataEntityName:
+      name: dataEntityName
+      in: path
+      required: true
+      description: Name of the data entity.
+      schema:
+        type: string
+        example: Newsletter
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    versionId:
+      name: versionId
+      in: path
+      description: ID of the version to update.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: _8sZcvyj4nng7FgA2RgtVVZmkIxb4Pbfe_
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

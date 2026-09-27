@@ -192,37 +192,44 @@ paths:
                 appToken: 57ea254d-f3d3-488d-88d7-129766037ed1
       deprecated: false
 components:
+  parameters:
+    X-PROVIDER-API-AppToken:
+      name: X-PROVIDER-API-AppToken
+      in: header
+      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX).
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppToken}}'
+    X-PROVIDER-API-AppKey:
+      name: X-PROVIDER-API-AppKey
+      in: header
+      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX).
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppKey}}'
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
-    1.RetrieveToken:
-      required:
-      - applicationId
-      - token
-      type: object
-      properties:
-        applicationId:
-          type: string
-          description: This value is always identified as `vtex`.
-        token:
-          type: string
-          description: Payment Provider Token. Used to identify the context after you receive the redirected user to your site.
-      example:
-        applicationId: vtex
-        token: 358a5bea-07d0-4122-888a-54ab70b5f02f
-    1.RetrieveTokenRequest:
-      required:
-      - applicationId
-      - returnUrl
-      type: object
-      properties:
-        applicationId:
-          type: string
-          description: This value is always identified as `vtex`.
-        returnUrl:
-          type: string
-          description: VTEX website URL. You will redirect the user after they complete login on the payment provider's website. The URL should contain a query string parameter called `authorizationCode` which will be passed empty and which you must fill in before returning the user.
-      example:
-        applicationId: vtex
-        returnUrl: https://storevtex.vtexpayments.com/?authorizationCode=
     3.GetCredentials:
       required:
       - applicationId
@@ -243,43 +250,36 @@ components:
         applicationId: vtex
         appKey: c5a5e3f1-4a77-4a00-8b53-0d1adb3e9628
         appToken: 57ea254d-f3d3-488d-88d7-129766037ed1
-  parameters:
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    X-PROVIDER-API-AppKey:
-      name: X-PROVIDER-API-AppKey
-      in: header
-      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX).
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppKey}}'
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    X-PROVIDER-API-AppToken:
-      name: X-PROVIDER-API-AppToken
-      in: header
-      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX).
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppToken}}'
+    1.RetrieveTokenRequest:
+      required:
+      - applicationId
+      - returnUrl
+      type: object
+      properties:
+        applicationId:
+          type: string
+          description: This value is always identified as `vtex`.
+        returnUrl:
+          type: string
+          description: VTEX website URL. You will redirect the user after they complete login on the payment provider's website. The URL should contain a query string parameter called `authorizationCode` which will be passed empty and which you must fill in before returning the user.
+      example:
+        applicationId: vtex
+        returnUrl: https://storevtex.vtexpayments.com/?authorizationCode=
+    1.RetrieveToken:
+      required:
+      - applicationId
+      - token
+      type: object
+      properties:
+        applicationId:
+          type: string
+          description: This value is always identified as `vtex`.
+        token:
+          type: string
+          description: Payment Provider Token. Used to identify the context after you receive the redirected user to your site.
+      example:
+        applicationId: vtex
+        token: 358a5bea-07d0-4122-888a-54ab70b5f02f
   securitySchemes:
     VtexIdclientAutCookie:
       type: apiKey

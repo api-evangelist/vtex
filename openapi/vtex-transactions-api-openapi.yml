@@ -591,6 +591,80 @@ paths:
       deprecated: false
 components:
   schemas:
+    Item2:
+      description: Items information.
+      required:
+      - id
+      - productId
+      - refId
+      - name
+      - value
+      - price
+      - quantity
+      - shippingDiscount
+      - discount
+      - priceTags
+      type: object
+      properties:
+        id:
+          type: string
+          description: SKU ID.
+          example: '2001023'
+        productId:
+          type: string
+          description: Product ID.
+          example: '2000492'
+        refId:
+          type: string
+          description: Product Reference ID.
+          example: '35994'
+        name:
+          type: string
+          description: Product name.
+          example: Vaporizador Des. ColC4nia Branco
+        value:
+          type: number
+          description: Product value.
+          example: 14.99
+        price:
+          type: number
+          description: Product price.
+          example: 14.99
+        quantity:
+          type: integer
+          description: Product quantity.
+          example: 1
+        shippingDiscount:
+          type: integer
+          description: Discount to be applied for the shipping value.
+          example: 0
+        discount:
+          type: number
+          description: Discount applied on item.
+          example: -7.5
+        priceTags:
+          type: array
+          description: Array of price tags, each of which modifies the price in some way, like discounts or rates that apply to the item in the context of the order.
+          items:
+            $ref: '#/components/schemas/PriceTag'
+    OrderInfo:
+      description: Order Information.
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Order ID.
+          example: v500
+        sequence:
+          type: integer
+          description: Sequence number.
+          example: 5006128
+        cart:
+          $ref: '#/components/schemas/Cart1'
+        clientProfile:
+          $ref: '#/components/schemas/ClientProfile'
+        shipping:
+          $ref: '#/components/schemas/Shipping'
     ClientProfile:
       description: Client profile information.
       required:
@@ -631,21 +705,15 @@ components:
           type: boolean
           description: Defines if the customer is a company (`true`) or not (`false`).
           example: false
-    PriceTag:
-      description: Price tag information.
+    Self:
       required:
-      - name
-      - value
+      - href
       type: object
+      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
       properties:
-        name:
+        href:
           type: string
-          description: Price tag name.
-          example: discount@price-discount_store_183#4911bf6f-22a2-4af1-a365-cce895c3df2c
-        value:
-          type: integer
-          description: Price tag value.
-          example: 0
+          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
     TransactionResponse:
       description: Transaction response information.
       required:
@@ -737,39 +805,22 @@ components:
           - 'null'
           description: Complement that might help locate the shipping address more precisely in case of delivery.
           example: Subway
-    CreateGiftCardTransactionCancellationRequest:
-      description: Cancel a gift card transaction request information.
+    GiftCardTransactionResponse:
+      description: Gift card transaction response information.
       required:
-      - value
-      - requestId
+      - cardId
+      - id
+      - _self
       type: object
       properties:
-        value:
-          type: number
-          description: Transaction value.
-          example: 4.1
-        requestId:
+        cardId:
           type: string
-          description: Request identification of the transaction.
-          example: 12093812masoidj120398
-    OrderInfo:
-      description: Order Information.
-      type: object
-      properties:
-        orderId:
+          description: Gift card identification.
+        id:
           type: string
-          description: Order ID.
-          example: v500
-        sequence:
-          type: integer
-          description: Sequence number.
-          example: 5006128
-        cart:
-          $ref: '#/components/schemas/Cart1'
-        clientProfile:
-          $ref: '#/components/schemas/ClientProfile'
-        shipping:
-          $ref: '#/components/schemas/Shipping'
+          description: Transaction identification.
+        _self:
+          $ref: '#/components/schemas/Self'
     CreateGiftCardTransactionRequest:
       description: Create a gift card transaction request body information.
       required:
@@ -808,31 +859,36 @@ components:
           example: B56CBE231DEE4E1A859183C1030CE926
         orderInfo:
           $ref: '#/components/schemas/OrderInfo'
-    GiftCardTransactionResponse:
-      description: Gift card transaction response information.
+    PriceTag:
+      description: Price tag information.
       required:
-      - cardId
-      - id
-      - _self
+      - name
+      - value
       type: object
       properties:
-        cardId:
+        name:
           type: string
-          description: Gift card identification.
-        id:
-          type: string
-          description: Transaction identification.
-        _self:
-          $ref: '#/components/schemas/Self'
-    Self:
+          description: Price tag name.
+          example: discount@price-discount_store_183#4911bf6f-22a2-4af1-a365-cce895c3df2c
+        value:
+          type: integer
+          description: Price tag value.
+          example: 0
+    CreateGiftCardTransactionCancellationRequest:
+      description: Cancel a gift card transaction request information.
       required:
-      - href
+      - value
+      - requestId
       type: object
-      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
       properties:
-        href:
+        value:
+          type: number
+          description: Transaction value.
+          example: 4.1
+        requestId:
           type: string
-          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
+          description: Request identification of the transaction.
+          example: 12093812masoidj120398
     Cart1:
       description: Cart information.
       required:
@@ -869,62 +925,6 @@ components:
           type: number
           description: Total items value.
           example: 14.99
-    Item2:
-      description: Items information.
-      required:
-      - id
-      - productId
-      - refId
-      - name
-      - value
-      - price
-      - quantity
-      - shippingDiscount
-      - discount
-      - priceTags
-      type: object
-      properties:
-        id:
-          type: string
-          description: SKU ID.
-          example: '2001023'
-        productId:
-          type: string
-          description: Product ID.
-          example: '2000492'
-        refId:
-          type: string
-          description: Product Reference ID.
-          example: '35994'
-        name:
-          type: string
-          description: Product name.
-          example: Vaporizador Des. ColC4nia Branco
-        value:
-          type: number
-          description: Product value.
-          example: 14.99
-        price:
-          type: number
-          description: Product price.
-          example: 14.99
-        quantity:
-          type: integer
-          description: Product quantity.
-          example: 1
-        shippingDiscount:
-          type: integer
-          description: Discount to be applied for the shipping value.
-          example: 0
-        discount:
-          type: number
-          description: Discount applied on item.
-          example: -7.5
-        priceTags:
-          type: array
-          description: Array of price tags, each of which modifies the price in some way, like discounts or rates that apply to the item in the context of the order.
-          items:
-            $ref: '#/components/schemas/PriceTag'
   securitySchemes:
     appKey:
       type: apiKey

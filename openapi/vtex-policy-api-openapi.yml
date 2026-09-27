@@ -434,20 +434,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    PolicyActionGetResponse:
-      title: PolicyActionGetResponse
-      type: object
-      description: Object with policy conditions.
-      properties:
-        id:
-          type: string
-          description: Action ID.
-          title: id
-        metadata:
-          type: object
-          description: Metadata object from the current action.
-          title: metadata
-          additionalProperties: true
     StatementGetResponse:
       type: object
       description: Object with policy conditions.
@@ -568,6 +554,63 @@ components:
           - dateTimeUtcGreaterThan
           - dateTimeUtcLessThan
           - between
+    PolicySaveRequest:
+      required:
+      - name
+      - description
+      - statements
+      type: object
+      properties:
+        name:
+          type: string
+          description: Policy name.
+          title: name
+          example: id
+        description:
+          type: string
+          description: Policy description, only for internal use.
+          title: description
+          example: TesteMarcosPromotionsAlert
+        statements:
+          type: array
+          title: statements
+          items:
+            $ref: '#/components/schemas/StatementGetResponse'
+          description: Requirements for the the policy to be applied.
+    EvaluatePolicyRequest:
+      required:
+      - resource
+      - context
+      type: object
+      description: Object with policy conditions.
+      properties:
+        resource:
+          description: Scope on which this policy must be evaluated.
+          title: resource
+          type: string
+          example: vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert
+        context:
+          type: object
+          description: Conditions that the policy needs to satisfy.
+          title: context
+          example:
+            brandId: '2000001'
+            discountPercentage: '91.00'
+          additionalProperties: true
+    PolicyActionGetResponse:
+      title: PolicyActionGetResponse
+      type: object
+      description: Object with policy conditions.
+      properties:
+        id:
+          type: string
+          description: Action ID.
+          title: id
+        metadata:
+          type: object
+          description: Metadata object from the current action.
+          title: metadata
+          additionalProperties: true
     PolicyGetResponse:
       title: PolicyGetResponse
       description: Object with policy information.
@@ -592,63 +635,20 @@ components:
           items:
             $ref: '#/components/schemas/StatementGetResponse'
           description: Requirements for the policy to be applied.
-    EvaluatePolicyRequest:
-      required:
-      - resource
-      - context
-      type: object
-      description: Object with policy conditions.
-      properties:
-        resource:
-          description: Scope on which this policy must be evaluated.
-          title: resource
-          type: string
-          example: vrn:vtex.promotions-alert:aws-us-east-1:kamila:master:/_v/promotions_alert
-        context:
-          type: object
-          description: Conditions that the policy needs to satisfy.
-          title: context
-          example:
-            brandId: '2000001'
-            discountPercentage: '91.00'
-          additionalProperties: true
-    PolicySaveRequest:
-      required:
-      - name
-      - description
-      - statements
-      type: object
-      properties:
-        name:
-          type: string
-          description: Policy name.
-          title: name
-          example: id
-        description:
-          type: string
-          description: Policy description, only for internal use.
-          title: description
-          example: TesteMarcosPromotionsAlert
-        statements:
-          type: array
-          title: statements
-          items:
-            $ref: '#/components/schemas/StatementGetResponse'
-          description: Requirements for the the policy to be applied.
   parameters:
-    Content-Type:
-      name: Content-Type
+    Accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
         type: string
         default: application/json
-    Accept:
-      name: Accept
+    Content-Type:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:

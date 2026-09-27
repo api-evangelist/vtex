@@ -4406,15 +4406,6 @@ paths:
           default: vtexcommercestable
 components:
   parameters:
-    creditAccountId:
-      name: creditAccountId
-      in: path
-      description: Credit account identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 01bce461-9g03-12ds-8217-b3d39271e15b
     transactionId:
       name: transactionId
       in: path
@@ -4424,19 +4415,28 @@ components:
       schema:
         type: string
         example: B2E754DCD7304D22866CB6F221CF0FEB
-    Accept:
-      name: Accept
+    creditAccountId:
+      name: creditAccountId
+      in: path
+      description: Credit account identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 01bce461-9g03-12ds-8217-b3d39271e15b
+    Content-Type:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:
         type: string
         example: application/json
-    Content-Type:
-      name: Content-Type
+    Accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
@@ -4524,63 +4524,6 @@ components:
             description: Alias.
             deprecated: true
           deprecated: true
-    LicenseItems:
-      description: Object representing licenses.
-      type: object
-      properties:
-        expiration:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          deprecated: true
-          description: Expiration date.
-        id:
-          description: ID of the category of the license.
-          type: number
-        isPurchased:
-          description: Defines if the license is purchased (`true`) or not (`false`).
-          type: boolean
-        products:
-          description: Array of products.
-          type: array
-          items:
-            description: Object representing products of licenses.
-            type: object
-            properties:
-              id:
-                description: ID of the product.
-                type: number
-              name:
-                description: Name of the product.
-                type: string
-              domains:
-                description: List of domains of the product.
-                type: array
-                items:
-                  type: string
-                  description: Domain of the product.
-                deprecated: true
-              endpoints:
-                type: object
-                description: Endpoints.
-                properties:
-                  webApiUrl:
-                    type:
-                    - string
-                    - 'null'
-                    description: Web API URL.
-                    deprecated: true
-                  consoleUrl:
-                    type:
-                    - string
-                    - 'null'
-                    description: Console URL.
-                    deprecated: true
-                deprecated: true
-        name:
-          description: Name of the category of the license.
-          type: string
     AccountResponse:
       description: Successful response for `/api/vlm/account`.
       type: object
@@ -4767,6 +4710,63 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AppKeyItems'
+    LicenseItems:
+      description: Object representing licenses.
+      type: object
+      properties:
+        expiration:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          deprecated: true
+          description: Expiration date.
+        id:
+          description: ID of the category of the license.
+          type: number
+        isPurchased:
+          description: Defines if the license is purchased (`true`) or not (`false`).
+          type: boolean
+        products:
+          description: Array of products.
+          type: array
+          items:
+            description: Object representing products of licenses.
+            type: object
+            properties:
+              id:
+                description: ID of the product.
+                type: number
+              name:
+                description: Name of the product.
+                type: string
+              domains:
+                description: List of domains of the product.
+                type: array
+                items:
+                  type: string
+                  description: Domain of the product.
+                deprecated: true
+              endpoints:
+                type: object
+                description: Endpoints.
+                properties:
+                  webApiUrl:
+                    type:
+                    - string
+                    - 'null'
+                    description: Web API URL.
+                    deprecated: true
+                  consoleUrl:
+                    type:
+                    - string
+                    - 'null'
+                    description: Console URL.
+                    deprecated: true
+                deprecated: true
+        name:
+          description: Name of the category of the license.
+          type: string
   securitySchemes:
     appKey:
       type: apiKey

@@ -149,101 +149,6 @@ paths:
           description: OK
 components:
   schemas:
-    GetPricesRequestObject:
-      required:
-      - items
-      - salesChannel
-      - email
-      type: object
-      properties:
-        items:
-          $ref: '#/components/schemas/items'
-        UtmSource:
-          type:
-          - string
-          - 'null'
-          example: facebook
-          description: Traffic source, which indicates where the traffic originated from according to the `utm_source` value in the URL that led to the order. If there is no value, use `null`.
-        UtmMedium:
-          type:
-          - string
-          - 'null'
-          example: social
-          description: Medium that indicates what type of traffic the customer originated from, represented by the `utm_medium` value in the URL that led to the order. If there is no value, use `null`.
-        UtmCampaign:
-          type: string
-          example: summer
-          description: Campaign name, represented by the `utm_campaign` value in the URL that led to the order. If there is no value, use `null`.
-        UtmInternalCampaign:
-          type:
-          - string
-          - 'null'
-          example: sale
-          description: Internal campaign name, represented by the `utmi_cp` value in the URL that led to the order. If there is no value, use `null`.
-        salesChannel:
-          type: string
-          example: '1'
-          description: Represents Checkout's sales channel.
-        email:
-          type: string
-          example: customer@email.com
-          description: Customer's email address. If there is no value, use an empty string.
-    ConfigExternalPriceSourceRequest:
-      required:
-      - appName
-      type: object
-      properties:
-        active:
-          type: boolean
-          example: false
-          description: Defines if the external price source is active (`true`) or not (`false`). If not set, the default value will be `false`.
-        appName:
-          type: string
-          description: Name of the app that communicates with the external pricing source.
-          example: apiexamples_app_name
-    response2:
-      required:
-      - items
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item1'
-          description: List of items and their respective prices applied by Pricing Hub.
-    Item1:
-      required:
-      - index
-      - skuId
-      - price
-      - costPrice
-      - listPrice
-      - priceTable
-      - priceValidUntil
-      type: object
-      description: Each price item.
-      properties:
-        index:
-          type: integer
-          description: The same index referring to Checkout's cart that was passed to the API.
-        skuId:
-          type: string
-          description: The same skuId that was passed to the API.
-        price:
-          type: number
-          description: The price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
-        costPrice:
-          type: number
-          description: The cost price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
-        listPrice:
-          type: number
-          description: The list price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
-        priceTable:
-          type: string
-          description: The price table that was used to price the item.
-        priceValidUntil:
-          type: string
-          description: The moment up until the price is valid. After that moment, it will be necessary to call the pricing API again. The format of the string is in RFC3339.
     items:
       required:
       - itemsObject
@@ -299,6 +204,101 @@ components:
               description: ID of a category that will be used to compute the price.
             default:
             - '1'
+    GetPricesRequestObject:
+      required:
+      - items
+      - salesChannel
+      - email
+      type: object
+      properties:
+        items:
+          $ref: '#/components/schemas/items'
+        UtmSource:
+          type:
+          - string
+          - 'null'
+          example: facebook
+          description: Traffic source, which indicates where the traffic originated from according to the `utm_source` value in the URL that led to the order. If there is no value, use `null`.
+        UtmMedium:
+          type:
+          - string
+          - 'null'
+          example: social
+          description: Medium that indicates what type of traffic the customer originated from, represented by the `utm_medium` value in the URL that led to the order. If there is no value, use `null`.
+        UtmCampaign:
+          type: string
+          example: summer
+          description: Campaign name, represented by the `utm_campaign` value in the URL that led to the order. If there is no value, use `null`.
+        UtmInternalCampaign:
+          type:
+          - string
+          - 'null'
+          example: sale
+          description: Internal campaign name, represented by the `utmi_cp` value in the URL that led to the order. If there is no value, use `null`.
+        salesChannel:
+          type: string
+          example: '1'
+          description: Represents Checkout's sales channel.
+        email:
+          type: string
+          example: customer@email.com
+          description: Customer's email address. If there is no value, use an empty string.
+    response2:
+      required:
+      - items
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item1'
+          description: List of items and their respective prices applied by Pricing Hub.
+    Item1:
+      required:
+      - index
+      - skuId
+      - price
+      - costPrice
+      - listPrice
+      - priceTable
+      - priceValidUntil
+      type: object
+      description: Each price item.
+      properties:
+        index:
+          type: integer
+          description: The same index referring to Checkout's cart that was passed to the API.
+        skuId:
+          type: string
+          description: The same skuId that was passed to the API.
+        price:
+          type: number
+          description: The price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
+        costPrice:
+          type: number
+          description: The cost price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
+        listPrice:
+          type: number
+          description: The list price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
+        priceTable:
+          type: string
+          description: The price table that was used to price the item.
+        priceValidUntil:
+          type: string
+          description: The moment up until the price is valid. After that moment, it will be necessary to call the pricing API again. The format of the string is in RFC3339.
+    ConfigExternalPriceSourceRequest:
+      required:
+      - appName
+      type: object
+      properties:
+        active:
+          type: boolean
+          example: false
+          description: Defines if the external price source is active (`true`) or not (`false`). If not set, the default value will be `false`.
+        appName:
+          type: string
+          description: Name of the app that communicates with the external pricing source.
+          example: apiexamples_app_name
   securitySchemes:
     appKey:
       type: apiKey

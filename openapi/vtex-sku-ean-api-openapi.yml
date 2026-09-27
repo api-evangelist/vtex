@@ -396,6 +396,149 @@ components:
         realLength: 65
         realWeight: 9800
         realWidth: 105
+    SkuSpecification:
+      required:
+      - FieldId
+      - FieldName
+      - FieldValueIds
+      - FieldValues
+      type: object
+      description: Object containing related SKU specifications.
+      properties:
+        FieldId:
+          type: integer
+          format: int32
+          description: Specification field ID.
+        FieldName:
+          type: string
+          description: Specification field Name.
+        FieldValueIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Specification value ID.
+          description: Array with related specification values IDs.
+        FieldValues:
+          type: array
+          items:
+            type: string
+          description: Array with related specification values.
+      example:
+        FieldId: 102
+        FieldName: Cor
+        FieldValueIds:
+        - 266
+        FieldValues:
+        - Padrão
+    SkuSeller:
+      required:
+      - SellerId
+      - StockKeepingUnitId
+      - SellerStockKeepingUnitId
+      - IsActive
+      - FreightCommissionPercentage
+      - ProductCommissionPercentage
+      type: object
+      description: Object containing related SKU sellers data.
+      properties:
+        SellerId:
+          type: string
+          description: SKU seller ID. This is the ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
+        StockKeepingUnitId:
+          type: integer
+          format: int32
+          description: SKU ID.
+        SellerStockKeepingUnitId:
+          type: string
+          description: SKU ID for the SKU seller.
+        IsActive:
+          type: boolean
+          description: Defines if the SKU is active.
+        FreightCommissionPercentage:
+          type: number
+          description: Registered value for Seller Freight Commission.
+        ProductCommissionPercentage:
+          type: number
+          description: Registered value for Seller product Commission.
+      example:
+        SellerId: '1'
+        StockKeepingUnitId: 2001773
+        SellerStockKeepingUnitId: '2001773'
+        IsActive: true
+        FreightCommissionPercentage: 0
+        ProductCommissionPercentage: 0
+    Attachment:
+      required:
+      - Id
+      - Name
+      - Keys
+      - Fields
+      - IsActive
+      - IsRequired
+      type: object
+      description: Object containing information about SKU attachments.
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: Attachment ID.
+        Name:
+          type: string
+          description: Attachment Name.
+        Keys:
+          type: array
+          items:
+            type: string
+          description: Attachment Keys.
+        Fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+          description: Array containing Attachment fields.
+        IsActive:
+          type: boolean
+          description: Defines if the Attachment is active or not.
+        IsRequired:
+          type: boolean
+          description: Defines if the Attachment is required or not.
+      example:
+        Id: 3
+        Name: Mensagem
+        Keys:
+        - nome;20
+        - foto;40
+        Fields:
+        - FieldName: nome
+          MaxCaracters: '20'
+          DomainValues: Adalberto,Pedro,João
+        - FieldName: foto
+          MaxCaracters: '40'
+          DomainValues: null
+        IsActive: true
+        IsRequired: false
+    Field:
+      required:
+      - FieldName
+      - MaxCaracters
+      - DomainValues
+      type: object
+      properties:
+        FieldName:
+          type: string
+          description: Attachment field name.
+        MaxCaracters:
+          type: string
+          description: Maximum number of characters accepted in the attachment field.
+        DomainValues:
+          type:
+          - string
+          - 'null'
+          description: Allowed key values.
+      example:
+        FieldName: nome
+        MaxCaracters: '20'
+        DomainValues: Adalberto,Pedro,João
     GetSKUAltID:
       required:
       - Id
@@ -779,90 +922,30 @@ components:
         ShowIfNotAvailable: true
         IsProductActive: true
         ProductFinalScore: 0
-    Attachment:
+    Image:
       required:
-      - Id
-      - Name
-      - Keys
-      - Fields
-      - IsActive
-      - IsRequired
+      - ImageUrl
+      - ImageName
+      - FileId
       type: object
-      description: Object containing information about SKU attachments.
+      description: Object containing SKU images details.
       properties:
-        Id:
+        ImageUrl:
+          type: string
+          description: Image URL.
+        ImageName:
+          type:
+          - string
+          - 'null'
+          description: Image label.
+        FileId:
           type: integer
           format: int32
-          description: Attachment ID.
-        Name:
-          type: string
-          description: Attachment Name.
-        Keys:
-          type: array
-          items:
-            type: string
-          description: Attachment Keys.
-        Fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-          description: Array containing Attachment fields.
-        IsActive:
-          type: boolean
-          description: Defines if the Attachment is active or not.
-        IsRequired:
-          type: boolean
-          description: Defines if the Attachment is required or not.
+          description: SKU image ID.
       example:
-        Id: 3
-        Name: Mensagem
-        Keys:
-        - nome;20
-        - foto;40
-        Fields:
-        - FieldName: nome
-          MaxCaracters: '20'
-          DomainValues: Adalberto,Pedro,João
-        - FieldName: foto
-          MaxCaracters: '40'
-          DomainValues: null
-        IsActive: true
-        IsRequired: false
-    SkuSpecification:
-      required:
-      - FieldId
-      - FieldName
-      - FieldValueIds
-      - FieldValues
-      type: object
-      description: Object containing related SKU specifications.
-      properties:
-        FieldId:
-          type: integer
-          format: int32
-          description: Specification field ID.
-        FieldName:
-          type: string
-          description: Specification field Name.
-        FieldValueIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-            description: Specification value ID.
-          description: Array with related specification values IDs.
-        FieldValues:
-          type: array
-          items:
-            type: string
-          description: Array with related specification values.
-      example:
-        FieldId: 102
-        FieldName: Cor
-        FieldValueIds:
-        - 266
-        FieldValues:
-        - Padrão
+        ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
+        ImageName: ''
+        FileId: 168952
     Dimension:
       required:
       - cubicweight
@@ -894,52 +977,19 @@ components:
         length: 58
         weight: 10000
         width: 130
-    Image:
-      required:
-      - ImageUrl
-      - ImageName
-      - FileId
+    AlternateIds:
       type: object
-      description: Object containing SKU images details.
+      description: Array with alternate SKU IDs, such as EAN and `RefId`.
       properties:
-        ImageUrl:
+        Ean:
           type: string
-          description: Image URL.
-        ImageName:
-          type:
-          - string
-          - 'null'
-          description: Image label.
-        FileId:
-          type: integer
-          format: int32
-          description: SKU image ID.
+          description: SKU EAN.
+        RefId:
+          type: string
+          description: SKU reference ID.
       example:
-        ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
-        ImageName: ''
-        FileId: 168952
-    Field:
-      required:
-      - FieldName
-      - MaxCaracters
-      - DomainValues
-      type: object
-      properties:
-        FieldName:
-          type: string
-          description: Attachment field name.
-        MaxCaracters:
-          type: string
-          description: Maximum number of characters accepted in the attachment field.
-        DomainValues:
-          type:
-          - string
-          - 'null'
-          description: Allowed key values.
-      example:
-        FieldName: nome
-        MaxCaracters: '20'
-        DomainValues: Adalberto,Pedro,João
+        Ean: '8781'
+        RefId: '878181'
     ProductSpecification:
       required:
       - FieldId
@@ -980,70 +1030,20 @@ components:
         - 7 a 8 anos
         - 9 a 10 anos
         - Acima de 10 anos
-    AlternateIds:
-      type: object
-      description: Array with alternate SKU IDs, such as EAN and `RefId`.
-      properties:
-        Ean:
-          type: string
-          description: SKU EAN.
-        RefId:
-          type: string
-          description: SKU reference ID.
-      example:
-        Ean: '8781'
-        RefId: '878181'
-    SkuSeller:
-      required:
-      - SellerId
-      - StockKeepingUnitId
-      - SellerStockKeepingUnitId
-      - IsActive
-      - FreightCommissionPercentage
-      - ProductCommissionPercentage
-      type: object
-      description: Object containing related SKU sellers data.
-      properties:
-        SellerId:
-          type: string
-          description: SKU seller ID. This is the ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
-        StockKeepingUnitId:
-          type: integer
-          format: int32
-          description: SKU ID.
-        SellerStockKeepingUnitId:
-          type: string
-          description: SKU ID for the SKU seller.
-        IsActive:
-          type: boolean
-          description: Defines if the SKU is active.
-        FreightCommissionPercentage:
-          type: number
-          description: Registered value for Seller Freight Commission.
-        ProductCommissionPercentage:
-          type: number
-          description: Registered value for Seller product Commission.
-      example:
-        SellerId: '1'
-        StockKeepingUnitId: 2001773
-        SellerStockKeepingUnitId: '2001773'
-        IsActive: true
-        FreightCommissionPercentage: 0
-        ProductCommissionPercentage: 0
   parameters:
-    Content-Type:
-      name: Content-Type
+    Accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
         type: string
         default: application/json
-    Accept:
-      name: Accept
+    Content-Type:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:
