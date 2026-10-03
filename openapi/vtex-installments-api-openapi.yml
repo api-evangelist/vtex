@@ -177,6 +177,69 @@ paths:
       deprecated: false
 components:
   schemas:
+    Installment:
+      required:
+      - payment
+      - options
+      type: object
+      description: Installment options information.
+      properties:
+        payment:
+          $ref: '#/components/schemas/Payment'
+        options:
+          type: array
+          description: Array containing information about installment options.
+          items:
+            $ref: '#/components/schemas/Option'
+    ValidRequest:
+      required:
+      - value
+      - installments
+      type: object
+      description: Installments options response body information.
+      properties:
+        value:
+          type: number
+          description: Value to be paid in installments.
+        installments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Installment'
+          description: Installments information.
+    InvalidRequestValue:
+      required:
+      - error
+      type: object
+      description: Installments options response body information.
+      properties:
+        error:
+          required:
+          - code
+          - message
+          - exception
+          type: object
+          description: Error information.
+          properties:
+            code:
+              type: string
+              description: Error code.
+            message:
+              type: string
+              description: Error message.
+            exception:
+              type:
+              - string
+              - 'null'
+              description: Exception information.
+    Self:
+      required:
+      - href
+      type: object
+      description: Object containing the payment system reference route.
+      properties:
+        href:
+          type: string
+          description: Payment system reference route.
     Option:
       required:
       - ruleId
@@ -212,55 +275,6 @@ components:
           - number
           - 'null'
           description: Interest tax (percent 0.1 = 10%).
-    Self:
-      required:
-      - href
-      type: object
-      description: Object containing the payment system reference route.
-      properties:
-        href:
-          type: string
-          description: Payment system reference route.
-    InvalidRequestValue:
-      required:
-      - error
-      type: object
-      description: Installments options response body information.
-      properties:
-        error:
-          required:
-          - code
-          - message
-          - exception
-          type: object
-          description: Error information.
-          properties:
-            code:
-              type: string
-              description: Error code.
-            message:
-              type: string
-              description: Error message.
-            exception:
-              type:
-              - string
-              - 'null'
-              description: Exception information.
-    ValidRequest:
-      required:
-      - value
-      - installments
-      type: object
-      description: Installments options response body information.
-      properties:
-        value:
-          type: number
-          description: Value to be paid in installments.
-        installments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Installment'
-          description: Installments information.
     Payment:
       required:
       - id
@@ -294,20 +308,6 @@ components:
           default: false
         self:
           $ref: '#/components/schemas/Self'
-    Installment:
-      required:
-      - payment
-      - options
-      type: object
-      description: Installment options information.
-      properties:
-        payment:
-          $ref: '#/components/schemas/Payment'
-        options:
-          type: array
-          description: Array containing information about installment options.
-          items:
-            $ref: '#/components/schemas/Option'
   parameters:
     Accept:
       name: Accept

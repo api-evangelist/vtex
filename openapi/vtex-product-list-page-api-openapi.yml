@@ -660,6 +660,72 @@ paths:
       operationId: getFacetsByFacets
       x-operation-id-source: derived
 components:
+  parameters:
+    hideUnavailableItems:
+      in: query
+      name: hideUnavailableItems
+      description: Defines whether the result should hide unavailable items (`true`), or not (`false`).
+      schema:
+        type: boolean
+        default: false
+    query:
+      in: query
+      name: query
+      description: Search term. It can contain any character.
+      schema:
+        type: string
+        example: shirt
+    locale:
+      in: query
+      name: locale
+      description: Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language.
+      example: en-US
+      schema:
+        type:
+        - string
+        - 'null'
+    facetsPath:
+      in: path
+      name: facets
+      required: true
+      description: '## Format
+
+
+        The `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.
+
+
+        The order in which the terms appear is not relevant to the search.
+
+
+        You can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.
+
+
+        ## General filters
+
+
+        The `facets` parameter also allows the following general filters:
+
+
+        | `facetKey` | Description | Example |
+
+        | - | - | - |
+
+        | `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |
+
+        | `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |
+
+        | `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |
+
+        | `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|
+
+        '
+      example: category-1/clothing/category-2/shirt/category-3/man
+      schema:
+        type:
+        - string
+        - 'null'
+        default: /
+        example: color/blue
   schemas:
     ProductSearch:
       type: object
@@ -1436,69 +1502,3 @@ components:
         translated:
           type: boolean
           description: Defines whether the facets were translated by Intelligent Search (`true`) or not (`false`).
-  parameters:
-    locale:
-      in: query
-      name: locale
-      description: Indicates the target language as a BCP 47 language code. The Intelligent Search must have indexed the account in the target language.
-      example: en-US
-      schema:
-        type:
-        - string
-        - 'null'
-    hideUnavailableItems:
-      in: query
-      name: hideUnavailableItems
-      description: Defines whether the result should hide unavailable items (`true`), or not (`false`).
-      schema:
-        type: boolean
-        default: false
-    facetsPath:
-      in: path
-      name: facets
-      required: true
-      description: '## Format
-
-
-        The `facets` parameter follows the format: `/${facetKey1}/${facetValue1}/${facetKey2}/${facetValue2}/.../${facetKeyN}/${facetValueN}`.
-
-
-        The order in which the terms appear is not relevant to the search.
-
-
-        You can also repeat the same `facetKey` several times for different values. For example: `category-1/shoes/color/blue/color/red/color/yellow`.
-
-
-        ## General filters
-
-
-        The `facets` parameter also allows the following general filters:
-
-
-        | `facetKey` | Description | Example |
-
-        | - | - | - |
-
-        | `price` | Filter the search by a price range, following the format `${minPrice}:${maxPrice}`. | `/color/blue/price/100:500?query=shirt` |
-
-        | `category-${n}` | Filter the search by category, where `n` represents the category tree level (1 = department, 2 = category, 3 = subcategory, and so on). | `category-1/clothing/category-2/shirts` |
-
-        | `productClusterIds` | Filter the search by collection, following the format `productClusterIds/{collectionId}`. | `productClusterIds/262` |
-
-        | `trade-policy` |  Filter the search by trade policy (also known as sales channel), following the format `trade-policy/{tradePolicyId}`. | `trade-policy/2`|
-
-        '
-      example: category-1/clothing/category-2/shirt/category-3/man
-      schema:
-        type:
-        - string
-        - 'null'
-        default: /
-        example: color/blue
-    query:
-      in: query
-      name: query
-      description: Search term. It can contain any character.
-      schema:
-        type: string
-        example: shirt

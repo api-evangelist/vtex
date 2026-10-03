@@ -306,24 +306,6 @@ components:
       schema:
         type: string
         default: vtexcommercestable
-    contentType:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    sellerId:
-      name: sellerId
-      in: path
-      description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: seller123
     skuId:
       name: skuId
       in: path
@@ -342,6 +324,24 @@ components:
       schema:
         type: string
         default: application/json
+    contentType:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    sellerId:
+      name: sellerId
+      in: path
+      description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: seller123
   schemas:
     NotifyCarrierwithAppRequest:
       title: NotifyCarrierwithAppRequest
@@ -379,6 +379,50 @@ components:
       example:
         code: BRA
         name: BRA
+    Subregion3:
+      title: Neighborhood
+      description: Recipient's address neighborhood's information.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          type: string
+          description: Neighborhood's code, from the recipient's address.
+          example: Neighborhood example
+        name:
+          type: string
+          description: Neighborhood's name, from the recipient's address.
+          example: Neighborhood example
+      example:
+        code: Vila Antonieta
+        name: Vila Antonieta
+    DispatchOrder:
+      title: DispatchOrder
+      description: Information about the dispatched order.
+      required:
+      - id
+      - packageIds
+      - sender
+      - carrier
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the dispatched order.
+          example: 653560c2-7965-4614-a730-8e45c89bf284
+        packageIds:
+          type: array
+          description: Array with package IDs.
+          items:
+            type: string
+            description: Identification codes of the packages.
+            example: 6529cd28-6fd1-4b95-8397-5fad0a79d41c
+        sender:
+          $ref: '#/components/schemas/Sender'
+        carrier:
+          $ref: '#/components/schemas/Carrier'
     Address:
       title: Address
       description: Address of the VTEX account responsible for sending the package.
@@ -444,81 +488,9 @@ components:
         location:
           lat: -46.48582077026367
           lng: -23.521709442138672
-    Carrier:
-      title: Carrier
-      description: Carrier responsible for delivering the dispatched order.
-      required:
-      - cnpj
-      - fantasyName
-      - stateRegistration
-      - id
-      - name
-      - address
-      - email
-      - phone
-      type: object
-      properties:
-        cnpj:
-          type: string
-          description: Carrier's CNPJ.
-          example: '00000000000000'
-        fantasyName:
-          type: string
-          description: Carrier's fantasy name.
-          example: Carrier A
-        stateRegistration:
-          type: string
-          description: Carrier's state registration number.
-          example: '843904894875'
-        id:
-          type: string
-          description: Carrier's ID.
-          example: vtexShippinNetwork_example
-        name:
-          type: string
-          description: Carrier's company name.
-          example: Carrier LTDA
-        address:
-          $ref: '#/components/schemas/Address'
-        email:
-          type: string
-          description: Carrier's email address.
-          example: email@example.com
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Carrier's contact number.
-          example: '+5511111111111'
-      example:
-        cnpj: '00000000000000'
-        fantasyName: carrier
-        stateRegistration: 096/3624636
-        id: vtexlog_exemplo
-        name: Carrier LTDA.
-        address:
-          postalCode: '90200001'
-          country:
-            code: BRA
-            name: Brasil
-          subregion1:
-            code: RS
-            name: Rio Grande do Sul
-          subregion2:
-            code: Porto_Alegre
-            name: Porto Alegre
-          subregion3:
-            code: Anchieta
-            name: Anchieta
-          street: Rua Exemplo
-          number: '01'
-          complement: Pavilhão 6
-          location: null
-        email: email
-        phone: '+5511111111111'
-    Subregion2:
-      title: City
-      description: Recipient's address city's information.
+    Subregion1:
+      title: State
+      description: Recipient's address state's information.
       required:
       - code
       - name
@@ -526,40 +498,15 @@ components:
       properties:
         code:
           type: string
-          description: City's code, from the recipient's address.
+          description: State's code, from the recipient's address.
           example: SP
         name:
           type: string
-          description: City's name, from the recipient's address.
+          description: State's name, from the recipient's address.
           example: Sao Paulo
       example:
         code: SP
-        name: São Paulo
-    DispatchOrder:
-      title: DispatchOrder
-      description: Information about the dispatched order.
-      required:
-      - id
-      - packageIds
-      - sender
-      - carrier
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the dispatched order.
-          example: 653560c2-7965-4614-a730-8e45c89bf284
-        packageIds:
-          type: array
-          description: Array with package IDs.
-          items:
-            type: string
-            description: Identification codes of the packages.
-            example: 6529cd28-6fd1-4b95-8397-5fad0a79d41c
-        sender:
-          $ref: '#/components/schemas/Sender'
-        carrier:
-          $ref: '#/components/schemas/Carrier'
+        name: SP
     Sender:
       title: Sender
       description: User's logged account in the VTEX store.
@@ -661,44 +608,6 @@ components:
       example:
         lat: -46.48582077026367
         lng: -23.521709442138672
-    Subregion1:
-      title: State
-      description: Recipient's address state's information.
-      required:
-      - code
-      - name
-      type: object
-      properties:
-        code:
-          type: string
-          description: State's code, from the recipient's address.
-          example: SP
-        name:
-          type: string
-          description: State's name, from the recipient's address.
-          example: Sao Paulo
-      example:
-        code: SP
-        name: SP
-    Subregion3:
-      title: Neighborhood
-      description: Recipient's address neighborhood's information.
-      required:
-      - code
-      - name
-      type: object
-      properties:
-        code:
-          type: string
-          description: Neighborhood's code, from the recipient's address.
-          example: Neighborhood example
-        name:
-          type: string
-          description: Neighborhood's name, from the recipient's address.
-          example: Neighborhood example
-      example:
-        code: Vila Antonieta
-        name: Vila Antonieta
     Account:
       title: Account
       required:
@@ -820,6 +729,97 @@ components:
         state: null
         telephone: null
         tradingName: tradingName
+    Carrier:
+      title: Carrier
+      description: Carrier responsible for delivering the dispatched order.
+      required:
+      - cnpj
+      - fantasyName
+      - stateRegistration
+      - id
+      - name
+      - address
+      - email
+      - phone
+      type: object
+      properties:
+        cnpj:
+          type: string
+          description: Carrier's CNPJ.
+          example: '00000000000000'
+        fantasyName:
+          type: string
+          description: Carrier's fantasy name.
+          example: Carrier A
+        stateRegistration:
+          type: string
+          description: Carrier's state registration number.
+          example: '843904894875'
+        id:
+          type: string
+          description: Carrier's ID.
+          example: vtexShippinNetwork_example
+        name:
+          type: string
+          description: Carrier's company name.
+          example: Carrier LTDA
+        address:
+          $ref: '#/components/schemas/Address'
+        email:
+          type: string
+          description: Carrier's email address.
+          example: email@example.com
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Carrier's contact number.
+          example: '+5511111111111'
+      example:
+        cnpj: '00000000000000'
+        fantasyName: carrier
+        stateRegistration: 096/3624636
+        id: vtexlog_exemplo
+        name: Carrier LTDA.
+        address:
+          postalCode: '90200001'
+          country:
+            code: BRA
+            name: Brasil
+          subregion1:
+            code: RS
+            name: Rio Grande do Sul
+          subregion2:
+            code: Porto_Alegre
+            name: Porto Alegre
+          subregion3:
+            code: Anchieta
+            name: Anchieta
+          street: Rua Exemplo
+          number: '01'
+          complement: Pavilhão 6
+          location: null
+        email: email
+        phone: '+5511111111111'
+    Subregion2:
+      title: City
+      description: Recipient's address city's information.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          type: string
+          description: City's code, from the recipient's address.
+          example: SP
+        name:
+          type: string
+          description: City's name, from the recipient's address.
+          example: Sao Paulo
+      example:
+        code: SP
+        name: São Paulo
   securitySchemes:
     appKey:
       type: apiKey

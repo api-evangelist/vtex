@@ -381,7 +381,87 @@ paths:
           headers: {}
       deprecated: false
 components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    id:
+      name: id
+      in: path
+      description: ID of the Document.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: b818cbda-e489-11e6-94f4-0ac138d2d42e
+    _where:
+      name: _where
+      in: query
+      description: Defines a clause the document must comply with.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: firstName is not null
+    _fields:
+      name: _fields
+      in: query
+      description: Fields that should be returned by document. Separate fields' names with commas. For example `_fields=email,firstName,document`. You can also use `_fields=_all` to fetch all fields.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: email,firstName,document
+    _schema:
+      name: _schema
+      in: query
+      description: Name of the [schema](https://developers.vtex.com/docs/guides/master-data-schema-lifecycle) that the document complies with. This field is required when using `_where` or `_fields` query parameters.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: schema
+    dataEntityName:
+      name: dataEntityName
+      in: path
+      required: true
+      description: Name of the data entity.
+      schema:
+        type: string
+        example: Newsletter
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
+    CreateDocumentResponse:
+      required:
+      - Id
+      - Href
+      - DocumentId
+      type: object
+      description: Response body object.
+      properties:
+        Id:
+          type: string
+          description: ID of the document that was created, with data entity prefix.
+        Href:
+          type: string
+          description: Document reference URL.
+        DocumentId:
+          type: string
+          description: ID of the document that was created.
     DocumentRequest:
       title: DocumentRequest
       type: object
@@ -409,23 +489,6 @@ components:
         dataEntityId:
           type: string
           description: Data entity name.
-    CreateDocumentResponse:
-      required:
-      - Id
-      - Href
-      - DocumentId
-      type: object
-      description: Response body object.
-      properties:
-        Id:
-          type: string
-          description: ID of the document that was created, with data entity prefix.
-        Href:
-          type: string
-          description: Document reference URL.
-        DocumentId:
-          type: string
-          description: ID of the document that was created.
     documentResponse:
       required:
       - Id
@@ -439,69 +502,6 @@ components:
         Href:
           type: string
           description: Document reference URL.
-  parameters:
-    id:
-      name: id
-      in: path
-      description: ID of the Document.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: b818cbda-e489-11e6-94f4-0ac138d2d42e
-    _where:
-      name: _where
-      in: query
-      description: Defines a clause the document must comply with.
-      required: false
-      style: form
-      schema:
-        type: string
-        example: firstName is not null
-    dataEntityName:
-      name: dataEntityName
-      in: path
-      required: true
-      description: Name of the data entity.
-      schema:
-        type: string
-        example: Newsletter
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    _fields:
-      name: _fields
-      in: query
-      description: Fields that should be returned by document. Separate fields' names with commas. For example `_fields=email,firstName,document`. You can also use `_fields=_all` to fetch all fields.
-      required: false
-      style: form
-      schema:
-        type: string
-        example: email,firstName,document
-    _schema:
-      name: _schema
-      in: query
-      description: Name of the [schema](https://developers.vtex.com/docs/guides/master-data-schema-lifecycle) that the document complies with. This field is required when using `_where` or `_fields` query parameters.
-      required: false
-      style: form
-      schema:
-        type: string
-        example: schema
   securitySchemes:
     appKey:
       type: apiKey

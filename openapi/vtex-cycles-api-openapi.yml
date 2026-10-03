@@ -219,6 +219,25 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    SubscriptionCycleOrderInfo:
+      type: object
+      properties:
+        orderId:
+          type:
+          - string
+          - 'null'
+        orderGroup:
+          type:
+          - string
+          - 'null'
+        paymentURL:
+          type:
+          - string
+          - 'null'
+        value:
+          type: integer
+          format: int64
+      additionalProperties: false
     ItemSimulationStatus:
       enum:
       - 0
@@ -228,6 +247,34 @@ components:
       - 4
       type: integer
       format: int32
+    SubscriptionCycleItemContext:
+      type: object
+      properties:
+        subscriptionItemId:
+          type:
+          - string
+          - 'null'
+        skuId:
+          type:
+          - string
+          - 'null'
+          title: skuId
+          description: SKU ID.
+          example: '12'
+        quantity:
+          type: integer
+          format: int32
+          title: quantity
+          description: Amount of units in the cart.
+          example: 5
+        status:
+          $ref: '#/components/schemas/Status'
+        isSkipped:
+          type: boolean
+        cycleCount:
+          type: integer
+          format: int32
+      additionalProperties: false
     SubscriptionCycleResponse:
       type: object
       properties:
@@ -273,86 +320,6 @@ components:
           items:
             $ref: '#/components/schemas/SimulationItemResult'
       additionalProperties: false
-    Status:
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      type: integer
-      format: int32
-    SubscriptionCycleItemContext:
-      type: object
-      properties:
-        subscriptionItemId:
-          type:
-          - string
-          - 'null'
-        skuId:
-          type:
-          - string
-          - 'null'
-          title: skuId
-          description: SKU ID.
-          example: '12'
-        quantity:
-          type: integer
-          format: int32
-          title: quantity
-          description: Amount of units in the cart.
-          example: 5
-        status:
-          $ref: '#/components/schemas/Status'
-        isSkipped:
-          type: boolean
-        cycleCount:
-          type: integer
-          format: int32
-      additionalProperties: false
-    SubscriptionCycleOrderInfo:
-      type: object
-      properties:
-        orderId:
-          type:
-          - string
-          - 'null'
-        orderGroup:
-          type:
-          - string
-          - 'null'
-        paymentURL:
-          type:
-          - string
-          - 'null'
-        value:
-          type: integer
-          format: int64
-      additionalProperties: false
-    SimulationItemResult:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        quantity:
-          type: integer
-          format: int32
-          title: quantity
-          description: Amount of units in the cart.
-          example: 5
-        unitPrice:
-          type:
-          - integer
-          - 'null'
-          format: int64
-        status:
-          $ref: '#/components/schemas/ItemSimulationStatus'
-        statusName:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     SubscriptionCycleContext:
       type: object
       properties:
@@ -387,6 +354,39 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    SimulationItemResult:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        quantity:
+          type: integer
+          format: int32
+          title: quantity
+          description: Amount of units in the cart.
+          example: 5
+        unitPrice:
+          type:
+          - integer
+          - 'null'
+          format: int64
+        status:
+          $ref: '#/components/schemas/ItemSimulationStatus'
+        statusName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Status:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      type: integer
+      format: int32
   securitySchemes:
     appKey:
       type: apiKey

@@ -790,259 +790,128 @@ paths:
       deprecated: false
 components:
   schemas:
-    TransactionDetailsResponse:
+    Fields3:
       required:
-      - id
-      - transactionId
-      - referenceKey
-      - interactions
-      - settlements
-      - payments
-      - refunds
-      - cancellations
-      - capabilities
-      - timeoutStatus
-      - totalRefunds
-      - status
-      - value
-      - receiverUri
-      - startDate
-      - authorizationToken
-      - authorizationDate
-      - commitmentToken
-      - commitmentDate
-      - refundingToken
-      - refundingDate
-      - cancelationToken
-      - cancelationDate
-      - fields
-      - shopperInteraction
-      - ipAddress
-      - sessionId
-      - macId
-      - vtexFingerprint
-      - chargeback
-      - whiteSignature
-      - owner
-      - orderId
-      - userAgent
-      - acceptHeader
-      - antifraudTid
-      - antifraudResponse
-      - antifraudReference
-      - antifraudAffiliationId
-      - channel
-      - salesChannel
-      - urn
-      - softDescriptor
-      - markedForRecurrence
-      - buyer
+      - holderName
+      - cardNumber
+      - validationCode
+      - dueDate
+      - document
+      - accountId
+      - address
+      - callbackUrl
       type: object
-      description: Transaction details response body information.
+      description: Fields information.
       properties:
-        id:
+        holderName:
           type: string
-          description: Transaction identification.
-        transactionId:
-          type: string
-          description: Transaction identification (same value of the `id` field).
-        referenceKey:
-          type: string
-          description: Field used for anti-fraud to identify the transaction.
-        interactions:
-          $ref: '#/components/schemas/Interactions'
-        settlements:
-          $ref: '#/components/schemas/Settlements'
-        payments:
-          $ref: '#/components/schemas/Payments'
-        refunds:
-          $ref: '#/components/schemas/Refunds'
-        cancellations:
-          $ref: '#/components/schemas/Cancellations'
-        capabilities:
-          $ref: '#/components/schemas/Capabilities'
-        timeoutStatus:
+          description: Card holder name.
+          example: UserTest
+        cardNumber:
           type: number
-          description: 'Field that represents the possible transaction timeout statuses. Possible statuses and meanings: `0` = NotStarted, `1` = CancellingOrFinishing, `2` = CancellingOrFinishingByTimeout, `3` = CancelledOrFinished and `4` = TriesExceeded.'
-          enum:
-          - 0
-          - 1
-          - 2
-          - 3
-          - 4
-        totalRefunds:
+          description: Card number information.
+          example: 111111111111
+        validationCode:
           type: number
-          description: Total refunded transaction amount.
-        status:
+          description: CVV code.
+          example: 231
+        dueDate:
           type: string
-          description: Transaction status.
+          description: Due date information. The date format is `mm/yy`.
+          example: 10/19
+        document:
+          type: string
+          description: Card holder documentation.
+          example: '8041734561'
+        accountId:
+          type:
+          - string
+          - 'null'
+          description: Account identification.
+          example: 08134AF761A148B9A5DCE14A81F31DD9
+        address:
+          type:
+          - array
+          - 'null'
+          description: Array containing customer address information.
+          items:
+            type: string
+            description: Customer address information.
+            example: Customer address data
+        callbackUrl:
+          type:
+          - string
+          - 'null'
+          description: Callback URL information.
+          example: https://payment-test.myvtex.com/checkout/gatewayCallback/1336650505288/Success
+    Refunds:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction refunds.
+      properties:
+        href:
+          type: string
+          description: Transaction refund reference route.
+    Fields1:
+      required:
+      - name
+      - value
+      type: object
+      description: Payment parameters information.
+      properties:
+        name:
+          type: string
+          description: Payment parameter name.
+        value:
+          type: string
+          description: Payment parameter value.
+    2.SendPaymentsWithSavedCreditCardRequest:
+      required:
+      - paymentSystem
+      - installments
+      - currencyCode
+      - value
+      - installmentsInterestRate
+      - installmentsValue
+      - referenceValue
+      - fields
+      - transaction
+      type: object
+      description: Send payments with saved credit card request body information.
+      properties:
+        paymentSystem:
+          type: number
+          description: Payment system identification.
+          example: 4
+        installments:
+          type: number
+          description: Number of installments.
+          example: 1
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217 standard.
+          example: BRL
         value:
           type: number
-          description: Transaction value.
-        receiverUri:
-          type:
-          - string
-          - 'null'
-          description: Receiver [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) information.
-        startDate:
-          type: string
-          description: Transaction start date.
-        authorizationToken:
-          type:
-          - string
-          - 'null'
-          description: Transaction authorization token.
-        authorizationDate:
-          type:
-          - string
-          - 'null'
-          description: Transaction authorization date.
-        commitmentToken:
-          type:
-          - string
-          - 'null'
-          description: Transaction completion token.
-        commitmentDate:
-          type:
-          - string
-          - 'null'
-          description: Transaction completion date.
-        refundingToken:
-          type:
-          - string
-          - 'null'
-          description: Transaction refund token.
-        refundingDate:
-          type:
-          - string
-          - 'null'
-          description: Transaction refund date.
-        cancelationToken:
-          type:
-          - string
-          - 'null'
-          description: Transaction cancellation token.
-        cancelationDate:
-          type:
-          - string
-          - 'null'
-          description: Transaction cancellation date.
+          description: Payment value.
+          example: 30000
+        installmentsInterestRate:
+          type: number
+          description: The interest rate.
+          example: 0
+        installmentsValue:
+          type: number
+          description: The value of each installment.
+          example: 0
+        referenceValue:
+          type: number
+          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
+          example: 30000
         fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/Fields1'
-          description: Field containing information and values of payment parameters.
-        shopperInteraction:
-          type: string
-          description: Transaction origin.
-        ipAddress:
-          type:
-          - string
-          - 'null'
-          description: Ip address information.
-        sessionId:
-          type:
-          - string
-          - 'null'
-          description: Session identification.
-        macId:
-          type: string
-          description: Random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) V4 generated when the Request Capture receives a session that does not contain the macID already set. This value is set to the cookie `VtexRCMacIdv7`. The cookie has 1 year of expiration.
-        vtexFingerprint:
-          type:
-          - string
-          - 'null'
-          description: VTEX fingerprint information.
-        chargeback:
-          type:
-          - string
-          - 'null'
-          description: Chargeback information.
-        whiteSignature:
-          type:
-          - string
-          - 'null'
-          description: White signature (anti-fraud list) information.
-        owner:
-          type: string
-          description: Responsible for transaction request.
-        orderId:
-          type:
-          - string
-          - 'null'
-          description: Order identitication.
-        userAgent:
-          type: string
-          description: HTTP client used in the transaction.
-        acceptHeader:
-          type: string
-          description: Type of content accepted in the transaction request header.
-        antifraudTid:
-          type:
-          - string
-          - 'null'
-          description: Anti-fraud transaction identification.
-        antifraudResponse:
-          type:
-          - string
-          - 'null'
-          description: Anti-fraud response information.
-        antifraudReference:
-          type:
-          - string
-          - 'null'
-          description: Anti-fraud reference information.
-        antifraudAffiliationId:
-          type:
-          - string
-          - 'null'
-          description: Anti-fraud affiliation identification.
-        channel:
-          type: string
-          description: Store where the transaction was initiated.
-        salesChannel:
-          type: string
-          description: Sales channel information.
-        urn:
-          type:
-          - string
-          - 'null'
-          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
-        softDescriptor:
-          type:
-          - string
-          - 'null'
-          description: Custom field for a transaction that can be displayed on the customer's invoice.
-        markedForRecurrence:
-          type: boolean
-          description: Indicates whether the payment transaction should be recurring.
-        buyer:
-          type:
-          - object
-          - 'null'
-          description: Buyer information.
-          properties:
-            firstName:
-              type: string
-              description: Buyer first name.
-            lastName:
-              type: string
-              description: Buyer last name.
-            documentType:
-              type: string
-              description: Type of the document informed by the buyer.
-            document:
-              type: string
-              description: Document informed by the buyer.
-            email:
-              type: string
-              description: Buyer email address.
-            address:
-              type: string
-              description: Buyer address.
-            phone:
-              type: string
-              description: Buyer phone number.
+          $ref: '#/components/schemas/Fields3'
+        transaction:
+          $ref: '#/components/schemas/Transaction'
     Fields:
       required:
       - holderName
@@ -1163,52 +1032,68 @@ components:
           type: string
           description: Callback URL information.
           example: https://coinshop.vtexpayments.com.br/payment-provider/transactions/900BA26FEAC84332A53AE1007E740DE3/payments/E713830E32764BF99028A0A275841BFC/notification
-    2.SendPaymentsPublicRequest:
+    Field:
       required:
-      - paymentSystem
-      - installments
-      - currencyCode
+      - name
       - value
-      - installmentsInterestRate
-      - installmentsValue
-      - referenceValue
-      - fields
-      - transaction
       type: object
-      description: Send payments information public request body information.
+      description: Transaction parameters information.
       properties:
-        paymentSystem:
-          type: number
-          description: Payment system identification.
-          example: 17
-        installments:
-          type: number
-          description: Number of installments.
-          example: 1
-        currencyCode:
+        name:
           type: string
-          description: Currency code in ISO 4217 standard.
-          example: BRL
+          description: Transaction parameter name.
+        value:
+          type: string
+          description: Transaction parameter value.
+    Capabilities:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction capabilities.
+      properties:
+        href:
+          type: string
+          description: Transaction capabilities reference route.
+    Payment1:
+      required:
+      - href
+      type: object
+      description: Object containing the transaction settlement reference route.
+      properties:
+        href:
+          type: string
+          description: Transaction reference settlement route.
+    1.CreateanewtransactionRequest:
+      required:
+      - value
+      - referenceId
+      - channel
+      - salesChannel
+      type: object
+      description: New transaction request body information.
+      properties:
         value:
           type: number
-          description: Payment value.
-          example: 15000
-        installmentsInterestRate:
-          type: number
-          description: The interest rate.
-          example: 0
-        installmentsValue:
-          type: number
-          description: The value of each installment.
-          example: 0
-        referenceValue:
-          type: number
-          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
-          example: 15000
-        fields:
-          $ref: '#/components/schemas/Fields'
-        transaction:
-          $ref: '#/components/schemas/Transaction'
+          description: Transaction value. The value must be described without using separation for decimals, e.g. for a transaction with a value equal to 201.50, send 20150.
+          example: 20000
+        referenceId:
+          type: string
+          description: Identification number that relates the transaction to a purchase order.
+          example: '1234567'
+        channel:
+          type: string
+          description: Store where the transaction was initiated.
+          example: cosmetics2
+        urn:
+          type:
+          - string
+          - 'null'
+          description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
+          example: urn:amazon:webservices:clientvpn
+        salesChannel:
+          type: string
+          description: Sales channel information.
+          example: '1'
     StartTransactionResponse:
       required:
       - id
@@ -1464,46 +1349,372 @@ components:
             phone:
               type: string
               description: Buyer phone number.
-    Capabilities:
+    Settlements:
       required:
       - href
       type: object
-      description: Object containing the reference route of transaction capabilities.
+      description: Object containing the reference route of transaction settlements.
       properties:
         href:
           type: string
-          description: Transaction capabilities reference route.
-    1.CreateanewtransactionRequest:
+          description: Transaction settlement reference route.
+    Payments:
       required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction payments.
+      properties:
+        href:
+          type: string
+          description: Transaction payment reference route.
+    TransactionSettlementDetails:
+      required:
+      - requests
+      - actions
+      type: object
+      description: Transaction settlement details response body information.
+      properties:
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+          description: Array containing requests information.
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+          description: Array containing actions information.
+    Interactions:
+      required:
+      - href
+      type: object
+      description: Object containing the reference route of transaction interactions.
+      properties:
+        href:
+          type: string
+          description: Transaction interaction reference route.
+    TransactionDetailsResponse:
+      required:
+      - id
+      - transactionId
+      - referenceKey
+      - interactions
+      - settlements
+      - payments
+      - refunds
+      - cancellations
+      - capabilities
+      - timeoutStatus
+      - totalRefunds
+      - status
       - value
-      - referenceId
+      - receiverUri
+      - startDate
+      - authorizationToken
+      - authorizationDate
+      - commitmentToken
+      - commitmentDate
+      - refundingToken
+      - refundingDate
+      - cancelationToken
+      - cancelationDate
+      - fields
+      - shopperInteraction
+      - ipAddress
+      - sessionId
+      - macId
+      - vtexFingerprint
+      - chargeback
+      - whiteSignature
+      - owner
+      - orderId
+      - userAgent
+      - acceptHeader
+      - antifraudTid
+      - antifraudResponse
+      - antifraudReference
+      - antifraudAffiliationId
       - channel
       - salesChannel
+      - urn
+      - softDescriptor
+      - markedForRecurrence
+      - buyer
       type: object
-      description: New transaction request body information.
+      description: Transaction details response body information.
       properties:
+        id:
+          type: string
+          description: Transaction identification.
+        transactionId:
+          type: string
+          description: Transaction identification (same value of the `id` field).
+        referenceKey:
+          type: string
+          description: Field used for anti-fraud to identify the transaction.
+        interactions:
+          $ref: '#/components/schemas/Interactions'
+        settlements:
+          $ref: '#/components/schemas/Settlements'
+        payments:
+          $ref: '#/components/schemas/Payments'
+        refunds:
+          $ref: '#/components/schemas/Refunds'
+        cancellations:
+          $ref: '#/components/schemas/Cancellations'
+        capabilities:
+          $ref: '#/components/schemas/Capabilities'
+        timeoutStatus:
+          type: number
+          description: 'Field that represents the possible transaction timeout statuses. Possible statuses and meanings: `0` = NotStarted, `1` = CancellingOrFinishing, `2` = CancellingOrFinishingByTimeout, `3` = CancelledOrFinished and `4` = TriesExceeded.'
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+        totalRefunds:
+          type: number
+          description: Total refunded transaction amount.
+        status:
+          type: string
+          description: Transaction status.
         value:
           type: number
-          description: Transaction value. The value must be described without using separation for decimals, e.g. for a transaction with a value equal to 201.50, send 20150.
-          example: 20000
-        referenceId:
+          description: Transaction value.
+        receiverUri:
+          type:
+          - string
+          - 'null'
+          description: Receiver [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) information.
+        startDate:
           type: string
-          description: Identification number that relates the transaction to a purchase order.
-          example: '1234567'
+          description: Transaction start date.
+        authorizationToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction authorization token.
+        authorizationDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction authorization date.
+        commitmentToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction completion token.
+        commitmentDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction completion date.
+        refundingToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction refund token.
+        refundingDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction refund date.
+        cancelationToken:
+          type:
+          - string
+          - 'null'
+          description: Transaction cancellation token.
+        cancelationDate:
+          type:
+          - string
+          - 'null'
+          description: Transaction cancellation date.
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fields1'
+          description: Field containing information and values of payment parameters.
+        shopperInteraction:
+          type: string
+          description: Transaction origin.
+        ipAddress:
+          type:
+          - string
+          - 'null'
+          description: Ip address information.
+        sessionId:
+          type:
+          - string
+          - 'null'
+          description: Session identification.
+        macId:
+          type: string
+          description: Random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) V4 generated when the Request Capture receives a session that does not contain the macID already set. This value is set to the cookie `VtexRCMacIdv7`. The cookie has 1 year of expiration.
+        vtexFingerprint:
+          type:
+          - string
+          - 'null'
+          description: VTEX fingerprint information.
+        chargeback:
+          type:
+          - string
+          - 'null'
+          description: Chargeback information.
+        whiteSignature:
+          type:
+          - string
+          - 'null'
+          description: White signature (anti-fraud list) information.
+        owner:
+          type: string
+          description: Responsible for transaction request.
+        orderId:
+          type:
+          - string
+          - 'null'
+          description: Order identitication.
+        userAgent:
+          type: string
+          description: HTTP client used in the transaction.
+        acceptHeader:
+          type: string
+          description: Type of content accepted in the transaction request header.
+        antifraudTid:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud transaction identification.
+        antifraudResponse:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud response information.
+        antifraudReference:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud reference information.
+        antifraudAffiliationId:
+          type:
+          - string
+          - 'null'
+          description: Anti-fraud affiliation identification.
         channel:
           type: string
           description: Store where the transaction was initiated.
-          example: cosmetics2
+        salesChannel:
+          type: string
+          description: Sales channel information.
         urn:
           type:
           - string
           - 'null'
           description: '[URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name) information.'
-          example: urn:amazon:webservices:clientvpn
-        salesChannel:
+        softDescriptor:
+          type:
+          - string
+          - 'null'
+          description: Custom field for a transaction that can be displayed on the customer's invoice.
+        markedForRecurrence:
+          type: boolean
+          description: Indicates whether the payment transaction should be recurring.
+        buyer:
+          type:
+          - object
+          - 'null'
+          description: Buyer information.
+          properties:
+            firstName:
+              type: string
+              description: Buyer first name.
+            lastName:
+              type: string
+              description: Buyer last name.
+            documentType:
+              type: string
+              description: Type of the document informed by the buyer.
+            document:
+              type: string
+              description: Document informed by the buyer.
+            email:
+              type: string
+              description: Buyer email address.
+            address:
+              type: string
+              description: Buyer address.
+            phone:
+              type: string
+              description: Buyer phone number.
+    Action:
+      required:
+      - paymentId
+      - payment
+      - date
+      - type
+      - value
+      - connectorResponse
+      type: object
+      description: Actions information.
+      properties:
+        paymentId:
           type: string
-          description: Sales channel information.
-          example: '1'
+          description: Payment identification.
+        payment:
+          $ref: '#/components/schemas/Payment1'
+        date:
+          type: string
+          description: Transaction settlement date.
+        type:
+          type: string
+          description: Settlement action date.
+        value:
+          type: integer
+          description: Transaction settlement value.
+        connectorResponse:
+          type:
+          - string
+          - 'null'
+          description: Connector transaction response information. This object can return different fields according to the internal configuration of each connector (payment provider), for example, `Tid`, `ReturnCode`, `authId`, among others).
+    4.DoauthorizationRequest:
+      required:
+      - transactionId
+      - softDescriptor
+      - prepareForRecurrency
+      type: object
+      description: Authorize new transaction request body information.
+      properties:
+        transactionId:
+          type: string
+          description: Transaction identification.
+          example: 7ECE7DF3EEE14647B05DB904164923E8
+        softDescriptor:
+          type:
+          - string
+          - 'null'
+          description: Custom field for a transaction that can be displayed on the customer's invoice.
+          example: company_name_description_code
+        prepareForRecurrency:
+          type: boolean
+          description: Indicates whether the transaction supports recurrence.
+          example: false
+    Request:
+      required:
+      - id
+      - date
+      - value
+      type: object
+      description: Requests information.
+      properties:
+        id:
+          type: string
+          description: Transaction identification. This is the same `transactionId` value sent in the request path.
+        date:
+          type: string
+          description: Transaction settlement date.
+        value:
+          type: number
+          description: Transaction settlement value.
     Self:
       required:
       - href
@@ -1513,15 +1724,61 @@ components:
         href:
           type: string
           description: Payment system reference route.
-    Refunds:
+    2.SendPaymentsPublicRequest:
+      required:
+      - paymentSystem
+      - installments
+      - currencyCode
+      - value
+      - installmentsInterestRate
+      - installmentsValue
+      - referenceValue
+      - fields
+      - transaction
+      type: object
+      description: Send payments information public request body information.
+      properties:
+        paymentSystem:
+          type: number
+          description: Payment system identification.
+          example: 17
+        installments:
+          type: number
+          description: Number of installments.
+          example: 1
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217 standard.
+          example: BRL
+        value:
+          type: number
+          description: Payment value.
+          example: 15000
+        installmentsInterestRate:
+          type: number
+          description: The interest rate.
+          example: 0
+        installmentsValue:
+          type: number
+          description: The value of each installment.
+          example: 0
+        referenceValue:
+          type: number
+          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
+          example: 15000
+        fields:
+          $ref: '#/components/schemas/Fields'
+        transaction:
+          $ref: '#/components/schemas/Transaction'
+    Cancellations:
       required:
       - href
       type: object
-      description: Object containing the reference route of transaction refunds.
+      description: Object containing the reference route of transaction cancellations.
       properties:
         href:
           type: string
-          description: Transaction refund reference route.
+          description: Transaction cancellation reference route.
     PaymentDetailsResponse:
       required:
       - id
@@ -1764,263 +2021,6 @@ components:
             - string
             - 'null'
             description: Original payment identification, if applicable.
-    Interactions:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction interactions.
-      properties:
-        href:
-          type: string
-          description: Transaction interaction reference route.
-    Payment1:
-      required:
-      - href
-      type: object
-      description: Object containing the transaction settlement reference route.
-      properties:
-        href:
-          type: string
-          description: Transaction reference settlement route.
-    Field:
-      required:
-      - name
-      - value
-      type: object
-      description: Transaction parameters information.
-      properties:
-        name:
-          type: string
-          description: Transaction parameter name.
-        value:
-          type: string
-          description: Transaction parameter value.
-    Action:
-      required:
-      - paymentId
-      - payment
-      - date
-      - type
-      - value
-      - connectorResponse
-      type: object
-      description: Actions information.
-      properties:
-        paymentId:
-          type: string
-          description: Payment identification.
-        payment:
-          $ref: '#/components/schemas/Payment1'
-        date:
-          type: string
-          description: Transaction settlement date.
-        type:
-          type: string
-          description: Settlement action date.
-        value:
-          type: integer
-          description: Transaction settlement value.
-        connectorResponse:
-          type:
-          - string
-          - 'null'
-          description: Connector transaction response information. This object can return different fields according to the internal configuration of each connector (payment provider), for example, `Tid`, `ReturnCode`, `authId`, among others).
-    4.DoauthorizationRequest:
-      required:
-      - transactionId
-      - softDescriptor
-      - prepareForRecurrency
-      type: object
-      description: Authorize new transaction request body information.
-      properties:
-        transactionId:
-          type: string
-          description: Transaction identification.
-          example: 7ECE7DF3EEE14647B05DB904164923E8
-        softDescriptor:
-          type:
-          - string
-          - 'null'
-          description: Custom field for a transaction that can be displayed on the customer's invoice.
-          example: company_name_description_code
-        prepareForRecurrency:
-          type: boolean
-          description: Indicates whether the transaction supports recurrence.
-          example: false
-    Fields3:
-      required:
-      - holderName
-      - cardNumber
-      - validationCode
-      - dueDate
-      - document
-      - accountId
-      - address
-      - callbackUrl
-      type: object
-      description: Fields information.
-      properties:
-        holderName:
-          type: string
-          description: Card holder name.
-          example: UserTest
-        cardNumber:
-          type: number
-          description: Card number information.
-          example: 111111111111
-        validationCode:
-          type: number
-          description: CVV code.
-          example: 231
-        dueDate:
-          type: string
-          description: Due date information. The date format is `mm/yy`.
-          example: 10/19
-        document:
-          type: string
-          description: Card holder documentation.
-          example: '8041734561'
-        accountId:
-          type:
-          - string
-          - 'null'
-          description: Account identification.
-          example: 08134AF761A148B9A5DCE14A81F31DD9
-        address:
-          type:
-          - array
-          - 'null'
-          description: Array containing customer address information.
-          items:
-            type: string
-            description: Customer address information.
-            example: Customer address data
-        callbackUrl:
-          type:
-          - string
-          - 'null'
-          description: Callback URL information.
-          example: https://payment-test.myvtex.com/checkout/gatewayCallback/1336650505288/Success
-    Request:
-      required:
-      - id
-      - date
-      - value
-      type: object
-      description: Requests information.
-      properties:
-        id:
-          type: string
-          description: Transaction identification. This is the same `transactionId` value sent in the request path.
-        date:
-          type: string
-          description: Transaction settlement date.
-        value:
-          type: number
-          description: Transaction settlement value.
-    Cancellations:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction cancellations.
-      properties:
-        href:
-          type: string
-          description: Transaction cancellation reference route.
-    TransactionSettlementDetails:
-      required:
-      - requests
-      - actions
-      type: object
-      description: Transaction settlement details response body information.
-      properties:
-        requests:
-          type: array
-          items:
-            $ref: '#/components/schemas/Request'
-          description: Array containing requests information.
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-          description: Array containing actions information.
-    2.SendPaymentsWithSavedCreditCardRequest:
-      required:
-      - paymentSystem
-      - installments
-      - currencyCode
-      - value
-      - installmentsInterestRate
-      - installmentsValue
-      - referenceValue
-      - fields
-      - transaction
-      type: object
-      description: Send payments with saved credit card request body information.
-      properties:
-        paymentSystem:
-          type: number
-          description: Payment system identification.
-          example: 4
-        installments:
-          type: number
-          description: Number of installments.
-          example: 1
-        currencyCode:
-          type: string
-          description: Currency code in ISO 4217 standard.
-          example: BRL
-        value:
-          type: number
-          description: Payment value.
-          example: 30000
-        installmentsInterestRate:
-          type: number
-          description: The interest rate.
-          example: 0
-        installmentsValue:
-          type: number
-          description: The value of each installment.
-          example: 0
-        referenceValue:
-          type: number
-          description: Value amount of the payment without interest applied. This value is the same as the `value` field when `installmentsInterestRate` is `0.0`.
-          example: 30000
-        fields:
-          $ref: '#/components/schemas/Fields3'
-        transaction:
-          $ref: '#/components/schemas/Transaction'
-    Settlements:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction settlements.
-      properties:
-        href:
-          type: string
-          description: Transaction settlement reference route.
-    Payments:
-      required:
-      - href
-      type: object
-      description: Object containing the reference route of transaction payments.
-      properties:
-        href:
-          type: string
-          description: Transaction payment reference route.
-    Fields1:
-      required:
-      - name
-      - value
-      type: object
-      description: Payment parameters information.
-      properties:
-        name:
-          type: string
-          description: Payment parameter name.
-        value:
-          type: string
-          description: Payment parameter value.
     SettleResponse:
       required:
       - id
@@ -2094,15 +2094,6 @@ components:
           description: Merchant name.
           example: cosmetics2
   parameters:
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     transactionId:
       name: transactionId
       in: path
@@ -2116,6 +2107,15 @@ components:
       name: Accept
       in: header
       description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:

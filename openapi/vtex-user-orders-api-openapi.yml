@@ -1025,188 +1025,253 @@ paths:
       deprecated: false
 components:
   schemas:
-    PaymentData:
-      title: PaymentData
-      description: Object with information about the payment.
+    AdditionalInfo:
+      title: AdditionalInfo
+      description: Additional information about the item.
       required:
-      - transactions
+      - brandName
+      - brandId
+      - categoriesIds
+      - productClusterId
+      - commercialConditionId
+      - dimension
+      - offeringInfo
+      - offeringType
+      - offeringTypeId
       type: object
       properties:
-        giftCards:
-          type: array
-          description: Array with information about Gift Cards.
-          items:
-            type: string
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-          description: Information about financial transactions.
+        brandName:
+          type: string
+          description: Item's brand name.
+        brandId:
+          type: string
+          description: Item's brand ID.
+        categoriesIds:
+          type: string
+          description: Item's category ID.
+        productClusterId:
+          type: string
+          description: All product clusters related to the item.
+        commercialConditionId:
+          type: string
+          description: Commercial conditions ID.
+        dimension:
+          $ref: '#/components/schemas/Dimension'
+        offeringInfo:
+          type:
+          - string
+          - 'null'
+          description: 'Information about services related to the item. For example: guarantee or installation.'
+        offeringType:
+          type:
+          - string
+          - 'null'
+          description: Offering type.
+        offeringTypeId:
+          type:
+          - string
+          - 'null'
+          description: Offering type ID.
       example:
-        giftCards: []
-        transactions:
-        - isActive: true
-          transactionId: 418213DE29634837A63DD693A937A696
-          merchantName: luxstore
-          payments:
-          - id: D3DEECAB3C6C4B9EAF8EF4C1FE062FF3
-            paymentSystem: '6'
-            paymentSystemName: Boleto Bancário
-            value: 4450
-            installments: 1
-            referenceValue: 4450
-            cardHolder: null
-            cardNumber: null
-            firstDigits: null
-            lastDigits: null
-            cvv2: null
-            expireMonth: null
-            expireYear: null
-            url: https://luxstore.vtexpayments.com.br:443/BankIssuedInvoice/Transaction/418213DE29634837A63DD693A937A696/Payment/D3DEECAB3C6C4B9EAF8EF4C1FE062FF3/Installment/{Installment}
-            giftCardId: null
-            giftCardName: null
-            giftCardCaption: null
-            redemptionCode: null
-            group: bankInvoice
-            tid: null
-            dueDate: '2019-02-02'
-            connectorResponses:
-              Tid: '94857956'
-              ReturnCode: '200'
-              Message: logMessage
-              authId: '857956'
-            giftCardProvider: presentCard
-            giftCardAsDiscount: false
-            koinUrl: koinURL
-            accountId: 5BC5C6B417FE432AB971B1D399F190C9
-            parentAccountId: 5BC5C6B417FE432AB971B1D399F190C9
-            bankIssuedInvoiceIdentificationNumber: '23797770100000019003099260100022107500729050'
-            bankIssuedInvoiceIdentificationNumberFormatted: 32534.95739 75945.24534 54395.734214 5
-            bankIssuedInvoiceBarCodeNumber: '325349573975945245345439573421443986734065'
-            bankIssuedInvoiceBarCodeType: i25
-            billingAddress: {}
-    Stats3:
-      title: Stats3
+        brandName: VTEX
+        brandId: '2000023'
+        categoriesIds: /1/
+        productClusterId: 135,142
+        commercialConditionId: '5'
+        dimension:
+          cubicweight: 0.7031
+          height: 15
+          length: 15
+          weight: 15
+          width: 15
+        offeringInfo: null
+        offeringType: null
+        offeringTypeId: null
+    CurrencyFormatInfo:
+      title: CurrencyFormatInfo
+      description: Object with currency format details.
       required:
-      - totalValue
-      - totalItems
+      - CurrencyDecimalDigits
+      - CurrencyDecimalSeparator
+      - CurrencyGroupSeparator
+      - CurrencyGroupSize
+      - StartsWithCurrencySymbol
       type: object
       properties:
-        totalValue:
-          $ref: '#/components/schemas/TotalValue1'
-        totalItems:
-          $ref: '#/components/schemas/TotalItems1'
+        CurrencyDecimalDigits:
+          type: integer
+          description: Quantity of currency decimal digits.
+        CurrencyDecimalSeparator:
+          type: string
+          description: Defines what currency decimal separator will be applied.
+        CurrencyGroupSeparator:
+          type: string
+          description: Defines what currency group separator will be applied.
+        CurrencyGroupSize:
+          type: integer
+          description: Defines how many characters will be grouped.
+        StartsWithCurrencySymbol:
+          type: boolean
+          description: Defines if all prices will be initiated with the currency symbol (`true`) or not (`false`).
       example:
-        totalValue:
-          Count: 19
-          Max: 0
-          Mean: 0
-          Min: 0
-          Missing: 0
-          StdDev: 0
-          Sum: 0
-          SumOfSquares: 0
-          Facets: {}
-        totalItems:
-          Count: 19
-          Max: 0
-          Mean: 0
-          Min: 0
-          Missing: 0
-          StdDev: 0
-          Sum: 0
-          SumOfSquares: 0
-          Facets: {}
-    Address:
-      title: Address
-      description: Shipping address details.
+        CurrencyDecimalDigits: 2
+        CurrencyDecimalSeparator: ','
+        CurrencyGroupSeparator: .
+        CurrencyGroupSize: 3
+        StartsWithCurrencySymbol: true
+    TotalItems1:
+      title: TotalItems1
       required:
-      - addressType
-      - receiverName
+      - Count
+      - Max
+      - Mean
+      - Min
+      - Missing
+      - StdDev
+      - Sum
+      - SumOfSquares
+      - Facets
+      type: object
+      properties:
+        Count:
+          type: integer
+        Max:
+          type: integer
+        Mean:
+          type: integer
+        Min:
+          type: integer
+        Missing:
+          type: integer
+        StdDev:
+          type: integer
+        Sum:
+          type: integer
+        SumOfSquares:
+          type: integer
+        Facets:
+          type: object
+      example:
+        Count: 19
+        Max: 0
+        Mean: 0
+        Min: 0
+        Missing: 0
+        StdDev: 0
+        Sum: 0
+        SumOfSquares: 0
+        Facets: {}
+    SelectedAddress:
+      title: SelectedAddress
+      required:
       - addressId
       - versionId
       - entityId
+      - addressType
+      - receiverName
+      - street
+      - number
+      - complement
+      - neighborhood
       - postalCode
       - city
       - state
       - country
-      - street
-      - number
-      - neighborhood
-      - complement
       - reference
       - geoCoordinates
       type: object
       properties:
-        addressType:
-          type: string
-          description: Type of address. For example, `Residential` or `Pickup`, among others.
-        receiverName:
-          type: string
-          description: Name of the person who is going to receive the order.
         addressId:
           type: string
-          description: Shipping address ID.
+          description: Selected address ID.
         versionId:
           type:
           - string
           - 'null'
-          description: Shipping address version ID.
+          description: Shipping address version ID of the selected address.
         entityId:
           type:
           - string
           - 'null'
-          description: Shipping address entity ID.
-        postalCode:
+          description: Shipping address entity ID  of the selected address.
+        addressType:
           type: string
-          description: Postal code of the shipping address.
-        city:
+          description: Selected adress's shipping type, which can be `pickup`, `residential`, `invoice`, `search`, `inStore`, `commercial` or `giftRegistry`.
+        receiverName:
           type: string
-          description: City of the shipping address.
-        state:
-          type: string
-          description: State of the shipping address.
-        country:
-          type: string
-          description: Three letters ISO code of the country of the shipping address (ISO 3166 ALPHA-3).
+          description: Name of the person who is going to receive the order in the selected address.
         street:
           type: string
-          description: Street of the shipping address.
+          description: Street of the selected address.
         number:
           type: string
-          description: Number of the building, house or apartment in the shipping address.
-        neighborhood:
-          type: string
-          description: Neighborhood of the shipping address.
+          description: Number of the building, house or apartment of the selected address.
         complement:
           type: string
-          description: Complement to the shipping address when it applies.
+          description: Complement to the selected address if it applies.
+        neighborhood:
+          type: string
+          description: Neighborhood of the selected address.
+        postalCode:
+          type: string
+          description: Postal code of the selected address.
+        city:
+          type: string
+          description: City of the selected address.
+        state:
+          type: string
+          description: State of the selected address.
+        country:
+          type: string
+          description: Three letters ISO code of the country of the selected address (ISO 3166 ALPHA-3).
         reference:
           type:
           - string
           - 'null'
-          description: Complement to help locate the shipping address, in case of delivery.
+          description: Complement to help locate the selected address.
         geoCoordinates:
           type: array
           items:
             type: number
-          description: Array with two numbers with geocoordinates, first longitude then latitude.
+          description: Array with two numbers with the selected address's geocoordinates, first longitude then latitude.
       example:
-        addressType: residential
-        receiverName: Rodrigo Cunha
         addressId: '-1425945657910'
         versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
         entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
+        addressType: residential
+        receiverName: Rodrigo Cunha
+        street: Praia de Botafogo
+        number: '518'
+        complement: '10'
+        neighborhood: Botafogo
         postalCode: 22250-040
         city: Rio de Janeiro
         state: RJ
         country: BRA
-        street: Praia de Botafogo
-        number: '300'
-        neighborhood: Botafogo
-        complement: '3'
         reference: null
         geoCoordinates: []
+    Paging:
+      title: Paging
+      required:
+      - total
+      - pages
+      - currentPage
+      - perPage
+      type: object
+      properties:
+        total:
+          type: integer
+        pages:
+          type: integer
+        currentPage:
+          type: integer
+        perPage:
+          type: integer
+      example:
+        total: 84
+        pages: 6
+        currentPage: 1
+        perPage: 15
     Item:
       title: Item
       required:
@@ -1551,242 +1616,6 @@ components:
         serialNumbers: '3'
         assemblies: []
         costPrice: 52
-    DeliveryId:
-      title: DeliveryId
-      description: Information about delivery IDs.
-      required:
-      - courierId
-      - courierName
-      - dockId
-      - quantity
-      - warehouseId
-      - accountCarrierName
-      - kitItemDetails
-      type: object
-      properties:
-        courierId:
-          type: string
-          description: '[Carrier](https://help.vtex.com/en/tutorial/transportadoras-na-vtex--7u9duMD5UQa2QQwukAWMcE)''s ID.'
-        courierName:
-          type: string
-          description: Carrier's name.
-        dockId:
-          type: string
-          description: ID of the [loading dock](https://help.vtex.com/pt/tutorial/doca--5DY8xHEjOLYDVL41Urd5qj).
-        quantity:
-          type: integer
-          description: Quantity of items.
-        warehouseId:
-          type: string
-          description: ID of the [warehouse](https://help.vtex.com/tutorial/warehouse--6oIxvsVDTtGpO7y6zwhGpb).
-        accountCarrierName:
-          type: string
-          description: Name of the account's [carrier](https://help.vtex.com/en/tutorial/transportadoras-na-vtex--7u9duMD5UQa2QQwukAWMcE).
-        kitItemDetails:
-          type:
-          - array
-          - 'null'
-          description: Information about [kits](https://help.vtex.com/tutorial/what-is-a-kit--5ov5s3eHM4AqAAgqWwoc28), if there are any.
-          items:
-            type: string
-      example:
-        courierId: 197a56f
-        courierName: Todos os CEPS
-        dockId: '1'
-        quantity: 1
-        warehouseId: '1_1'
-        accountCarrierName: recorrenciaqa
-        kitItemDetails: []
-    RatesAndBenefitsData:
-      title: RatesAndBenefitsData
-      description: Information on promotions and taxes that apply to the order.
-      required:
-      - id
-      - rateAndBenefitsIdentifiers
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the rate or benefit.
-        rateAndBenefitsIdentifiers:
-          type: array
-          items:
-            type: string
-          description: Information about order's promotions and taxes identifiers.
-      example:
-        id: ratesAndBenefitsData
-        rateAndBenefitsIdentifiers: []
-    ShippingData:
-      title: ShippingData
-      description: Object containing shipping data.
-      required:
-      - id
-      - address
-      - logisticsInfo
-      - trackingHints
-      - selectedAddresses
-      type: object
-      properties:
-        id:
-          type: string
-          description: Object ID, the expected value is `shippingData`.
-        address:
-          $ref: '#/components/schemas/Address'
-        logisticsInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/LogisticsInfo'
-          description: Array of objects containing item's logistics information.
-        trackingHints:
-          type:
-          - string
-          - 'null'
-        selectedAddresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectedAddress'
-          description: Information about selected adresses.
-      example:
-        id: shippingData
-        address:
-          addressType: residential
-          receiverName: Rodrigo Cunha
-          addressId: '-1425945657910'
-          versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
-          entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
-          postalCode: 22250-040
-          city: Rio de Janeiro
-          state: RJ
-          country: BRA
-          street: Praia de Botafogo
-          number: '300'
-          neighborhood: Botafogo
-          complement: '3'
-          reference: null
-          geoCoordinates: []
-        logisticsInfo:
-        - itemIndex: 0
-          selectedSla: Normal
-          lockTTL: 10d
-          price: 1160
-          listPrice: 1160
-          sellingPrice: 1160
-          deliveryWindow: null
-          deliveryCompany: Todos os CEPS
-          shippingEstimate: 5bd
-          shippingEstimateDate: '2019-02-04T20:33:46.4595004+00:00'
-          slas:
-          - id: Normal
-            name: Normal
-            shippingEstimate: 5bd
-            deliveryWindow: null
-            price: 1160
-            deliveryChannel: delivery
-            pickupStoreInfo:
-              additionalInfo: null
-              address: null
-              dockId: null
-              friendlyName: null
-              isPickupStore: false
-            polygonName: ''
-            lockTTL: 12d
-            pickupPointId: store35
-            transitTime: 3d
-            pickupDistance: 0
-          - id: Expressa
-            name: Expressa
-            shippingEstimate: 5bd
-            deliveryWindow: null
-            price: 1160
-            deliveryChannel: delivery
-            pickupStoreInfo:
-              additionalInfo: null
-              address: null
-              dockId: null
-              friendlyName: null
-              isPickupStore: false
-            polygonName: ''
-            lockTTL: 12d
-            pickupPointId: store45
-            transitTime: 3d
-            pickupDistance: 0
-          - id: Quebra Kit
-            name: Quebra Kit
-            shippingEstimate: 2bd
-            deliveryWindow: null
-            price: 1392
-            deliveryChannel: delivery
-            pickupStoreInfo:
-              additionalInfo: null
-              address: null
-              dockId: null
-              friendlyName: null
-              isPickupStore: false
-            polygonName: ''
-            lockTTL: 12d
-            pickupPointId: store45
-            transitTime: 3d
-            pickupDistance: 0
-          - id: Sob Encomenda
-            name: Sob Encomenda
-            shippingEstimate: 32bd
-            deliveryWindow: null
-            price: 1392
-            deliveryChannel: delivery
-            pickupStoreInfo:
-              additionalInfo: null
-              address: null
-              dockId: null
-              friendlyName: null
-              isPickupStore: false
-            polygonName: ''
-            lockTTL: 12d
-            pickupPointId: store46
-            transitTime: 3d
-            pickupDistance: 0
-          shipsTo:
-          - BRA
-          deliveryIds:
-          - courierId: 197a56f
-            courierName: Todos os CEPS
-            dockId: '1'
-            quantity: 1
-            warehouseId: '1_1'
-            accountCarrierName: recorrenciaqa
-            kitItemDetails: []
-          deliveryChannels:
-          - id: delivery
-            stockBalance: 0
-          deliveryChannel: delivery
-          pickupStoreInfo:
-            additionalInfo: null
-            address: null
-            dockId: null
-            friendlyName: null
-            isPickupStore: false
-          addressId: '4791759472332'
-          versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
-          entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
-          polygonName: ''
-          pickupPointId: store67
-          transitTime: 3d
-        trackingHints: null
-        selectedAddresses:
-        - addressId: '-1425945657910'
-          versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
-          entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
-          addressType: residential
-          receiverName: Rodrigo Cunha
-          street: Praia de Botafogo
-          number: '518'
-          complement: '10'
-          neighborhood: Botafogo
-          postalCode: 22250-040
-          city: Rio de Janeiro
-          state: RJ
-          country: BRA
-          reference: null
-          geoCoordinates: []
     PickupStoreInfo:
       title: PickupStoreInfo
       description: Detailed information about a [pickup point](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R).
@@ -1827,6 +1656,205 @@ components:
         dockId: null
         friendlyName: null
         isPickupStore: false
+    StorePreferencesData:
+      title: StorePreferencesData
+      description: Object with data from the store's configuration - stored in VTEX's License Manager.
+      required:
+      - countryCode
+      - currencyCode
+      - currencyFormatInfo
+      - currencyLocale
+      - currencySymbol
+      - timeZone
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: Three letters ISO code of the country (ISO 3166 ALPHA-3).
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217. For example, `BRL`.
+        currencyFormatInfo:
+          $ref: '#/components/schemas/CurrencyFormatInfo'
+        currencyLocale:
+          type: integer
+          description: Currency Locale Code in LCID in decimal.
+        currencySymbol:
+          type: string
+          description: Currency symbol.
+        timeZone:
+          type: string
+          description: Time zone from where the order was made.
+      example:
+        countryCode: BRA
+        currencyCode: BRL
+        currencyFormatInfo:
+          CurrencyDecimalDigits: 2
+          CurrencyDecimalSeparator: ','
+          CurrencyGroupSeparator: .
+          CurrencyGroupSize: 3
+          StartsWithCurrencySymbol: true
+        currencyLocale: 1046
+        currencySymbol: R$
+        timeZone: E. South America Standard Time
+    ItemsRemoved:
+      title: ItemsRemoved
+      required:
+      - id
+      - name
+      - quantity
+      - price
+      - unitMultiplier
+      type: object
+      properties:
+        id:
+          type: string
+          description: SKU ID of the item removed from the order.
+        name:
+          type: string
+          description: Name of the item removed from the order.
+        quantity:
+          type: integer
+          description: Quantity of items removed from the order.
+        price:
+          type: integer
+          description: Total amount of items removed from the order.
+        unitMultiplier:
+          type:
+          - string
+          - 'null'
+          description: Unit multiplier of the item removed from the order.
+      example:
+        id: '1234568358'
+        name: Bay Max L
+        quantity: 1
+        price: 3290
+        unitMultiplier: null
+    ClientProfileData:
+      title: ClientProfileData
+      description: Object with information on the client's profile.
+      required:
+      - id
+      - email
+      - firstName
+      - lastName
+      - documentType
+      - document
+      - phone
+      - corporateName
+      - tradeName
+      - corporateDocument
+      - stateInscription
+      - corporatePhone
+      - isCorporate
+      - userProfileId
+      - customerClass
+      type: object
+      properties:
+        id:
+          type: string
+          description: Object ID, the expected value is `clientProfileData`.
+        email:
+          type: string
+          description: Customer's email.
+        firstName:
+          type: string
+          description: Customer's first name.
+        lastName:
+          type: string
+          description: Customer's last name.
+        documentType:
+          type: string
+          description: Type of the document informed by the customer.
+        document:
+          type: string
+          description: Document identification code informed by the customer.
+        phone:
+          type: string
+          description: Customers's phone number.
+        corporateName:
+          type:
+          - string
+          - 'null'
+          description: If the customer is a legal entity, here goes the corporate name.
+        tradeName:
+          type:
+          - string
+          - 'null'
+          description: If the customer is a legal entity, here goes the trade name.
+        corporateDocument:
+          type:
+          - string
+          - 'null'
+          description: If the customer is a legal entity, here goes the corporate document.
+        stateInscription:
+          type:
+          - string
+          - 'null'
+          description: If the customer is a legal entity, here goes the state inscription.
+        corporatePhone:
+          type:
+          - string
+          - 'null'
+          description: If the customer is a legal entity, here goes the corpany's phone number.
+        isCorporate:
+          type: boolean
+          description: The value is `true` when the customer is a legal entity and `false` when not.
+        userProfileId:
+          type: string
+          description: Customer user profile ID.
+        customerClass:
+          type:
+          - string
+          - 'null'
+          description: Identification of the class the customer belongs to.
+      example:
+        id: clientProfileData
+        email: rodrigo.cunha@vtex.com.br
+        firstName: Rodrigo
+        lastName: VTEX
+        documentType: cpf
+        document: '11047867702'
+        phone: '+5521972321094'
+        corporateName: null
+        tradeName: null
+        corporateDocument: null
+        stateInscription: null
+        corporatePhone: null
+        isCorporate: false
+        userProfileId: 5a3692de-358a-4bea-8885-044bce33bb93
+        customerClass: null
+    Dimension:
+      title: Dimension
+      required:
+      - cubicweight
+      - height
+      - length
+      - weight
+      - width
+      type: object
+      properties:
+        cubicweight:
+          type: number
+          description: Item's cubic weight.
+        height:
+          type: integer
+          description: Item's height.
+        length:
+          type: integer
+          description: Item's length.
+        weight:
+          type: integer
+          description: Item's weight.
+        width:
+          type: integer
+          description: Item's width.
+      example:
+        cubicweight: 0.7031
+        height: 15
+        length: 15
+        weight: 15
+        width: 15
     Payment:
       title: Payment
       description: Payment details.
@@ -2040,293 +2068,6 @@ components:
         bankIssuedInvoiceBarCodeNumber: '325349573975945245345439573421443986734065'
         bankIssuedInvoiceBarCodeType: i25
         billingAddress: {}
-    Stats2:
-      title: Stats2
-      required:
-      - stats
-      type: object
-      properties:
-        stats:
-          $ref: '#/components/schemas/Stats3'
-      example:
-        stats:
-          totalValue:
-            Count: 19
-            Max: 0
-            Mean: 0
-            Min: 0
-            Missing: 0
-            StdDev: 0
-            Sum: 0
-            SumOfSquares: 0
-            Facets: {}
-          totalItems:
-            Count: 19
-            Max: 0
-            Mean: 0
-            Min: 0
-            Missing: 0
-            StdDev: 0
-            Sum: 0
-            SumOfSquares: 0
-            Facets: {}
-    CurrencyFormatInfo:
-      title: CurrencyFormatInfo
-      description: Object with currency format details.
-      required:
-      - CurrencyDecimalDigits
-      - CurrencyDecimalSeparator
-      - CurrencyGroupSeparator
-      - CurrencyGroupSize
-      - StartsWithCurrencySymbol
-      type: object
-      properties:
-        CurrencyDecimalDigits:
-          type: integer
-          description: Quantity of currency decimal digits.
-        CurrencyDecimalSeparator:
-          type: string
-          description: Defines what currency decimal separator will be applied.
-        CurrencyGroupSeparator:
-          type: string
-          description: Defines what currency group separator will be applied.
-        CurrencyGroupSize:
-          type: integer
-          description: Defines how many characters will be grouped.
-        StartsWithCurrencySymbol:
-          type: boolean
-          description: Defines if all prices will be initiated with the currency symbol (`true`) or not (`false`).
-      example:
-        CurrencyDecimalDigits: 2
-        CurrencyDecimalSeparator: ','
-        CurrencyGroupSeparator: .
-        CurrencyGroupSize: 3
-        StartsWithCurrencySymbol: true
-    Receipt:
-      title: Receipt
-      description: Information about the receipt for changed orders.
-      required:
-      - date
-      - orderId
-      - receipt
-      type: object
-      properties:
-        date:
-          type: string
-          description: Date when the receipt was created.
-        orderId:
-          type: string
-          description: ID of the order.
-        receipt:
-          type: string
-          description: Receipt's unique identifier code.
-      example:
-        date: '2019-02-06T20:46:04.4003606+00:00'
-        orderId: v5195004lux-01
-        receipt: 029f9ab8-751a-4b1e-bf81-7dd25d14b49b
-    ChangesAttachment:
-      title: ChangesAttachment
-      description: Information about changes in the order.
-      required:
-      - id
-      - changesData
-      type: object
-      properties:
-        id:
-          type: string
-          description: Object ID, the expect value is `changeAttachment`.
-        changesData:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangesDatum'
-          description: Order change details.
-      example:
-        id: changeAttachment
-        changesData:
-        - reason: Blah
-          discountValue: 3290
-          incrementValue: 0
-          itemsAdded: []
-          itemsRemoved:
-          - id: '1234568358'
-            name: Bay Max L
-            quantity: 1
-            price: 3290
-            unitMultiplier: null
-          receipt:
-            date: '2019-02-06T20:46:04.4003606+00:00'
-            orderId: v5195004lux-01
-            receipt: 029f9ab8-751a-4b1e-bf81-7dd25d14b49b
-    SelectedAddress:
-      title: SelectedAddress
-      required:
-      - addressId
-      - versionId
-      - entityId
-      - addressType
-      - receiverName
-      - street
-      - number
-      - complement
-      - neighborhood
-      - postalCode
-      - city
-      - state
-      - country
-      - reference
-      - geoCoordinates
-      type: object
-      properties:
-        addressId:
-          type: string
-          description: Selected address ID.
-        versionId:
-          type:
-          - string
-          - 'null'
-          description: Shipping address version ID of the selected address.
-        entityId:
-          type:
-          - string
-          - 'null'
-          description: Shipping address entity ID  of the selected address.
-        addressType:
-          type: string
-          description: Selected adress's shipping type, which can be `pickup`, `residential`, `invoice`, `search`, `inStore`, `commercial` or `giftRegistry`.
-        receiverName:
-          type: string
-          description: Name of the person who is going to receive the order in the selected address.
-        street:
-          type: string
-          description: Street of the selected address.
-        number:
-          type: string
-          description: Number of the building, house or apartment of the selected address.
-        complement:
-          type: string
-          description: Complement to the selected address if it applies.
-        neighborhood:
-          type: string
-          description: Neighborhood of the selected address.
-        postalCode:
-          type: string
-          description: Postal code of the selected address.
-        city:
-          type: string
-          description: City of the selected address.
-        state:
-          type: string
-          description: State of the selected address.
-        country:
-          type: string
-          description: Three letters ISO code of the country of the selected address (ISO 3166 ALPHA-3).
-        reference:
-          type:
-          - string
-          - 'null'
-          description: Complement to help locate the selected address.
-        geoCoordinates:
-          type: array
-          items:
-            type: number
-          description: Array with two numbers with the selected address's geocoordinates, first longitude then latitude.
-      example:
-        addressId: '-1425945657910'
-        versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
-        entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
-        addressType: residential
-        receiverName: Rodrigo Cunha
-        street: Praia de Botafogo
-        number: '518'
-        complement: '10'
-        neighborhood: Botafogo
-        postalCode: 22250-040
-        city: Rio de Janeiro
-        state: RJ
-        country: BRA
-        reference: null
-        geoCoordinates: []
-    ItemAttachment:
-      title: ItemAttachment
-      description: Information about attachments, if it applies.
-      required:
-      - content
-      - name
-      type: object
-      properties:
-        content:
-          type: object
-          description: Attachment's custom field for content.
-        name:
-          type:
-          - string
-          - 'null'
-          description: Attachment's name.
-      example:
-        content: {}
-        name: null
-    AdditionalInfo:
-      title: AdditionalInfo
-      description: Additional information about the item.
-      required:
-      - brandName
-      - brandId
-      - categoriesIds
-      - productClusterId
-      - commercialConditionId
-      - dimension
-      - offeringInfo
-      - offeringType
-      - offeringTypeId
-      type: object
-      properties:
-        brandName:
-          type: string
-          description: Item's brand name.
-        brandId:
-          type: string
-          description: Item's brand ID.
-        categoriesIds:
-          type: string
-          description: Item's category ID.
-        productClusterId:
-          type: string
-          description: All product clusters related to the item.
-        commercialConditionId:
-          type: string
-          description: Commercial conditions ID.
-        dimension:
-          $ref: '#/components/schemas/Dimension'
-        offeringInfo:
-          type:
-          - string
-          - 'null'
-          description: 'Information about services related to the item. For example: guarantee or installation.'
-        offeringType:
-          type:
-          - string
-          - 'null'
-          description: Offering type.
-        offeringTypeId:
-          type:
-          - string
-          - 'null'
-          description: Offering type ID.
-      example:
-        brandName: VTEX
-        brandId: '2000023'
-        categoriesIds: /1/
-        productClusterId: 135,142
-        commercialConditionId: '5'
-        dimension:
-          cubicweight: 0.7031
-          height: 15
-          length: 15
-          weight: 15
-          width: 15
-        offeringInfo: null
-        offeringType: null
-        offeringTypeId: null
     LogisticsInfo:
       title: LogisticsInfo
       required:
@@ -2549,285 +2290,6 @@ components:
         polygonName: null
         pickupPointId: 1_VTEX-RJ
         transitTime: 3d
-    TotalValue1:
-      title: TotalValue1
-      required:
-      - Count
-      - Max
-      - Mean
-      - Min
-      - Missing
-      - StdDev
-      - Sum
-      - SumOfSquares
-      - Facets
-      type: object
-      properties:
-        Count:
-          type: integer
-        Max:
-          type: integer
-        Mean:
-          type: integer
-        Min:
-          type: integer
-        Missing:
-          type: integer
-        StdDev:
-          type: integer
-        Sum:
-          type: integer
-        SumOfSquares:
-          type: integer
-        Facets:
-          type: object
-      example:
-        Count: 19
-        Max: 0
-        Mean: 0
-        Min: 0
-        Missing: 0
-        StdDev: 0
-        Sum: 0
-        SumOfSquares: 0
-        Facets: {}
-    StorePreferencesData:
-      title: StorePreferencesData
-      description: Object with data from the store's configuration - stored in VTEX's License Manager.
-      required:
-      - countryCode
-      - currencyCode
-      - currencyFormatInfo
-      - currencyLocale
-      - currencySymbol
-      - timeZone
-      type: object
-      properties:
-        countryCode:
-          type: string
-          description: Three letters ISO code of the country (ISO 3166 ALPHA-3).
-        currencyCode:
-          type: string
-          description: Currency code in ISO 4217. For example, `BRL`.
-        currencyFormatInfo:
-          $ref: '#/components/schemas/CurrencyFormatInfo'
-        currencyLocale:
-          type: integer
-          description: Currency Locale Code in LCID in decimal.
-        currencySymbol:
-          type: string
-          description: Currency symbol.
-        timeZone:
-          type: string
-          description: Time zone from where the order was made.
-      example:
-        countryCode: BRA
-        currencyCode: BRL
-        currencyFormatInfo:
-          CurrencyDecimalDigits: 2
-          CurrencyDecimalSeparator: ','
-          CurrencyGroupSeparator: .
-          CurrencyGroupSize: 3
-          StartsWithCurrencySymbol: true
-        currencyLocale: 1046
-        currencySymbol: R$
-        timeZone: E. South America Standard Time
-    List1:
-      title: List1
-      required:
-      - orderId
-      - creationDate
-      - clientName
-      - items
-      - totalValue
-      - paymentNames
-      - status
-      - statusDescription
-      - marketPlaceOrderId
-      - sequence
-      - salesChannel
-      - affiliateId
-      - origin
-      - workflowInErrorState
-      - workflowInRetry
-      - lastMessageUnread
-      - ShippingEstimatedDate
-      - ShippingEstimatedDateMax
-      - ShippingEstimatedDateMin
-      - orderIsComplete
-      - listId
-      - listType
-      - authorizedDate
-      - callCenterOperatorName
-      - totalItems
-      - currencyCode
-      type: object
-      properties:
-        orderId:
-          type: string
-          description: Order ID is a unique code that identifies an order.
-        creationDate:
-          type: string
-          description: Order's creation date.
-        clientName:
-          type: string
-          description: Order's customer name.
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Item2'
-          description: Information about order's items.
-          deprecated: true
-        totalValue:
-          type: integer
-          description: Total value amount.
-        paymentNames:
-          type:
-          - string
-          - 'null'
-          description: Payment system name.
-        status:
-          type: string
-          description: Order [status](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196).
-        statusDescription:
-          type: string
-          description: Status description which is displayed on the Admin panel. This field is deprecated and may not return any value.
-          deprecated: true
-        marketPlaceOrderId:
-          type:
-          - string
-          - 'null'
-          description: Marketplace order ID.
-        sequence:
-          type: string
-          description: Six-digit string that follows the order ID. For example, in order `1268540501456-01 (501456)`, the sequence is `501456`.
-        salesChannel:
-          type: string
-          description: Sales channel (or [trade policy](https://help.vtex.com/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) ID related to the order.
-        affiliateId:
-          type: string
-          description: Corresponds to the three-digits [affiliate](https://help.vtex.com/en/tutorial/configuring-affiliates--tutorials_187) identification code of the seller responsible for the order.
-        origin:
-          type: string
-          description: Order's [origin in the order flow](https://developers.vtex.com/docs/guides/orders-overview#understanding-order-flow-types), which can be `Marketplace`, `Fulfillment` or `Chain`.
-        workflowInErrorState:
-          type: boolean
-          description: If there is a work flow error (`true`) or not (`false`).
-        workflowInRetry:
-          type: boolean
-          description: If the order is in a work flow retry (`true`) or not (`false`).
-        lastMessageUnread:
-          type:
-          - string
-          - 'null'
-          description: Last sent transactional message.
-        ShippingEstimatedDate:
-          type:
-          - string
-          - 'null'
-          description: Estimate shipping date.
-        ShippingEstimatedDateMax:
-          type:
-          - string
-          - 'null'
-          description: The most extended shipping estimation possible.
-        ShippingEstimatedDateMin:
-          type:
-          - string
-          - 'null'
-          description: The least extended shipping estimation possible.
-        orderIsComplete:
-          type: boolean
-          description: If it is a completed order (`true`) or not (`false`). For more information, see [Order flow and status](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196).
-        listId:
-          type:
-          - string
-          - 'null'
-          description: Related Gift List ID.
-        listType:
-          type:
-          - string
-          - 'null'
-          description: Related Gift list type.
-        authorizedDate:
-          type:
-          - string
-          - 'null'
-          description: Authorized order date.
-        callCenterOperatorName:
-          type:
-          - string
-          - 'null'
-          description: Call center operator responsible for the order.
-        totalItems:
-          type: integer
-          description: Order's total amount of items.
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: Currency code in ISO 4217. For example, `BRL`.
-      example:
-        orderId: 1172452900788-01
-        creationDate: '2019-01-28T20:09:43+00:00'
-        clientName: Cunha VTEX
-        items:
-        - seller: '1'
-          quantity: 1
-          description: Reservoir hose
-          ean: null
-          refId: TE3121110
-          id: '195'
-          productId: '134'
-          sellingPrice: 7390
-          price: 7390
-        - seller: '1'
-          quantity: 1
-          description: Reservoir filter
-          ean: null
-          refId: XC459N610CA
-          id: '238'
-          productId: '162'
-          sellingPrice: 5190
-          price: 5190
-        totalValue: 1160
-        paymentNames: Boleto Bancário
-        status: handling
-        statusDescription: Preparing for delivery
-        marketPlaceOrderId: null
-        sequence: '502556'
-        salesChannel: '1'
-        affiliateId: GTB
-        origin: Marketplace
-        workflowInErrorState: false
-        workflowInRetry: false
-        lastMessageUnread: ' Lux Store Seu pedido foi alterado! Pedido realizado em: 28/01/2019 Olá, Rodrigo. Seu pedido foi alterado. Seguem informações abaixo: '
-        ShippingEstimatedDate: '2019-02-04T20:33:46+00:00'
-        ShippingEstimatedDateMax: null
-        ShippingEstimatedDateMin: null
-        orderIsComplete: true
-        listId: null
-        listType: null
-        authorizedDate: '2019-01-28T20:33:04+00:00'
-        callCenterOperatorName: null
-        totalItems: 1
-        currencyCode: BRL
-    PackageAttachment:
-      title: PackageAttachment
-      description: Package object populated after order invoiced.
-      required:
-      - packages
-      type: object
-      properties:
-        packages:
-          type: array
-          items:
-            type: string
-          description: Packages details.
-      example:
-        packages: []
     Userorderdetails:
       title: Userorderdetails
       required:
@@ -3765,302 +3227,285 @@ components:
         clientPreferencesData:
           locale: en-US
           optinNewsLetter: false
-    Marketplace:
-      title: Marketplace
-      description: Details about the marketplace related to the order.
+    Stats2:
+      title: Stats2
       required:
-      - baseURL
-      - isCertified
-      - name
+      - stats
       type: object
       properties:
-        baseURL:
-          type: string
-          description: Marketplace base URL.
-        isCertified:
-          type:
-          - string
-          - 'null'
-          description: If is a certified marketplace.
-        name:
-          type: string
-          description: Name of the marketplace.
+        stats:
+          $ref: '#/components/schemas/Stats3'
       example:
-        baseURL: http://oms.vtexinternal.com.br/api/oms?an=luxstore
-        isCertified: null
-        name: luxstore
-    ClientProfileData:
-      title: ClientProfileData
-      description: Object with information on the client's profile.
+        stats:
+          totalValue:
+            Count: 19
+            Max: 0
+            Mean: 0
+            Min: 0
+            Missing: 0
+            StdDev: 0
+            Sum: 0
+            SumOfSquares: 0
+            Facets: {}
+          totalItems:
+            Count: 19
+            Max: 0
+            Mean: 0
+            Min: 0
+            Missing: 0
+            StdDev: 0
+            Sum: 0
+            SumOfSquares: 0
+            Facets: {}
+    PaymentData:
+      title: PaymentData
+      description: Object with information about the payment.
+      required:
+      - transactions
+      type: object
+      properties:
+        giftCards:
+          type: array
+          description: Array with information about Gift Cards.
+          items:
+            type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: Information about financial transactions.
+      example:
+        giftCards: []
+        transactions:
+        - isActive: true
+          transactionId: 418213DE29634837A63DD693A937A696
+          merchantName: luxstore
+          payments:
+          - id: D3DEECAB3C6C4B9EAF8EF4C1FE062FF3
+            paymentSystem: '6'
+            paymentSystemName: Boleto Bancário
+            value: 4450
+            installments: 1
+            referenceValue: 4450
+            cardHolder: null
+            cardNumber: null
+            firstDigits: null
+            lastDigits: null
+            cvv2: null
+            expireMonth: null
+            expireYear: null
+            url: https://luxstore.vtexpayments.com.br:443/BankIssuedInvoice/Transaction/418213DE29634837A63DD693A937A696/Payment/D3DEECAB3C6C4B9EAF8EF4C1FE062FF3/Installment/{Installment}
+            giftCardId: null
+            giftCardName: null
+            giftCardCaption: null
+            redemptionCode: null
+            group: bankInvoice
+            tid: null
+            dueDate: '2019-02-02'
+            connectorResponses:
+              Tid: '94857956'
+              ReturnCode: '200'
+              Message: logMessage
+              authId: '857956'
+            giftCardProvider: presentCard
+            giftCardAsDiscount: false
+            koinUrl: koinURL
+            accountId: 5BC5C6B417FE432AB971B1D399F190C9
+            parentAccountId: 5BC5C6B417FE432AB971B1D399F190C9
+            bankIssuedInvoiceIdentificationNumber: '23797770100000019003099260100022107500729050'
+            bankIssuedInvoiceIdentificationNumberFormatted: 32534.95739 75945.24534 54395.734214 5
+            bankIssuedInvoiceBarCodeNumber: '325349573975945245345439573421443986734065'
+            bankIssuedInvoiceBarCodeType: i25
+            billingAddress: {}
+    PackageAttachment:
+      title: PackageAttachment
+      description: Package object populated after order invoiced.
+      required:
+      - packages
+      type: object
+      properties:
+        packages:
+          type: array
+          items:
+            type: string
+          description: Packages details.
+      example:
+        packages: []
+    Receipt:
+      title: Receipt
+      description: Information about the receipt for changed orders.
+      required:
+      - date
+      - orderId
+      - receipt
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date when the receipt was created.
+        orderId:
+          type: string
+          description: ID of the order.
+        receipt:
+          type: string
+          description: Receipt's unique identifier code.
+      example:
+        date: '2019-02-06T20:46:04.4003606+00:00'
+        orderId: v5195004lux-01
+        receipt: 029f9ab8-751a-4b1e-bf81-7dd25d14b49b
+    ChangesAttachment:
+      title: ChangesAttachment
+      description: Information about changes in the order.
       required:
       - id
-      - email
-      - firstName
-      - lastName
-      - documentType
-      - document
-      - phone
-      - corporateName
-      - tradeName
-      - corporateDocument
-      - stateInscription
-      - corporatePhone
-      - isCorporate
-      - userProfileId
-      - customerClass
+      - changesData
       type: object
       properties:
         id:
           type: string
-          description: Object ID, the expected value is `clientProfileData`.
-        email:
-          type: string
-          description: Customer's email.
-        firstName:
-          type: string
-          description: Customer's first name.
-        lastName:
-          type: string
-          description: Customer's last name.
-        documentType:
-          type: string
-          description: Type of the document informed by the customer.
-        document:
-          type: string
-          description: Document identification code informed by the customer.
-        phone:
-          type: string
-          description: Customers's phone number.
-        corporateName:
-          type:
-          - string
-          - 'null'
-          description: If the customer is a legal entity, here goes the corporate name.
-        tradeName:
-          type:
-          - string
-          - 'null'
-          description: If the customer is a legal entity, here goes the trade name.
-        corporateDocument:
-          type:
-          - string
-          - 'null'
-          description: If the customer is a legal entity, here goes the corporate document.
-        stateInscription:
-          type:
-          - string
-          - 'null'
-          description: If the customer is a legal entity, here goes the state inscription.
-        corporatePhone:
-          type:
-          - string
-          - 'null'
-          description: If the customer is a legal entity, here goes the corpany's phone number.
-        isCorporate:
-          type: boolean
-          description: The value is `true` when the customer is a legal entity and `false` when not.
-        userProfileId:
-          type: string
-          description: Customer user profile ID.
-        customerClass:
-          type:
-          - string
-          - 'null'
-          description: Identification of the class the customer belongs to.
+          description: Object ID, the expect value is `changeAttachment`.
+        changesData:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangesDatum'
+          description: Order change details.
       example:
-        id: clientProfileData
-        email: rodrigo.cunha@vtex.com.br
-        firstName: Rodrigo
-        lastName: VTEX
-        documentType: cpf
-        document: '11047867702'
-        phone: '+5521972321094'
-        corporateName: null
-        tradeName: null
-        corporateDocument: null
-        stateInscription: null
-        corporatePhone: null
-        isCorporate: false
-        userProfileId: 5a3692de-358a-4bea-8885-044bce33bb93
-        customerClass: null
-    Total:
-      title: Total
+        id: changeAttachment
+        changesData:
+        - reason: Blah
+          discountValue: 3290
+          incrementValue: 0
+          itemsAdded: []
+          itemsRemoved:
+          - id: '1234568358'
+            name: Bay Max L
+            quantity: 1
+            price: 3290
+            unitMultiplier: null
+          receipt:
+            date: '2019-02-06T20:46:04.4003606+00:00'
+            orderId: v5195004lux-01
+            receipt: 029f9ab8-751a-4b1e-bf81-7dd25d14b49b
+    DeliveryId:
+      title: DeliveryId
+      description: Information about delivery IDs.
       required:
-      - id
-      - name
-      - value
-      type: object
-      properties:
-        id:
-          type: string
-          description: Code that identifies if the information is about `Items`, `Discounts`, `Shipping`, `Tax` or `Change`.
-        name:
-          type: string
-          description: Name of `Items`, `Discounts`, `Shipping`, `Tax` or `Change`.
-        value:
-          type: integer
-          description: Total amount of `Items`, `Discounts`, `Shipping`, `Tax` or `Change`.
-      example:
-        id: Items
-        name: Total dos Itens
-        value: 3290
-    TotalItems1:
-      title: TotalItems1
-      required:
-      - Count
-      - Max
-      - Mean
-      - Min
-      - Missing
-      - StdDev
-      - Sum
-      - SumOfSquares
-      - Facets
-      type: object
-      properties:
-        Count:
-          type: integer
-        Max:
-          type: integer
-        Mean:
-          type: integer
-        Min:
-          type: integer
-        Missing:
-          type: integer
-        StdDev:
-          type: integer
-        Sum:
-          type: integer
-        SumOfSquares:
-          type: integer
-        Facets:
-          type: object
-      example:
-        Count: 19
-        Max: 0
-        Mean: 0
-        Min: 0
-        Missing: 0
-        StdDev: 0
-        Sum: 0
-        SumOfSquares: 0
-        Facets: {}
-    Item2:
-      title: Item2
-      required:
-      - seller
+      - courierId
+      - courierName
+      - dockId
       - quantity
-      - description
-      - ean
-      - refId
-      - id
-      - productId
-      - sellingPrice
-      - price
+      - warehouseId
+      - accountCarrierName
+      - kitItemDetails
       type: object
       properties:
-        seller:
+        courierId:
           type: string
-          description: Seller related to the order.
+          description: '[Carrier](https://help.vtex.com/en/tutorial/transportadoras-na-vtex--7u9duMD5UQa2QQwukAWMcE)''s ID.'
+        courierName:
+          type: string
+          description: Carrier's name.
+        dockId:
+          type: string
+          description: ID of the [loading dock](https://help.vtex.com/pt/tutorial/doca--5DY8xHEjOLYDVL41Urd5qj).
         quantity:
           type: integer
-          description: Quantity of SKUs.
-        description:
+          description: Quantity of items.
+        warehouseId:
           type: string
-          description: Description of items.
-        ean:
+          description: ID of the [warehouse](https://help.vtex.com/tutorial/warehouse--6oIxvsVDTtGpO7y6zwhGpb).
+        accountCarrierName:
+          type: string
+          description: Name of the account's [carrier](https://help.vtex.com/en/tutorial/transportadoras-na-vtex--7u9duMD5UQa2QQwukAWMcE).
+        kitItemDetails:
           type:
-          - string
+          - array
           - 'null'
-          description: EAN of the SKU.
-        refId:
-          type:
-          - string
-          - 'null'
-          description: Item's reference ID.
-        id:
-          type: string
-          description: Item's SKU ID, which is a unique numerical identifier.
-        productId:
-          type: string
-          description: ID of the Product associated with the item.
-        sellingPrice:
-          type: integer
-          description: Details on item's selling price.
-        price:
-          type: integer
-          description: Item's price.
+          description: Information about [kits](https://help.vtex.com/tutorial/what-is-a-kit--5ov5s3eHM4AqAAgqWwoc28), if there are any.
+          items:
+            type: string
       example:
-        seller: '1'
+        courierId: 197a56f
+        courierName: Todos os CEPS
+        dockId: '1'
         quantity: 1
-        description: Mangueira Reservatório Ao Cavalete
-        ean: null
-        refId: TE3121110
-        id: '195'
-        productId: '134'
-        sellingPrice: 7390
-        price: 7390
-    ItemsRemoved:
-      title: ItemsRemoved
+        warehouseId: '1_1'
+        accountCarrierName: recorrenciaqa
+        kitItemDetails: []
+    Sla:
+      title: Sla
       required:
       - id
       - name
-      - quantity
+      - shippingEstimate
+      - deliveryWindow
       - price
-      - unitMultiplier
+      - deliveryChannel
+      - pickupStoreInfo
+      - polygonName
+      - lockTTL
+      - pickupPointId
+      - transitTime
+      - pickupDistance
       type: object
       properties:
         id:
           type: string
-          description: SKU ID of the item removed from the order.
+          description: ID of the shipping method used in the [shipping policy](https://help.vtex.com/en/tutorial/shipping-policy--tutorials_140).
         name:
           type: string
-          description: Name of the item removed from the order.
-        quantity:
-          type: integer
-          description: Quantity of items removed from the order.
-        price:
-          type: integer
-          description: Total amount of items removed from the order.
-        unitMultiplier:
+          description: Name of the shipping policy.
+        shippingEstimate:
+          type: string
+          description: Total shipping estimate time in days. For instance, three business days is represented `3bd`.
+        deliveryWindow:
           type:
           - string
           - 'null'
-          description: Unit multiplier of the item removed from the order.
+          description: '[Scheduled delivery window](https://help.vtex.com/tutorial/scheduled-delivery--22g3HAVCGLFiU7xugShOBi) information, if it applies to the item.'
+        price:
+          type: integer
+          description: Shipping price for the item in cents. Does not account for the whole order's shipping price.
+        deliveryChannel:
+          type: string
+          description: If the delivery channel is `delivery` or `pickup-in-point`.
+        pickupStoreInfo:
+          $ref: '#/components/schemas/PickupStoreInfo'
+        polygonName:
+          type:
+          - string
+          - 'null'
+          description: Name of the [polygon](https://help.vtex.com/en/tutorial/registering-geolocation/) associated with the shipping policy.
+        lockTTL:
+          type: string
+          description: Logistics [reservation](https://help.vtex.com/en/tutorial/how-does-reservation-work--tutorials_92) waiting time of the SLA.
+        pickupPointId:
+          type: string
+          description: '[Pickup point](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R) ID related to the SLA.'
+        transitTime:
+          type: string
+          description: Duration in business days of the time the carrier takes in transit to fulfill the order. For example, three business days is represented `3bd`.
+        pickupDistance:
+          type: number
+          description: Distance in kilometers between the pickup point and the customer's address. The distance is measured as a straight line.
       example:
-        id: '1234568358'
-        name: Bay Max L
-        quantity: 1
-        price: 3290
-        unitMultiplier: null
-    Seller:
-      title: Seller
-      description: Information about the seller associated with the order.
-      required:
-      - id
-      - name
-      - logo
-      - fulfillmentEndpoint
-      type: object
-      properties:
-        id:
-          type: string
-          description: Seller ID that identifies the seller.
-        name:
-          type: string
-          description: Seller's name.
-        logo:
-          type: string
-          description: URL of the seller's logo.
-        fulfillmentEndpoint:
-          type: string
-          description: URL of the endpoint for fulfillment of seller's orders.
-      example:
-        id: '1'
-        name: Loja do Suporte
-        logo: https://sellersLogo/images.png
-        fulfillmentEndpoint: http://fulfillment.vtexcommerce.com.br/api/fulfillment?an=accountName
+        id: Normal
+        name: Normal
+        shippingEstimate: 5bd
+        deliveryWindow: null
+        price: 1160
+        deliveryChannel: delivery
+        pickupStoreInfo:
+          additionalInfo: null
+          address: null
+          dockId: null
+          friendlyName: null
+          isPickupStore: false
+        polygonName: null
+        lockTTL: 12d
+        pickupPointId: 1_VTEX-RJ
+        transitTime: 3d
+        pickupDistance: 0
     Userorderslist:
       title: Userorderslist
       required:
@@ -4465,80 +3910,118 @@ components:
               Sum: 0
               SumOfSquares: 0
               Facets: {}
-    Sla:
-      title: Sla
+    ItemAttachment:
+      title: ItemAttachment
+      description: Information about attachments, if it applies.
+      required:
+      - content
+      - name
+      type: object
+      properties:
+        content:
+          type: object
+          description: Attachment's custom field for content.
+        name:
+          type:
+          - string
+          - 'null'
+          description: Attachment's name.
+      example:
+        content: {}
+        name: null
+    RatesAndBenefitsData:
+      title: RatesAndBenefitsData
+      description: Information on promotions and taxes that apply to the order.
       required:
       - id
-      - name
-      - shippingEstimate
-      - deliveryWindow
-      - price
-      - deliveryChannel
-      - pickupStoreInfo
-      - polygonName
-      - lockTTL
-      - pickupPointId
-      - transitTime
-      - pickupDistance
+      - rateAndBenefitsIdentifiers
       type: object
       properties:
         id:
           type: string
-          description: ID of the shipping method used in the [shipping policy](https://help.vtex.com/en/tutorial/shipping-policy--tutorials_140).
-        name:
-          type: string
-          description: Name of the shipping policy.
-        shippingEstimate:
-          type: string
-          description: Total shipping estimate time in days. For instance, three business days is represented `3bd`.
-        deliveryWindow:
-          type:
-          - string
-          - 'null'
-          description: '[Scheduled delivery window](https://help.vtex.com/tutorial/scheduled-delivery--22g3HAVCGLFiU7xugShOBi) information, if it applies to the item.'
-        price:
-          type: integer
-          description: Shipping price for the item in cents. Does not account for the whole order's shipping price.
-        deliveryChannel:
-          type: string
-          description: If the delivery channel is `delivery` or `pickup-in-point`.
-        pickupStoreInfo:
-          $ref: '#/components/schemas/PickupStoreInfo'
-        polygonName:
-          type:
-          - string
-          - 'null'
-          description: Name of the [polygon](https://help.vtex.com/en/tutorial/registering-geolocation/) associated with the shipping policy.
-        lockTTL:
-          type: string
-          description: Logistics [reservation](https://help.vtex.com/en/tutorial/how-does-reservation-work--tutorials_92) waiting time of the SLA.
-        pickupPointId:
-          type: string
-          description: '[Pickup point](https://help.vtex.com/en/tutorial/pickup-points--2fljn6wLjn8M4lJHA6HP3R) ID related to the SLA.'
-        transitTime:
-          type: string
-          description: Duration in business days of the time the carrier takes in transit to fulfill the order. For example, three business days is represented `3bd`.
-        pickupDistance:
-          type: number
-          description: Distance in kilometers between the pickup point and the customer's address. The distance is measured as a straight line.
+          description: ID of the rate or benefit.
+        rateAndBenefitsIdentifiers:
+          type: array
+          items:
+            type: string
+          description: Information about order's promotions and taxes identifiers.
       example:
-        id: Normal
-        name: Normal
-        shippingEstimate: 5bd
-        deliveryWindow: null
-        price: 1160
-        deliveryChannel: delivery
-        pickupStoreInfo:
-          additionalInfo: null
-          address: null
-          dockId: null
-          friendlyName: null
-          isPickupStore: false
-        polygonName: null
-        lockTTL: 12d
-        pickupPointId: 1_VTEX-RJ
-        transitTime: 3d
-        pickupDistance: 0
+        id: ratesAndBenefitsData
+        rateAndBenefitsIdentifiers: []
+    TotalValue1:
+      title: TotalValue1
+      required:
+      - Count
+      - Max
+      - Mean
+      - Min
+      - Missing
+      - StdDev
+      - Sum
+      - SumOfSquares
+      - Facets
+      type: object
+      properties:
+        Count:
+          type: integer
+        Max:
+          type: integer
+        Mean:
+          type: integer
+        Min:
+          type: integer
+        Missing:
+          type: integer
+        StdDev:
+          type: integer
+        Sum:
+          type: integer
+        SumOfSquares:
+          type: integer
+        Facets:
+          type: object
+      example:
+        Count: 19
+        Max: 0
+        Mean: 0
+        Min: 0
+        Missing: 0
+        StdDev: 0
+        Sum: 0
+        SumOfSquares: 0
+        Facets: {}
+    Stats3:
+      title: Stats3
+      required:
+      - totalValue
+      - totalItems
+      type: object
+      properties:
+        totalValue:
+          $ref: '#/components/schemas/TotalValue1'
+        totalItems:
+          $ref: '#/components/schemas/TotalItems1'
+      example:
+        totalValue:
+          Count: 19
+          Max: 0
+          Mean: 0
+          Min: 0
+          Missing: 0
+          StdDev: 0
+          Sum: 0
+          SumOfSquares: 0
+          Facets: {}
+        totalItems:
+          Count: 19
+          Max: 0
+          Mean: 0
+          Min: 0
+          Missing: 0
+          StdDev: 0
+          Sum: 0
+          SumOfSquares: 0
+          Facets: {}
     ChangesDatum:
       title: ChangesDatum
       required:
@@ -4586,59 +4069,367 @@ components:
           date: '2019-02-06T20:46:04.4003606+00:00'
           orderId: v5195004lux-01
           receipt: 029f9ab8-751a-4b1e-bf81-7dd25d14b49b
-    Dimension:
-      title: Dimension
+    Item2:
+      title: Item2
       required:
-      - cubicweight
-      - height
-      - length
-      - weight
-      - width
+      - seller
+      - quantity
+      - description
+      - ean
+      - refId
+      - id
+      - productId
+      - sellingPrice
+      - price
       type: object
       properties:
-        cubicweight:
-          type: number
-          description: Item's cubic weight.
-        height:
+        seller:
+          type: string
+          description: Seller related to the order.
+        quantity:
           type: integer
-          description: Item's height.
-        length:
+          description: Quantity of SKUs.
+        description:
+          type: string
+          description: Description of items.
+        ean:
+          type:
+          - string
+          - 'null'
+          description: EAN of the SKU.
+        refId:
+          type:
+          - string
+          - 'null'
+          description: Item's reference ID.
+        id:
+          type: string
+          description: Item's SKU ID, which is a unique numerical identifier.
+        productId:
+          type: string
+          description: ID of the Product associated with the item.
+        sellingPrice:
           type: integer
-          description: Item's length.
-        weight:
+          description: Details on item's selling price.
+        price:
           type: integer
-          description: Item's weight.
-        width:
-          type: integer
-          description: Item's width.
+          description: Item's price.
       example:
-        cubicweight: 0.7031
-        height: 15
-        length: 15
-        weight: 15
-        width: 15
-    Paging:
-      title: Paging
+        seller: '1'
+        quantity: 1
+        description: Mangueira Reservatório Ao Cavalete
+        ean: null
+        refId: TE3121110
+        id: '195'
+        productId: '134'
+        sellingPrice: 7390
+        price: 7390
+    ShippingData:
+      title: ShippingData
+      description: Object containing shipping data.
       required:
-      - total
-      - pages
-      - currentPage
-      - perPage
+      - id
+      - address
+      - logisticsInfo
+      - trackingHints
+      - selectedAddresses
       type: object
       properties:
-        total:
-          type: integer
-        pages:
-          type: integer
-        currentPage:
-          type: integer
-        perPage:
-          type: integer
+        id:
+          type: string
+          description: Object ID, the expected value is `shippingData`.
+        address:
+          $ref: '#/components/schemas/Address'
+        logisticsInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogisticsInfo'
+          description: Array of objects containing item's logistics information.
+        trackingHints:
+          type:
+          - string
+          - 'null'
+        selectedAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectedAddress'
+          description: Information about selected adresses.
       example:
-        total: 84
-        pages: 6
-        currentPage: 1
-        perPage: 15
+        id: shippingData
+        address:
+          addressType: residential
+          receiverName: Rodrigo Cunha
+          addressId: '-1425945657910'
+          versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
+          entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
+          postalCode: 22250-040
+          city: Rio de Janeiro
+          state: RJ
+          country: BRA
+          street: Praia de Botafogo
+          number: '300'
+          neighborhood: Botafogo
+          complement: '3'
+          reference: null
+          geoCoordinates: []
+        logisticsInfo:
+        - itemIndex: 0
+          selectedSla: Normal
+          lockTTL: 10d
+          price: 1160
+          listPrice: 1160
+          sellingPrice: 1160
+          deliveryWindow: null
+          deliveryCompany: Todos os CEPS
+          shippingEstimate: 5bd
+          shippingEstimateDate: '2019-02-04T20:33:46.4595004+00:00'
+          slas:
+          - id: Normal
+            name: Normal
+            shippingEstimate: 5bd
+            deliveryWindow: null
+            price: 1160
+            deliveryChannel: delivery
+            pickupStoreInfo:
+              additionalInfo: null
+              address: null
+              dockId: null
+              friendlyName: null
+              isPickupStore: false
+            polygonName: ''
+            lockTTL: 12d
+            pickupPointId: store35
+            transitTime: 3d
+            pickupDistance: 0
+          - id: Expressa
+            name: Expressa
+            shippingEstimate: 5bd
+            deliveryWindow: null
+            price: 1160
+            deliveryChannel: delivery
+            pickupStoreInfo:
+              additionalInfo: null
+              address: null
+              dockId: null
+              friendlyName: null
+              isPickupStore: false
+            polygonName: ''
+            lockTTL: 12d
+            pickupPointId: store45
+            transitTime: 3d
+            pickupDistance: 0
+          - id: Quebra Kit
+            name: Quebra Kit
+            shippingEstimate: 2bd
+            deliveryWindow: null
+            price: 1392
+            deliveryChannel: delivery
+            pickupStoreInfo:
+              additionalInfo: null
+              address: null
+              dockId: null
+              friendlyName: null
+              isPickupStore: false
+            polygonName: ''
+            lockTTL: 12d
+            pickupPointId: store45
+            transitTime: 3d
+            pickupDistance: 0
+          - id: Sob Encomenda
+            name: Sob Encomenda
+            shippingEstimate: 32bd
+            deliveryWindow: null
+            price: 1392
+            deliveryChannel: delivery
+            pickupStoreInfo:
+              additionalInfo: null
+              address: null
+              dockId: null
+              friendlyName: null
+              isPickupStore: false
+            polygonName: ''
+            lockTTL: 12d
+            pickupPointId: store46
+            transitTime: 3d
+            pickupDistance: 0
+          shipsTo:
+          - BRA
+          deliveryIds:
+          - courierId: 197a56f
+            courierName: Todos os CEPS
+            dockId: '1'
+            quantity: 1
+            warehouseId: '1_1'
+            accountCarrierName: recorrenciaqa
+            kitItemDetails: []
+          deliveryChannels:
+          - id: delivery
+            stockBalance: 0
+          deliveryChannel: delivery
+          pickupStoreInfo:
+            additionalInfo: null
+            address: null
+            dockId: null
+            friendlyName: null
+            isPickupStore: false
+          addressId: '4791759472332'
+          versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
+          entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
+          polygonName: ''
+          pickupPointId: store67
+          transitTime: 3d
+        trackingHints: null
+        selectedAddresses:
+        - addressId: '-1425945657910'
+          versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
+          entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
+          addressType: residential
+          receiverName: Rodrigo Cunha
+          street: Praia de Botafogo
+          number: '518'
+          complement: '10'
+          neighborhood: Botafogo
+          postalCode: 22250-040
+          city: Rio de Janeiro
+          state: RJ
+          country: BRA
+          reference: null
+          geoCoordinates: []
+    Address:
+      title: Address
+      description: Shipping address details.
+      required:
+      - addressType
+      - receiverName
+      - addressId
+      - versionId
+      - entityId
+      - postalCode
+      - city
+      - state
+      - country
+      - street
+      - number
+      - neighborhood
+      - complement
+      - reference
+      - geoCoordinates
+      type: object
+      properties:
+        addressType:
+          type: string
+          description: Type of address. For example, `Residential` or `Pickup`, among others.
+        receiverName:
+          type: string
+          description: Name of the person who is going to receive the order.
+        addressId:
+          type: string
+          description: Shipping address ID.
+        versionId:
+          type:
+          - string
+          - 'null'
+          description: Shipping address version ID.
+        entityId:
+          type:
+          - string
+          - 'null'
+          description: Shipping address entity ID.
+        postalCode:
+          type: string
+          description: Postal code of the shipping address.
+        city:
+          type: string
+          description: City of the shipping address.
+        state:
+          type: string
+          description: State of the shipping address.
+        country:
+          type: string
+          description: Three letters ISO code of the country of the shipping address (ISO 3166 ALPHA-3).
+        street:
+          type: string
+          description: Street of the shipping address.
+        number:
+          type: string
+          description: Number of the building, house or apartment in the shipping address.
+        neighborhood:
+          type: string
+          description: Neighborhood of the shipping address.
+        complement:
+          type: string
+          description: Complement to the shipping address when it applies.
+        reference:
+          type:
+          - string
+          - 'null'
+          description: Complement to help locate the shipping address, in case of delivery.
+        geoCoordinates:
+          type: array
+          items:
+            type: number
+          description: Array with two numbers with geocoordinates, first longitude then latitude.
+      example:
+        addressType: residential
+        receiverName: Rodrigo Cunha
+        addressId: '-1425945657910'
+        versionId: e9c3bec2-125d-4b96-a021-316c3aa9f14f
+        entityId: eabfb564-99d6-40d8-bd6c-bddbd4990aad
+        postalCode: 22250-040
+        city: Rio de Janeiro
+        state: RJ
+        country: BRA
+        street: Praia de Botafogo
+        number: '300'
+        neighborhood: Botafogo
+        complement: '3'
+        reference: null
+        geoCoordinates: []
+    Marketplace:
+      title: Marketplace
+      description: Details about the marketplace related to the order.
+      required:
+      - baseURL
+      - isCertified
+      - name
+      type: object
+      properties:
+        baseURL:
+          type: string
+          description: Marketplace base URL.
+        isCertified:
+          type:
+          - string
+          - 'null'
+          description: If is a certified marketplace.
+        name:
+          type: string
+          description: Name of the marketplace.
+      example:
+        baseURL: http://oms.vtexinternal.com.br/api/oms?an=luxstore
+        isCertified: null
+        name: luxstore
+    Total:
+      title: Total
+      required:
+      - id
+      - name
+      - value
+      type: object
+      properties:
+        id:
+          type: string
+          description: Code that identifies if the information is about `Items`, `Discounts`, `Shipping`, `Tax` or `Change`.
+        name:
+          type: string
+          description: Name of `Items`, `Discounts`, `Shipping`, `Tax` or `Change`.
+        value:
+          type: integer
+          description: Total amount of `Items`, `Discounts`, `Shipping`, `Tax` or `Change`.
+      example:
+        id: Items
+        name: Total dos Itens
+        value: 3290
     Transaction:
       title: Transaction
       description: Financial transaction details.
@@ -4704,6 +4495,215 @@ components:
           bankIssuedInvoiceBarCodeNumber: '325349573975945245345439573421443986734065'
           bankIssuedInvoiceBarCodeType: i25
           billingAddress: {}
+    List1:
+      title: List1
+      required:
+      - orderId
+      - creationDate
+      - clientName
+      - items
+      - totalValue
+      - paymentNames
+      - status
+      - statusDescription
+      - marketPlaceOrderId
+      - sequence
+      - salesChannel
+      - affiliateId
+      - origin
+      - workflowInErrorState
+      - workflowInRetry
+      - lastMessageUnread
+      - ShippingEstimatedDate
+      - ShippingEstimatedDateMax
+      - ShippingEstimatedDateMin
+      - orderIsComplete
+      - listId
+      - listType
+      - authorizedDate
+      - callCenterOperatorName
+      - totalItems
+      - currencyCode
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Order ID is a unique code that identifies an order.
+        creationDate:
+          type: string
+          description: Order's creation date.
+        clientName:
+          type: string
+          description: Order's customer name.
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Item2'
+          description: Information about order's items.
+          deprecated: true
+        totalValue:
+          type: integer
+          description: Total value amount.
+        paymentNames:
+          type:
+          - string
+          - 'null'
+          description: Payment system name.
+        status:
+          type: string
+          description: Order [status](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196).
+        statusDescription:
+          type: string
+          description: Status description which is displayed on the Admin panel. This field is deprecated and may not return any value.
+          deprecated: true
+        marketPlaceOrderId:
+          type:
+          - string
+          - 'null'
+          description: Marketplace order ID.
+        sequence:
+          type: string
+          description: Six-digit string that follows the order ID. For example, in order `1268540501456-01 (501456)`, the sequence is `501456`.
+        salesChannel:
+          type: string
+          description: Sales channel (or [trade policy](https://help.vtex.com/tutorial/how-trade-policies-work--6Xef8PZiFm40kg2STrMkMV)) ID related to the order.
+        affiliateId:
+          type: string
+          description: Corresponds to the three-digits [affiliate](https://help.vtex.com/en/tutorial/configuring-affiliates--tutorials_187) identification code of the seller responsible for the order.
+        origin:
+          type: string
+          description: Order's [origin in the order flow](https://developers.vtex.com/docs/guides/orders-overview#understanding-order-flow-types), which can be `Marketplace`, `Fulfillment` or `Chain`.
+        workflowInErrorState:
+          type: boolean
+          description: If there is a work flow error (`true`) or not (`false`).
+        workflowInRetry:
+          type: boolean
+          description: If the order is in a work flow retry (`true`) or not (`false`).
+        lastMessageUnread:
+          type:
+          - string
+          - 'null'
+          description: Last sent transactional message.
+        ShippingEstimatedDate:
+          type:
+          - string
+          - 'null'
+          description: Estimate shipping date.
+        ShippingEstimatedDateMax:
+          type:
+          - string
+          - 'null'
+          description: The most extended shipping estimation possible.
+        ShippingEstimatedDateMin:
+          type:
+          - string
+          - 'null'
+          description: The least extended shipping estimation possible.
+        orderIsComplete:
+          type: boolean
+          description: If it is a completed order (`true`) or not (`false`). For more information, see [Order flow and status](https://help.vtex.com/en/tutorial/order-flow-and-status--tutorials_196).
+        listId:
+          type:
+          - string
+          - 'null'
+          description: Related Gift List ID.
+        listType:
+          type:
+          - string
+          - 'null'
+          description: Related Gift list type.
+        authorizedDate:
+          type:
+          - string
+          - 'null'
+          description: Authorized order date.
+        callCenterOperatorName:
+          type:
+          - string
+          - 'null'
+          description: Call center operator responsible for the order.
+        totalItems:
+          type: integer
+          description: Order's total amount of items.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code in ISO 4217. For example, `BRL`.
+      example:
+        orderId: 1172452900788-01
+        creationDate: '2019-01-28T20:09:43+00:00'
+        clientName: Cunha VTEX
+        items:
+        - seller: '1'
+          quantity: 1
+          description: Reservoir hose
+          ean: null
+          refId: TE3121110
+          id: '195'
+          productId: '134'
+          sellingPrice: 7390
+          price: 7390
+        - seller: '1'
+          quantity: 1
+          description: Reservoir filter
+          ean: null
+          refId: XC459N610CA
+          id: '238'
+          productId: '162'
+          sellingPrice: 5190
+          price: 5190
+        totalValue: 1160
+        paymentNames: Boleto Bancário
+        status: handling
+        statusDescription: Preparing for delivery
+        marketPlaceOrderId: null
+        sequence: '502556'
+        salesChannel: '1'
+        affiliateId: GTB
+        origin: Marketplace
+        workflowInErrorState: false
+        workflowInRetry: false
+        lastMessageUnread: ' Lux Store Seu pedido foi alterado! Pedido realizado em: 28/01/2019 Olá, Rodrigo. Seu pedido foi alterado. Seguem informações abaixo: '
+        ShippingEstimatedDate: '2019-02-04T20:33:46+00:00'
+        ShippingEstimatedDateMax: null
+        ShippingEstimatedDateMin: null
+        orderIsComplete: true
+        listId: null
+        listType: null
+        authorizedDate: '2019-01-28T20:33:04+00:00'
+        callCenterOperatorName: null
+        totalItems: 1
+        currencyCode: BRL
+    Seller:
+      title: Seller
+      description: Information about the seller associated with the order.
+      required:
+      - id
+      - name
+      - logo
+      - fulfillmentEndpoint
+      type: object
+      properties:
+        id:
+          type: string
+          description: Seller ID that identifies the seller.
+        name:
+          type: string
+          description: Seller's name.
+        logo:
+          type: string
+          description: URL of the seller's logo.
+        fulfillmentEndpoint:
+          type: string
+          description: URL of the endpoint for fulfillment of seller's orders.
+      example:
+        id: '1'
+        name: Loja do Suporte
+        logo: https://sellersLogo/images.png
+        fulfillmentEndpoint: http://fulfillment.vtexcommerce.com.br/api/fulfillment?an=accountName
   securitySchemes:
     appKey:
       type: apiKey

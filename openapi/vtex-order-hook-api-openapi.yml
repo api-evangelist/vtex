@@ -196,59 +196,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Origin2:
-      title: Origin2
-      required:
-      - Account
-      - Key
-      type: object
-      properties:
-        Account:
-          type: string
-        Key:
-          type: string
-      example:
-        Account: automacaoqa
-        Key: vtexappkey-appvtex
-    HookConfigurationRequest:
-      title: HookConfigurationRequest
-      required:
-      - filter
-      - hook
-      type: object
-      properties:
-        filter:
-          $ref: '#/components/schemas/HookFilter'
-        hook:
-          $ref: '#/components/schemas/Hook'
-      example:
-        filter:
-          type: FromWorkflow
-          status:
-          - order-completed
-          - handling
-          - ready-for-handling
-          - waiting-ffmt-authorization
-          - cancel
-        hook:
-          url: https://endpoint.example/path
-          headers:
-            key: value
-    Hook:
-      title: Hook
-      required:
-      - url
-      - headers
-      type: object
-      properties:
-        url:
-          type: string
-        headers:
-          $ref: '#/components/schemas/Headers'
-      example:
-        url: https://endpoint.example/path
-        headers:
-          key: value
     HookConfiguration:
       title: HookConfiguration
       required:
@@ -285,16 +232,6 @@ components:
         Origin:
           Account: automacaoqa
           Key: vtexappkey-appvtex
-    Headers:
-      title: Headers
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          type: string
-      example:
-        key: value
     HookFilter:
       title: Filter
       required:
@@ -317,6 +254,69 @@ components:
           type: boolean
           description: Sets a limit to how many times a specific order shows on the hook, after it first meets filtering conditions. Using the `FromOrders` type configuration with JSONata filtering expressions might cause orders to appear more than once on a feed, whenever changes are made to that order. If this field is `false` orders will appear in the hook only once. Send this field if you want to filter `FromOrders`.
           example: false
+    HookConfigurationRequest:
+      title: HookConfigurationRequest
+      required:
+      - filter
+      - hook
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/HookFilter'
+        hook:
+          $ref: '#/components/schemas/Hook'
+      example:
+        filter:
+          type: FromWorkflow
+          status:
+          - order-completed
+          - handling
+          - ready-for-handling
+          - waiting-ffmt-authorization
+          - cancel
+        hook:
+          url: https://endpoint.example/path
+          headers:
+            key: value
+    Origin2:
+      title: Origin2
+      required:
+      - Account
+      - Key
+      type: object
+      properties:
+        Account:
+          type: string
+        Key:
+          type: string
+      example:
+        Account: automacaoqa
+        Key: vtexappkey-appvtex
+    Headers:
+      title: Headers
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          type: string
+      example:
+        key: value
+    Hook:
+      title: Hook
+      required:
+      - url
+      - headers
+      type: object
+      properties:
+        url:
+          type: string
+        headers:
+          $ref: '#/components/schemas/Headers'
+      example:
+        url: https://endpoint.example/path
+        headers:
+          key: value
   securitySchemes:
     appKey:
       type: apiKey

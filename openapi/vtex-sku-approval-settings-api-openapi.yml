@@ -613,6 +613,44 @@ paths:
       deprecated: false
 components:
   schemas:
+    PutselleraccountconfigRequest:
+      title: PutselleraccountconfigRequest
+      required:
+      - sellerId
+      - mapping
+      - matchFlux
+      type: object
+      properties:
+        sellerId:
+          type: string
+          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+          default: seller123
+        mapping:
+          type:
+          - object
+          - 'null'
+          description: 'Mapping of SKU and product Specifications. This object should be sent in the following format for all fields you wish to map:
+
+
+            {specificationName}:{specificationValue},
+
+
+            Example:
+
+
+            Choose voltage: Voltage,
+
+
+            Choose size: Size'
+          default:
+            Choose voltage: Voltage
+            Choose size: Size
+            Choose volume: Volume
+            Choose type: Type
+        matchFlux:
+          type: string
+          description: "This field determines the type of approval configuration applied to SKUs received  from a seller. The possible values include: \n\n- `default` where the Matcher reviews the SKU, and approves it based on its score \n\n- `manual` for manual approvals through the Received SKU UI or Match API \n\n- `autoApprove` for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
+          default: autoApprove
     responseGetAccountsMatcherSettings:
       title: GetAccountsMatcherSettings
       description: Response from Get Account's Matcher Settings endpoint with information about current matcher score setting, rules, spec mapping, and matchFlux.
@@ -666,44 +704,59 @@ components:
         matchFlux:
           type: string
           description: "This field shows what type of approval setting is being applied to SKUs received from a seller. \n\nPossible values include: \n\n-`default`: where Matcher reviews the SKU and approves it based on its score. \n\n-`manual`: for manual approvals via incoming SKU UI or mailing API. \n\n-`autoApprove`: so that every SKU received from a given seller is automatically approved, regardless of its Matcher Score."
-    PutselleraccountconfigRequest:
-      title: PutselleraccountconfigRequest
+    Matcher:
+      title: Matcher
       required:
-      - sellerId
-      - mapping
-      - matchFlux
+      - MatcherId
+      - hook-base-address
+      - IsActive
+      - UpdatesNotificationEndpoint
       type: object
       properties:
-        sellerId:
+        MatcherId:
           type: string
-          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
-          default: seller123
-        mapping:
+          description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+          default: vtex-matcher
+        hook-base-address:
+          type: string
+          description: The chosen Matcher's url. It is the endpoint that the Received SKUs module calls, to send new suggestions for the Matcher's review.
+          default: http://simple-suggestion-matcher.vtex.com.br
+        IsActive:
+          type: boolean
+          description: Whether the matcher is active in the account (`true`), or not (`false`).
+          default: true
+        UpdatesNotificationEndpoint:
           type:
-          - object
+          - string
           - 'null'
-          description: 'Mapping of SKU and product Specifications. This object should be sent in the following format for all fields you wish to map:
-
-
-            {specificationName}:{specificationValue},
-
-
-            Example:
-
-
-            Choose voltage: Voltage,
-
-
-            Choose size: Size'
-          default:
-            Choose voltage: Voltage
-            Choose size: Size
-            Choose volume: Volume
-            Choose type: Type
-        matchFlux:
-          type: string
-          description: "This field determines the type of approval configuration applied to SKUs received  from a seller. The possible values include: \n\n- `default` where the Matcher reviews the SKU, and approves it based on its score \n\n- `manual` for manual approvals through the Received SKU UI or Match API \n\n- `autoApprove` for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
-          default: autoApprove
+          description: The Received SKUs module uses this endpoint to send updates about a suggestion, to the chosen Matcher.
+          default: null
+        Description:
+          type:
+          - string
+          - 'null'
+          description: Insert in this field any notes about the approval. This field is optional.
+          default: null
+    SaveautoapproveforaccountRequest:
+      title: SaveautoapproveforaccountRequest
+      required:
+      - Enabled
+      type: object
+      properties:
+        Enabled:
+          type: boolean
+          description: Insert `true` if you wish to activate the autoapprove rule for an entire marketplace account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all received SKUs will be automatically approved on your store, regardless of the seller, or the Matcher Score.
+          default: true
+    SaveautoapproveforaccountsellerRequest:
+      title: SaveautoapproveforaccountsellerRequest
+      required:
+      - Enabled
+      type: object
+      properties:
+        Enabled:
+          type: boolean
+          description: Insert `true` if you wish to activate the autoapprove rule for that specific seller account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all SKUs received from this seller will be automatically approved on your store regardless of the Matcher Score.
+          default: true
     responseGetSellersApprovalSettings:
       title: GetSellersApprovalSettings
       type: object
@@ -809,56 +862,3 @@ components:
           description: Insert in this field the desired maximum score to reject SKUs.
           format: int32
           default: 30
-    SaveautoapproveforaccountRequest:
-      title: SaveautoapproveforaccountRequest
-      required:
-      - Enabled
-      type: object
-      properties:
-        Enabled:
-          type: boolean
-          description: Insert `true` if you wish to activate the autoapprove rule for an entire marketplace account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all received SKUs will be automatically approved on your store, regardless of the seller, or the Matcher Score.
-          default: true
-    SaveautoapproveforaccountsellerRequest:
-      title: SaveautoapproveforaccountsellerRequest
-      required:
-      - Enabled
-      type: object
-      properties:
-        Enabled:
-          type: boolean
-          description: Insert `true` if you wish to activate the autoapprove rule for that specific seller account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all SKUs received from this seller will be automatically approved on your store regardless of the Matcher Score.
-          default: true
-    Matcher:
-      title: Matcher
-      required:
-      - MatcherId
-      - hook-base-address
-      - IsActive
-      - UpdatesNotificationEndpoint
-      type: object
-      properties:
-        MatcherId:
-          type: string
-          description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
-          default: vtex-matcher
-        hook-base-address:
-          type: string
-          description: The chosen Matcher's url. It is the endpoint that the Received SKUs module calls, to send new suggestions for the Matcher's review.
-          default: http://simple-suggestion-matcher.vtex.com.br
-        IsActive:
-          type: boolean
-          description: Whether the matcher is active in the account (`true`), or not (`false`).
-          default: true
-        UpdatesNotificationEndpoint:
-          type:
-          - string
-          - 'null'
-          description: The Received SKUs module uses this endpoint to send updates about a suggestion, to the chosen Matcher.
-          default: null
-        Description:
-          type:
-          - string
-          - 'null'
-          description: Insert in this field any notes about the approval. This field is optional.
-          default: null

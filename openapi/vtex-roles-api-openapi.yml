@@ -364,7 +364,80 @@ paths:
                   total: 1
                   pages: 1
 components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   schemas:
+    RoleItems:
+      description: Object with information about a role.
+      type: object
+      properties:
+        id:
+          description: ID of the role.
+          type: integer
+        isAdmin:
+          description: Defines if the role has administrative access (`true`) or not (`false`).
+          type: boolean
+        roleType:
+          description: Returns `1` for custom roles, and `0` for predefined roles.
+          type: integer
+        products:
+          type: array
+          description: Array of License Manager product objects.
+          items:
+            $ref: '#/components/schemas/ProductItems'
+        resources:
+          type:
+          - string
+          - 'null'
+          description: Resources.
+          deprecated: true
+        logins:
+          type:
+          - string
+          - 'null'
+          description: Logins.
+          deprecated: true
+        name:
+          description: Name of the role.
+          type: string
+    Paging:
+      description: Paging object.
+      required:
+      - page
+      - perPage
+      - total
+      - pages
+      type: object
+      properties:
+        page:
+          description: Current page number.
+          type: integer
+        perPage:
+          description: Items per page.
+          type: integer
+        total:
+          description: Total of items.
+          type: integer
+        pages:
+          description: Total of pages.
+          type: integer
     ProductItems:
       description: Object representing License Manager products.
       type: object
@@ -426,60 +499,6 @@ components:
         name:
           description: Name of the License Manager product.
           type: string
-    RoleItems:
-      description: Object with information about a role.
-      type: object
-      properties:
-        id:
-          description: ID of the role.
-          type: integer
-        isAdmin:
-          description: Defines if the role has administrative access (`true`) or not (`false`).
-          type: boolean
-        roleType:
-          description: Returns `1` for custom roles, and `0` for predefined roles.
-          type: integer
-        products:
-          type: array
-          description: Array of License Manager product objects.
-          items:
-            $ref: '#/components/schemas/ProductItems'
-        resources:
-          type:
-          - string
-          - 'null'
-          description: Resources.
-          deprecated: true
-        logins:
-          type:
-          - string
-          - 'null'
-          description: Logins.
-          deprecated: true
-        name:
-          description: Name of the role.
-          type: string
-    Paging:
-      description: Paging object.
-      required:
-      - page
-      - perPage
-      - total
-      - pages
-      type: object
-      properties:
-        page:
-          description: Current page number.
-          type: integer
-        perPage:
-          description: Items per page.
-          type: integer
-        total:
-          description: Total of items.
-          type: integer
-        pages:
-          description: Total of pages.
-          type: integer
     ListRolesResponse:
       description: Response body for listing all roles.
       type: object
@@ -491,25 +510,6 @@ components:
             $ref: '#/components/schemas/RoleItems'
         paging:
           $ref: '#/components/schemas/Paging'
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
   securitySchemes:
     appKey:
       type: apiKey

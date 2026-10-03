@@ -237,65 +237,6 @@ paths:
           default: vtexcommercestable
 components:
   schemas:
-    GetPaymenttransaction:
-      title: GetPaymenttransaction
-      required:
-      - status
-      - isActive
-      - transactionId
-      - merchantName
-      - payments
-      type: object
-      properties:
-        status:
-          type: string
-          description: Transaction status.
-        isActive:
-          type: boolean
-          description: If it is an active transaction (`true`) or not (`false`).
-        transactionId:
-          type: string
-          description: Transaction ID.
-        merchantName:
-          type: string
-          description: Transaction merchant's name.
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment1'
-          description: Payments' details object.
-      example:
-        status: Finished
-        isActive: true
-        transactionId: CB452D77E7D04099A4DB0479087B1D2C
-        merchantName: LUXSTORE
-        payments:
-        - id: 721CBE1090324D12ABE301FE33DE775A
-          paymentSystem: '4'
-          paymentSystemName: Mastercard
-          value: 10150
-          installments: 1
-          referenceValue: 10150
-          cardHolder: null
-          cardNumber: null
-          firstDigits: '412341'
-          lastDigits: '4123'
-          cvv2: null
-          expireMonth: null
-          expireYear: null
-          url: null
-          giftCardId: null
-          giftCardName: null
-          giftCardCaption: null
-          redemptionCode: null
-          group: creditCard
-          tid: '101770752'
-          dueDate: null
-          connectorResponses:
-            Tid: '101770752'
-            ReturnCode: '200'
-            Message: logMessage
-            authId: '170852'
     Payment1:
       title: Payment1
       required:
@@ -437,6 +378,65 @@ components:
           ReturnCode: '200'
           Message: logMessage
           authId: '170852'
+    GetPaymenttransaction:
+      title: GetPaymenttransaction
+      required:
+      - status
+      - isActive
+      - transactionId
+      - merchantName
+      - payments
+      type: object
+      properties:
+        status:
+          type: string
+          description: Transaction status.
+        isActive:
+          type: boolean
+          description: If it is an active transaction (`true`) or not (`false`).
+        transactionId:
+          type: string
+          description: Transaction ID.
+        merchantName:
+          type: string
+          description: Transaction merchant's name.
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment1'
+          description: Payments' details object.
+      example:
+        status: Finished
+        isActive: true
+        transactionId: CB452D77E7D04099A4DB0479087B1D2C
+        merchantName: LUXSTORE
+        payments:
+        - id: 721CBE1090324D12ABE301FE33DE775A
+          paymentSystem: '4'
+          paymentSystemName: Mastercard
+          value: 10150
+          installments: 1
+          referenceValue: 10150
+          cardHolder: null
+          cardNumber: null
+          firstDigits: '412341'
+          lastDigits: '4123'
+          cvv2: null
+          expireMonth: null
+          expireYear: null
+          url: null
+          giftCardId: null
+          giftCardName: null
+          giftCardCaption: null
+          redemptionCode: null
+          group: creditCard
+          tid: '101770752'
+          dueDate: null
+          connectorResponses:
+            Tid: '101770752'
+            ReturnCode: '200'
+            Message: logMessage
+            authId: '170852'
     ConnectorResponses:
       title: ConnectorResponses
       required:
@@ -468,24 +468,6 @@ components:
         Message: null
         authId: '170852'
   parameters:
-    paymentId:
-      name: paymentId
-      in: path
-      description: ID of the payment.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 45hsfg5jkyu1384jdsfgh654sfgj1
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     orderId:
       name: orderId
       in: path
@@ -495,10 +477,28 @@ components:
       schema:
         type: string
         example: 70caf3941s6df1
+    paymentId:
+      name: paymentId
+      in: path
+      description: ID of the payment.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 45hsfg5jkyu1384jdsfgh654sfgj1
     Accept:
       name: Accept
       in: header
       description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:

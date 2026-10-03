@@ -591,161 +591,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Item2:
-      description: Items information.
-      required:
-      - id
-      - productId
-      - refId
-      - name
-      - value
-      - price
-      - quantity
-      - shippingDiscount
-      - discount
-      - priceTags
-      type: object
-      properties:
-        id:
-          type: string
-          description: SKU ID.
-          example: '2001023'
-        productId:
-          type: string
-          description: Product ID.
-          example: '2000492'
-        refId:
-          type: string
-          description: Product Reference ID.
-          example: '35994'
-        name:
-          type: string
-          description: Product name.
-          example: Vaporizador Des. ColC4nia Branco
-        value:
-          type: number
-          description: Product value.
-          example: 14.99
-        price:
-          type: number
-          description: Product price.
-          example: 14.99
-        quantity:
-          type: integer
-          description: Product quantity.
-          example: 1
-        shippingDiscount:
-          type: integer
-          description: Discount to be applied for the shipping value.
-          example: 0
-        discount:
-          type: number
-          description: Discount applied on item.
-          example: -7.5
-        priceTags:
-          type: array
-          description: Array of price tags, each of which modifies the price in some way, like discounts or rates that apply to the item in the context of the order.
-          items:
-            $ref: '#/components/schemas/PriceTag'
-    OrderInfo:
-      description: Order Information.
-      type: object
-      properties:
-        orderId:
-          type: string
-          description: Order ID.
-          example: v500
-        sequence:
-          type: integer
-          description: Sequence number.
-          example: 5006128
-        cart:
-          $ref: '#/components/schemas/Cart1'
-        clientProfile:
-          $ref: '#/components/schemas/ClientProfile'
-        shipping:
-          $ref: '#/components/schemas/Shipping'
-    ClientProfile:
-      description: Client profile information.
-      required:
-      - email
-      - firstName
-      - lastName
-      - document
-      - phone
-      - birthDate
-      - isCorporate
-      type: object
-      properties:
-        email:
-          type: string
-          description: Customer's email address.
-          example: michael.scott96@mail.com
-        firstName:
-          type: string
-          description: Customer's first name.
-          example: Michael
-        lastName:
-          type: string
-          description: Customer's last name.
-          example: Scott
-        document:
-          type: string
-          description: Document number informed by the customer.
-          example: 02906792063
-        phone:
-          type: string
-          description: Customer's phone number.
-          example: '+551111111111'
-        birthDate:
-          type: string
-          description: Customer's birth date.
-          example: '0001-01-01T00:00:00'
-        isCorporate:
-          type: boolean
-          description: Defines if the customer is a company (`true`) or not (`false`).
-          example: false
-    Self:
-      required:
-      - href
-      type: object
-      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
-      properties:
-        href:
-          type: string
-          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
-    TransactionResponse:
-      description: Transaction response information.
-      required:
-      - oid
-      - value
-      - date
-      type: object
-      properties:
-        oid:
-          type: string
-          description: Operation identification.
-        value:
-          type: number
-          description: Value information.
-        date:
-          type: string
-          description: Date information.
-    CreateGiftCardTransactionSettlementRequest:
-      description: Settle a gift card transaction request information.
-      required:
-      - value
-      - requestId
-      type: object
-      properties:
-        value:
-          type: number
-          description: Transaction value.
-          example: 1.8
-        requestId:
-          type: string
-          description: Request identification of the transaction.
-          example: 12093812masoidj120398
     Shipping:
       description: Shipping information.
       required:
@@ -805,60 +650,6 @@ components:
           - 'null'
           description: Complement that might help locate the shipping address more precisely in case of delivery.
           example: Subway
-    GiftCardTransactionResponse:
-      description: Gift card transaction response information.
-      required:
-      - cardId
-      - id
-      - _self
-      type: object
-      properties:
-        cardId:
-          type: string
-          description: Gift card identification.
-        id:
-          type: string
-          description: Transaction identification.
-        _self:
-          $ref: '#/components/schemas/Self'
-    CreateGiftCardTransactionRequest:
-      description: Create a gift card transaction request body information.
-      required:
-      - operation
-      - value
-      - description
-      - redemptionToken
-      - redemptionCode
-      - requestId
-      - orderInfo
-      type: object
-      properties:
-        operation:
-          type: string
-          description: 'Type of operation. Possible values are: `Debit` or `Credit`.'
-          example: Debit
-        value:
-          type: number
-          description: Operation value.
-          example: 3
-        description:
-          type: string
-          description: Description information.
-          example: GiftCardHub
-        redemptionToken:
-          type: string
-          description: Gift card redemption token.
-          example: b2dac6f2-f365-48cd-82a9-0b376a55557a
-        redemptionCode:
-          type: string
-          description: Gift card identification code used at checkout. Minimum of 6 characters.
-          example: '***********ASDQ'
-        requestId:
-          type: string
-          description: Request identification of the transaction. You need to send a different `requestId` value every time you make a new transaction. If you send the same `requestId`two or more times with a specific `redemptionCode`or `redemptionToken`, the gift card balance will not be updated.
-          example: B56CBE231DEE4E1A859183C1030CE926
-        orderInfo:
-          $ref: '#/components/schemas/OrderInfo'
     PriceTag:
       description: Price tag information.
       required:
@@ -874,6 +665,62 @@ components:
           type: integer
           description: Price tag value.
           example: 0
+    Item2:
+      description: Items information.
+      required:
+      - id
+      - productId
+      - refId
+      - name
+      - value
+      - price
+      - quantity
+      - shippingDiscount
+      - discount
+      - priceTags
+      type: object
+      properties:
+        id:
+          type: string
+          description: SKU ID.
+          example: '2001023'
+        productId:
+          type: string
+          description: Product ID.
+          example: '2000492'
+        refId:
+          type: string
+          description: Product Reference ID.
+          example: '35994'
+        name:
+          type: string
+          description: Product name.
+          example: Vaporizador Des. ColC4nia Branco
+        value:
+          type: number
+          description: Product value.
+          example: 14.99
+        price:
+          type: number
+          description: Product price.
+          example: 14.99
+        quantity:
+          type: integer
+          description: Product quantity.
+          example: 1
+        shippingDiscount:
+          type: integer
+          description: Discount to be applied for the shipping value.
+          example: 0
+        discount:
+          type: number
+          description: Discount applied on item.
+          example: -7.5
+        priceTags:
+          type: array
+          description: Array of price tags, each of which modifies the price in some way, like discounts or rates that apply to the item in the context of the order.
+          items:
+            $ref: '#/components/schemas/PriceTag'
     CreateGiftCardTransactionCancellationRequest:
       description: Cancel a gift card transaction request information.
       required:
@@ -925,6 +772,159 @@ components:
           type: number
           description: Total items value.
           example: 14.99
+    ClientProfile:
+      description: Client profile information.
+      required:
+      - email
+      - firstName
+      - lastName
+      - document
+      - phone
+      - birthDate
+      - isCorporate
+      type: object
+      properties:
+        email:
+          type: string
+          description: Customer's email address.
+          example: michael.scott96@mail.com
+        firstName:
+          type: string
+          description: Customer's first name.
+          example: Michael
+        lastName:
+          type: string
+          description: Customer's last name.
+          example: Scott
+        document:
+          type: string
+          description: Document number informed by the customer.
+          example: 02906792063
+        phone:
+          type: string
+          description: Customer's phone number.
+          example: '+551111111111'
+        birthDate:
+          type: string
+          description: Customer's birth date.
+          example: '0001-01-01T00:00:00'
+        isCorporate:
+          type: boolean
+          description: Defines if the customer is a company (`true`) or not (`false`).
+          example: false
+    GiftCardTransactionResponse:
+      description: Gift card transaction response information.
+      required:
+      - cardId
+      - id
+      - _self
+      type: object
+      properties:
+        cardId:
+          type: string
+          description: Gift card identification.
+        id:
+          type: string
+          description: Transaction identification.
+        _self:
+          $ref: '#/components/schemas/Self'
+    Self:
+      required:
+      - href
+      type: object
+      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
+      properties:
+        href:
+          type: string
+          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
+    CreateGiftCardTransactionRequest:
+      description: Create a gift card transaction request body information.
+      required:
+      - operation
+      - value
+      - description
+      - redemptionToken
+      - redemptionCode
+      - requestId
+      - orderInfo
+      type: object
+      properties:
+        operation:
+          type: string
+          description: 'Type of operation. Possible values are: `Debit` or `Credit`.'
+          example: Debit
+        value:
+          type: number
+          description: Operation value.
+          example: 3
+        description:
+          type: string
+          description: Description information.
+          example: GiftCardHub
+        redemptionToken:
+          type: string
+          description: Gift card redemption token.
+          example: b2dac6f2-f365-48cd-82a9-0b376a55557a
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: '***********ASDQ'
+        requestId:
+          type: string
+          description: Request identification of the transaction. You need to send a different `requestId` value every time you make a new transaction. If you send the same `requestId`two or more times with a specific `redemptionCode`or `redemptionToken`, the gift card balance will not be updated.
+          example: B56CBE231DEE4E1A859183C1030CE926
+        orderInfo:
+          $ref: '#/components/schemas/OrderInfo'
+    CreateGiftCardTransactionSettlementRequest:
+      description: Settle a gift card transaction request information.
+      required:
+      - value
+      - requestId
+      type: object
+      properties:
+        value:
+          type: number
+          description: Transaction value.
+          example: 1.8
+        requestId:
+          type: string
+          description: Request identification of the transaction.
+          example: 12093812masoidj120398
+    TransactionResponse:
+      description: Transaction response information.
+      required:
+      - oid
+      - value
+      - date
+      type: object
+      properties:
+        oid:
+          type: string
+          description: Operation identification.
+        value:
+          type: number
+          description: Value information.
+        date:
+          type: string
+          description: Date information.
+    OrderInfo:
+      description: Order Information.
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Order ID.
+          example: v500
+        sequence:
+          type: integer
+          description: Sequence number.
+          example: 5006128
+        cart:
+          $ref: '#/components/schemas/Cart1'
+        clientProfile:
+          $ref: '#/components/schemas/ClientProfile'
+        shipping:
+          $ref: '#/components/schemas/Shipping'
   securitySchemes:
     appKey:
       type: apiKey

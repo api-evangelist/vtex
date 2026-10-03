@@ -364,110 +364,26 @@ paths:
       operationId: deleteApiCatalogPvtStockkeepingunitBySkuIdEanByEan
       x-operation-id-source: derived
 components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   schemas:
-    RealDimension:
-      required:
-      - realCubicWeight
-      - realHeight
-      - realLength
-      - realWeight
-      - realWidth
-      type: object
-      description: Object containing the real SKU dimensions, which appear in the product page.
-      properties:
-        realCubicWeight:
-          type: number
-          description: Real SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
-        realHeight:
-          type: number
-          description: Real SKU height.
-        realLength:
-          type: number
-          description: Real SKU length.
-        realWeight:
-          type: number
-          description: Real SKU weight.
-        realWidth:
-          type: number
-          description: Real SKU width.
-      example:
-        realCubicWeight: 274.1375
-        realHeight: 241
-        realLength: 65
-        realWeight: 9800
-        realWidth: 105
-    SkuSpecification:
-      required:
-      - FieldId
-      - FieldName
-      - FieldValueIds
-      - FieldValues
-      type: object
-      description: Object containing related SKU specifications.
-      properties:
-        FieldId:
-          type: integer
-          format: int32
-          description: Specification field ID.
-        FieldName:
-          type: string
-          description: Specification field Name.
-        FieldValueIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-            description: Specification value ID.
-          description: Array with related specification values IDs.
-        FieldValues:
-          type: array
-          items:
-            type: string
-          description: Array with related specification values.
-      example:
-        FieldId: 102
-        FieldName: Cor
-        FieldValueIds:
-        - 266
-        FieldValues:
-        - Padrão
-    SkuSeller:
-      required:
-      - SellerId
-      - StockKeepingUnitId
-      - SellerStockKeepingUnitId
-      - IsActive
-      - FreightCommissionPercentage
-      - ProductCommissionPercentage
-      type: object
-      description: Object containing related SKU sellers data.
-      properties:
-        SellerId:
-          type: string
-          description: SKU seller ID. This is the ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
-        StockKeepingUnitId:
-          type: integer
-          format: int32
-          description: SKU ID.
-        SellerStockKeepingUnitId:
-          type: string
-          description: SKU ID for the SKU seller.
-        IsActive:
-          type: boolean
-          description: Defines if the SKU is active.
-        FreightCommissionPercentage:
-          type: number
-          description: Registered value for Seller Freight Commission.
-        ProductCommissionPercentage:
-          type: number
-          description: Registered value for Seller product Commission.
-      example:
-        SellerId: '1'
-        StockKeepingUnitId: 2001773
-        SellerStockKeepingUnitId: '2001773'
-        IsActive: true
-        FreightCommissionPercentage: 0
-        ProductCommissionPercentage: 0
     Attachment:
       required:
       - Id
@@ -517,28 +433,37 @@ components:
           DomainValues: null
         IsActive: true
         IsRequired: false
-    Field:
+    RealDimension:
       required:
-      - FieldName
-      - MaxCaracters
-      - DomainValues
+      - realCubicWeight
+      - realHeight
+      - realLength
+      - realWeight
+      - realWidth
       type: object
+      description: Object containing the real SKU dimensions, which appear in the product page.
       properties:
-        FieldName:
-          type: string
-          description: Attachment field name.
-        MaxCaracters:
-          type: string
-          description: Maximum number of characters accepted in the attachment field.
-        DomainValues:
-          type:
-          - string
-          - 'null'
-          description: Allowed key values.
+        realCubicWeight:
+          type: number
+          description: Real SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
+        realHeight:
+          type: number
+          description: Real SKU height.
+        realLength:
+          type: number
+          description: Real SKU length.
+        realWeight:
+          type: number
+          description: Real SKU weight.
+        realWidth:
+          type: number
+          description: Real SKU width.
       example:
-        FieldName: nome
-        MaxCaracters: '20'
-        DomainValues: Adalberto,Pedro,João
+        realCubicWeight: 274.1375
+        realHeight: 241
+        realLength: 65
+        realWeight: 9800
+        realWidth: 105
     GetSKUAltID:
       required:
       - Id
@@ -922,74 +847,6 @@ components:
         ShowIfNotAvailable: true
         IsProductActive: true
         ProductFinalScore: 0
-    Image:
-      required:
-      - ImageUrl
-      - ImageName
-      - FileId
-      type: object
-      description: Object containing SKU images details.
-      properties:
-        ImageUrl:
-          type: string
-          description: Image URL.
-        ImageName:
-          type:
-          - string
-          - 'null'
-          description: Image label.
-        FileId:
-          type: integer
-          format: int32
-          description: SKU image ID.
-      example:
-        ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
-        ImageName: ''
-        FileId: 168952
-    Dimension:
-      required:
-      - cubicweight
-      - height
-      - length
-      - weight
-      - width
-      type: object
-      description: Object containing the SKU dimensions to be used on the shipping calculation.
-      properties:
-        cubicweight:
-          type: number
-          description: SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
-        height:
-          type: number
-          description: SKU height.
-        length:
-          type: number
-          description: SKU length.
-        weight:
-          type: number
-          description: SKU weight.
-        width:
-          type: number
-          description: SKU width.
-      example:
-        cubicweight: 81.6833
-        height: 65
-        length: 58
-        weight: 10000
-        width: 130
-    AlternateIds:
-      type: object
-      description: Array with alternate SKU IDs, such as EAN and `RefId`.
-      properties:
-        Ean:
-          type: string
-          description: SKU EAN.
-        RefId:
-          type: string
-          description: SKU reference ID.
-      example:
-        Ean: '8781'
-        RefId: '878181'
     ProductSpecification:
       required:
       - FieldId
@@ -1030,25 +887,168 @@ components:
         - 7 a 8 anos
         - 9 a 10 anos
         - Acima de 10 anos
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
+    Image:
+      required:
+      - ImageUrl
+      - ImageName
+      - FileId
+      type: object
+      description: Object containing SKU images details.
+      properties:
+        ImageUrl:
+          type: string
+          description: Image URL.
+        ImageName:
+          type:
+          - string
+          - 'null'
+          description: Image label.
+        FileId:
+          type: integer
+          format: int32
+          description: SKU image ID.
+      example:
+        ImageUrl: http://ambienteqa.vteximg.com.br/arquivos/ids/168952/7508800GG.jpg
+        ImageName: ''
+        FileId: 168952
+    Field:
+      required:
+      - FieldName
+      - MaxCaracters
+      - DomainValues
+      type: object
+      properties:
+        FieldName:
+          type: string
+          description: Attachment field name.
+        MaxCaracters:
+          type: string
+          description: Maximum number of characters accepted in the attachment field.
+        DomainValues:
+          type:
+          - string
+          - 'null'
+          description: Allowed key values.
+      example:
+        FieldName: nome
+        MaxCaracters: '20'
+        DomainValues: Adalberto,Pedro,João
+    AlternateIds:
+      type: object
+      description: Array with alternate SKU IDs, such as EAN and `RefId`.
+      properties:
+        Ean:
+          type: string
+          description: SKU EAN.
+        RefId:
+          type: string
+          description: SKU reference ID.
+      example:
+        Ean: '8781'
+        RefId: '878181'
+    SkuSeller:
+      required:
+      - SellerId
+      - StockKeepingUnitId
+      - SellerStockKeepingUnitId
+      - IsActive
+      - FreightCommissionPercentage
+      - ProductCommissionPercentage
+      type: object
+      description: Object containing related SKU sellers data.
+      properties:
+        SellerId:
+          type: string
+          description: SKU seller ID. This is the ID that identifies the seller in the marketplace. It can be the same as the seller name or a unique number. Check the **Sellers management** section in the Admin to get the correct ID.
+        StockKeepingUnitId:
+          type: integer
+          format: int32
+          description: SKU ID.
+        SellerStockKeepingUnitId:
+          type: string
+          description: SKU ID for the SKU seller.
+        IsActive:
+          type: boolean
+          description: Defines if the SKU is active.
+        FreightCommissionPercentage:
+          type: number
+          description: Registered value for Seller Freight Commission.
+        ProductCommissionPercentage:
+          type: number
+          description: Registered value for Seller product Commission.
+      example:
+        SellerId: '1'
+        StockKeepingUnitId: 2001773
+        SellerStockKeepingUnitId: '2001773'
+        IsActive: true
+        FreightCommissionPercentage: 0
+        ProductCommissionPercentage: 0
+    SkuSpecification:
+      required:
+      - FieldId
+      - FieldName
+      - FieldValueIds
+      - FieldValues
+      type: object
+      description: Object containing related SKU specifications.
+      properties:
+        FieldId:
+          type: integer
+          format: int32
+          description: Specification field ID.
+        FieldName:
+          type: string
+          description: Specification field Name.
+        FieldValueIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Specification value ID.
+          description: Array with related specification values IDs.
+        FieldValues:
+          type: array
+          items:
+            type: string
+          description: Array with related specification values.
+      example:
+        FieldId: 102
+        FieldName: Cor
+        FieldValueIds:
+        - 266
+        FieldValues:
+        - Padrão
+    Dimension:
+      required:
+      - cubicweight
+      - height
+      - length
+      - weight
+      - width
+      type: object
+      description: Object containing the SKU dimensions to be used on the shipping calculation.
+      properties:
+        cubicweight:
+          type: number
+          description: SKU [cubic weight](https://help.vtex.com/en/tutorial/understanding-the-cubic-weight-factor--tutorials_128).
+        height:
+          type: number
+          description: SKU height.
+        length:
+          type: number
+          description: SKU length.
+        weight:
+          type: number
+          description: SKU weight.
+        width:
+          type: number
+          description: SKU width.
+      example:
+        cubicweight: 81.6833
+        height: 65
+        length: 58
+        weight: 10000
+        width: 130
   securitySchemes:
     appKey:
       type: apiKey

@@ -431,36 +431,6 @@ components:
               count:
                 type: number
                 description: Number of times the term was searched.
-    Error:
-      type: object
-      description: Response body object.
-      required:
-      - stack
-      - message
-      properties:
-        message:
-          type: string
-          description: Error message.
-        stack:
-          type: string
-          description: Error stack trace.
-    SearchSuggestions:
-      type: object
-      description: Response body object.
-      properties:
-        searches:
-          type: array
-          description: List of suggested terms.
-          items:
-            type: object
-            description: Suggested term.
-            properties:
-              term:
-                type: string
-                description: Search term.
-              count:
-                type: number
-                description: Number of times the term was searched.
     AutocompleteSearchSuggestions:
       type: object
       description: Response body object.
@@ -499,7 +469,44 @@ components:
                     labelValue:
                       type: string
                       description: Human-readable format of the facet value.
+    SearchSuggestions:
+      type: object
+      description: Response body object.
+      properties:
+        searches:
+          type: array
+          description: List of suggested terms.
+          items:
+            type: object
+            description: Suggested term.
+            properties:
+              term:
+                type: string
+                description: Search term.
+              count:
+                type: number
+                description: Number of times the term was searched.
+    Error:
+      type: object
+      description: Response body object.
+      required:
+      - stack
+      - message
+      properties:
+        message:
+          type: string
+          description: Error message.
+        stack:
+          type: string
+          description: Error stack trace.
   parameters:
+    query:
+      in: query
+      name: query
+      description: Search term. It can contain any character.
+      schema:
+        type: string
+        example: shirt
     locale:
       in: query
       name: locale
@@ -509,13 +516,6 @@ components:
         type:
         - string
         - 'null'
-    query:
-      in: query
-      name: query
-      description: Search term. It can contain any character.
-      schema:
-        type: string
-        example: shirt
   securitySchemes:
     appKey:
       type: apiKey

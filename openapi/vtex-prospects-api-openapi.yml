@@ -754,50 +754,44 @@ paths:
                   expirationDate: null
       deprecated: false
 components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    prospectId:
+      name: prospectId
+      in: path
+      description: ID of the prospect as returned by the [Create prospect](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/prospects) endpoint's response, in the `id` field.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 98478f6b-d025-4f35-a560-dd1ee7a6f26e
+    reason:
+      name: reason
+      in: query
+      description: Reason for requesting unmasked data.
+      required: true
+      style: form
+      schema:
+        type: string
+        example: data-validation
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
-    ProspectMeta:
-      title: Prospect information metadata.
-      description: Prospect information metadata.
-      type: object
-      required:
-      - version
-      - author
-      - creationDate
-      - lastUpdateDate
-      properties:
-        version:
-          type: string
-          description: Unique identifier of the prospect version.
-          example: 27112371-a71b-45d6-b3bc-93436a3a0b4f
-        author:
-          type: string
-          description: Unique identifier of the user who created the prospect.
-          example: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
-        creationDate:
-          type: string
-          description: Date when the prospect information was created in ISO 8601 format.
-          example: '2022-01-05T15:41:37.5009471+00:00'
-        lastUpdateDate:
-          type: string
-          description: Date when the prospect information was last updated in ISO 8601 format.
-          example: '2022-01-05T15:41:37.5009471+00:00'
-        expirationDate:
-          type:
-          - string
-          - 'null'
-          description: Date when the prospect information expires in ISO 8601 format.
-          example: '2022-01-05T15:41:37.5009471+00:00'
-    MaskedProspectResponse:
-      title: Masked prospect information.
-      type: object
-      description: Masked prospect information.
-      properties:
-        id:
-          $ref: '#/components/schemas/ProspectId'
-        document:
-          $ref: '#/components/schemas/Prospect'
-        meta:
-          $ref: '#/components/schemas/ProspectMeta'
     PaymentData:
       title: paymentData
       type: object
@@ -917,154 +911,60 @@ components:
           - 'null'
           description: Last denied transaction.
           example: null
-    Prospect:
-      title: Prospect information.
+    MaskedProspectResponse:
+      title: Masked prospect information.
       type: object
-      description: Prospect information.
+      description: Masked prospect information.
       properties:
-        availableAddresses:
-          type: array
-          description: Available addresses.
-          items:
-            type: object
-            description: Available address information.
-            properties:
-              disposable:
-                type: boolean
-                description: Defines whether the address is deleted after use (`true`) or not (`false`).
-                example: true
-              userId:
-                type: string
-                description: User unique identifier.
-                example: 98478f6b-d025-4f35-a560-dd1ee7a6f26e
-              addressName:
-                type: string
-                description: Address name.
-                example: Home
-              addressType:
-                type: string
-                description: Address type.
-                example: residential
-              postalCode:
-                type: string
-                description: Postal code.
-                example: '32137'
-              city:
-                type: string
-                description: City.
-                example: Palm Coast
-              country:
-                type: string
-                description: Country code.
-                example: USA
-              street:
-                type: string
-                description: Street name.
-                example: Fifth St.
-              number:
-                type: string
-                description: Street number.
-                example: '9538'
-              complement:
-                type: string
-                description: Complement information.
-                example: Apartment 2B
-              geoCoordinate:
-                type: array
-                description: 'Array with two strings that represent geocoordinates: first latitude, then longitude.'
-                items:
-                  type: string
-                  description: Geocoordinate.
-        paymentData:
-          $ref: '#/components/schemas/PaymentData'
-        contacts:
-          type: array
-          description: List of contacts.
-          items:
-            type: object
-            description: Contact information.
-            properties:
-              contactId:
-                type: string
-                description: Contact's unique identifier.
-                example: '0'
-              email:
-                type: string
-                description: Contact's email address.
-                example: jane@mail.com
-              firstName:
-                type: string
-                description: Contact's first name.
-                example: Jane
-              lastName:
-                type: string
-                description: Contact's last name.
-                example: Doe
-              phone:
-                type: string
-                description: Contact's phone number.
-                example: '12345678910'
-              document:
-                type: string
-                description: Contact's document.
-                example: '12345678910'
-        invoiceSubject:
-          type: object
-          description: Information about the invoice subject.
-          properties:
-            invoiceSubjectId:
-              type: string
-              description: Invoice subject ID.
-              example: '0'
-            email:
-              type: string
-              description: Invoice subject's email address.
-              example: jane@mail.com
-            firstName:
-              type: string
-              description: Invoice subject's first name.
-              example: Jane
-            lastName:
-              type: string
-              description: Invoice subject's last name.
-              example: Doe
-            phone:
-              type: string
-              description: Invoice subject's phone number.
-              example: '12345678910'
-        email:
-          type: string
-          description: Prospect's email address.
-          example: jane@mail.com
-        firstName:
-          type: string
-          description: Prospect's first name.
-          example: Jane
-        lastName:
-          type: string
-          description: Prospect's last name.
-          example: Doe
+        id:
+          $ref: '#/components/schemas/ProspectId'
         document:
+          $ref: '#/components/schemas/Prospect'
+        meta:
+          $ref: '#/components/schemas/ProspectMeta'
+    UnmaskedProspectResponse:
+      title: Unmasked prospect information.
+      type: object
+      description: Unmasked prospect information.
+      properties:
+        id:
+          $ref: '#/components/schemas/ProspectId'
+        document:
+          $ref: '#/components/schemas/Prospect'
+        meta:
+          $ref: '#/components/schemas/ProspectMeta'
+    ProspectMeta:
+      title: Prospect information metadata.
+      description: Prospect information metadata.
+      type: object
+      required:
+      - version
+      - author
+      - creationDate
+      - lastUpdateDate
+      properties:
+        version:
           type: string
-          description: Prospect's document.
-          example: 5397eefef23741d4976ebdf772cc42e0
-        cellPhone:
+          description: Unique identifier of the prospect version.
+          example: 27112371-a71b-45d6-b3bc-93436a3a0b4f
+        author:
           type: string
-          description: Prospect's cellphone number.
-          example: '12345678910'
-        isPJ:
-          type: boolean
-          description: Defines if a prospect is corporate (`true`) or not (`false`).
-          example: false
-        customerCode:
+          description: Unique identifier of the user who created the prospect.
+          example: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
+        creationDate:
           type: string
-          description: Prospect's customer code.
-          example: 5397eefe-f237-41d4-976e-bdf772cc42e0
-    ProspectId:
-      title: id
-      type: string
-      description: ID of the prospect.
-      example: c2cbebba-214e-40b2-b68f-98f862e755d5
+          description: Date when the prospect information was created in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
+        lastUpdateDate:
+          type: string
+          description: Date when the prospect information was last updated in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          description: Date when the prospect information expires in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
     Payment:
       title: Payment
       required:
@@ -1209,54 +1109,154 @@ components:
         tid: null
         dueDate: '2019-02-02'
         connectorResponses: {}
-    UnmaskedProspectResponse:
-      title: Unmasked prospect information.
+    ProspectId:
+      title: id
+      type: string
+      description: ID of the prospect.
+      example: c2cbebba-214e-40b2-b68f-98f862e755d5
+    Prospect:
+      title: Prospect information.
       type: object
-      description: Unmasked prospect information.
+      description: Prospect information.
       properties:
-        id:
-          $ref: '#/components/schemas/ProspectId'
+        availableAddresses:
+          type: array
+          description: Available addresses.
+          items:
+            type: object
+            description: Available address information.
+            properties:
+              disposable:
+                type: boolean
+                description: Defines whether the address is deleted after use (`true`) or not (`false`).
+                example: true
+              userId:
+                type: string
+                description: User unique identifier.
+                example: 98478f6b-d025-4f35-a560-dd1ee7a6f26e
+              addressName:
+                type: string
+                description: Address name.
+                example: Home
+              addressType:
+                type: string
+                description: Address type.
+                example: residential
+              postalCode:
+                type: string
+                description: Postal code.
+                example: '32137'
+              city:
+                type: string
+                description: City.
+                example: Palm Coast
+              country:
+                type: string
+                description: Country code.
+                example: USA
+              street:
+                type: string
+                description: Street name.
+                example: Fifth St.
+              number:
+                type: string
+                description: Street number.
+                example: '9538'
+              complement:
+                type: string
+                description: Complement information.
+                example: Apartment 2B
+              geoCoordinate:
+                type: array
+                description: 'Array with two strings that represent geocoordinates: first latitude, then longitude.'
+                items:
+                  type: string
+                  description: Geocoordinate.
+        paymentData:
+          $ref: '#/components/schemas/PaymentData'
+        contacts:
+          type: array
+          description: List of contacts.
+          items:
+            type: object
+            description: Contact information.
+            properties:
+              contactId:
+                type: string
+                description: Contact's unique identifier.
+                example: '0'
+              email:
+                type: string
+                description: Contact's email address.
+                example: jane@mail.com
+              firstName:
+                type: string
+                description: Contact's first name.
+                example: Jane
+              lastName:
+                type: string
+                description: Contact's last name.
+                example: Doe
+              phone:
+                type: string
+                description: Contact's phone number.
+                example: '12345678910'
+              document:
+                type: string
+                description: Contact's document.
+                example: '12345678910'
+        invoiceSubject:
+          type: object
+          description: Information about the invoice subject.
+          properties:
+            invoiceSubjectId:
+              type: string
+              description: Invoice subject ID.
+              example: '0'
+            email:
+              type: string
+              description: Invoice subject's email address.
+              example: jane@mail.com
+            firstName:
+              type: string
+              description: Invoice subject's first name.
+              example: Jane
+            lastName:
+              type: string
+              description: Invoice subject's last name.
+              example: Doe
+            phone:
+              type: string
+              description: Invoice subject's phone number.
+              example: '12345678910'
+        email:
+          type: string
+          description: Prospect's email address.
+          example: jane@mail.com
+        firstName:
+          type: string
+          description: Prospect's first name.
+          example: Jane
+        lastName:
+          type: string
+          description: Prospect's last name.
+          example: Doe
         document:
-          $ref: '#/components/schemas/Prospect'
-        meta:
-          $ref: '#/components/schemas/ProspectMeta'
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    reason:
-      name: reason
-      in: query
-      description: Reason for requesting unmasked data.
-      required: true
-      style: form
-      schema:
-        type: string
-        example: data-validation
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    prospectId:
-      name: prospectId
-      in: path
-      description: ID of the prospect as returned by the [Create prospect](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/prospects) endpoint's response, in the `id` field.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 98478f6b-d025-4f35-a560-dd1ee7a6f26e
+          type: string
+          description: Prospect's document.
+          example: 5397eefef23741d4976ebdf772cc42e0
+        cellPhone:
+          type: string
+          description: Prospect's cellphone number.
+          example: '12345678910'
+        isPJ:
+          type: boolean
+          description: Defines if a prospect is corporate (`true`) or not (`false`).
+          example: false
+        customerCode:
+          type: string
+          description: Prospect's customer code.
+          example: 5397eefe-f237-41d4-976e-bdf772cc42e0
   securitySchemes:
     appKey:
       type: apiKey

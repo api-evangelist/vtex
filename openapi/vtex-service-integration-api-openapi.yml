@@ -156,178 +156,35 @@ paths:
             default: storeapi.com
             description: Server from the store.
 components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Authorization:
+      name: Authorization
+      in: header
+      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{token}'
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
-    Dimensions:
-      required:
-      - height
-      - length
-      - width
-      type: object
-      properties:
-        height:
-          type: string
-          description: Package height in centimeters.
-        length:
-          type: string
-          description: Package length in centimeters.
-        width:
-          type: string
-          description: Package width in centimeters.
-      example:
-        height: '5'
-        length: '11'
-        width: '7'
-    Label:
-      required:
-      - id
-      - name
-      - url
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          description: Label ID.
-        name:
-          type: string
-          description: Name of the label.
-        url:
-          type: string
-          description: Label URL.
-        type:
-          type: string
-          description: Label's type of file.
-      example:
-        id: 78c83922-d658-48bf-89d5-0658a6a94e27
-        name: Shipping label
-        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-        type: PDF
-    Item:
-      title: Item
-      required:
-      - id
-      - name
-      - ean
-      - quantity
-      - price
-      - refId
-      - image
-      - type
-      - weight
-      type: object
-      properties:
-        id:
-          type: string
-          description: Product ID.
-        name:
-          type: string
-          description: Product name.
-        ean:
-          type: string
-          description: Unique SKU identification code (barcode). Up to 13 numerical characters.
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity of units of the product.
-        price:
-          type: integer
-          format: int32
-          description: Product price in cents.
-        refId:
-          type: string
-          description: Product reference ID.
-        image:
-          type: string
-          description: SKU image.
-        type:
-          type: string
-          description: Item type.
-        weight:
-          type: string
-          description: Product weight in grams.
-      example:
-        id: '184'
-        name: Chicken
-        ean: EAN354
-        quantity: 8
-        price: 669
-        refId: '314'
-        image: https://picsum.photos/seed/YtoZ9/128/480
-        type: other
-        weight: '6'
-    Package:
-      required:
-      - id
-      - orderId
-      - envelope
-      - dimensions
-      - weight
-      - totalValue
-      - items
-      - categories
-      - description
-      type: object
-      description: Package information.
-      properties:
-        id:
-          type: string
-          description: Package ID.
-        orderId:
-          type: string
-          description: Order ID.
-        envelope:
-          type: string
-          description: Name of the envelope used.
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-          description: Package dimensions.
-        weight:
-          type: string
-          description: Package weight in grams.
-        totalValue:
-          type: integer
-          format: int32
-          description: Total value of the order.
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-            description: Product general information.
-          description: Array containing information about the order's products.
-        categories:
-          type: array
-          items:
-            type: string
-            description: Category name.
-          description: Array of categories.
-        description:
-          type: string
-          description: Package description.
-      example:
-        id: a46e5bc1-8959-459f-a094-b6e699f7214c
-        orderId: 46369545534253-01
-        envelope: Foam or Plastic Containers
-        dimensions:
-          height: '5'
-          length: '11'
-          width: '7'
-        weight: '48'
-        totalValue: 5352
-        items:
-        - id: '184'
-          name: Chicken
-          ean: EAN354
-          quantity: 8
-          price: 669
-          refId: '314'
-          image: https://picsum.photos/seed/YtoZ9/128/480
-          type: other
-          weight: '6'
-        categories:
-        - Movies
-        - Garden
-        - Books
-        description: Unde deserunt libero cupiditate illum.
     CreateServiceBody:
       type: object
       properties:
@@ -499,6 +356,79 @@ components:
                 type: string
         timezone:
           $ref: '#/components/schemas/Timezone'
+    Package:
+      required:
+      - id
+      - orderId
+      - envelope
+      - dimensions
+      - weight
+      - totalValue
+      - items
+      - categories
+      - description
+      type: object
+      description: Package information.
+      properties:
+        id:
+          type: string
+          description: Package ID.
+        orderId:
+          type: string
+          description: Order ID.
+        envelope:
+          type: string
+          description: Name of the envelope used.
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+          description: Package dimensions.
+        weight:
+          type: string
+          description: Package weight in grams.
+        totalValue:
+          type: integer
+          format: int32
+          description: Total value of the order.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+            description: Product general information.
+          description: Array containing information about the order's products.
+        categories:
+          type: array
+          items:
+            type: string
+            description: Category name.
+          description: Array of categories.
+        description:
+          type: string
+          description: Package description.
+      example:
+        id: a46e5bc1-8959-459f-a094-b6e699f7214c
+        orderId: 46369545534253-01
+        envelope: Foam or Plastic Containers
+        dimensions:
+          height: '5'
+          length: '11'
+          width: '7'
+        weight: '48'
+        totalValue: 5352
+        items:
+        - id: '184'
+          name: Chicken
+          ean: EAN354
+          quantity: 8
+          price: 669
+          refId: '314'
+          image: https://picsum.photos/seed/YtoZ9/128/480
+          type: other
+          weight: '6'
+        categories:
+        - Movies
+        - Garden
+        - Books
+        description: Unde deserunt libero cupiditate illum.
     Timezone:
       required:
       - offset
@@ -523,6 +453,104 @@ components:
         offset: 300
         value: America/Bogota
         label: null
+    Dimensions:
+      required:
+      - height
+      - length
+      - width
+      type: object
+      properties:
+        height:
+          type: string
+          description: Package height in centimeters.
+        length:
+          type: string
+          description: Package length in centimeters.
+        width:
+          type: string
+          description: Package width in centimeters.
+      example:
+        height: '5'
+        length: '11'
+        width: '7'
+    Item:
+      title: Item
+      required:
+      - id
+      - name
+      - ean
+      - quantity
+      - price
+      - refId
+      - image
+      - type
+      - weight
+      type: object
+      properties:
+        id:
+          type: string
+          description: Product ID.
+        name:
+          type: string
+          description: Product name.
+        ean:
+          type: string
+          description: Unique SKU identification code (barcode). Up to 13 numerical characters.
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity of units of the product.
+        price:
+          type: integer
+          format: int32
+          description: Product price in cents.
+        refId:
+          type: string
+          description: Product reference ID.
+        image:
+          type: string
+          description: SKU image.
+        type:
+          type: string
+          description: Item type.
+        weight:
+          type: string
+          description: Product weight in grams.
+      example:
+        id: '184'
+        name: Chicken
+        ean: EAN354
+        quantity: 8
+        price: 669
+        refId: '314'
+        image: https://picsum.photos/seed/YtoZ9/128/480
+        type: other
+        weight: '6'
+    Label:
+      required:
+      - id
+      - name
+      - url
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Label ID.
+        name:
+          type: string
+          description: Name of the label.
+        url:
+          type: string
+          description: Label URL.
+        type:
+          type: string
+          description: Label's type of file.
+      example:
+        id: 78c83922-d658-48bf-89d5-0658a6a94e27
+        name: Shipping label
+        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+        type: PDF
     ResponseService:
       type: object
       required:
@@ -572,31 +600,3 @@ components:
           items:
             $ref: '#/components/schemas/Label'
           description: Shipping labels, there may be more than one per order due to breakage in packages.
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Authorization:
-      name: Authorization
-      in: header
-      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{token}'

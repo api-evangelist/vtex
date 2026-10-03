@@ -336,6 +336,25 @@ paths:
                   total: 1
                   pages: 1
 components:
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   schemas:
     ListUsersResponse:
       description: Response body for listing all users.
@@ -348,6 +367,27 @@ components:
             $ref: '#/components/schemas/UserItems'
         paging:
           $ref: '#/components/schemas/Paging'
+    Paging:
+      description: Paging object.
+      required:
+      - page
+      - perPage
+      - total
+      - pages
+      type: object
+      properties:
+        page:
+          description: Current page number.
+          type: integer
+        perPage:
+          description: Items per page.
+          type: integer
+        total:
+          description: Total of items.
+          type: integer
+        pages:
+          description: Total of pages.
+          type: integer
     UserItems:
       description: Object with information about an user.
       type: object
@@ -396,46 +436,6 @@ components:
           description: Email of the user.
           type: string
           example: john@mail.com
-    Paging:
-      description: Paging object.
-      required:
-      - page
-      - perPage
-      - total
-      - pages
-      type: object
-      properties:
-        page:
-          description: Current page number.
-          type: integer
-        perPage:
-          description: Items per page.
-          type: integer
-        total:
-          description: Total of items.
-          type: integer
-        pages:
-          description: Total of pages.
-          type: integer
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
   securitySchemes:
     appKey:
       type: apiKey

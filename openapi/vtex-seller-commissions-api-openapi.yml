@@ -242,6 +242,15 @@ components:
       schema:
         type: string
         example: apiexamples
+    categoryId:
+      name: categoryId
+      in: path
+      description: ID of the category in which the comission was applied
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: '6'
     environment:
       name: environment
       in: path
@@ -250,6 +259,15 @@ components:
       schema:
         type: string
         default: vtexcommercestable
+    accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
     contentType:
       name: Content-Type
       in: header
@@ -268,25 +286,42 @@ components:
       schema:
         type: string
         example: seller123
-    accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    categoryId:
-      name: categoryId
-      in: path
-      description: ID of the category in which the comission was applied
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: '6'
   schemas:
+    BulkUpsertSellerCommissionsRequest:
+      required:
+      - categoryId
+      - categoryFullPath
+      - productCommissionPercentage
+      - freightCommissionPercentage
+      type: object
+      properties:
+        categoryId:
+          type: string
+          description: Marketplace's Category ID that the product belongs to, configured in the Catalog.
+          example: '6'
+        categoryFullPath:
+          type:
+          - string
+          - 'null'
+          description: 'Full path to the SKU''s category. It should be written as {department}/{category}. For example: if the department is **Appliances** and the category is **Oven**, the full path should be ''Appliances/Oven''.'
+          example: Appliances/Oven
+        productCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the product in decimals.
+          example: 9.85
+        freightCommissionPercentage:
+          type: number
+          description: Percentage of the comission applied to the freight in decimals.
+          example: 2.43
+      example:
+      - categoryId: '6'
+        categoryFullPath: null
+        productCommissionPercentage: 9.85
+        freightCommissionPercentage: 2.43
+      - categoryId: '51'
+        categoryFullPath: Appliances/Oven
+        productCommissionPercentage: 7.85
+        freightCommissionPercentage: 3.43
     responseSellerCommissionsID:
       type: object
       description: Object with the category properties and the commission percentage applied to it.
@@ -326,41 +361,6 @@ components:
         - Clothes
         productCommissionPercentage: 7.75
         freightCommissionPercentage: 2.33
-    BulkUpsertSellerCommissionsRequest:
-      required:
-      - categoryId
-      - categoryFullPath
-      - productCommissionPercentage
-      - freightCommissionPercentage
-      type: object
-      properties:
-        categoryId:
-          type: string
-          description: Marketplace's Category ID that the product belongs to, configured in the Catalog.
-          example: '6'
-        categoryFullPath:
-          type:
-          - string
-          - 'null'
-          description: 'Full path to the SKU''s category. It should be written as {department}/{category}. For example: if the department is **Appliances** and the category is **Oven**, the full path should be ''Appliances/Oven''.'
-          example: Appliances/Oven
-        productCommissionPercentage:
-          type: number
-          description: Percentage of the comission applied to the product in decimals.
-          example: 9.85
-        freightCommissionPercentage:
-          type: number
-          description: Percentage of the comission applied to the freight in decimals.
-          example: 2.43
-      example:
-      - categoryId: '6'
-        categoryFullPath: null
-        productCommissionPercentage: 9.85
-        freightCommissionPercentage: 2.43
-      - categoryId: '51'
-        categoryFullPath: Appliances/Oven
-        productCommissionPercentage: 7.85
-        freightCommissionPercentage: 3.43
   securitySchemes:
     appKey:
       type: apiKey
