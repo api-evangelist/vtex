@@ -290,14 +290,6 @@ paths:
       variables: {}
 components:
   parameters:
-    accountName:
-      name: accountName
-      in: path
-      required: true
-      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
-      schema:
-        type: string
-        example: apiexamples
     environment:
       name: environment
       in: path
@@ -306,33 +298,6 @@ components:
       schema:
         type: string
         default: vtexcommercestable
-    skuId:
-      name: skuId
-      in: path
-      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '1234'
-    accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    contentType:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
     sellerId:
       name: sellerId
       in: path
@@ -342,152 +307,42 @@ components:
       schema:
         type: string
         example: seller123
+    skuId:
+      name: skuId
+      in: path
+      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '1234'
+    contentType:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    accountName:
+      name: accountName
+      in: path
+      required: true
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
+      schema:
+        type: string
+        example: apiexamples
   schemas:
-    NotifyCarrierwithAppRequest:
-      title: NotifyCarrierwithAppRequest
-      description: Object containing email, account, and dispatched order information.
-      required:
-      - email
-      - dispatchOrder
-      - account
-      type: object
-      properties:
-        account:
-          $ref: '#/components/schemas/Account'
-        email:
-          type: string
-          description: Fill in this field if you wish to send the generated file for an email besides the ones already involved in the operation, like the carrier and VTEX account's email.
-          example: email
-        dispatchOrder:
-          $ref: '#/components/schemas/DispatchOrder'
-    Country:
-      title: Country
-      description: Recipient's country.
-      required:
-      - code
-      - name
-      type: object
-      properties:
-        code:
-          type: string
-          description: Country's three-digit identifying code, from the recipient's address.
-          example: BRA
-        name:
-          type: string
-          description: Country's name, from the recipient's address.
-          example: Brasil
-      example:
-        code: BRA
-        name: BRA
-    Subregion3:
-      title: Neighborhood
-      description: Recipient's address neighborhood's information.
-      required:
-      - code
-      - name
-      type: object
-      properties:
-        code:
-          type: string
-          description: Neighborhood's code, from the recipient's address.
-          example: Neighborhood example
-        name:
-          type: string
-          description: Neighborhood's name, from the recipient's address.
-          example: Neighborhood example
-      example:
-        code: Vila Antonieta
-        name: Vila Antonieta
-    DispatchOrder:
-      title: DispatchOrder
-      description: Information about the dispatched order.
-      required:
-      - id
-      - packageIds
-      - sender
-      - carrier
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the dispatched order.
-          example: 653560c2-7965-4614-a730-8e45c89bf284
-        packageIds:
-          type: array
-          description: Array with package IDs.
-          items:
-            type: string
-            description: Identification codes of the packages.
-            example: 6529cd28-6fd1-4b95-8397-5fad0a79d41c
-        sender:
-          $ref: '#/components/schemas/Sender'
-        carrier:
-          $ref: '#/components/schemas/Carrier'
-    Address:
-      title: Address
-      description: Address of the VTEX account responsible for sending the package.
-      required:
-      - postalCode
-      - country
-      - subregion1
-      - subregion2
-      - subregion3
-      - street
-      - number
-      - complement
-      - location
-      type: object
-      properties:
-        postalCode:
-          type:
-          - string
-          - 'null'
-          description: ZIP code of the package's recipient.
-          example: 12345-678
-        country:
-          $ref: '#/components/schemas/Country'
-        subregion1:
-          $ref: '#/components/schemas/Subregion1'
-        subregion2:
-          $ref: '#/components/schemas/Subregion2'
-        subregion3:
-          $ref: '#/components/schemas/Subregion3'
-        street:
-          type: string
-          description: Recipient's address.
-          example: Street example
-        number:
-          type: string
-          description: Number of the recipient's address.
-          example: '1'
-        complement:
-          type:
-          - string
-          - 'null'
-          description: Complement for the recipient's address.
-          example: A
-        location:
-          $ref: '#/components/schemas/Location'
-      example:
-        postalCode: 00000-000
-        country:
-          code: BRA
-          name: BRA
-        subregion1:
-          code: SP
-          name: SP
-        subregion2:
-          code: São Paulo
-          name: São Paulo
-        subregion3:
-          code: Burgo Paulista
-          name: Burgo Paulista
-        street: Rua Exempo
-        number: '01'
-        complement: null
-        location:
-          lat: -46.48582077026367
-          lng: -23.521709442138672
     Subregion1:
       title: State
       description: Recipient's address state's information.
@@ -507,6 +362,63 @@ components:
       example:
         code: SP
         name: SP
+    NotifyCarrierwithAppRequest:
+      title: NotifyCarrierwithAppRequest
+      description: Object containing email, account, and dispatched order information.
+      required:
+      - email
+      - dispatchOrder
+      - account
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        email:
+          type: string
+          description: Fill in this field if you wish to send the generated file for an email besides the ones already involved in the operation, like the carrier and VTEX account's email.
+          example: email
+        dispatchOrder:
+          $ref: '#/components/schemas/DispatchOrder'
+    Location:
+      title: Location
+      description: Recipient's address geocoordinates.
+      required:
+      - lat
+      - lng
+      type:
+      - object
+      - 'null'
+      properties:
+        lat:
+          type: number
+          description: Latitude number of the address' geolocation coordinates.
+          example: -46.48582077026367
+        lng:
+          type: number
+          description: Longitude number of the address' geolocation coordinates.
+          example: -23.521709442138672
+      example:
+        lat: -46.48582077026367
+        lng: -23.521709442138672
+    Subregion3:
+      title: Neighborhood
+      description: Recipient's address neighborhood's information.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          type: string
+          description: Neighborhood's code, from the recipient's address.
+          example: Neighborhood example
+        name:
+          type: string
+          description: Neighborhood's name, from the recipient's address.
+          example: Neighborhood example
+      example:
+        code: Vila Antonieta
+        name: Vila Antonieta
     Sender:
       title: Sender
       description: User's logged account in the VTEX store.
@@ -587,27 +499,6 @@ components:
           location: null
         email: null
         phone: '+5511111111111'
-    Location:
-      title: Location
-      description: Recipient's address geocoordinates.
-      required:
-      - lat
-      - lng
-      type:
-      - object
-      - 'null'
-      properties:
-        lat:
-          type: number
-          description: Latitude number of the address' geolocation coordinates.
-          example: -46.48582077026367
-        lng:
-          type: number
-          description: Longitude number of the address' geolocation coordinates.
-          example: -23.521709442138672
-      example:
-        lat: -46.48582077026367
-        lng: -23.521709442138672
     Account:
       title: Account
       required:
@@ -729,6 +620,50 @@ components:
         state: null
         telephone: null
         tradingName: tradingName
+    DispatchOrder:
+      title: DispatchOrder
+      description: Information about the dispatched order.
+      required:
+      - id
+      - packageIds
+      - sender
+      - carrier
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the dispatched order.
+          example: 653560c2-7965-4614-a730-8e45c89bf284
+        packageIds:
+          type: array
+          description: Array with package IDs.
+          items:
+            type: string
+            description: Identification codes of the packages.
+            example: 6529cd28-6fd1-4b95-8397-5fad0a79d41c
+        sender:
+          $ref: '#/components/schemas/Sender'
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+    Subregion2:
+      title: City
+      description: Recipient's address city's information.
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          type: string
+          description: City's code, from the recipient's address.
+          example: SP
+        name:
+          type: string
+          description: City's name, from the recipient's address.
+          example: Sao Paulo
+      example:
+        code: SP
+        name: São Paulo
     Carrier:
       title: Carrier
       description: Carrier responsible for delivering the dispatched order.
@@ -801,9 +736,74 @@ components:
           location: null
         email: email
         phone: '+5511111111111'
-    Subregion2:
-      title: City
-      description: Recipient's address city's information.
+    Address:
+      title: Address
+      description: Address of the VTEX account responsible for sending the package.
+      required:
+      - postalCode
+      - country
+      - subregion1
+      - subregion2
+      - subregion3
+      - street
+      - number
+      - complement
+      - location
+      type: object
+      properties:
+        postalCode:
+          type:
+          - string
+          - 'null'
+          description: ZIP code of the package's recipient.
+          example: 12345-678
+        country:
+          $ref: '#/components/schemas/Country'
+        subregion1:
+          $ref: '#/components/schemas/Subregion1'
+        subregion2:
+          $ref: '#/components/schemas/Subregion2'
+        subregion3:
+          $ref: '#/components/schemas/Subregion3'
+        street:
+          type: string
+          description: Recipient's address.
+          example: Street example
+        number:
+          type: string
+          description: Number of the recipient's address.
+          example: '1'
+        complement:
+          type:
+          - string
+          - 'null'
+          description: Complement for the recipient's address.
+          example: A
+        location:
+          $ref: '#/components/schemas/Location'
+      example:
+        postalCode: 00000-000
+        country:
+          code: BRA
+          name: BRA
+        subregion1:
+          code: SP
+          name: SP
+        subregion2:
+          code: São Paulo
+          name: São Paulo
+        subregion3:
+          code: Burgo Paulista
+          name: Burgo Paulista
+        street: Rua Exempo
+        number: '01'
+        complement: null
+        location:
+          lat: -46.48582077026367
+          lng: -23.521709442138672
+    Country:
+      title: Country
+      description: Recipient's country.
       required:
       - code
       - name
@@ -811,15 +811,15 @@ components:
       properties:
         code:
           type: string
-          description: City's code, from the recipient's address.
-          example: SP
+          description: Country's three-digit identifying code, from the recipient's address.
+          example: BRA
         name:
           type: string
-          description: City's name, from the recipient's address.
-          example: Sao Paulo
+          description: Country's name, from the recipient's address.
+          example: Brasil
       example:
-        code: SP
-        name: São Paulo
+        code: BRA
+        name: BRA
   securitySchemes:
     appKey:
       type: apiKey

@@ -282,92 +282,40 @@ paths:
       deprecated: false
 components:
   schemas:
-    Client:
+    Item:
       type: object
       required:
+      - productId
       - id
-      - email
-      - document
+      - refId
+      - name
+      - price
+      - quantity
       properties:
+        productId:
+          type: string
+          description: Product ID.
+          example: '2000000'
         id:
           type: string
-          description: Customer's identification.
-          example: 3b1abc17
-        email:
+          description: The ID of the SKU in VTEX platform.
+          example: '2000002'
+        refId:
           type: string
-          description: Customer's email address.
-          example: email@domain.com
-        document:
+          description: Product Reference ID.
+          example: MEV41
+        name:
           type: string
-          description: Document number informed by the customer.
-          example: '234235'
-    Cart:
-      type: object
-      required:
-      - grandTotal
-      - relationName
-      - redemptionCode
-      - discounts
-      - shipping
-      - taxes
-      - items
-      - itemsTotal
-      properties:
-        grandTotal:
+          description: Product name.
+          example: Shoes
+        price:
           type: integer
-          description: Total payment value.
-          example: 182
-        relationName:
-          type:
-          - string
-          - 'null'
-          description: Represents the relationship between the client and the store.
-          example: null
-        redemptionCode:
-          type: string
-          description: Gift card identification code used at checkout. Minimum of 6 characters.
-          example: BAHD-ASDB-ADQW-ASDQ
-        discounts:
-          type: integer
-          description: Discounts value.
-          example: 20
-        shipping:
-          type: integer
-          description: Shipping value.
-          example: 2
-        taxes:
-          type: integer
-          description: Taxes value.
-          example: 0
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-          description: Items information.
-        itemsTotal:
-          type: integer
-          description: Total items value.
+          description: Product price.
           example: 200
-    Transactions:
-      type: object
-      description: Transactions information.
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: Gift card resource URL. The number described in the URL refers to the gift card identification.
-          example: cards/954/transactions
-    Self:
-      type: object
-      description: Object that carries an auto reference of the transaction (on its API).
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
-          example: cards/890/transactions/268
+        quantity:
+          type: integer
+          description: Product quantity.
+          example: 1
     response:
       type: object
       required:
@@ -419,16 +367,6 @@ components:
           example: USD
         transactions:
           $ref: '#/components/schemas/Transactions'
-    GetGiftCardusingJSONRequest:
-      type: object
-      required:
-      - cart
-      - client
-      properties:
-        cart:
-          $ref: '#/components/schemas/Cart'
-        client:
-          $ref: '#/components/schemas/Client'
     Paging:
       type: object
       required:
@@ -465,6 +403,45 @@ components:
           example: '589'
         _self:
           $ref: '#/components/schemas/Self'
+    Self:
+      type: object
+      description: Object that carries an auto reference of the transaction (on its API).
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+          example: cards/890/transactions/268
+    Transactions:
+      type: object
+      description: Transactions information.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: Gift card resource URL. The number described in the URL refers to the gift card identification.
+          example: cards/954/transactions
+    Client:
+      type: object
+      required:
+      - id
+      - email
+      - document
+      properties:
+        id:
+          type: string
+          description: Customer's identification.
+          example: 3b1abc17
+        email:
+          type: string
+          description: Customer's email address.
+          example: email@domain.com
+        document:
+          type: string
+          description: Document number informed by the customer.
+          example: '234235'
     CreateGiftCardRequest:
       type: object
       required:
@@ -505,40 +482,53 @@ components:
           type: boolean
           description: The gift card can be used to make new purchases until its value is completely used.
           example: false
-    Item:
+    Cart:
       type: object
       required:
-      - productId
-      - id
-      - refId
-      - name
-      - price
-      - quantity
+      - grandTotal
+      - relationName
+      - redemptionCode
+      - discounts
+      - shipping
+      - taxes
+      - items
+      - itemsTotal
       properties:
-        productId:
-          type: string
-          description: Product ID.
-          example: '2000000'
-        id:
-          type: string
-          description: The ID of the SKU in VTEX platform.
-          example: '2000002'
-        refId:
-          type: string
-          description: Product Reference ID.
-          example: MEV41
-        name:
-          type: string
-          description: Product name.
-          example: Shoes
-        price:
+        grandTotal:
           type: integer
-          description: Product price.
+          description: Total payment value.
+          example: 182
+        relationName:
+          type:
+          - string
+          - 'null'
+          description: Represents the relationship between the client and the store.
+          example: null
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: BAHD-ASDB-ADQW-ASDQ
+        discounts:
+          type: integer
+          description: Discounts value.
+          example: 20
+        shipping:
+          type: integer
+          description: Shipping value.
+          example: 2
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: Items information.
+        itemsTotal:
+          type: integer
+          description: Total items value.
           example: 200
-        quantity:
-          type: integer
-          description: Product quantity.
-          example: 1
     response2:
       type: object
       required:
@@ -552,6 +542,16 @@ components:
           description: Items information.
         paging:
           $ref: '#/components/schemas/Paging'
+    GetGiftCardusingJSONRequest:
+      type: object
+      required:
+      - cart
+      - client
+      properties:
+        cart:
+          $ref: '#/components/schemas/Cart'
+        client:
+          $ref: '#/components/schemas/Client'
   securitySchemes:
     appKey:
       type: apiKey

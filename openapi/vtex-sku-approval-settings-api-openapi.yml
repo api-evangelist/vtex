@@ -613,44 +613,116 @@ paths:
       deprecated: false
 components:
   schemas:
-    PutselleraccountconfigRequest:
-      title: PutselleraccountconfigRequest
+    Score:
+      title: Score
+      description: 'Matcher rates received SKUs by comparing the data sent by sellers to existing fields in the marketplace. The calculation of these scores determines whether the product has been: `Approved` or `Denied`.'
       required:
-      - sellerId
-      - mapping
-      - matchFlux
+      - Approve
+      - Reject
+      type: object
+      properties:
+        Approve:
+          type: integer
+          description: Insert in this field the desired minimum score to approve SKUs. If this field is set as 99, it means all approvals will be made manually.
+          format: int32
+          default: 80
+        Reject:
+          type: integer
+          description: Insert in this field the desired maximum score to reject SKUs.
+          format: int32
+          default: 30
+    responseGetSellersApprovalSettings:
+      title: GetSellersApprovalSettings
       type: object
       properties:
         sellerId:
           type: string
-          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
-          default: seller123
+          description: A string that identifies the seller in the marketplace.
+          example: sellerexample
+        accountId:
+          type: string
+          description: Marketplace’s account ID.
+          example: d74daf1f-355a-4463-bdc7-ae8b045311c
+        accountName:
+          type: string
+          description: Marketplace’s account name.
+          example: marketplaceexample
         mapping:
-          type:
-          - object
-          - 'null'
-          description: 'Mapping of SKU and product Specifications. This object should be sent in the following format for all fields you wish to map:
-
-
-            {specificationName}:{specificationValue},
-
-
-            Example:
-
-
-            Choose voltage: Voltage,
-
-
-            Choose size: Size'
-          default:
-            Choose voltage: Voltage
-            Choose size: Size
-            Choose volume: Volume
-            Choose type: Type
+          type: object
+          default: {}
+          description: "SKU Mapping Information and Product [Specifications](https://developers.vtex.com/docs/guides/catalog-overview#configuring-initial-settings-mandatory).\n\n The properties included within `mapping` can change according to the product type, the `color` specification and its variations described in this example are just one of the possibilities. The values received in this call's payload for those properties depend on the seller's catalog architecture, and are not default. \n\nSee some examples of specifications: \n\n- Voltage \n\n- Power \n\n- Size \n\n- Height \n\n- Width"
+          properties:
+            defaultColor:
+              type: string
+              description: 'The field will indicate the default color predefined by the seller in cases where specific product colors are not defined. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog. '
+              example: white /black
+            searchColor:
+              type: string
+              description: Field that provides the available colors to filter searches. This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
+              example: color1, color2
+            color1:
+              type: string
+              description: '`color1` available for search filter. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog.'
+              example: black
+            color2:
+              type: string
+              description: '`color2` available for search filter. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog.'
+              example: white
+            color:
+              type: string
+              description: Indicates the predominant or main color of the product. This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
+              example: black
+            size:
+              type: string
+              description: Indicates the size of the product.This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
+              example: EUR44
         matchFlux:
           type: string
-          description: "This field determines the type of approval configuration applied to SKUs received  from a seller. The possible values include: \n\n- `default` where the Matcher reviews the SKU, and approves it based on its score \n\n- `manual` for manual approvals through the Received SKU UI or Match API \n\n- `autoApprove` for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
-          default: autoApprove
+          description: "This field determines the type of [approval configuration applied to SKUs received from a seller](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/seller/-sellerId-). \n\nThe possible values include:  \n\n-`default`, where the Matcher reviews the SKU, and approves it based on its score. \n\n-`manual`, for manual approvals through the Received SKU UI and Match API. \n\n-`autoApprove`, for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
+          example: default
+    Matcher:
+      title: Matcher
+      required:
+      - MatcherId
+      - hook-base-address
+      - IsActive
+      - UpdatesNotificationEndpoint
+      type: object
+      properties:
+        MatcherId:
+          type: string
+          description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
+          default: vtex-matcher
+        hook-base-address:
+          type: string
+          description: The chosen Matcher's url. It is the endpoint that the Received SKUs module calls, to send new suggestions for the Matcher's review.
+          default: http://simple-suggestion-matcher.vtex.com.br
+        IsActive:
+          type: boolean
+          description: Whether the matcher is active in the account (`true`), or not (`false`).
+          default: true
+        UpdatesNotificationEndpoint:
+          type:
+          - string
+          - 'null'
+          description: The Received SKUs module uses this endpoint to send updates about a suggestion, to the chosen Matcher.
+          default: null
+        Description:
+          type:
+          - string
+          - 'null'
+          description: Insert in this field any notes about the approval. This field is optional.
+          default: null
+    SaveautoapproveforaccountsellerRequest:
+      title: SaveautoapproveforaccountsellerRequest
+      required:
+      - Enabled
+      type: object
+      properties:
+        Enabled:
+          type: boolean
+          description: Insert `true` if you wish to activate the autoapprove rule for that specific seller account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all SKUs received from this seller will be automatically approved on your store regardless of the Matcher Score.
+          default: true
     responseGetAccountsMatcherSettings:
       title: GetAccountsMatcherSettings
       description: Response from Get Account's Matcher Settings endpoint with information about current matcher score setting, rules, spec mapping, and matchFlux.
@@ -704,39 +776,44 @@ components:
         matchFlux:
           type: string
           description: "This field shows what type of approval setting is being applied to SKUs received from a seller. \n\nPossible values include: \n\n-`default`: where Matcher reviews the SKU and approves it based on its score. \n\n-`manual`: for manual approvals via incoming SKU UI or mailing API. \n\n-`autoApprove`: so that every SKU received from a given seller is automatically approved, regardless of its Matcher Score."
-    Matcher:
-      title: Matcher
+    PutselleraccountconfigRequest:
+      title: PutselleraccountconfigRequest
       required:
-      - MatcherId
-      - hook-base-address
-      - IsActive
-      - UpdatesNotificationEndpoint
+      - sellerId
+      - mapping
+      - matchFlux
       type: object
       properties:
-        MatcherId:
+        sellerId:
           type: string
-          description: Identifies the matching entity. It can be either VTEX's matcher, or an external matcher developed by partners, for example. The `matcherId`'s value can be obtained through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion) endpoint.
-          default: vtex-matcher
-        hook-base-address:
+          description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace.
+          default: seller123
+        mapping:
+          type:
+          - object
+          - 'null'
+          description: 'Mapping of SKU and product Specifications. This object should be sent in the following format for all fields you wish to map:
+
+
+            {specificationName}:{specificationValue},
+
+
+            Example:
+
+
+            Choose voltage: Voltage,
+
+
+            Choose size: Size'
+          default:
+            Choose voltage: Voltage
+            Choose size: Size
+            Choose volume: Volume
+            Choose type: Type
+        matchFlux:
           type: string
-          description: The chosen Matcher's url. It is the endpoint that the Received SKUs module calls, to send new suggestions for the Matcher's review.
-          default: http://simple-suggestion-matcher.vtex.com.br
-        IsActive:
-          type: boolean
-          description: Whether the matcher is active in the account (`true`), or not (`false`).
-          default: true
-        UpdatesNotificationEndpoint:
-          type:
-          - string
-          - 'null'
-          description: The Received SKUs module uses this endpoint to send updates about a suggestion, to the chosen Matcher.
-          default: null
-        Description:
-          type:
-          - string
-          - 'null'
-          description: Insert in this field any notes about the approval. This field is optional.
-          default: null
+          description: "This field determines the type of approval configuration applied to SKUs received  from a seller. The possible values include: \n\n- `default` where the Matcher reviews the SKU, and approves it based on its score \n\n- `manual` for manual approvals through the Received SKU UI or Match API \n\n- `autoApprove` for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
+          default: autoApprove
     SaveautoapproveforaccountRequest:
       title: SaveautoapproveforaccountRequest
       required:
@@ -747,65 +824,6 @@ components:
           type: boolean
           description: Insert `true` if you wish to activate the autoapprove rule for an entire marketplace account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all received SKUs will be automatically approved on your store, regardless of the seller, or the Matcher Score.
           default: true
-    SaveautoapproveforaccountsellerRequest:
-      title: SaveautoapproveforaccountsellerRequest
-      required:
-      - Enabled
-      type: object
-      properties:
-        Enabled:
-          type: boolean
-          description: Insert `true` if you wish to activate the autoapprove rule for that specific seller account. Insert `false` if you wish to deactivate it. Be aware that once enabling the setting through this request, all SKUs received from this seller will be automatically approved on your store regardless of the Matcher Score.
-          default: true
-    responseGetSellersApprovalSettings:
-      title: GetSellersApprovalSettings
-      type: object
-      properties:
-        sellerId:
-          type: string
-          description: A string that identifies the seller in the marketplace.
-          example: sellerexample
-        accountId:
-          type: string
-          description: Marketplace’s account ID.
-          example: d74daf1f-355a-4463-bdc7-ae8b045311c
-        accountName:
-          type: string
-          description: Marketplace’s account name.
-          example: marketplaceexample
-        mapping:
-          type: object
-          default: {}
-          description: "SKU Mapping Information and Product [Specifications](https://developers.vtex.com/docs/guides/catalog-overview#configuring-initial-settings-mandatory).\n\n The properties included within `mapping` can change according to the product type, the `color` specification and its variations described in this example are just one of the possibilities. The values received in this call's payload for those properties depend on the seller's catalog architecture, and are not default. \n\nSee some examples of specifications: \n\n- Voltage \n\n- Power \n\n- Size \n\n- Height \n\n- Width"
-          properties:
-            defaultColor:
-              type: string
-              description: 'The field will indicate the default color predefined by the seller in cases where specific product colors are not defined. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog. '
-              example: white /black
-            searchColor:
-              type: string
-              description: Field that provides the available colors to filter searches. This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
-              example: color1, color2
-            color1:
-              type: string
-              description: '`color1` available for search filter. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog.'
-              example: black
-            color2:
-              type: string
-              description: '`color2` available for search filter. This field is neither mandatory nor default, it will depend on the architecture of the seller''s catalog.'
-              example: white
-            color:
-              type: string
-              description: Indicates the predominant or main color of the product. This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
-              example: black
-            size:
-              type: string
-              description: Indicates the size of the product.This field is neither mandatory nor default, it will depend on the architecture of the seller's catalog.
-              example: EUR44
-        matchFlux:
-          type: string
-          description: "This field determines the type of [approval configuration applied to SKUs received from a seller](https://developers.vtex.com/docs/api-reference/marketplace-apis-suggestions#put-/suggestions/configuration/seller/-sellerId-). \n\nThe possible values include:  \n\n-`default`, where the Matcher reviews the SKU, and approves it based on its score. \n\n-`manual`, for manual approvals through the Received SKU UI and Match API. \n\n-`autoApprove`, for every SKU received from a given seller to be approved automatically, regardless of the Matcher Score."
-          example: default
     SaveaccountconfigRequest:
       title: SaveaccountconfigRequest
       required:
@@ -844,21 +862,3 @@ components:
           Description: null
         SpecificationsMapping: []
         MatchFlux: AutoApprove
-    Score:
-      title: Score
-      description: 'Matcher rates received SKUs by comparing the data sent by sellers to existing fields in the marketplace. The calculation of these scores determines whether the product has been: `Approved` or `Denied`.'
-      required:
-      - Approve
-      - Reject
-      type: object
-      properties:
-        Approve:
-          type: integer
-          description: Insert in this field the desired minimum score to approve SKUs. If this field is set as 99, it means all approvals will be made manually.
-          format: int32
-          default: 80
-        Reject:
-          type: integer
-          description: Insert in this field the desired maximum score to reject SKUs.
-          format: int32
-          default: 30

@@ -156,35 +156,60 @@ paths:
             default: storeapi.com
             description: Server from the store.
 components:
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Authorization:
-      name: Authorization
-      in: header
-      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{token}'
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   schemas:
+    Item:
+      title: Item
+      required:
+      - id
+      - name
+      - ean
+      - quantity
+      - price
+      - refId
+      - image
+      - type
+      - weight
+      type: object
+      properties:
+        id:
+          type: string
+          description: Product ID.
+        name:
+          type: string
+          description: Product name.
+        ean:
+          type: string
+          description: Unique SKU identification code (barcode). Up to 13 numerical characters.
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity of units of the product.
+        price:
+          type: integer
+          format: int32
+          description: Product price in cents.
+        refId:
+          type: string
+          description: Product reference ID.
+        image:
+          type: string
+          description: SKU image.
+        type:
+          type: string
+          description: Item type.
+        weight:
+          type: string
+          description: Product weight in grams.
+      example:
+        id: '184'
+        name: Chicken
+        ean: EAN354
+        quantity: 8
+        price: 669
+        refId: '314'
+        image: https://picsum.photos/seed/YtoZ9/128/480
+        type: other
+        weight: '6'
     CreateServiceBody:
       type: object
       properties:
@@ -356,6 +381,99 @@ components:
                 type: string
         timezone:
           $ref: '#/components/schemas/Timezone'
+    ResponseService:
+      type: object
+      required:
+      - status
+      - serviceId
+      - shippingPrice
+      - metaData
+      - shippingEstimatedDate
+      - labels
+      properties:
+        status:
+          type: string
+          example: PENDING
+          description: Status of the service.
+          enum:
+          - PENDING
+          - ASSIGNED
+          - PICKED
+          - ON_ROUTE
+          - INCIDENT
+          - RETURNED
+          - DELIVERED
+          - CANCELED
+          - ON_HOLD
+        serviceId:
+          type: string
+          example: ASDF23324KDSF2
+          description: Service ID.
+        shippingPrice:
+          type: number
+          example: 20000.09
+          description: Service shipping price.
+        metaData:
+          type: object
+          properties:
+            '{keyValue}':
+              description: Carrier additional information.
+              type: string
+          example:
+            anyKey: anyValue
+        shippingEstimatedDate:
+          type: string
+          example: '2024-05-29T22:36:37.589Z'
+          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          description: Shipping labels, there may be more than one per order due to breakage in packages.
+    Timezone:
+      required:
+      - offset
+      - value
+      - label
+      type: object
+      description: Time zone information.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: Time zone offset.
+        value:
+          type: string
+          description: Time zone.
+        label:
+          type:
+          - string
+          - 'null'
+          description: Label.
+      example:
+        offset: 300
+        value: America/Bogota
+        label: null
+    Dimensions:
+      required:
+      - height
+      - length
+      - width
+      type: object
+      properties:
+        height:
+          type: string
+          description: Package height in centimeters.
+        length:
+          type: string
+          description: Package length in centimeters.
+        width:
+          type: string
+          description: Package width in centimeters.
+      example:
+        height: '5'
+        length: '11'
+        width: '7'
     Package:
       required:
       - id
@@ -429,103 +547,6 @@ components:
         - Garden
         - Books
         description: Unde deserunt libero cupiditate illum.
-    Timezone:
-      required:
-      - offset
-      - value
-      - label
-      type: object
-      description: Time zone information.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: Time zone offset.
-        value:
-          type: string
-          description: Time zone.
-        label:
-          type:
-          - string
-          - 'null'
-          description: Label.
-      example:
-        offset: 300
-        value: America/Bogota
-        label: null
-    Dimensions:
-      required:
-      - height
-      - length
-      - width
-      type: object
-      properties:
-        height:
-          type: string
-          description: Package height in centimeters.
-        length:
-          type: string
-          description: Package length in centimeters.
-        width:
-          type: string
-          description: Package width in centimeters.
-      example:
-        height: '5'
-        length: '11'
-        width: '7'
-    Item:
-      title: Item
-      required:
-      - id
-      - name
-      - ean
-      - quantity
-      - price
-      - refId
-      - image
-      - type
-      - weight
-      type: object
-      properties:
-        id:
-          type: string
-          description: Product ID.
-        name:
-          type: string
-          description: Product name.
-        ean:
-          type: string
-          description: Unique SKU identification code (barcode). Up to 13 numerical characters.
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity of units of the product.
-        price:
-          type: integer
-          format: int32
-          description: Product price in cents.
-        refId:
-          type: string
-          description: Product reference ID.
-        image:
-          type: string
-          description: SKU image.
-        type:
-          type: string
-          description: Item type.
-        weight:
-          type: string
-          description: Product weight in grams.
-      example:
-        id: '184'
-        name: Chicken
-        ean: EAN354
-        quantity: 8
-        price: 669
-        refId: '314'
-        image: https://picsum.photos/seed/YtoZ9/128/480
-        type: other
-        weight: '6'
     Label:
       required:
       - id
@@ -551,52 +572,31 @@ components:
         name: Shipping label
         url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
         type: PDF
-    ResponseService:
-      type: object
-      required:
-      - status
-      - serviceId
-      - shippingPrice
-      - metaData
-      - shippingEstimatedDate
-      - labels
-      properties:
-        status:
-          type: string
-          example: PENDING
-          description: Status of the service.
-          enum:
-          - PENDING
-          - ASSIGNED
-          - PICKED
-          - ON_ROUTE
-          - INCIDENT
-          - RETURNED
-          - DELIVERED
-          - CANCELED
-          - ON_HOLD
-        serviceId:
-          type: string
-          example: ASDF23324KDSF2
-          description: Service ID.
-        shippingPrice:
-          type: number
-          example: 20000.09
-          description: Service shipping price.
-        metaData:
-          type: object
-          properties:
-            '{keyValue}':
-              description: Carrier additional information.
-              type: string
-          example:
-            anyKey: anyValue
-        shippingEstimatedDate:
-          type: string
-          example: '2024-05-29T22:36:37.589Z'
-          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-          description: Shipping labels, there may be more than one per order due to breakage in packages.
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{token}'
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json

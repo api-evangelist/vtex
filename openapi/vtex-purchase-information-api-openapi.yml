@@ -519,15 +519,6 @@ paths:
       deprecated: false
 components:
   parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     alternativeKey:
       name: alternativeKey
       in: query
@@ -549,15 +540,6 @@ components:
       schema:
         type: string
         example: data-validation
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     profileId:
       name: profileId
       in: path
@@ -567,43 +549,25 @@ components:
       schema:
         type: string
         example: 70caf394-8534-447e-a0ca-1803c669c771
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
-    PurchaseInfo:
-      title: Purchase information.
-      type: object
-      description: Purchase information object.
-      properties:
-        paymentData:
-          $ref: '#/components/schemas/PaymentData'
-        clientPreferences:
-          type: object
-          description: Client preferences.
-          properties: {}
-        isToSavePersonalData:
-          type: boolean
-          description: Defines if personal data will be saved (`true`) or not (`false`).
-        lastUserPurchases:
-          type: array
-          description: Array with latest purchases from the client.
-          items:
-            type: object
-            description: Purchase information.
-            properties:
-              creationDate:
-                type: string
-                description: Purchase date in the ISO 8601 format.
-              orderId:
-                type: string
-                description: Unique identifier of the order.
-              orderGroup:
-                type: string
-                description: Unique identifier of the order group.
-              value:
-                type: number
-                description: Purchase value.
-        lastPurchasesAddressId:
-          type: string
-          description: Unique identifier of the client address.
     PaymentData:
       title: paymentData
       type: object
@@ -723,17 +687,47 @@ components:
           - 'null'
           description: Last denied transaction.
           example: null
-    MaskedPurchaseInfoResponse:
-      title: Masked purchase information response.
+    PurchaseInfo:
+      title: Purchase information.
       type: object
-      description: Masked purchase information.
+      description: Purchase information object.
       properties:
-        id:
-          $ref: '#/components/schemas/PurchaseInfoId'
-        document:
-          $ref: '#/components/schemas/PurchaseInfo'
-        meta:
-          $ref: '#/components/schemas/PurchaseInfoMeta'
+        paymentData:
+          $ref: '#/components/schemas/PaymentData'
+        clientPreferences:
+          type: object
+          description: Client preferences.
+          properties: {}
+        isToSavePersonalData:
+          type: boolean
+          description: Defines if personal data will be saved (`true`) or not (`false`).
+        lastUserPurchases:
+          type: array
+          description: Array with latest purchases from the client.
+          items:
+            type: object
+            description: Purchase information.
+            properties:
+              creationDate:
+                type: string
+                description: Purchase date in the ISO 8601 format.
+              orderId:
+                type: string
+                description: Unique identifier of the order.
+              orderGroup:
+                type: string
+                description: Unique identifier of the order group.
+              value:
+                type: number
+                description: Purchase value.
+        lastPurchasesAddressId:
+          type: string
+          description: Unique identifier of the client address.
+    PurchaseInfoId:
+      title: id
+      type: string
+      description: ID of purchase information.
+      example: c2cbebba-214e-40b2-b68f-98f862e755d5
     Payment:
       title: Payment
       required:
@@ -878,11 +872,6 @@ components:
         tid: null
         dueDate: '2019-02-02'
         connectorResponses: {}
-    PurchaseInfoId:
-      title: id
-      type: string
-      description: ID of purchase information.
-      example: c2cbebba-214e-40b2-b68f-98f862e755d5
     PurchaseInfoMeta:
       title: Purchase information metadata.
       type: object
@@ -915,6 +904,17 @@ components:
           - 'null'
           description: Date when the purchase information expires in ISO 8601 format.
           example: '2022-01-05T15:41:37.5009471+00:00'
+    MaskedPurchaseInfoResponse:
+      title: Masked purchase information response.
+      type: object
+      description: Masked purchase information.
+      properties:
+        id:
+          $ref: '#/components/schemas/PurchaseInfoId'
+        document:
+          $ref: '#/components/schemas/PurchaseInfo'
+        meta:
+          $ref: '#/components/schemas/PurchaseInfoMeta'
   securitySchemes:
     appKey:
       type: apiKey

@@ -336,25 +336,6 @@ paths:
                   total: 1
                   pages: 1
 components:
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
   schemas:
     ListUsersResponse:
       description: Response body for listing all users.
@@ -388,6 +369,20 @@ components:
         pages:
           description: Total of pages.
           type: integer
+    CreateUserRequest:
+      description: Request body for creating users.
+      required:
+      - email
+      type: object
+      properties:
+        name:
+          description: Name of the user.
+          type: string
+          example: John
+        email:
+          description: Email of the user.
+          type: string
+          example: john@mail.com
     UserItems:
       description: Object with information about an user.
       type: object
@@ -422,20 +417,25 @@ components:
         name:
           description: Name of the user.
           type: string
-    CreateUserRequest:
-      description: Request body for creating users.
-      required:
-      - email
-      type: object
-      properties:
-        name:
-          description: Name of the user.
-          type: string
-          example: John
-        email:
-          description: Email of the user.
-          type: string
-          example: john@mail.com
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   securitySchemes:
     appKey:
       type: apiKey

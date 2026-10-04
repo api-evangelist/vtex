@@ -650,7 +650,95 @@ paths:
                   lastUpdateDate: '2022-01-18T18:51:34.1293829+00:00'
       deprecated: false
 components:
+  parameters:
+    alternativeKey:
+      name: alternativeKey
+      in: query
+      description: 'The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.
+
+
+        > Currently, there are two possible values for this parameter: `email` and `document`.'
+      required: false
+      style: form
+      schema:
+        type: string
+        example: email
+    addressId:
+      name: addressId
+      in: path
+      description: ID of a client's specific address as returned in the [Create client address](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles/-profileId-/addresses) endpoint's response, in the `id` field.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: bf82180e-cf9e-4089-9af6-ae1518555992
+    addressVersionId:
+      name: addressVersionId
+      in: path
+      description: ID of the version of a given client's address as returned by endpoints that create or update address information in the `version` field.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 86dfae79-1d23-43f2-a643-2fc8f1839461
+    reason:
+      name: reason
+      in: query
+      description: Reason for requesting unmasked data.
+      required: true
+      style: form
+      schema:
+        type: string
+        example: data-validation
+    profileId:
+      name: profileId
+      in: path
+      description: ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf394-8534-447e-a0ca-1803c669c771
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
+    UnmaskedAddressResponse:
+      title: Unmasked address response
+      type: object
+      description: Unmasked address information.
+      properties:
+        id:
+          $ref: '#/components/schemas/AddressId'
+        document:
+          $ref: '#/components/schemas/Address'
+        meta:
+          $ref: '#/components/schemas/AddressMeta'
+    MaskedAddressResponse:
+      title: Masked address response
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/AddressId'
+        document:
+          $ref: '#/components/schemas/Address'
+        meta:
+          $ref: '#/components/schemas/AddressMeta'
     AddressMeta:
       title: Address metadata
       type: object
@@ -677,95 +765,11 @@ components:
           type: string
           description: Date when the address was last updated in ISO 8601 format.
           example: '2022-01-05T15:41:37.5009471+00:00'
-    Address:
-      title: Address
-      type: object
-      description: Address information.
-      required:
-      - postalCode
-      - countryName
-      - administrativeAreaLevel1
-      - locality
-      - localityAreaLevel1
-      - route
-      - streetNumber
-      - profileId
-      properties:
-        postalCode:
-          type: string
-          description: Address postal code.
-          example: 20200-000
-        countryName:
-          type: string
-          description: Name of the address country.
-          example: Brasil
-        countryCode:
-          type: string
-          description: Two letter country code.
-          example: BR
-        administrativeAreaLevel1:
-          type: string
-          description: Name of administrative area, such as the state or province.
-          example: RJ
-        locality:
-          type: string
-          description: Name of address locality, such as the city.
-          example: Locality
-        localityAreaLevel1:
-          type: string
-          description: Name of the address locality area, such as the neighborhood or district.
-          example: Locality area
-        route:
-          type: string
-          description: Address route or street name.
-          example: '51'
-        streetNumber:
-          type: string
-          description: Address street number.
-          example: '999'
-        profileId:
-          $ref: '#/components/schemas/ProfileId'
-        contactId:
-          type: string
-          description: Contact unique identifier.
-          example: '1'
-      example:
-        postalCode: 20200-000
-        countryName: Brasil
-        countryCode: BR
-        administrativeAreaLevel1: RJ
-        locality: Locality
-        localityAreaLevel1: locality area
-        route: '51'
-        streetNumber: '999'
-        profileId: 70caf394-8534-447e-a0ca-1803c669c771
-        contactId: '1'
-    MaskedAddressResponse:
-      title: Masked address response
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/AddressId'
-        document:
-          $ref: '#/components/schemas/Address'
-        meta:
-          $ref: '#/components/schemas/AddressMeta'
     AddressId:
       title: id
       type: string
       description: ID of a client's address.
       example: c2cbebba-214e-40b2-b68f-98f862e755d5
-    UnmaskedAddressResponse:
-      title: Unmasked address response
-      type: object
-      description: Unmasked address information.
-      properties:
-        id:
-          $ref: '#/components/schemas/AddressId'
-        document:
-          $ref: '#/components/schemas/Address'
-        meta:
-          $ref: '#/components/schemas/AddressMeta'
     CreateAddress:
       title: Address request body
       type: object
@@ -830,73 +834,69 @@ components:
       type: string
       description: ID of the client's profile.
       example: c2cbebba-214e-40b2-b68f-98f862e755d5
-  parameters:
-    addressId:
-      name: addressId
-      in: path
-      description: ID of a client's specific address as returned in the [Create client address](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles/-profileId-/addresses) endpoint's response, in the `id` field.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: bf82180e-cf9e-4089-9af6-ae1518555992
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    alternativeKey:
-      name: alternativeKey
-      in: query
-      description: 'The `profileId` path parameter may be substituted by other profile fields in this request. When making this request, send the `alternativeKey` parameter with a value equal to the key of the field you wish to use as `profileId`.
-
-
-        > Currently, there are two possible values for this parameter: `email` and `document`.'
-      required: false
-      style: form
-      schema:
-        type: string
-        example: email
-    reason:
-      name: reason
-      in: query
-      description: Reason for requesting unmasked data.
-      required: true
-      style: form
-      schema:
-        type: string
-        example: data-validation
-    profileId:
-      name: profileId
-      in: path
-      description: ID of the client's profile as returned by the [Create profile](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/profiles) endpoint's response, in the `id` field. It can also be an `alternativeKey` according to your custom profile schema. In this case, this request should also send the `alternativeKey` parameter.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 70caf394-8534-447e-a0ca-1803c669c771
-    addressVersionId:
-      name: addressVersionId
-      in: path
-      description: ID of the version of a given client's address as returned by endpoints that create or update address information in the `version` field.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 86dfae79-1d23-43f2-a643-2fc8f1839461
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
+    Address:
+      title: Address
+      type: object
+      description: Address information.
+      required:
+      - postalCode
+      - countryName
+      - administrativeAreaLevel1
+      - locality
+      - localityAreaLevel1
+      - route
+      - streetNumber
+      - profileId
+      properties:
+        postalCode:
+          type: string
+          description: Address postal code.
+          example: 20200-000
+        countryName:
+          type: string
+          description: Name of the address country.
+          example: Brasil
+        countryCode:
+          type: string
+          description: Two letter country code.
+          example: BR
+        administrativeAreaLevel1:
+          type: string
+          description: Name of administrative area, such as the state or province.
+          example: RJ
+        locality:
+          type: string
+          description: Name of address locality, such as the city.
+          example: Locality
+        localityAreaLevel1:
+          type: string
+          description: Name of the address locality area, such as the neighborhood or district.
+          example: Locality area
+        route:
+          type: string
+          description: Address route or street name.
+          example: '51'
+        streetNumber:
+          type: string
+          description: Address street number.
+          example: '999'
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        contactId:
+          type: string
+          description: Contact unique identifier.
+          example: '1'
+      example:
+        postalCode: 20200-000
+        countryName: Brasil
+        countryCode: BR
+        administrativeAreaLevel1: RJ
+        locality: Locality
+        localityAreaLevel1: locality area
+        route: '51'
+        streetNumber: '999'
+        profileId: 70caf394-8534-447e-a0ca-1803c669c771
+        contactId: '1'
   securitySchemes:
     appKey:
       type: apiKey

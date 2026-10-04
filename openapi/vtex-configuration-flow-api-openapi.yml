@@ -175,54 +175,20 @@ paths:
                 appToken: 57ea254d-f3d3-488d-88d7-129766037ed1
       deprecated: false
 components:
-  parameters:
-    applicationId:
-      name: applicationId
-      in: query
-      description: VTEX application identifier.
-      required: true
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: vtex
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    X-PROVIDER-API-AppKey:
-      name: X-PROVIDER-API-AppKey
-      in: header
-      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppKey}}'
-    X-PROVIDER-API-AppToken:
-      name: X-PROVIDER-API-AppToken
-      in: header
-      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppToken}}'
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   schemas:
+    Success5:
+      required:
+      - applicationId
+      - token
+      type: object
+      description: Create authorization token response body information.
+      properties:
+        applicationId:
+          type: string
+          description: The same `applicationId` sent in the request.
+        token:
+          type: string
+          description: You must generate a token that will be used to identify the same context when we redirect the merchant to your application.
     Success6:
       required:
       - applicationId
@@ -255,19 +221,53 @@ components:
           type: string
           description: The base URL you need to use to form the final URL when redirecting the merchant back to VTEX.
           example: https://admin.mystore.example.com/provider-return?authorizationCode=
-    Success5:
-      required:
-      - applicationId
-      - token
-      type: object
-      description: Create authorization token response body information.
-      properties:
-        applicationId:
-          type: string
-          description: The same `applicationId` sent in the request.
-        token:
-          type: string
-          description: You must generate a token that will be used to identify the same context when we redirect the merchant to your application.
+  parameters:
+    X-PROVIDER-API-AppKey:
+      name: X-PROVIDER-API-AppKey
+      in: header
+      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppKey}}'
+    applicationId:
+      name: applicationId
+      in: query
+      description: VTEX application identifier.
+      required: true
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: vtex
+    X-PROVIDER-API-AppToken:
+      name: X-PROVIDER-API-AppToken
+      in: header
+      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppToken}}'
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

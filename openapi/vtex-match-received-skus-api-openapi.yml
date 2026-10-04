@@ -218,72 +218,91 @@ paths:
               deprecated: false
 components:
   schemas:
-    Specifications:
-      title: Specifications
-      required:
-      - Embalagem
-      type: object
-      properties:
-        Embalagem:
-          type: string
-          description: Packaging specifications. Should include package's weight.
-      example:
-        Embalagem: 3 kg
-    Product:
-      title: Product
+    Sku:
+      title: SKU
       required:
       - name
-      - description
-      - categoryId
-      - brandId
+      - eans
+      - refId
+      - height
+      - width
+      - length
+      - weight
+      - images
+      - unitMultiplier
+      - measurementUnit
       - specifications
       type: object
       properties:
         name:
           type: string
-          description: Name of the product that will be matched.
-          default: Book
-        description:
-          type: string
-          description: Product's description.
-          default: Description of the product, how it will appear on the marketplace.
-        categoryId:
-          type: integer
-          format: int32
-          description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
-          default: 12
-        brandId:
-          type: integer
-          format: int32
-          description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The brandId is already mapped through the Get Suggestions API. This field is nulled when the inserted value is 0.
-          default: 1234567
-        specifications:
+          description: ''
+          default: ''
+        eans:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: SKU reference code.
+          default:
+          - '12345678901213'
+        refId:
           type:
           - string
           - 'null'
-          description: This field is optional. Add here any product specifications or details.
-          default: ''
-    responseMatchMultiple:
-      title: responseMatchMultiple
-      type: array
-      items:
-        type: object
-        properties:
-          matchId:
-            type: string
-            example: 06272023010821403
-          matcherId:
-            type: string
-            example: vtex-matcher
-          sellerId:
-            type: string
-            example: melissatestbug858
-          itemId:
-            type: string
-            example: '81'
-          isSuccess:
-            type: boolean
-            example: false
+          description: SKU reference code.
+          default: '1234'
+        height:
+          type: integer
+          format: int32
+          description: Height of the SKU.
+          default: 10
+        width:
+          type: integer
+          format: int32
+          description: Width of the SKU.
+          default: 20
+        length:
+          type: integer
+          format: int32
+          description: Length of the SKU.
+          default: 10
+        weight:
+          type: integer
+          format: int32
+          description: Weight of the SKU.
+          default: 100
+        images:
+          $ref: '#/components/schemas/Images'
+        unitMultiplier:
+          type: integer
+          format: int32
+          description: Unit multiplier for this SKU. If this information doesn't apply, you should use the default value 1.
+          default: 1
+        measurementUnit:
+          type:
+          - string
+          - 'null'
+          description: Measurement unit that should be used for this SKU. If this information doesn't apply, you should use the default value un.
+          default: un
+        specifications:
+          $ref: '#/components/schemas/Specifications'
+      example:
+        name: Sku exemplo
+        eans:
+        - '12345678901213'
+        refId: null
+        height: 1
+        width: 1
+        length: 1
+        weight: 1
+        images:
+        - imagem1.jpg: imageurl.example
+        unitMultiplier: 1
+        measurementUnit: un
+        specifications:
+          Embalagem: 3 kg
     MatchRequest:
       title: ''
       required:
@@ -407,91 +426,27 @@ components:
             type: string
             description: A string that identifies the seller in the marketplace. This ID must be created by the marketplace and informed to the seller before the integration is built.
             example: seller123
-    Sku:
-      title: SKU
-      required:
-      - name
-      - eans
-      - refId
-      - height
-      - width
-      - length
-      - weight
-      - images
-      - unitMultiplier
-      - measurementUnit
-      - specifications
-      type: object
-      properties:
-        name:
-          type: string
-          description: ''
-          default: ''
-        eans:
-          type:
-          - array
-          - 'null'
-          items:
+    responseMatchMultiple:
+      title: responseMatchMultiple
+      type: array
+      items:
+        type: object
+        properties:
+          matchId:
             type: string
-          description: SKU reference code.
-          default:
-          - '12345678901213'
-        refId:
-          type:
-          - string
-          - 'null'
-          description: SKU reference code.
-          default: '1234'
-        height:
-          type: integer
-          format: int32
-          description: Height of the SKU.
-          default: 10
-        width:
-          type: integer
-          format: int32
-          description: Width of the SKU.
-          default: 20
-        length:
-          type: integer
-          format: int32
-          description: Length of the SKU.
-          default: 10
-        weight:
-          type: integer
-          format: int32
-          description: Weight of the SKU.
-          default: 100
-        images:
-          $ref: '#/components/schemas/Images'
-        unitMultiplier:
-          type: integer
-          format: int32
-          description: Unit multiplier for this SKU. If this information doesn't apply, you should use the default value 1.
-          default: 1
-        measurementUnit:
-          type:
-          - string
-          - 'null'
-          description: Measurement unit that should be used for this SKU. If this information doesn't apply, you should use the default value un.
-          default: un
-        specifications:
-          $ref: '#/components/schemas/Specifications'
-      example:
-        name: Sku exemplo
-        eans:
-        - '12345678901213'
-        refId: null
-        height: 1
-        width: 1
-        length: 1
-        weight: 1
-        images:
-        - imagem1.jpg: imageurl.example
-        unitMultiplier: 1
-        measurementUnit: un
-        specifications:
-          Embalagem: 3 kg
+            example: 06272023010821403
+          matcherId:
+            type: string
+            example: vtex-matcher
+          sellerId:
+            type: string
+            example: melissatestbug858
+          itemId:
+            type: string
+            example: '81'
+          isSuccess:
+            type: boolean
+            example: false
     Images:
       title: Images
       required:
@@ -504,3 +459,48 @@ components:
           default: https://imageurl.example
       example:
       - imagem1.jpg: imageurl.example
+    Product:
+      title: Product
+      required:
+      - name
+      - description
+      - categoryId
+      - brandId
+      - specifications
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product that will be matched.
+          default: Book
+        description:
+          type: string
+          description: Product's description.
+          default: Description of the product, how it will appear on the marketplace.
+        categoryId:
+          type: integer
+          format: int32
+          description: Marketplace's Category ID that the product belongs to, configured in the Catalog. It should be the category chosen for the received SKU to be matched with. The `categoryId` is already mapped through the [Get SKU Suggestion by ID](https://developers.vtex.com/vtex-rest-api/reference/getsuggestion). You can choose to keep the same suggested `categoryID`, or overwrite it with another value in this request. This field is nulled when the inserted value is 0.
+          default: 12
+        brandId:
+          type: integer
+          format: int32
+          description: Marketplace's Brand ID that the product belongs to, configured in the Catalog. It should be the brand chosen for the received SKU to be matched with. The brandId is already mapped through the Get Suggestions API. This field is nulled when the inserted value is 0.
+          default: 1234567
+        specifications:
+          type:
+          - string
+          - 'null'
+          description: This field is optional. Add here any product specifications or details.
+          default: ''
+    Specifications:
+      title: Specifications
+      required:
+      - Embalagem
+      type: object
+      properties:
+        Embalagem:
+          type: string
+          description: Packaging specifications. Should include package's weight.
+      example:
+        Embalagem: 3 kg

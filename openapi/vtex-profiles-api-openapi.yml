@@ -532,15 +532,6 @@ paths:
       deprecated: false
 components:
   parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     alternativeKey:
       name: alternativeKey
       in: query
@@ -553,6 +544,15 @@ components:
       schema:
         type: string
         example: email
+    profileVersionId:
+      name: profileVersionId
+      in: path
+      description: ID of the version of the client's profile as returned by endpoints that create or update profile information in the `version` field.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: 70caf394-8534-447e-a0ca-1803c669c771
     reason:
       name: reason
       in: query
@@ -574,15 +574,6 @@ components:
       schema:
         type: integer
         example: 365
-    profileVersionId:
-      name: profileVersionId
-      in: path
-      description: ID of the version of the client's profile as returned by endpoints that create or update profile information in the `version` field.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: 70caf394-8534-447e-a0ca-1803c669c771
     profileId:
       name: profileId
       in: path
@@ -592,6 +583,15 @@ components:
       schema:
         type: string
         example: 70caf394-8534-447e-a0ca-1803c669c771
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
     Content-Type:
       name: Content-Type
       in: header
@@ -602,6 +602,20 @@ components:
         type: string
         example: application/json
   schemas:
+    MaskedProfileResponse:
+      title: Masked profile response
+      type: array
+      description: Array containing masked profile information.
+      items:
+        type: object
+        description: Masked profile information.
+        properties:
+          id:
+            $ref: '#/components/schemas/ProfileId'
+          meta:
+            $ref: '#/components/schemas/ProfileMeta'
+          document:
+            $ref: '#/components/schemas/Profile'
     MaskedProfileResponseByVersion:
       title: Masked profile response
       type: array
@@ -616,32 +630,11 @@ components:
             $ref: '#/components/schemas/Profile'
           meta:
             $ref: '#/components/schemas/ProfileMeta'
-    ProfileMeta:
-      title: Profile metadata
-      type: object
-      description: Profile metadata.
-      required:
-      - version
-      - author
-      - creationDate
-      - lastUpdate
-      properties:
-        version:
-          type: string
-          description: Unique identifier of the profile version.
-          example: 27112371-a71b-45d6-b3bc-93436a3a0b4f
-        author:
-          type: string
-          description: Unique identifier of the user who created the profile.
-          example: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
-        creationDate:
-          type: string
-          description: Date when the profile was created in ISO 8601 format.
-          example: '2022-01-05T15:41:37.5009471+00:00'
-        lastUpdate:
-          type: string
-          description: Date when the profile was last updated in ISO 8601 format.
-          example: '2022-01-05T15:41:37.5009471+00:00'
+    ProfileId:
+      title: id
+      type: string
+      description: ID of the client's profile.
+      example: c2cbebba-214e-40b2-b68f-98f862e755d5
     UnmaskedProfileResponse:
       title: Unmasked profile response
       type: object
@@ -692,25 +685,32 @@ components:
           type: string
           description: 'Name of custom field defined in [Create or delete custom fields](https://developers.vtex.com/docs/api-reference/profile-system#put-/api/storage/profile-system/schemas/profileSystem/custom). Can be of any type: string, number, boolean, array or object.'
           example: '{value}'
-    MaskedProfileResponse:
-      title: Masked profile response
-      type: array
-      description: Array containing masked profile information.
-      items:
-        type: object
-        description: Masked profile information.
-        properties:
-          id:
-            $ref: '#/components/schemas/ProfileId'
-          meta:
-            $ref: '#/components/schemas/ProfileMeta'
-          document:
-            $ref: '#/components/schemas/Profile'
-    ProfileId:
-      title: id
-      type: string
-      description: ID of the client's profile.
-      example: c2cbebba-214e-40b2-b68f-98f862e755d5
+    ProfileMeta:
+      title: Profile metadata
+      type: object
+      description: Profile metadata.
+      required:
+      - version
+      - author
+      - creationDate
+      - lastUpdate
+      properties:
+        version:
+          type: string
+          description: Unique identifier of the profile version.
+          example: 27112371-a71b-45d6-b3bc-93436a3a0b4f
+        author:
+          type: string
+          description: Unique identifier of the user who created the profile.
+          example: 82a2b53d-39be-4f49-bb7c-8971b58cb7dc
+        creationDate:
+          type: string
+          description: Date when the profile was created in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
+        lastUpdate:
+          type: string
+          description: Date when the profile was last updated in ISO 8601 format.
+          example: '2022-01-05T15:41:37.5009471+00:00'
   securitySchemes:
     appKey:
       type: apiKey

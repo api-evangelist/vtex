@@ -201,7 +201,54 @@ paths:
           description: No Content
       deprecated: false
 components:
+  parameters:
+    dataEntityName:
+      name: dataEntityName
+      in: path
+      required: true
+      description: Name of the data entity.
+      schema:
+        type: string
+        example: Newsletter
+    index_name:
+      name: index_name
+      in: path
+      description: Name of the index.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{index_name}}'
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
+    Index:
+      type: object
+      description: Index information.
+      properties:
+        name:
+          type: string
+          description: Index name.
+        acronym:
+          type: string
+          description: Data entity name.
+        isGlobal:
+          type: boolean
+          description: Defines whether the index is global (`true`) or not (`false`).
+          deprecated: true
+        multiple:
+          type: boolean
+          description: Determines whether the values need to be unique. If `false`, values must be unique.
+        fields:
+          type: string
+          description: Comma-separated fields of the index.
     PutindicesRequest:
       title: PutindicesRequest
       required:
@@ -223,53 +270,6 @@ components:
           description: Comma-separated fields of the index.
           type: string
           example: fieldName
-    Index:
-      type: object
-      description: Index information.
-      properties:
-        name:
-          type: string
-          description: Index name.
-        acronym:
-          type: string
-          description: Data entity name.
-        isGlobal:
-          type: boolean
-          description: Defines whether the index is global (`true`) or not (`false`).
-          deprecated: true
-        multiple:
-          type: boolean
-          description: Determines whether the values need to be unique. If `false`, values must be unique.
-        fields:
-          type: string
-          description: Comma-separated fields of the index.
-  parameters:
-    index_name:
-      name: index_name
-      in: path
-      description: Name of the index.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{index_name}}'
-    dataEntityName:
-      name: dataEntityName
-      in: path
-      required: true
-      description: Name of the data entity.
-      schema:
-        type: string
-        example: Newsletter
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

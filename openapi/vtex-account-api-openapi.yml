@@ -4415,10 +4415,10 @@ components:
       schema:
         type: string
         example: B2E754DCD7304D22866CB6F221CF0FEB
-    Accept:
-      name: Accept
+    Content-Type:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:
@@ -4433,44 +4433,16 @@ components:
       schema:
         type: string
         example: 01bce461-9g03-12ds-8217-b3d39271e15b
-    Content-Type:
-      name: Content-Type
+    Accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
         type: string
         example: application/json
   schemas:
-    AppKeyItems:
-      description: Object representing application keys.
-      type: object
-      properties:
-        id:
-          description: ID of the application key.
-          type: string
-        appKey:
-          description: AppKey.
-          type: string
-        appToken:
-          description: AppToken. For security reasons, it should always be null.
-          type:
-          - string
-          - 'null'
-        label:
-          description: Label of the application key.
-          type: string
-        createdIn:
-          description: Creation date of the application key.
-          type: string
-          format: date-time
-        isActive:
-          description: Defines if the application key is active (`true`) or not (`false`).
-          type: boolean
-        isBlocked:
-          description: Defines if the application key is blocked (`true`) or not (`false`).
-          type: boolean
     SiteItems:
       description: Object containing complete information from a store.
       type: object
@@ -4524,6 +4496,63 @@ components:
             description: Alias.
             deprecated: true
           deprecated: true
+    LicenseItems:
+      description: Object representing licenses.
+      type: object
+      properties:
+        expiration:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          deprecated: true
+          description: Expiration date.
+        id:
+          description: ID of the category of the license.
+          type: number
+        isPurchased:
+          description: Defines if the license is purchased (`true`) or not (`false`).
+          type: boolean
+        products:
+          description: Array of products.
+          type: array
+          items:
+            description: Object representing products of licenses.
+            type: object
+            properties:
+              id:
+                description: ID of the product.
+                type: number
+              name:
+                description: Name of the product.
+                type: string
+              domains:
+                description: List of domains of the product.
+                type: array
+                items:
+                  type: string
+                  description: Domain of the product.
+                deprecated: true
+              endpoints:
+                type: object
+                description: Endpoints.
+                properties:
+                  webApiUrl:
+                    type:
+                    - string
+                    - 'null'
+                    description: Web API URL.
+                    deprecated: true
+                  consoleUrl:
+                    type:
+                    - string
+                    - 'null'
+                    description: Console URL.
+                    deprecated: true
+                deprecated: true
+        name:
+          description: Name of the category of the license.
+          type: string
     AccountResponse:
       description: Successful response for `/api/vlm/account`.
       type: object
@@ -4710,63 +4739,34 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AppKeyItems'
-    LicenseItems:
-      description: Object representing licenses.
+    AppKeyItems:
+      description: Object representing application keys.
       type: object
       properties:
-        expiration:
+        id:
+          description: ID of the application key.
+          type: string
+        appKey:
+          description: AppKey.
+          type: string
+        appToken:
+          description: AppToken. For security reasons, it should always be null.
           type:
           - string
           - 'null'
-          format: date-time
-          deprecated: true
-          description: Expiration date.
-        id:
-          description: ID of the category of the license.
-          type: number
-        isPurchased:
-          description: Defines if the license is purchased (`true`) or not (`false`).
-          type: boolean
-        products:
-          description: Array of products.
-          type: array
-          items:
-            description: Object representing products of licenses.
-            type: object
-            properties:
-              id:
-                description: ID of the product.
-                type: number
-              name:
-                description: Name of the product.
-                type: string
-              domains:
-                description: List of domains of the product.
-                type: array
-                items:
-                  type: string
-                  description: Domain of the product.
-                deprecated: true
-              endpoints:
-                type: object
-                description: Endpoints.
-                properties:
-                  webApiUrl:
-                    type:
-                    - string
-                    - 'null'
-                    description: Web API URL.
-                    deprecated: true
-                  consoleUrl:
-                    type:
-                    - string
-                    - 'null'
-                    description: Console URL.
-                    deprecated: true
-                deprecated: true
-        name:
-          description: Name of the category of the license.
+        label:
+          description: Label of the application key.
           type: string
+        createdIn:
+          description: Creation date of the application key.
+          type: string
+          format: date-time
+        isActive:
+          description: Defines if the application key is active (`true`) or not (`false`).
+          type: boolean
+        isBlocked:
+          description: Defines if the application key is blocked (`true`) or not (`false`).
+          type: boolean
   securitySchemes:
     appKey:
       type: apiKey

@@ -268,138 +268,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Cart:
-      description: Cart information.
-      required:
-      - grandTotal
-      - relationName
-      - redemptionCode
-      - discounts
-      - shipping
-      - taxes
-      - items
-      - itemsTotal
-      type: object
-      properties:
-        grandTotal:
-          type: integer
-          description: Total payment value.
-          example: 182
-        relationName:
-          type:
-          - string
-          - 'null'
-          description: Represents the relationship between the client and the store.
-          example: null
-        redemptionCode:
-          type: string
-          description: Gift card identification code used at checkout. Minimum of 6 characters.
-          example: BAHD-ASDB-ADQW-ASDQ
-        discounts:
-          type: integer
-          description: Discounts value.
-          example: 20
-        shipping:
-          type: integer
-          description: Shipping value.
-          example: 2
-        taxes:
-          type: integer
-          description: Taxes value.
-          example: 0
-        items:
-          type: array
-          description: Items information.
-          items:
-            $ref: '#/components/schemas/Item'
-        itemsTotal:
-          type: integer
-          description: Total items value.
-          example: 200
-    Client:
-      description: Customer information.
-      required:
-      - id
-      - email
-      - document
-      type: object
-      properties:
-        id:
-          type: string
-          description: Customer's identification.
-          example: 3b1abc17
-        email:
-          type: string
-          description: Customer's email address.
-          example: email@domain.com
-        document:
-          type: string
-          description: Document number informed by the customer.
-          example: '234235'
-    Self:
-      required:
-      - href
-      type: object
-      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
-      properties:
-        href:
-          type: string
-          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
-    ListAllGiftCardsRequest:
-      description: Gift cards information.
-      required:
-      - client
-      - cart
-      type: object
-      properties:
-        client:
-          $ref: '#/components/schemas/Client'
-        cart:
-          $ref: '#/components/schemas/Cart'
-    CreateGiftCardRequest:
-      description: Create a gift card request body information.
-      required:
-      - relationName
-      - caption
-      - profileId
-      type: object
-      properties:
-        relationName:
-          type: string
-          description: Field to be filled in when it is not necessary to use a loyalty program for the gift card. Note that a new `relationNamevalue` is required for each new gift card to be created.
-          example: loyalty-program
-        emissionDate:
-          type: string
-          description: Gift card creation date.
-          example: '2020-08-01T13:15:30Z'
-        expiringDate:
-          type: string
-          description: Gift card expiration date.
-          example: '2020-09-01T13:15:30Z'
-        caption:
-          type: string
-          description: Field to be filled in if a loyalty program must be created for the gift card.
-          example: Loyalty program
-        restrictedToOwner:
-          type: boolean
-          description: The gift card can only be used for a specified client's ID.
-          example: true
-        multipleRedemptions:
-          type: boolean
-          description: The gift card can be used to make new purchases until its value is completely used.
-          example: true
-        multipleCredits:
-          type: boolean
-          description: The gift card balance can be changed.
-          example: true
-        profileId:
-          type: string
-          description: Client ID. You can use the customer's registered email or the `userId` parameter which can be found in the [Master Data](https://help.vtex.com/en/tutorial/master-data--4otjBnR27u4WUIciQsmkAw).
-          example: 92de2249-0e02-4ca9-a4aa-a09cc9d8f7ff
-        currencyCode:
-          type: string
-          description: Currency code in ISO 4217.
-          example: USD
     Item:
       description: Items information.
       required:
@@ -455,6 +323,138 @@ components:
           description: Gift card current balance.
         _self:
           $ref: '#/components/schemas/Self'
+    ListAllGiftCardsRequest:
+      description: Gift cards information.
+      required:
+      - client
+      - cart
+      type: object
+      properties:
+        client:
+          $ref: '#/components/schemas/Client'
+        cart:
+          $ref: '#/components/schemas/Cart'
+    Self:
+      required:
+      - href
+      type: object
+      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
+      properties:
+        href:
+          type: string
+          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
+    Client:
+      description: Customer information.
+      required:
+      - id
+      - email
+      - document
+      type: object
+      properties:
+        id:
+          type: string
+          description: Customer's identification.
+          example: 3b1abc17
+        email:
+          type: string
+          description: Customer's email address.
+          example: email@domain.com
+        document:
+          type: string
+          description: Document number informed by the customer.
+          example: '234235'
+    CreateGiftCardRequest:
+      description: Create a gift card request body information.
+      required:
+      - relationName
+      - caption
+      - profileId
+      type: object
+      properties:
+        relationName:
+          type: string
+          description: Field to be filled in when it is not necessary to use a loyalty program for the gift card. Note that a new `relationNamevalue` is required for each new gift card to be created.
+          example: loyalty-program
+        emissionDate:
+          type: string
+          description: Gift card creation date.
+          example: '2020-08-01T13:15:30Z'
+        expiringDate:
+          type: string
+          description: Gift card expiration date.
+          example: '2020-09-01T13:15:30Z'
+        caption:
+          type: string
+          description: Field to be filled in if a loyalty program must be created for the gift card.
+          example: Loyalty program
+        restrictedToOwner:
+          type: boolean
+          description: The gift card can only be used for a specified client's ID.
+          example: true
+        multipleRedemptions:
+          type: boolean
+          description: The gift card can be used to make new purchases until its value is completely used.
+          example: true
+        multipleCredits:
+          type: boolean
+          description: The gift card balance can be changed.
+          example: true
+        profileId:
+          type: string
+          description: Client ID. You can use the customer's registered email or the `userId` parameter which can be found in the [Master Data](https://help.vtex.com/en/tutorial/master-data--4otjBnR27u4WUIciQsmkAw).
+          example: 92de2249-0e02-4ca9-a4aa-a09cc9d8f7ff
+        currencyCode:
+          type: string
+          description: Currency code in ISO 4217.
+          example: USD
+    Cart:
+      description: Cart information.
+      required:
+      - grandTotal
+      - relationName
+      - redemptionCode
+      - discounts
+      - shipping
+      - taxes
+      - items
+      - itemsTotal
+      type: object
+      properties:
+        grandTotal:
+          type: integer
+          description: Total payment value.
+          example: 182
+        relationName:
+          type:
+          - string
+          - 'null'
+          description: Represents the relationship between the client and the store.
+          example: null
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: BAHD-ASDB-ADQW-ASDQ
+        discounts:
+          type: integer
+          description: Discounts value.
+          example: 20
+        shipping:
+          type: integer
+          description: Shipping value.
+          example: 2
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        items:
+          type: array
+          description: Items information.
+          items:
+            $ref: '#/components/schemas/Item'
+        itemsTotal:
+          type: integer
+          description: Total items value.
+          example: 200
   securitySchemes:
     appKey:
       type: apiKey

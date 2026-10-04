@@ -2028,418 +2028,53 @@ paths:
                   value: MetadataValue
       deprecated: false
 components:
+  parameters:
+    X-PROVIDER-API-AppKey:
+      name: X-PROVIDER-API-AppKey
+      in: header
+      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppKey}}'
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    paymentId:
+      name: paymentId
+      in: path
+      description: VTEX payment identifier.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
+    X-PROVIDER-API-AppToken:
+      name: X-PROVIDER-API-AppToken
+      in: header
+      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppToken}}'
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
-    Fail-GenericError3:
-      required:
-      - paymentId
-      - refundId
-      - value
-      - code
-      - message
-      - requestId
-      type: object
-      description: Internal server error information.
-      properties:
-        paymentId:
-          type: string
-          description: The same `paymentId` sent in the request.
-        refundId:
-          type:
-          - string
-          - 'null'
-          description: Provider's refund identifier. If the operation has failed you **MUST** return `null`.
-        value:
-          type: integer
-          description: The amount to be settled.
-        code:
-          type: string
-          description: Provider's operation/error code to be logged. Return `refund-manually` if you do not support this operation, so we can send a notification to the merchant.
-        message:
-          type: string
-          description: Provider's operation/error message to be logged.
-        requestId:
-          type: string
-          description: The same `requestId` sent in the request.
-    Success1:
-      required:
-      - paymentId
-      - cancellationId
-      - code
-      - message
-      - requestId
-      type: object
-      description: Cancel payment response body information.
-      properties:
-        paymentId:
-          type: string
-          description: The same `paymentId` sent in the request.
-        cancellationId:
-          type: string
-          description: Provider's cancellation identifier. If the operation has failed you **MUST** return `null`.
-        code:
-          type:
-          - string
-          - 'null'
-          description: Provider's operation/error code to be logged. Return `cancel-manually` if you do not support this operation, so we can send a notification to the merchant.
-        message:
-          type: string
-          description: Provider's operation/error message to be logged.
-        requestId:
-          type: string
-          description: The same `requestId` sent in the request.
-        connectorMetadata:
-          type: array
-          description: Array containing metadata fields sent from the provider to the payment gateway.
-          items:
-            type: object
-            description: Metadata fields information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
-              value:
-                type: string
-                description: The value of the metadata stored (limited to 200 characters).
-    Success-Approved:
-      required:
-      - paymentId
-      - status
-      - authorizationId
-      - tid
-      - nsu
-      - acquirer
-      - delayToAutoSettle
-      - delayToAutoSettleAfterAntifraud
-      - delayToCancel
-      type: object
-      description: Create payment response body information.
-      properties:
-        paymentId:
-          type: string
-          description: VTEX identifier for this payment. The same sent in the request.
-        status:
-          type: string
-          description: 'The Provider''s status for this payment. Must be one of three values:
-
-
-            - `approved`
-
-            - `denied`
-
-            - `undefined`.'
-        authorizationId:
-          type: string
-          description: Provider's unique identifier for the authorization. Should be sent when the payment is authorized. In other statuses, it should be absent or `null`.
-        bankIssueInvoiceId:
-          type: string
-          description: This field is deprecated, please use `paymentUrl` instead. The bank invoice URL to be presented to the end user.
-        paymentUrl:
-          type:
-          - string
-          - 'null'
-          description: When the payment is via bank invoice, this should be the invoice URL to be presented to the user. If the payment requires the redirection of the user, this should be the URL to redirect the user. If neither is the case, then this should be absent.
-        paymentAppData:
-          type: object
-          description: Object which indicates that a [Payment App](https://developers.vtex.com/docs/guides/payments-integration-payment-app) is needed to finish the payment. This object contains the data to be used by the Payment App.
-          required:
-          - appName
-          - payload
-          properties:
-            appName:
-              type: string
-              description: Indicates which VTEX IO app that will handle the payment flow at Checkout.
-            payload:
-              type: string
-              description: The payload that will be sent to your app, like a serialized JSON, for example.
-        identificationNumber:
-          type: string
-          description: The bank invoice unformatted identification number. Should only be present when the payment is made via bank invoice.
-        identificationNumberFormatted:
-          type: string
-          description: The bank invoice formatted identification number that will be presented to the end user.
-        barCodeImageType:
-          type: string
-          description: The bank invoice barcode image type. For instance, "i25" for Brazilian *Boleto Bancário*. Should only be present when the payment is made via bank invoice.
-        barCodeImageNumber:
-          type: string
-          description: The bank invoice number to generate a barcode (must follow any regulations/specifications for targeted countries). Should only be present when the payment is made via bank invoice.
-        tid:
-          type: string
-          description: Provider's unique identifier for the transaction.
-        nsu:
-          type:
-          - string
-          - 'null'
-          description: Provider's unique sequential number for the transaction.
-        acquirer:
-          type:
-          - string
-          - 'null'
-          description: Acquirer name (mostly used for card payments).
-        redirectUrl:
-          type: string
-          description: This field is deprecated, please use `paymentUrl` instead. The URL the end user needs to be redirected to (external authentication, 3DS, etc).
-        code:
-          type:
-          - string
-          - 'null'
-          description: Provider's operation/error code to be logged.
-        message:
-          type:
-          - string
-          - 'null'
-          description: Provider's operation/error message to be logged.
-        delayToAutoSettle:
-          type: integer
-          description: Total time (in seconds) before we make an automatic call to `/settlements`, regardless of whether the payment was approved by the merchant's anti-fraud provider or not. The maximum time allowed to wait for an auto capture is 604800 seconds (7 days).
-        delayToAutoSettleAfterAntifraud:
-          type: integer
-          description: Total time (in seconds) before we make an automatic call to `/settlements` after merchant's antifraud approval.
-        delayToCancel:
-          type: integer
-          description: 'Total time (in seconds) to wait for an authorization and make an automatic call to `/cancellations` to cancel the payment. The minimum value is 10 minutes (600 seconds). **NOTE 1**: If you set this field to a time period less than 24 hours (86399 seconds or less), the gateway will retry processing the payment every 1 hour. If you use a value of 24 hours (86400 seconds) or more in this field, the gateway will retry processing the payment every 4 hours. **NOTE 2**:  For `delayToCancel` values between 5 minutes and 1 hour (300 and 3600 seconds), or when payment is made by [PIX](https://developers.vtex.com/docs/guides/payments-integration-pix-instant-payments-in-brazil) (Brazilian instant payment method), retry calls will occur every 5 minutes.'
-        maxValue:
-          type: integer
-          description: The maximum value for this payment. This field allows changes to be made to transactions to settle larger amounts as a result of order changes.
-        connectorMetadata:
-          type: array
-          description: Array containing metadata fields sent from the provider to the payment gateway.
-          items:
-            type: object
-            description: Metadata fields information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
-              value:
-                type: string
-                description: The value of the metadata stored (limited to 200 characters).
-    CancelPaymentRequest:
-      required:
-      - paymentId
-      - requestId
-      - authorizationId
-      type: object
-      description: Cancel payment request body information.
-      properties:
-        paymentId:
-          type: string
-          description: VTEX payment identifier.
-          example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-        requestId:
-          type: string
-          description: VTEX request identifier.
-          example: D12D9B80972C462980F5067A3A126837
-        authorizationId:
-          type: string
-          description: Payment authorization identifier (in case it was authorized previous to the cancellation request).
-          example: '5784589'
-        tid:
-          type: string
-          description: Provider's unique identifier for the transaction.
-          example: '10022005181543584603'
-        transactionId:
-          type: string
-          description: VTEX transaction ID related to this payment.
-          example: D3AA1FC8372E430E8236649DB5EBD08E
-        nsu:
-          type: string
-          description: Provider's unique sequential number for the transaction.
-          example: NSU987432
-        sandboxMode:
-          type: boolean
-          description: Indicates whether or not this request is being sent from a sandbox environment.
-          example: false
-        merchantSettings:
-          type: array
-          description: Custom fields (for the given provider) which the merchant must fill. Each element of this array is a key-value pair.
-          items:
-            type: object
-            description: Merchant settings information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: The custom field name.
-                example: Public Merchant ID Test.
-              value:
-                type: string
-                description: The custom field value.
-                example: '1'
-        connectorMetadata:
-          type: array
-          description: Array containing metadata fields sent from the provider to the payment gateway.
-          items:
-            type: object
-            description: Metadata fields information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
-                example: MetadataName
-              value:
-                type: string
-                description: The value of the metadata stored (limited to 200 characters).
-                example: MetadataValue
-    InboundRequest_BETA_Request:
-      required:
-      - requestId
-      - transactionId
-      - paymentId
-      - authorizationId
-      - tid
-      - nsu
-      - requestData
-      type: object
-      description: Inbound request information.
-      properties:
-        requestId:
-          type: string
-          description: The unique identifier for this request to ensure its idempotency.
-          example: LA4E20D3B4E07B7E871F5B5BC9F91
-        transactionId:
-          type: string
-          description: VTEX transaction ID related to this payment.
-          example: D3AA1FC8372E430E8236649DB5EBD08E
-        paymentId:
-          type: string
-          description: VTEX payment ID from this payment.
-          example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-        authorizationId:
-          type: string
-          description: Provider's unique identifier for the authorization.
-          example: AUT123567
-        nsu:
-          type: string
-          description: Provider's unique sequential number for the transaction.
-          example: NSU987432
-        tid:
-          type: string
-          description: Provider's unique identifier for the transaction.
-          example: '10022005181543584603'
-        requestData:
-          $ref: '#/components/schemas/RequestData'
-        merchantSettings:
-          type: array
-          description: Custom fields (for the given provider) which the merchant must fill. Each element of this array is a key-value pair.
-          items:
-            type: object
-            description: Merchant settings information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: The custom field name.
-                example: Public Merchant ID Test.
-              value:
-                type: string
-                description: The custom field value.
-                example: '1'
-        connectorMetadata:
-          type: array
-          description: Array containing metadata fields sent from the provider to the payment gateway.
-          items:
-            type: object
-            description: Metadata fields information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
-                example: MetadataName
-              value:
-                type: string
-                description: The value of the metadata stored (limited to 200 characters).
-                example: MetadataValue
-    Fail-GenericError1:
-      required:
-      - paymentId
-      - cancellationId
-      - code
-      - message
-      - requestId
-      type: object
-      description: Cancellation failure information.
-      properties:
-        paymentId:
-          type: string
-          description: The same `paymentId` sent in the request.
-        cancellationId:
-          type:
-          - string
-          - 'null'
-          description: Provider's cancellation identifier. If the operation has failed you **MUST** return `null`.
-        code:
-          type: string
-          description: Provider's operation/error code to be logged. Return `cancel-manually` if you do not support this operation, so we can send a notification to the merchant.
-        message:
-          type: string
-          description: Provider's operation/error message to be logged.
-        requestId:
-          type: string
-          description: The same `requestId` sent in the request.
-    Success3:
-      required:
-      - paymentId
-      - refundId
-      - value
-      - code
-      - message
-      - requestId
-      type: object
-      description: Refund payment response body information.
-      properties:
-        paymentId:
-          type: string
-          description: The same `paymentId` sent in the request.
-        refundId:
-          type: string
-          description: Provider's refund identifier. If the operation has failed you **MUST** return `null`.
-        value:
-          type: number
-          description: The amount that was refunded. If the operation has failed you **MUST** return `0`.
-        code:
-          type:
-          - string
-          - 'null'
-          description: Provider's operation/error code to be logged. Return `refund-manually` if you do not support this operation, so we can send a notification to the merchant.
-        message:
-          type: string
-          description: Provider's operation/error message to be logged.
-        requestId:
-          type: string
-          description: The same `requestId` sent in the request.
-        connectorMetadata:
-          type: array
-          description: Array containing metadata fields sent from the provider to the payment gateway.
-          items:
-            type: object
-            description: Metadata fields information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
-              value:
-                type: string
-                description: The value of the metadata stored (limited to 200 characters).
     Success-Manifest:
       required:
       - paymentMethods
@@ -2562,23 +2197,249 @@ components:
               value:
                 type: string
                 description: The value of the metadata stored (limited to 200 characters).
-    Fail-BadRequest:
+    InboundRequest_BETA_Request:
       required:
-      - status
+      - requestId
+      - transactionId
+      - paymentId
+      - authorizationId
+      - tid
+      - nsu
+      - requestData
+      type: object
+      description: Inbound request information.
+      properties:
+        requestId:
+          type: string
+          description: The unique identifier for this request to ensure its idempotency.
+          example: LA4E20D3B4E07B7E871F5B5BC9F91
+        transactionId:
+          type: string
+          description: VTEX transaction ID related to this payment.
+          example: D3AA1FC8372E430E8236649DB5EBD08E
+        paymentId:
+          type: string
+          description: VTEX payment ID from this payment.
+          example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
+        authorizationId:
+          type: string
+          description: Provider's unique identifier for the authorization.
+          example: AUT123567
+        nsu:
+          type: string
+          description: Provider's unique sequential number for the transaction.
+          example: NSU987432
+        tid:
+          type: string
+          description: Provider's unique identifier for the transaction.
+          example: '10022005181543584603'
+        requestData:
+          $ref: '#/components/schemas/RequestData'
+        merchantSettings:
+          type: array
+          description: Custom fields (for the given provider) which the merchant must fill. Each element of this array is a key-value pair.
+          items:
+            type: object
+            description: Merchant settings information.
+            required:
+            - name
+            - value
+            properties:
+              name:
+                type: string
+                description: The custom field name.
+                example: Public Merchant ID Test.
+              value:
+                type: string
+                description: The custom field value.
+                example: '1'
+        connectorMetadata:
+          type: array
+          description: Array containing metadata fields sent from the provider to the payment gateway.
+          items:
+            type: object
+            description: Metadata fields information.
+            required:
+            - name
+            - value
+            properties:
+              name:
+                type: string
+                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
+                example: MetadataName
+              value:
+                type: string
+                description: The value of the metadata stored (limited to 200 characters).
+                example: MetadataValue
+    ResponseData:
+      required:
+      - statusCode
+      - contentType
+      - content
+      type: object
+      description: Response data information.
+      properties:
+        statusCode:
+          type: integer
+          description: Your desired status code.
+        contentType:
+          type: string
+          description: Your desired content-type.
+        content:
+          type: string
+          description: Your desired content body.
+    RequestData:
+      required:
+      - body
+      type: object
+      description: Request data information.
+      properties:
+        body:
+          type: string
+          description: Original request body information.
+          example: '{{originalRequestBody}}'
+    CancelPaymentRequest:
+      required:
+      - paymentId
+      - requestId
+      - authorizationId
+      type: object
+      description: Cancel payment request body information.
+      properties:
+        paymentId:
+          type: string
+          description: VTEX payment identifier.
+          example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
+        requestId:
+          type: string
+          description: VTEX request identifier.
+          example: D12D9B80972C462980F5067A3A126837
+        authorizationId:
+          type: string
+          description: Payment authorization identifier (in case it was authorized previous to the cancellation request).
+          example: '5784589'
+        tid:
+          type: string
+          description: Provider's unique identifier for the transaction.
+          example: '10022005181543584603'
+        transactionId:
+          type: string
+          description: VTEX transaction ID related to this payment.
+          example: D3AA1FC8372E430E8236649DB5EBD08E
+        nsu:
+          type: string
+          description: Provider's unique sequential number for the transaction.
+          example: NSU987432
+        sandboxMode:
+          type: boolean
+          description: Indicates whether or not this request is being sent from a sandbox environment.
+          example: false
+        merchantSettings:
+          type: array
+          description: Custom fields (for the given provider) which the merchant must fill. Each element of this array is a key-value pair.
+          items:
+            type: object
+            description: Merchant settings information.
+            required:
+            - name
+            - value
+            properties:
+              name:
+                type: string
+                description: The custom field name.
+                example: Public Merchant ID Test.
+              value:
+                type: string
+                description: The custom field value.
+                example: '1'
+        connectorMetadata:
+          type: array
+          description: Array containing metadata fields sent from the provider to the payment gateway.
+          items:
+            type: object
+            description: Metadata fields information.
+            required:
+            - name
+            - value
+            properties:
+              name:
+                type: string
+                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
+                example: MetadataName
+              value:
+                type: string
+                description: The value of the metadata stored (limited to 200 characters).
+                example: MetadataValue
+    Success1:
+      required:
+      - paymentId
+      - cancellationId
       - code
       - message
+      - requestId
       type: object
-      description: Bad request information.
+      description: Cancel payment response body information.
       properties:
-        status:
+        paymentId:
           type: string
-          description: The Provider's status for this payment.
+          description: The same `paymentId` sent in the request.
+        cancellationId:
+          type: string
+          description: Provider's cancellation identifier. If the operation has failed you **MUST** return `null`.
         code:
-          type: string
-          description: Provider's operation/error code to be logged.
+          type:
+          - string
+          - 'null'
+          description: Provider's operation/error code to be logged. Return `cancel-manually` if you do not support this operation, so we can send a notification to the merchant.
         message:
           type: string
           description: Provider's operation/error message to be logged.
+        requestId:
+          type: string
+          description: The same `requestId` sent in the request.
+        connectorMetadata:
+          type: array
+          description: Array containing metadata fields sent from the provider to the payment gateway.
+          items:
+            type: object
+            description: Metadata fields information.
+            required:
+            - name
+            - value
+            properties:
+              name:
+                type: string
+                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
+              value:
+                type: string
+                description: The value of the metadata stored (limited to 200 characters).
+    Fail-GenericError1:
+      required:
+      - paymentId
+      - cancellationId
+      - code
+      - message
+      - requestId
+      type: object
+      description: Cancellation failure information.
+      properties:
+        paymentId:
+          type: string
+          description: The same `paymentId` sent in the request.
+        cancellationId:
+          type:
+          - string
+          - 'null'
+          description: Provider's cancellation identifier. If the operation has failed you **MUST** return `null`.
+        code:
+          type: string
+          description: Provider's operation/error code to be logged. Return `cancel-manually` if you do not support this operation, so we can send a notification to the merchant.
+        message:
+          type: string
+          description: Provider's operation/error message to be logged.
+        requestId:
+          type: string
+          description: The same `requestId` sent in the request.
     SettlePayment:
       required:
       - transactionId
@@ -2719,16 +2580,172 @@ components:
         connectorMetadata:
         - name: MetadataName
           value: MetadataValue
-    RequestData:
+    Fail-BadRequest:
       required:
-      - body
+      - status
+      - code
+      - message
       type: object
-      description: Request data information.
+      description: Bad request information.
       properties:
-        body:
+        status:
           type: string
-          description: Original request body information.
-          example: '{{originalRequestBody}}'
+          description: The Provider's status for this payment.
+        code:
+          type: string
+          description: Provider's operation/error code to be logged.
+        message:
+          type: string
+          description: Provider's operation/error message to be logged.
+    Fail-GenericError3:
+      required:
+      - paymentId
+      - refundId
+      - value
+      - code
+      - message
+      - requestId
+      type: object
+      description: Internal server error information.
+      properties:
+        paymentId:
+          type: string
+          description: The same `paymentId` sent in the request.
+        refundId:
+          type:
+          - string
+          - 'null'
+          description: Provider's refund identifier. If the operation has failed you **MUST** return `null`.
+        value:
+          type: integer
+          description: The amount to be settled.
+        code:
+          type: string
+          description: Provider's operation/error code to be logged. Return `refund-manually` if you do not support this operation, so we can send a notification to the merchant.
+        message:
+          type: string
+          description: Provider's operation/error message to be logged.
+        requestId:
+          type: string
+          description: The same `requestId` sent in the request.
+    Success3:
+      required:
+      - paymentId
+      - refundId
+      - value
+      - code
+      - message
+      - requestId
+      type: object
+      description: Refund payment response body information.
+      properties:
+        paymentId:
+          type: string
+          description: The same `paymentId` sent in the request.
+        refundId:
+          type: string
+          description: Provider's refund identifier. If the operation has failed you **MUST** return `null`.
+        value:
+          type: number
+          description: The amount that was refunded. If the operation has failed you **MUST** return `0`.
+        code:
+          type:
+          - string
+          - 'null'
+          description: Provider's operation/error code to be logged. Return `refund-manually` if you do not support this operation, so we can send a notification to the merchant.
+        message:
+          type: string
+          description: Provider's operation/error message to be logged.
+        requestId:
+          type: string
+          description: The same `requestId` sent in the request.
+        connectorMetadata:
+          type: array
+          description: Array containing metadata fields sent from the provider to the payment gateway.
+          items:
+            type: object
+            description: Metadata fields information.
+            required:
+            - name
+            - value
+            properties:
+              name:
+                type: string
+                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
+              value:
+                type: string
+                description: The value of the metadata stored (limited to 200 characters).
+    Success4:
+      required:
+      - requestId
+      - paymentId
+      - responseData
+      type: object
+      description: Inbound Request response body information.
+      properties:
+        requestId:
+          type: string
+          description: The same `requestId` sent in the request.
+        paymentId:
+          type: string
+          description: The same `paymentId` sent in the request.
+        code:
+          type: string
+          description: Provider's operation/error code to be logged.
+        message:
+          type: string
+          description: Provider's operation/error message to be logged.
+        responseData:
+          $ref: '#/components/schemas/ResponseData'
+        connectorMetadata:
+          type: array
+          description: Array containing metadata fields sent from the provider to the payment gateway.
+          items:
+            type: object
+            description: Metadata fields information.
+            required:
+            - name
+            - value
+            properties:
+              name:
+                type: string
+                description: The name of the metadata to be stored in the gateway (limited to 20 characters).
+                example: MetadataName
+              value:
+                type: string
+                description: The value of the metadata stored (limited to 200 characters).
+                example: MetadataValue
+    Fail-GenericError2:
+      required:
+      - paymentId
+      - settleId
+      - value
+      - code
+      - message
+      - requestId
+      type: object
+      description: Internal server error information.
+      properties:
+        paymentId:
+          type: string
+          description: The same `paymentId` sent in the request.
+        settleId:
+          type:
+          - string
+          - 'null'
+          description: VTEX identifier for this settlement.
+        value:
+          type: integer
+          description: The amount to be settled.
+        code:
+          type: string
+          description: Provider's operation/error code to be logged.
+        message:
+          type: string
+          description: Provider's operation/error message to be logged.
+        requestId:
+          type: string
+          description: The same `requestId` sent in the request.
     RefundPayment:
       required:
       - requestId
@@ -2872,45 +2889,107 @@ components:
         connectorMetadata:
         - name: MetadataName
           value: MetadataValue
-    ResponseData:
+    Success-Approved:
       required:
-      - statusCode
-      - contentType
-      - content
-      type: object
-      description: Response data information.
-      properties:
-        statusCode:
-          type: integer
-          description: Your desired status code.
-        contentType:
-          type: string
-          description: Your desired content-type.
-        content:
-          type: string
-          description: Your desired content body.
-    Success4:
-      required:
-      - requestId
       - paymentId
-      - responseData
+      - status
+      - authorizationId
+      - tid
+      - nsu
+      - acquirer
+      - delayToAutoSettle
+      - delayToAutoSettleAfterAntifraud
+      - delayToCancel
       type: object
-      description: Inbound Request response body information.
+      description: Create payment response body information.
       properties:
-        requestId:
-          type: string
-          description: The same `requestId` sent in the request.
         paymentId:
           type: string
-          description: The same `paymentId` sent in the request.
-        code:
+          description: VTEX identifier for this payment. The same sent in the request.
+        status:
           type: string
+          description: 'The Provider''s status for this payment. Must be one of three values:
+
+
+            - `approved`
+
+            - `denied`
+
+            - `undefined`.'
+        authorizationId:
+          type: string
+          description: Provider's unique identifier for the authorization. Should be sent when the payment is authorized. In other statuses, it should be absent or `null`.
+        bankIssueInvoiceId:
+          type: string
+          description: This field is deprecated, please use `paymentUrl` instead. The bank invoice URL to be presented to the end user.
+        paymentUrl:
+          type:
+          - string
+          - 'null'
+          description: When the payment is via bank invoice, this should be the invoice URL to be presented to the user. If the payment requires the redirection of the user, this should be the URL to redirect the user. If neither is the case, then this should be absent.
+        paymentAppData:
+          type: object
+          description: Object which indicates that a [Payment App](https://developers.vtex.com/docs/guides/payments-integration-payment-app) is needed to finish the payment. This object contains the data to be used by the Payment App.
+          required:
+          - appName
+          - payload
+          properties:
+            appName:
+              type: string
+              description: Indicates which VTEX IO app that will handle the payment flow at Checkout.
+            payload:
+              type: string
+              description: The payload that will be sent to your app, like a serialized JSON, for example.
+        identificationNumber:
+          type: string
+          description: The bank invoice unformatted identification number. Should only be present when the payment is made via bank invoice.
+        identificationNumberFormatted:
+          type: string
+          description: The bank invoice formatted identification number that will be presented to the end user.
+        barCodeImageType:
+          type: string
+          description: The bank invoice barcode image type. For instance, "i25" for Brazilian *Boleto Bancário*. Should only be present when the payment is made via bank invoice.
+        barCodeImageNumber:
+          type: string
+          description: The bank invoice number to generate a barcode (must follow any regulations/specifications for targeted countries). Should only be present when the payment is made via bank invoice.
+        tid:
+          type: string
+          description: Provider's unique identifier for the transaction.
+        nsu:
+          type:
+          - string
+          - 'null'
+          description: Provider's unique sequential number for the transaction.
+        acquirer:
+          type:
+          - string
+          - 'null'
+          description: Acquirer name (mostly used for card payments).
+        redirectUrl:
+          type: string
+          description: This field is deprecated, please use `paymentUrl` instead. The URL the end user needs to be redirected to (external authentication, 3DS, etc).
+        code:
+          type:
+          - string
+          - 'null'
           description: Provider's operation/error code to be logged.
         message:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Provider's operation/error message to be logged.
-        responseData:
-          $ref: '#/components/schemas/ResponseData'
+        delayToAutoSettle:
+          type: integer
+          description: Total time (in seconds) before we make an automatic call to `/settlements`, regardless of whether the payment was approved by the merchant's anti-fraud provider or not. The maximum time allowed to wait for an auto capture is 604800 seconds (7 days).
+        delayToAutoSettleAfterAntifraud:
+          type: integer
+          description: Total time (in seconds) before we make an automatic call to `/settlements` after merchant's antifraud approval.
+        delayToCancel:
+          type: integer
+          description: 'Total time (in seconds) to wait for an authorization and make an automatic call to `/cancellations` to cancel the payment. The minimum value is 10 minutes (600 seconds). **NOTE 1**: If you set this field to a time period less than 24 hours (86399 seconds or less), the gateway will retry processing the payment every 1 hour. If you use a value of 24 hours (86400 seconds) or more in this field, the gateway will retry processing the payment every 4 hours. **NOTE 2**:  For `delayToCancel` values between 5 minutes and 1 hour (300 and 3600 seconds), or when payment is made by [PIX](https://developers.vtex.com/docs/guides/payments-integration-pix-instant-payments-in-brazil) (Brazilian instant payment method), retry calls will occur every 5 minutes.'
+        maxValue:
+          type: integer
+          description: The maximum value for this payment. This field allows changes to be made to transactions to settle larger amounts as a result of order changes.
         connectorMetadata:
           type: array
           description: Array containing metadata fields sent from the provider to the payment gateway.
@@ -2924,88 +3003,9 @@ components:
               name:
                 type: string
                 description: The name of the metadata to be stored in the gateway (limited to 20 characters).
-                example: MetadataName
               value:
                 type: string
                 description: The value of the metadata stored (limited to 200 characters).
-                example: MetadataValue
-    Fail-GenericError2:
-      required:
-      - paymentId
-      - settleId
-      - value
-      - code
-      - message
-      - requestId
-      type: object
-      description: Internal server error information.
-      properties:
-        paymentId:
-          type: string
-          description: The same `paymentId` sent in the request.
-        settleId:
-          type:
-          - string
-          - 'null'
-          description: VTEX identifier for this settlement.
-        value:
-          type: integer
-          description: The amount to be settled.
-        code:
-          type: string
-          description: Provider's operation/error code to be logged.
-        message:
-          type: string
-          description: Provider's operation/error message to be logged.
-        requestId:
-          type: string
-          description: The same `requestId` sent in the request.
-  parameters:
-    paymentId:
-      name: paymentId
-      in: path
-      description: VTEX payment identifier.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: F5C1A4E20D3B4E07B7E871F5B5BC9F91
-    X-PROVIDER-API-AppKey:
-      name: X-PROVIDER-API-AppKey
-      in: header
-      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppKey}}'
-    X-PROVIDER-API-AppToken:
-      name: X-PROVIDER-API-AppToken
-      in: header
-      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX). To use this header as authorization, check that the `usesProviderHeadersName` field is set to `true` in the payment provider's `configuration.json`. To check the `configuration.json` file, access the route {{connector}}/paymentProvider/configuration.json
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppToken}}'
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

@@ -8110,15 +8110,6 @@ paths:
           default: vtexcommercestable
 components:
   parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     _where:
       name: _where
       in: query
@@ -8128,24 +8119,14 @@ components:
       schema:
         type: string
         example: firstName is not null
-    _fields:
-      name: _fields
-      in: query
-      description: Fields that should be returned by document. Separate fields' names with commas. For example `_fields=email,firstName,document`. You can also use `_fields=_all` to fetch all fields.
-      required: false
-      style: form
+    dataEntityName:
+      name: dataEntityName
+      in: path
+      required: true
+      description: Name of the data entity.
       schema:
         type: string
-        example: email,firstName,document
-    _schema:
-      name: _schema
-      in: query
-      description: Name of the [schema](https://developers.vtex.com/docs/guides/master-data-schema-lifecycle) that the document complies with. This field is required when using `_where` or `_fields` query parameters.
-      required: false
-      style: form
-      schema:
-        type: string
-        example: schema
+        example: Newsletter
     _sort:
       name: _sort
       in: query
@@ -8155,23 +8136,24 @@ components:
       schema:
         type: string
         example: firstName ASC
-    dataEntityName:
-      name: dataEntityName
-      in: path
-      required: true
-      description: Name of the data entity.
-      schema:
-        type: string
-        example: Newsletter
-    REST-Range:
-      name: REST-Range
+    Accept:
+      name: Accept
       in: header
-      description: Defines the collection of documents to be returned. A range within the collection limited by 100 documents per query.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
         type: string
-        example: resources=0-10
+        example: application/json
+    _schema:
+      name: _schema
+      in: query
+      description: Name of the [schema](https://developers.vtex.com/docs/guides/master-data-schema-lifecycle) that the document complies with. This field is required when using `_where` or `_fields` query parameters.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: schema
     Content-Type:
       name: Content-Type
       in: header
@@ -8181,6 +8163,24 @@ components:
       schema:
         type: string
         example: application/json
+    _fields:
+      name: _fields
+      in: query
+      description: Fields that should be returned by document. Separate fields' names with commas. For example `_fields=email,firstName,document`. You can also use `_fields=_all` to fetch all fields.
+      required: false
+      style: form
+      schema:
+        type: string
+        example: email,firstName,document
+    REST-Range:
+      name: REST-Range
+      in: header
+      description: Defines the collection of documents to be returned. A range within the collection limited by 100 documents per query.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: resources=0-10
   schemas:
     Using_fields_all:
       title: Using_fields=_all

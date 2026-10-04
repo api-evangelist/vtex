@@ -369,6 +369,52 @@ paths:
               - name: Promissory
       deprecated: false
 components:
+  parameters:
+    X-PROVIDER-API-AppKey:
+      name: X-PROVIDER-API-AppKey
+      in: header
+      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX).
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppKey}}'
+    Accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    transactions.Id:
+      name: transactions.Id
+      in: path
+      description: VTEX transaction ID. This parameter is the same `id` sent in the request body of the [Send Anti-fraud Data endpoint](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions).
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: D3AA1FC8372E430E8236649DB5EBD08E
+    X-PROVIDER-API-AppToken:
+      name: X-PROVIDER-API-AppToken
+      in: header
+      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX).
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{{X-PROVIDER-API-AppToken}}'
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
     SendAntifraudData:
       required:
@@ -414,368 +460,6 @@ components:
           example: automatic
         responses:
           $ref: '#/components/schemas/Responses'
-    Success:
-      title: Success
-      required:
-      - customFields
-      type: object
-      properties:
-        cardholderDocument:
-          type: string
-          description: 'Indicates the requirement of cardholder document in card transactions. The field has three possible values: `required`, `optional`, or `unused`.'
-        customFields:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-          description: Custom fields information.
-      example:
-        customFields:
-        - name: ApiKey
-          type: text
-        - name: AnalysisLocation
-          type: select
-          options:
-          - text: MEX
-            value: Latin America
-          - text: USA
-            value: United States
-    Item:
-      description: Item information.
-      required:
-      - id
-      - name
-      - price
-      - quantity
-      - deliveryType
-      - deliverySlaInMinutes
-      - categoryId
-      - categoryName
-      - discount
-      - sellerId
-      type: object
-      properties:
-        id:
-          type: string
-          description: SKU ID.
-          example: '132981'
-        name:
-          type: string
-          description: Product name.
-          example: Shirt
-        price:
-          type: number
-          description: Item price.
-          example: 20.51
-        quantity:
-          type: integer
-          description: Quantity of this item in the cart.
-          example: 2
-        deliveryType:
-          type: string
-          description: Type of delivery configured by the store.
-          example: Normal
-        deliverySlaInMinutes:
-          type: integer
-          description: Each item can have a separate shipping SLA in minutes.
-          example: 4320
-        categoryId:
-          type: string
-          description: Category ID for the item. Configured by each store.
-          example: '111'
-        categoryName:
-          type: string
-          description: Category name for the Item. Configured by each store.
-          example: Electronica
-        discount:
-          type: number
-          description: Discount applied on item(s) two decimal places.
-          example: 1.99
-        sellerId:
-          type: string
-          description: Discount applied on item(s), with two decimal places separated by `.`.
-          example: vtexargentina
-    ApproveAntifraudAnalysisResponse:
-      required:
-      - id
-      - status
-      - fraudRiskPercentage
-      - analysisType
-      - responses
-      type: object
-      properties:
-        id:
-          type: string
-          description: VTEX transaction ID. The ID of this transaction must be in the response.
-        status:
-          type: string
-          description: 'Transaction status from provider. Must be one of the values: `approved`, `denied` or `undefined`.'
-        fraudRiskPercentage:
-          type: number
-          description: Fraud risk percentage.
-        analysisType:
-          type: string
-          description: Analysis type. Valid values are `automatic` or `manual`.
-        responses:
-          type:
-          - string
-          - 'null'
-          description: Value dictionary to add custom responses from analysis.
-    Shipping:
-      description: Shipping information.
-      required:
-      - value
-      - estimatedDate
-      - address
-      type: object
-      properties:
-        value:
-          type: number
-          description: Shipping value with two decimal places.
-          example: 8.41
-        estimatedDate:
-          type: string
-          description: Estimated shipping date ISO 8601.
-          example: '2017-08-02T14:46:47'
-        address:
-          $ref: '#/components/schemas/Address'
-    Payment:
-      description: Payment information.
-      required:
-      - id
-      - method
-      - value
-      - currencyIso4217
-      - installments
-      type: object
-      properties:
-        id:
-          type: string
-          description: Payment ID unique identifier in VTEX.
-          example: 2D00FEBB
-        method:
-          type: string
-          description: Payment method used for the buyer.
-          example: CreditCard
-        name:
-          type: string
-          description: Payment name used for the buyer. This name could be the brand card or the VTEX payment method.
-          example: Visa
-        value:
-          type: number
-          description: Payment value, with two decimal places separated by `.`.
-          example: 63.98
-        currencyIso4217:
-          type: string
-          description: Currency used in each payment in the transaction, in ISO 4217 format.
-          example: BRL
-        installments:
-          type: integer
-          description: Number of installments.
-          example: 3
-        details:
-          $ref: '#/components/schemas/Details'
-    GetPaymentMethodsSupported:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Payment method name.
-    GetAntifraudStatus:
-      required:
-      - id
-      - tid
-      - status
-      - fraudRiskPercentage
-      - analysisType
-      - responses
-      type: object
-      properties:
-        id:
-          type: string
-          description: VTEX transaction ID. The ID of this transaction must be in the response.
-        tid:
-          type: string
-          description: Provider transaction ID. The ID of this transaction must be in the response. The anti-fraud provider must generate a unique transaction ID.
-        status:
-          type: string
-          description: 'Transaction status from provider. Must be one of the values: `approved`, `denied` or `undefined`.'
-        fraudRiskPercentage:
-          type: number
-          description: Fraud risk percentage.
-        analysisType:
-          type: string
-          description: Analysis type. Valid values are `automatic` or `manual`.
-        responses:
-          $ref: '#/components/schemas/Responses'
-    MiniCart:
-      description: Minicart information.
-      required:
-      - buyer
-      - shipping
-      - items
-      - taxValue
-      - listRegistry
-      type: object
-      properties:
-        buyer:
-          $ref: '#/components/schemas/Buyer'
-        shipping:
-          $ref: '#/components/schemas/Shipping'
-        items:
-          type: array
-          description: Items information.
-          items:
-            $ref: '#/components/schemas/Item'
-        taxValue:
-          type: number
-          description: Total tax value.
-          example: 5.58
-        listRegistry:
-          $ref: '#/components/schemas/ListRegistry'
-    ListRegistry:
-      description: ListRegistry information.
-      required:
-      - name
-      - deliveryToOwner
-      type: object
-      properties:
-        name:
-          type: string
-          description: List name defined by the store.
-          example: My gift list.
-        deliveryToOwner:
-          type: boolean
-          description: Defines if the order will be delivered to list creator (`true`) or not (`false`).
-          example: false
-    Responses:
-      required:
-      - foo
-      - custom
-      type: object
-      description: Responses information.
-      properties:
-        foo:
-          type: string
-          description: Any foo information.
-          example: anyFoo
-        custom:
-          type: string
-          description: Any custom value.
-          example: customAnyValue
-    Address:
-      description: Address information.
-      required:
-      - country
-      - street
-      - number
-      - complement
-      - neighborhood
-      - postalCode
-      - city
-      - state
-      type: object
-      properties:
-        country:
-          type: string
-          description: Buyer address country.
-          example: BRA
-        street:
-          type: string
-          description: Buyer address street.
-          example: Rua Praia de Botafogo
-        number:
-          type: string
-          description: Buyer address number.
-          example: '518'
-        complement:
-          type: string
-          description: Buyer address complement.
-          example: 2o. andar
-        neighborhood:
-          type: string
-          description: Buyer address neighborhood.
-          example: Botafogo
-        postalCode:
-          type: string
-          description: Buyer address postal code.
-          example: 22250-040
-        city:
-          type: string
-          description: Buyer address city.
-          example: Rio de Janeiro
-        state:
-          type: string
-          description: Buyer address state.
-          example: RJ
-    Details:
-      description: Details information.
-      required:
-      - bin
-      - lastDigits
-      - holder
-      - address
-      type: object
-      properties:
-        bin:
-          type: string
-          description: Abbreviation for 'Bank Identification Number', which is a code that identifies the institution responsible for issuing the credit card.
-          example: '507860'
-        lastDigits:
-          type: string
-          description: Credit card identifier number last digits.
-          example: '2798'
-        holder:
-          type: string
-          description: Credit card owner.
-          example: John Doe
-        address:
-          $ref: '#/components/schemas/Address'
-    Buyer:
-      description: Buyer information.
-      required:
-      - id
-      - firstName
-      - lastName
-      - document
-      - documentType
-      - email
-      - phone
-      - address
-      type: object
-      properties:
-        id:
-          type: string
-          description: VTEX buyer ID. The unique identifier of the buyer.
-          example: c1245228-1c68-11e6-94ac-0afa86a846a5
-        firstName:
-          type: string
-          description: First name of the buyer.
-          example: John
-        lastName:
-          type: string
-          description: Last name of the buyer.
-          example: Doe
-        document:
-          type: string
-          description: Document number of the buyer.
-          example: 012.345.678-90
-        documentType:
-          type: string
-          description: Type of document of the buyer, which depends on their country.
-          example: CPF
-        email:
-          type: string
-          description: Email of the buyer.
-          example: john@doe.com
-        phone:
-          type: string
-          description: Phone number of the buyer.
-          example: '+5521987654321'
-        address:
-          $ref: '#/components/schemas/Address'
     SendAntifraudDataRequest:
       required:
       - id
@@ -844,6 +528,368 @@ components:
                 type: string
                 description: Custom field name.
                 example: BRL
+    ApproveAntifraudAnalysisResponse:
+      required:
+      - id
+      - status
+      - fraudRiskPercentage
+      - analysisType
+      - responses
+      type: object
+      properties:
+        id:
+          type: string
+          description: VTEX transaction ID. The ID of this transaction must be in the response.
+        status:
+          type: string
+          description: 'Transaction status from provider. Must be one of the values: `approved`, `denied` or `undefined`.'
+        fraudRiskPercentage:
+          type: number
+          description: Fraud risk percentage.
+        analysisType:
+          type: string
+          description: Analysis type. Valid values are `automatic` or `manual`.
+        responses:
+          type:
+          - string
+          - 'null'
+          description: Value dictionary to add custom responses from analysis.
+    Item:
+      description: Item information.
+      required:
+      - id
+      - name
+      - price
+      - quantity
+      - deliveryType
+      - deliverySlaInMinutes
+      - categoryId
+      - categoryName
+      - discount
+      - sellerId
+      type: object
+      properties:
+        id:
+          type: string
+          description: SKU ID.
+          example: '132981'
+        name:
+          type: string
+          description: Product name.
+          example: Shirt
+        price:
+          type: number
+          description: Item price.
+          example: 20.51
+        quantity:
+          type: integer
+          description: Quantity of this item in the cart.
+          example: 2
+        deliveryType:
+          type: string
+          description: Type of delivery configured by the store.
+          example: Normal
+        deliverySlaInMinutes:
+          type: integer
+          description: Each item can have a separate shipping SLA in minutes.
+          example: 4320
+        categoryId:
+          type: string
+          description: Category ID for the item. Configured by each store.
+          example: '111'
+        categoryName:
+          type: string
+          description: Category name for the Item. Configured by each store.
+          example: Electronica
+        discount:
+          type: number
+          description: Discount applied on item(s) two decimal places.
+          example: 1.99
+        sellerId:
+          type: string
+          description: Discount applied on item(s), with two decimal places separated by `.`.
+          example: vtexargentina
+    Payment:
+      description: Payment information.
+      required:
+      - id
+      - method
+      - value
+      - currencyIso4217
+      - installments
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment ID unique identifier in VTEX.
+          example: 2D00FEBB
+        method:
+          type: string
+          description: Payment method used for the buyer.
+          example: CreditCard
+        name:
+          type: string
+          description: Payment name used for the buyer. This name could be the brand card or the VTEX payment method.
+          example: Visa
+        value:
+          type: number
+          description: Payment value, with two decimal places separated by `.`.
+          example: 63.98
+        currencyIso4217:
+          type: string
+          description: Currency used in each payment in the transaction, in ISO 4217 format.
+          example: BRL
+        installments:
+          type: integer
+          description: Number of installments.
+          example: 3
+        details:
+          $ref: '#/components/schemas/Details'
+    Success:
+      title: Success
+      required:
+      - customFields
+      type: object
+      properties:
+        cardholderDocument:
+          type: string
+          description: 'Indicates the requirement of cardholder document in card transactions. The field has three possible values: `required`, `optional`, or `unused`.'
+        customFields:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+          description: Custom fields information.
+      example:
+        customFields:
+        - name: ApiKey
+          type: text
+        - name: AnalysisLocation
+          type: select
+          options:
+          - text: MEX
+            value: Latin America
+          - text: USA
+            value: United States
+    MiniCart:
+      description: Minicart information.
+      required:
+      - buyer
+      - shipping
+      - items
+      - taxValue
+      - listRegistry
+      type: object
+      properties:
+        buyer:
+          $ref: '#/components/schemas/Buyer'
+        shipping:
+          $ref: '#/components/schemas/Shipping'
+        items:
+          type: array
+          description: Items information.
+          items:
+            $ref: '#/components/schemas/Item'
+        taxValue:
+          type: number
+          description: Total tax value.
+          example: 5.58
+        listRegistry:
+          $ref: '#/components/schemas/ListRegistry'
+    ListRegistry:
+      description: ListRegistry information.
+      required:
+      - name
+      - deliveryToOwner
+      type: object
+      properties:
+        name:
+          type: string
+          description: List name defined by the store.
+          example: My gift list.
+        deliveryToOwner:
+          type: boolean
+          description: Defines if the order will be delivered to list creator (`true`) or not (`false`).
+          example: false
+    Shipping:
+      description: Shipping information.
+      required:
+      - value
+      - estimatedDate
+      - address
+      type: object
+      properties:
+        value:
+          type: number
+          description: Shipping value with two decimal places.
+          example: 8.41
+        estimatedDate:
+          type: string
+          description: Estimated shipping date ISO 8601.
+          example: '2017-08-02T14:46:47'
+        address:
+          $ref: '#/components/schemas/Address'
+    Responses:
+      required:
+      - foo
+      - custom
+      type: object
+      description: Responses information.
+      properties:
+        foo:
+          type: string
+          description: Any foo information.
+          example: anyFoo
+        custom:
+          type: string
+          description: Any custom value.
+          example: customAnyValue
+    Address:
+      description: Address information.
+      required:
+      - country
+      - street
+      - number
+      - complement
+      - neighborhood
+      - postalCode
+      - city
+      - state
+      type: object
+      properties:
+        country:
+          type: string
+          description: Buyer address country.
+          example: BRA
+        street:
+          type: string
+          description: Buyer address street.
+          example: Rua Praia de Botafogo
+        number:
+          type: string
+          description: Buyer address number.
+          example: '518'
+        complement:
+          type: string
+          description: Buyer address complement.
+          example: 2o. andar
+        neighborhood:
+          type: string
+          description: Buyer address neighborhood.
+          example: Botafogo
+        postalCode:
+          type: string
+          description: Buyer address postal code.
+          example: 22250-040
+        city:
+          type: string
+          description: Buyer address city.
+          example: Rio de Janeiro
+        state:
+          type: string
+          description: Buyer address state.
+          example: RJ
+    GetAntifraudStatus:
+      required:
+      - id
+      - tid
+      - status
+      - fraudRiskPercentage
+      - analysisType
+      - responses
+      type: object
+      properties:
+        id:
+          type: string
+          description: VTEX transaction ID. The ID of this transaction must be in the response.
+        tid:
+          type: string
+          description: Provider transaction ID. The ID of this transaction must be in the response. The anti-fraud provider must generate a unique transaction ID.
+        status:
+          type: string
+          description: 'Transaction status from provider. Must be one of the values: `approved`, `denied` or `undefined`.'
+        fraudRiskPercentage:
+          type: number
+          description: Fraud risk percentage.
+        analysisType:
+          type: string
+          description: Analysis type. Valid values are `automatic` or `manual`.
+        responses:
+          $ref: '#/components/schemas/Responses'
+    GetPaymentMethodsSupported:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Payment method name.
+    Buyer:
+      description: Buyer information.
+      required:
+      - id
+      - firstName
+      - lastName
+      - document
+      - documentType
+      - email
+      - phone
+      - address
+      type: object
+      properties:
+        id:
+          type: string
+          description: VTEX buyer ID. The unique identifier of the buyer.
+          example: c1245228-1c68-11e6-94ac-0afa86a846a5
+        firstName:
+          type: string
+          description: First name of the buyer.
+          example: John
+        lastName:
+          type: string
+          description: Last name of the buyer.
+          example: Doe
+        document:
+          type: string
+          description: Document number of the buyer.
+          example: 012.345.678-90
+        documentType:
+          type: string
+          description: Type of document of the buyer, which depends on their country.
+          example: CPF
+        email:
+          type: string
+          description: Email of the buyer.
+          example: john@doe.com
+        phone:
+          type: string
+          description: Phone number of the buyer.
+          example: '+5521987654321'
+        address:
+          $ref: '#/components/schemas/Address'
+    Details:
+      description: Details information.
+      required:
+      - bin
+      - lastDigits
+      - holder
+      - address
+      type: object
+      properties:
+        bin:
+          type: string
+          description: Abbreviation for 'Bank Identification Number', which is a code that identifies the institution responsible for issuing the credit card.
+          example: '507860'
+        lastDigits:
+          type: string
+          description: Credit card identifier number last digits.
+          example: '2798'
+        holder:
+          type: string
+          description: Credit card owner.
+          example: John Doe
+        address:
+          $ref: '#/components/schemas/Address'
     UpdateAntifraudTransactionsoptionalRequest:
       required:
       - id
@@ -890,52 +936,6 @@ components:
             $ref: '#/components/schemas/Payment'
         hook:
           type: string
-  parameters:
-    X-PROVIDER-API-AppKey:
-      name: X-PROVIDER-API-AppKey
-      in: header
-      description: Unique identifier created by the provider and configured on the provider configuration page (Admin VTEX).
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppKey}}'
-    X-PROVIDER-API-AppToken:
-      name: X-PROVIDER-API-AppToken
-      in: header
-      description: Unique token created by the provider and configured on the provider configuration page (Admin VTEX).
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{{X-PROVIDER-API-AppToken}}'
-    Accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    transactions.Id:
-      name: transactions.Id
-      in: path
-      description: VTEX transaction ID. This parameter is the same `id` sent in the request body of the [Send Anti-fraud Data endpoint](https://developers.vtex.com/docs/api-reference/antifraud-provider-protocol#post-/transactions).
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: D3AA1FC8372E430E8236649DB5EBD08E
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   securitySchemes:
     VtexIdclientAutCookie:
       type: apiKey

@@ -267,14 +267,6 @@ paths:
       deprecated: false
 components:
   parameters:
-    accountName:
-      name: accountName
-      in: path
-      required: true
-      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
-      schema:
-        type: string
-        example: apiexamples
     environment:
       name: environment
       in: path
@@ -283,25 +275,6 @@ components:
       schema:
         type: string
         default: vtexcommercestable
-    fq:
-      name: fq
-      in: query
-      description: "This filter query can be used to filter offers by the criteria described below. It should be filled in by following the format: `fq={{criteriaName}}:{{criteriaValue}}`. \n\n- **productId:** integer of the product ID \n\n- **productName:** string of the product's name \n\n- **skuId:** integer of the SKU ID \n\n- **eanId:** string of the EAN ID \n\n- **refId:** string of the Ref ID \n\n- **categoryId:** integer of the category ID \n\n- **brandId:** integer of the brand ID \n\n- **sellerId:** string of the seller ID \n\n- **sc:** integer of the sales channel's ID (trade policy in VTEX) \n\nEx: skuId:172 \n\nEx: categoryId:13 \n\nEx. productName:Product example-123"
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: skuId:172
-    skuId:
-      name: skuId
-      in: path
-      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '1234'
     start:
       name: start
       in: query
@@ -312,19 +285,57 @@ components:
       schema:
         type: integer
         default: 0
-    accept:
-      name: Accept
+    fq:
+      name: fq
+      in: query
+      description: "This filter query can be used to filter offers by the criteria described below. It should be filled in by following the format: `fq={{criteriaName}}:{{criteriaValue}}`. \n\n- **productId:** integer of the product ID \n\n- **productName:** string of the product's name \n\n- **skuId:** integer of the SKU ID \n\n- **eanId:** string of the EAN ID \n\n- **refId:** string of the Ref ID \n\n- **categoryId:** integer of the category ID \n\n- **brandId:** integer of the brand ID \n\n- **sellerId:** string of the seller ID \n\n- **sc:** integer of the sales channel's ID (trade policy in VTEX) \n\nEx: skuId:172 \n\nEx: categoryId:13 \n\nEx. productName:Product example-123"
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: skuId:172
+    rows:
+      name: rows
+      in: query
+      description: Number of rows included in the response. Each row corresponds to a single offer. The default amount of rows in the response is 1, and the maximum amount is 50. To have more than one offer listed in the response, please add the `rows` parameter with a number greater than 1.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        example: 20
+    skuId:
+      name: skuId
+      in: path
+      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '1234'
+    contentType:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:
         type: string
         default: application/json
-    contentType:
-      name: Content-Type
+    productId:
+      name: productId
+      in: path
+      description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product, such as price and inventory notifications.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '123456'
+    accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
@@ -340,25 +351,14 @@ components:
       schema:
         type: string
         example: availability,desc
-    rows:
-      name: rows
-      in: query
-      description: Number of rows included in the response. Each row corresponds to a single offer. The default amount of rows in the response is 1, and the maximum amount is 50. To have more than one offer listed in the response, please add the `rows` parameter with a number greater than 1.
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: integer
-        example: 20
-    productId:
-      name: productId
+    accountName:
+      name: accountName
       in: path
-      description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product, such as price and inventory notifications.
       required: true
-      style: simple
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
       schema:
         type: string
-        example: '123456'
+        example: apiexamples
   schemas:
     Offer:
       title: Offer
@@ -398,6 +398,165 @@ components:
           PriceWithoutDiscount: 0
           AvailableQuantity: 0
         AvailableSalesChannels: null
+    responseGetMatchedOffersDataByProductId:
+      type: array
+      description: Array of matched offers data by product ID.
+      items:
+        type: object
+        description: Schema for individual offer data.
+        properties:
+          productId:
+            type: string
+            description: The unique identifier for the product.
+            example: '1561208'
+          skuId:
+            type: string
+            description: The unique identifier for the product SKU.
+            example: '1559161'
+          nameComplete:
+            type: string
+            description: The complete name of the product.
+            example: Blusa Cardigan Manga Longa Vestem - Feminina - CINZA G
+          mainImage:
+            type: object
+            description: Schema for the main product image.
+            required:
+            - imagePath
+            properties:
+              imagePath:
+                type: string
+                description: The file path of the main product image.
+                example: ~/arquivos/ids/8567753-#width#-#height#/image-05b40d3167b5b7ed42285124f6862f12.jpg
+          sellersOffers:
+            type: array
+            description: Array of offers from different sellers.
+            items:
+              type: object
+              description: Schema for individual seller offer data.
+              properties:
+                sellerId:
+                  type: string
+                  description: The unique identifier for the seller.
+                  example: '1'
+                sellerSkuId:
+                  type: string
+                  description: The unique identifier for the seller's SKU.
+                  example: '1559161'
+                salesChannelOffer:
+                  type: object
+                  description: Schema for the offer data on a specific sales channel.
+                  properties:
+                    salesChannelId:
+                      type: string
+                      description: The unique identifier for the sales channel.
+                      example: '1'
+                    salesChannelName:
+                      type: string
+                      description: The name of the sales channel.
+                      example: Principal
+                    price:
+                      type: number
+                      description: The offer price.
+                      example: 0
+                    listPrice:
+                      type: number
+                      description: The list price of the product.
+                      example: 0
+                    priceWithoutDiscount:
+                      type: number
+                      description: The offer price without any discount.
+                      example: 0
+                    availableQuantity:
+                      type: integer
+                      description: The available quantity of the product.
+                      example: 0
+    MainImage:
+      title: MainImage
+      required:
+      - ImageId
+      - ImageLabel
+      - ImageTag
+      - ImagePath
+      - IsMain
+      - IsZoomSize
+      - ImageText
+      - LastModified
+      type: object
+      properties:
+        ImageId:
+          type: string
+          description: Code identifying the image's file.
+          default: '53878805'
+        ImageLabel:
+          type:
+          - string
+          - 'null'
+          description: Image's label.
+          default: Image 1
+        ImageTag:
+          type: string
+          description: HTML tag for the selected image.
+          default: <img src="~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg" width="#width#" height="#height#" alt="Image name and description" id="" />
+        ImagePath:
+          type: string
+          description: Path for the image's file.
+          default: ~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg
+        IsMain:
+          type: boolean
+          description: Whether the image is the main one or not.
+          default: true
+        IsZoomSize:
+          type: boolean
+          description: If zoom can be applied to the image.
+          default: true
+        ImageText:
+          type: string
+          description: Alt text for the image.
+          default: Image name and description
+        LastModified:
+          type: string
+          description: Date of the last changed made to the offer.
+          default: '2021-05-06T21:37:24.262529'
+      example:
+        ImageId: '53878805'
+        ImageLabel: null
+        ImageTag: <img src="~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg" width="#width#" height="#height#" alt="image-8b4364782e664d76a6ebc8702008e478" id="" />
+        ImagePath: ~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg
+        IsMain: true
+        IsZoomSize: true
+        ImageText: image-8b4364782e664d76a6ebc8702008e478
+        LastModified: '2021-04-06T03:01:30.747'
+    responseGetMatchedOffersList:
+      type: array
+      description: Response with the list of offers available on the Marketplace.
+      items:
+        type: object
+        description: Array of SKUs in the offer.
+        properties:
+          LastModified:
+            type: string
+            description: Last date the offer was modified.
+            example: '2021-05-06T21:37:24.262529'
+          ProductId:
+            type: string
+            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
+            example: '941947'
+          CategoryId:
+            type: integer
+            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
+            example: 1563
+          BrandId:
+            type: integer
+            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
+            example: 2004291
+          ProductName:
+            type: string
+            description: Name of the offer's product.
+            example: Name of the Product - 123
+          Skus:
+            type: array
+            items:
+              $ref: '#/components/schemas/Sku2'
     responseGetMatchedOffersDataBySKU:
       description: Array of matched offers data by SKU.
       type: array
@@ -473,78 +632,6 @@ components:
                         type: integer
                         description: The available quantity of the product.
                         example: 8
-    responseGetMatchedOffersDataByProductId:
-      type: array
-      description: Array of matched offers data by product ID.
-      items:
-        type: object
-        description: Schema for individual offer data.
-        properties:
-          productId:
-            type: string
-            description: The unique identifier for the product.
-            example: '1561208'
-          skuId:
-            type: string
-            description: The unique identifier for the product SKU.
-            example: '1559161'
-          nameComplete:
-            type: string
-            description: The complete name of the product.
-            example: Blusa Cardigan Manga Longa Vestem - Feminina - CINZA G
-          mainImage:
-            type: object
-            description: Schema for the main product image.
-            required:
-            - imagePath
-            properties:
-              imagePath:
-                type: string
-                description: The file path of the main product image.
-                example: ~/arquivos/ids/8567753-#width#-#height#/image-05b40d3167b5b7ed42285124f6862f12.jpg
-          sellersOffers:
-            type: array
-            description: Array of offers from different sellers.
-            items:
-              type: object
-              description: Schema for individual seller offer data.
-              properties:
-                sellerId:
-                  type: string
-                  description: The unique identifier for the seller.
-                  example: '1'
-                sellerSkuId:
-                  type: string
-                  description: The unique identifier for the seller's SKU.
-                  example: '1559161'
-                salesChannelOffer:
-                  type: object
-                  description: Schema for the offer data on a specific sales channel.
-                  properties:
-                    salesChannelId:
-                      type: string
-                      description: The unique identifier for the sales channel.
-                      example: '1'
-                    salesChannelName:
-                      type: string
-                      description: The name of the sales channel.
-                      example: Principal
-                    price:
-                      type: number
-                      description: The offer price.
-                      example: 0
-                    listPrice:
-                      type: number
-                      description: The list price of the product.
-                      example: 0
-                    priceWithoutDiscount:
-                      type: number
-                      description: The offer price without any discount.
-                      example: 0
-                    availableQuantity:
-                      type: integer
-                      description: The available quantity of the product.
-                      example: 0
     OffersPerSalesChannel:
       title: OffersPerSalesChannel
       required:
@@ -581,93 +668,6 @@ components:
         ListPrice: 0
         PriceWithoutDiscount: 0
         AvailableQuantity: 0
-    responseGetMatchedOffersList:
-      type: array
-      description: Response with the list of offers available on the Marketplace.
-      items:
-        type: object
-        description: Array of SKUs in the offer.
-        properties:
-          LastModified:
-            type: string
-            description: Last date the offer was modified.
-            example: '2021-05-06T21:37:24.262529'
-          ProductId:
-            type: string
-            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
-            example: '941947'
-          CategoryId:
-            type: integer
-            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
-            example: 1563
-          BrandId:
-            type: integer
-            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
-            example: 2004291
-          ProductName:
-            type: string
-            description: Name of the offer's product.
-            example: Name of the Product - 123
-          Skus:
-            type: array
-            items:
-              $ref: '#/components/schemas/Sku2'
-    MainImage:
-      title: MainImage
-      required:
-      - ImageId
-      - ImageLabel
-      - ImageTag
-      - ImagePath
-      - IsMain
-      - IsZoomSize
-      - ImageText
-      - LastModified
-      type: object
-      properties:
-        ImageId:
-          type: string
-          description: Code identifying the image's file.
-          default: '53878805'
-        ImageLabel:
-          type:
-          - string
-          - 'null'
-          description: Image's label.
-          default: Image 1
-        ImageTag:
-          type: string
-          description: HTML tag for the selected image.
-          default: <img src="~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg" width="#width#" height="#height#" alt="Image name and description" id="" />
-        ImagePath:
-          type: string
-          description: Path for the image's file.
-          default: ~/archives/ids/155411-#width#-#height#/Webp.net-resizeimage.jpg
-        IsMain:
-          type: boolean
-          description: Whether the image is the main one or not.
-          default: true
-        IsZoomSize:
-          type: boolean
-          description: If zoom can be applied to the image.
-          default: true
-        ImageText:
-          type: string
-          description: Alt text for the image.
-          default: Image name and description
-        LastModified:
-          type: string
-          description: Date of the last changed made to the offer.
-          default: '2021-05-06T21:37:24.262529'
-      example:
-        ImageId: '53878805'
-        ImageLabel: null
-        ImageTag: <img src="~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg" width="#width#" height="#height#" alt="image-8b4364782e664d76a6ebc8702008e478" id="" />
-        ImagePath: ~/arquivos/ids/53878805-#width#-#height#/image-8b4364782e664d76a6ebc8702008e478.jpg
-        IsMain: true
-        IsZoomSize: true
-        ImageText: image-8b4364782e664d76a6ebc8702008e478
-        LastModified: '2021-04-06T03:01:30.747'
     Sku2:
       title: Sku
       required:

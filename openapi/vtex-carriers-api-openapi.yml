@@ -198,6 +198,118 @@ paths:
       x-operation-id-original: Createservice
 components:
   schemas:
+    generatedObject:
+      required:
+      - type
+      - note
+      - author
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of extra information about the item's shipping.
+        note:
+          type: string
+          description: Text with extra information about the item's shipping.
+        author:
+          type: string
+          description: Author.
+      example:
+        type: COMMENT
+        note: The package is delivered at the door
+        author: afterShip
+    InsurancePrice:
+      required:
+      - value
+      - currency
+      type: object
+      description: Insurance cost information.
+      properties:
+        value:
+          type: integer
+          format: int32
+          description: Insurance cost in cents.
+        currency:
+          type: string
+          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
+      example:
+        value: 0
+        currency: USD
+    ListRequest:
+      type: object
+      required:
+      - settings
+      properties:
+        settings:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+                example: Api key
+                description: Custom label.
+              key:
+                type: string
+                example: aftership-api-key
+                description: Custom key.
+              value:
+                type: string
+                example: 8f_XXXXXXXXX_db79
+                description: Custom value.
+    Item:
+      title: Item
+      required:
+      - id
+      - name
+      - ean
+      - quantity
+      - price
+      - refId
+      - image
+      - type
+      - weight
+      type: object
+      properties:
+        id:
+          type: string
+          description: Product ID.
+        name:
+          type: string
+          description: Product name.
+        ean:
+          type: string
+          description: Unique SKU identification code (barcode). Up to 13 numerical characters.
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity of units of the product.
+        price:
+          type: integer
+          format: int32
+          description: Product price in cents.
+        refId:
+          type: string
+          description: Product reference ID.
+        image:
+          type: string
+          description: SKU image.
+        type:
+          type: string
+          description: Item type.
+        weight:
+          type: string
+          description: Product weight in grams.
+      example:
+        id: '184'
+        name: Chicken
+        ean: EAN354
+        quantity: 8
+        price: 669
+        refId: '314'
+        image: https://picsum.photos/seed/YtoZ9/128/480
+        type: other
+        weight: '6'
     CreateServiceBody:
       type: object
       properties:
@@ -369,61 +481,30 @@ components:
                 type: string
         timezone:
           $ref: '#/components/schemas/Timezone'
-    Timeline:
+    Timezone:
       required:
-      - id
-      - date
-      - createdAt
-      - updatedAt
-      - type
-      - description
-      - author
-      - metaData
+      - offset
+      - value
+      - label
       type: object
+      description: Time zone information.
       properties:
-        id:
+        offset:
+          type: integer
+          format: int32
+          description: Time zone offset.
+        value:
           type: string
-          description: Timeline ID.
-        date:
-          type: string
-          description: Timeline actual date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        createdAt:
-          type: string
-          description: Order's creation date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        updatedAt:
-          type: string
-          description: Date of the order's last update in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        type:
-          type: string
-          description: Order status.
-        description:
-          type: string
-          description: Description of the status.
-        author:
-          type: string
-          description: Status author.
-        metaData:
-          $ref: '#/components/schemas/MetaData'
-          description: Metadata about the delivery information.
+          description: Time zone.
+        label:
+          type:
+          - string
+          - 'null'
+          description: Label.
       example:
-        id: 77263f59-0ac5-4b0c-bfe5-f17a1648474d
-        date: '2024-03-09T01:33:14.917Z'
-        createdAt: '2024-03-09T01:33:14.917Z'
-        updatedAt: '2024-03-09T01:33:14.917Z'
-        type: STATUS
-        description: Service pending in DEV
-        author: System
-        metaData:
-          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-          metaData: null
-          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
-          shippingPrice: 284.02
-          status: PENDING
-          labels:
-          - name: Shipping label
-            id: 78c83922-d658-48bf-89d5-0658a6a94e27
-            type: PDF
-            url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+        offset: 300
+        value: America/Bogota
+        label: null
     Carrier:
       required:
       - name
@@ -472,60 +553,128 @@ components:
           description: FedEx
           id: fedex_first_overnight
           international: false
-    Item:
-      title: Item
+    Note:
       required:
-      - id
-      - name
-      - ean
-      - quantity
-      - price
-      - refId
-      - image
       - type
-      - weight
+      - date
+      - content
+      - author
       type: object
+      description: Notes with delivery information.
       properties:
-        id:
-          type: string
-          description: Product ID.
-        name:
-          type: string
-          description: Product name.
-        ean:
-          type: string
-          description: Unique SKU identification code (barcode). Up to 13 numerical characters.
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity of units of the product.
-        price:
-          type: integer
-          format: int32
-          description: Product price in cents.
-        refId:
-          type: string
-          description: Product reference ID.
-        image:
-          type: string
-          description: SKU image.
         type:
           type: string
-          description: Item type.
-        weight:
+          description: Type of note.
+        date:
           type: string
-          description: Product weight in grams.
+          description: Date of creation of the note in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        content:
+          type: string
+          description: Content of the note.
+        author:
+          type: string
+          description: Author of the note.
       example:
-        id: '184'
-        name: Chicken
-        ean: EAN354
-        quantity: 8
-        price: 669
-        refId: '314'
-        image: https://picsum.photos/seed/YtoZ9/128/480
-        type: other
-        weight: '6'
-    ShippingPrice:
+        type: COMMENT
+        date: '2024-03-09T01:43:16.280Z'
+        content: 'Tracking Number: 10001709948594168'
+        author: afterShip
+    MetaData1:
+      required:
+      - integrationResponse
+      - carrier
+      type: object
+      description: Metadata about the Carrier.
+      properties:
+        integrationResponse:
+          type: object
+          description: Carrier integration information.
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+      example:
+        integrationResponse: {}
+        carrier:
+          name: '[FedEx] Postmen Testing Account'
+          image: null
+          metaData: {}
+          id: fedex
+          type:
+            metaData: {}
+            terms: ''
+            rate:
+              shippingPrice:
+                value: 284.02
+                currency: USD
+              insurancePrice:
+                value: 0
+                currency: USD
+            name: FedEx First Overnight®
+            transitTime: 0
+            shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+            description: FedEx
+            id: fedex_first_overnight
+            international: false
+    Type:
+      title: Type
+      required:
+      - metaData
+      - terms
+      - rate
+      - name
+      - transitTime
+      - shippingEstimatedDate
+      - description
+      - id
+      - international
+      type: object
+      properties:
+        metaData:
+          type: object
+          description: Carrier metadata.
+        terms:
+          type: string
+          description: Carrier terms.
+        rate:
+          $ref: '#/components/schemas/Rate1'
+          description: Carrier rate.
+        name:
+          type: string
+          description: Carrier name.
+        transitTime:
+          type: integer
+          format: int32
+          description: Carrier transit time.
+        shippingEstimatedDate:
+          type:
+          - string
+          - 'null'
+          description: Carrier Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        description:
+          type: string
+          description: Carrier description.
+        id:
+          type: string
+          description: Carrier ID.
+        international:
+          type: boolean
+          description: Defines if the carrier is international (`true`) or not (`false`).
+      example:
+        metaData: {}
+        terms: ''
+        rate:
+          shippingPrice:
+            value: 284.02
+            currency: USD
+          insurancePrice:
+            value: 0
+            currency: USD
+        name: FedEx First Overnight®
+        transitTime: 0
+        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+        description: ''
+        id: fedex_first_overnight
+        international: false
+    ShippingPrice1:
       required:
       - value
       - currency
@@ -538,10 +687,30 @@ components:
           description: Shipping cost in cents.
         currency:
           type: string
-          description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
+          description: Cost currency code in [ISO 4217](https://www.iban.com/currency-codes) format..
       example:
-        value: 0
+        value: 284.02
         currency: USD
+    Dimensions:
+      required:
+      - height
+      - length
+      - width
+      type: object
+      properties:
+        height:
+          type: string
+          description: Package height in centimeters.
+        length:
+          type: string
+          description: Package length in centimeters.
+        width:
+          type: string
+          description: Package width in centimeters.
+      example:
+        height: '5'
+        length: '11'
+        width: '7'
     Package:
       required:
       - id
@@ -615,23 +784,258 @@ components:
         - Garden
         - Books
         description: Unde deserunt libero cupiditate illum.
-    InsurancePrice:
+    Timeline:
+      required:
+      - id
+      - date
+      - createdAt
+      - updatedAt
+      - type
+      - description
+      - author
+      - metaData
+      type: object
+      properties:
+        id:
+          type: string
+          description: Timeline ID.
+        date:
+          type: string
+          description: Timeline actual date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        createdAt:
+          type: string
+          description: Order's creation date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        updatedAt:
+          type: string
+          description: Date of the order's last update in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        type:
+          type: string
+          description: Order status.
+        description:
+          type: string
+          description: Description of the status.
+        author:
+          type: string
+          description: Status author.
+        metaData:
+          $ref: '#/components/schemas/MetaData'
+          description: Metadata about the delivery information.
+      example:
+        id: 77263f59-0ac5-4b0c-bfe5-f17a1648474d
+        date: '2024-03-09T01:33:14.917Z'
+        createdAt: '2024-03-09T01:33:14.917Z'
+        updatedAt: '2024-03-09T01:33:14.917Z'
+        type: STATUS
+        description: Service pending in DEV
+        author: System
+        metaData:
+          shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+          metaData: null
+          serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
+          shippingPrice: 284.02
+          status: PENDING
+          labels:
+          - name: Shipping label
+            id: 78c83922-d658-48bf-89d5-0658a6a94e27
+            type: PDF
+            url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+    Rate1:
+      required:
+      - shippingPrice
+      - insurancePrice
+      type: object
+      description: Rate cost information.
+      properties:
+        shippingPrice:
+          $ref: '#/components/schemas/ShippingPrice1'
+        insurancePrice:
+          $ref: '#/components/schemas/InsurancePrice'
+      example:
+        shippingPrice:
+          value: 284.02
+          currency: USD
+        insurancePrice:
+          value: 0
+          currency: USD
+    Rate:
+      required:
+      - shippingPrice
+      - insurancePrice
+      type: object
+      description: Rate cost information.
+      properties:
+        shippingPrice:
+          $ref: '#/components/schemas/ShippingPrice'
+        insurancePrice:
+          $ref: '#/components/schemas/InsurancePrice'
+      example:
+        shippingPrice:
+          value: 0
+          currency: USD
+        insurancePrice:
+          value: 0
+          currency: USD
+    ServiceBody:
+      required:
+      - message
+      - data
+      type: object
+      properties:
+        message:
+          type: string
+          description: Status message about the request.
+        data:
+          $ref: '#/components/schemas/Data'
+          type: object
+          description: Service general information.
+    ShippingPrice:
       required:
       - value
       - currency
       type: object
-      description: Insurance cost information.
+      description: Shipping cost information.
       properties:
         value:
           type: integer
           format: int32
-          description: Insurance cost in cents.
+          description: Shipping cost in cents.
         currency:
           type: string
           description: Currency code in [ISO 4217](https://www.iban.com/currency-codes) format.
       example:
         value: 0
         currency: USD
+    MetaData:
+      title: MetaData
+      type: object
+      properties:
+        '0':
+          $ref: '#/components/schemas/generatedObject'
+          description: Item ID in the cart.
+        shippingEstimatedDate:
+          type:
+          - string
+          - 'null'
+          description: Order's Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        metaData:
+          type:
+          - string
+          - 'null'
+          description: Metadata.
+        serviceId:
+          type: string
+          description: Service ID.
+        shippingPrice:
+          type: number
+          description: Order's shipping price in cents.
+        status:
+          type: string
+          description: Shipping status.
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          description: Shipping labels, there may be more than one per order due to breakage in packages.
+        trackingUrl:
+          type: string
+          description: Carrier's tracking URL of the order.
+        name:
+          type: string
+          description: Carrier name.
+        id:
+          type: string
+          description: Tracking ID.
+        type:
+          type: string
+          description: Type of transportation.
+        url:
+          type: string
+          description: Carrier URL.
+      example:
+        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
+        metaData: null
+        serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
+        shippingPrice: 284.02
+        status: PENDING
+        labels:
+        - name: Shipping label
+          id: 78c83922-d658-48bf-89d5-0658a6a94e27
+          type: PDF
+          url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+    ResponseService:
+      type: object
+      required:
+      - status
+      - serviceId
+      - shippingPrice
+      - metaData
+      - shippingEstimatedDate
+      - labels
+      properties:
+        status:
+          type: string
+          example: PENDING
+          description: Status of the service.
+          enum:
+          - PENDING
+          - ASSIGNED
+          - PICKED
+          - ON_ROUTE
+          - INCIDENT
+          - RETURNED
+          - DELIVERED
+          - CANCELED
+          - ON_HOLD
+        serviceId:
+          type: string
+          example: ASDF23324KDSF2
+          description: Service ID.
+        shippingPrice:
+          type: number
+          example: 20000.09
+          description: Service shipping price.
+        metaData:
+          type: object
+          properties:
+            '{keyValue}':
+              description: Carrier additional information.
+              type: string
+          example:
+            anyKey: anyValue
+        shippingEstimatedDate:
+          type: string
+          example: '2024-05-29T22:36:37.589Z'
+          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          description: Shipping labels, there may be more than one per order due to breakage in packages.
+    Label:
+      required:
+      - id
+      - name
+      - url
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: Label ID.
+        name:
+          type: string
+          description: Name of the label.
+        url:
+          type: string
+          description: Label URL.
+        type:
+          type: string
+          description: Label's type of file.
+      example:
+        id: 78c83922-d658-48bf-89d5-0658a6a94e27
+        name: Shipping label
+        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
+        type: PDF
     Data:
       required:
       - id
@@ -967,420 +1371,7 @@ components:
               description: FedEx
               id: fedex_first_overnight
               international: false
-    ListRequest:
-      type: object
-      required:
-      - settings
-      properties:
-        settings:
-          type: array
-          items:
-            type: object
-            properties:
-              label:
-                type: string
-                example: Api key
-                description: Custom label.
-              key:
-                type: string
-                example: aftership-api-key
-                description: Custom key.
-              value:
-                type: string
-                example: 8f_XXXXXXXXX_db79
-                description: Custom value.
-    Dimensions:
-      required:
-      - height
-      - length
-      - width
-      type: object
-      properties:
-        height:
-          type: string
-          description: Package height in centimeters.
-        length:
-          type: string
-          description: Package length in centimeters.
-        width:
-          type: string
-          description: Package width in centimeters.
-      example:
-        height: '5'
-        length: '11'
-        width: '7'
-    MetaData:
-      title: MetaData
-      type: object
-      properties:
-        '0':
-          $ref: '#/components/schemas/generatedObject'
-          description: Item ID in the cart.
-        shippingEstimatedDate:
-          type:
-          - string
-          - 'null'
-          description: Order's Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        metaData:
-          type:
-          - string
-          - 'null'
-          description: Metadata.
-        serviceId:
-          type: string
-          description: Service ID.
-        shippingPrice:
-          type: number
-          description: Order's shipping price in cents.
-        status:
-          type: string
-          description: Shipping status.
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-          description: Shipping labels, there may be more than one per order due to breakage in packages.
-        trackingUrl:
-          type: string
-          description: Carrier's tracking URL of the order.
-        name:
-          type: string
-          description: Carrier name.
-        id:
-          type: string
-          description: Tracking ID.
-        type:
-          type: string
-          description: Type of transportation.
-        url:
-          type: string
-          description: Carrier URL.
-      example:
-        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-        metaData: null
-        serviceId: 78c83922-d658-48bf-89d5-0658a6a94e27
-        shippingPrice: 284.02
-        status: PENDING
-        labels:
-        - name: Shipping label
-          id: 78c83922-d658-48bf-89d5-0658a6a94e27
-          type: PDF
-          url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-    Note:
-      required:
-      - type
-      - date
-      - content
-      - author
-      type: object
-      description: Notes with delivery information.
-      properties:
-        type:
-          type: string
-          description: Type of note.
-        date:
-          type: string
-          description: Date of creation of the note in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        content:
-          type: string
-          description: Content of the note.
-        author:
-          type: string
-          description: Author of the note.
-      example:
-        type: COMMENT
-        date: '2024-03-09T01:43:16.280Z'
-        content: 'Tracking Number: 10001709948594168'
-        author: afterShip
-    Rate1:
-      required:
-      - shippingPrice
-      - insurancePrice
-      type: object
-      description: Rate cost information.
-      properties:
-        shippingPrice:
-          $ref: '#/components/schemas/ShippingPrice1'
-        insurancePrice:
-          $ref: '#/components/schemas/InsurancePrice'
-      example:
-        shippingPrice:
-          value: 284.02
-          currency: USD
-        insurancePrice:
-          value: 0
-          currency: USD
-    Type:
-      title: Type
-      required:
-      - metaData
-      - terms
-      - rate
-      - name
-      - transitTime
-      - shippingEstimatedDate
-      - description
-      - id
-      - international
-      type: object
-      properties:
-        metaData:
-          type: object
-          description: Carrier metadata.
-        terms:
-          type: string
-          description: Carrier terms.
-        rate:
-          $ref: '#/components/schemas/Rate1'
-          description: Carrier rate.
-        name:
-          type: string
-          description: Carrier name.
-        transitTime:
-          type: integer
-          format: int32
-          description: Carrier transit time.
-        shippingEstimatedDate:
-          type:
-          - string
-          - 'null'
-          description: Carrier Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        description:
-          type: string
-          description: Carrier description.
-        id:
-          type: string
-          description: Carrier ID.
-        international:
-          type: boolean
-          description: Defines if the carrier is international (`true`) or not (`false`).
-      example:
-        metaData: {}
-        terms: ''
-        rate:
-          shippingPrice:
-            value: 284.02
-            currency: USD
-          insurancePrice:
-            value: 0
-            currency: USD
-        name: FedEx First Overnight®
-        transitTime: 0
-        shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-        description: ''
-        id: fedex_first_overnight
-        international: false
-    Timezone:
-      required:
-      - offset
-      - value
-      - label
-      type: object
-      description: Time zone information.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: Time zone offset.
-        value:
-          type: string
-          description: Time zone.
-        label:
-          type:
-          - string
-          - 'null'
-          description: Label.
-      example:
-        offset: 300
-        value: America/Bogota
-        label: null
-    MetaData1:
-      required:
-      - integrationResponse
-      - carrier
-      type: object
-      description: Metadata about the Carrier.
-      properties:
-        integrationResponse:
-          type: object
-          description: Carrier integration information.
-        carrier:
-          $ref: '#/components/schemas/Carrier'
-      example:
-        integrationResponse: {}
-        carrier:
-          name: '[FedEx] Postmen Testing Account'
-          image: null
-          metaData: {}
-          id: fedex
-          type:
-            metaData: {}
-            terms: ''
-            rate:
-              shippingPrice:
-                value: 284.02
-                currency: USD
-              insurancePrice:
-                value: 0
-                currency: USD
-            name: FedEx First Overnight®
-            transitTime: 0
-            shippingEstimatedDate: '2024-01-05T11:11:11.000Z'
-            description: FedEx
-            id: fedex_first_overnight
-            international: false
-    Label:
-      required:
-      - id
-      - name
-      - url
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          description: Label ID.
-        name:
-          type: string
-          description: Name of the label.
-        url:
-          type: string
-          description: Label URL.
-        type:
-          type: string
-          description: Label's type of file.
-      example:
-        id: 78c83922-d658-48bf-89d5-0658a6a94e27
-        name: Shipping label
-        url: https://sandbox-download.postmen.com/label/2024-03-09/258a26a4-45ae-49eb-b64d-929d3b81f46d-1709947994279763.pdf
-        type: PDF
-    ResponseService:
-      type: object
-      required:
-      - status
-      - serviceId
-      - shippingPrice
-      - metaData
-      - shippingEstimatedDate
-      - labels
-      properties:
-        status:
-          type: string
-          example: PENDING
-          description: Status of the service.
-          enum:
-          - PENDING
-          - ASSIGNED
-          - PICKED
-          - ON_ROUTE
-          - INCIDENT
-          - RETURNED
-          - DELIVERED
-          - CANCELED
-          - ON_HOLD
-        serviceId:
-          type: string
-          example: ASDF23324KDSF2
-          description: Service ID.
-        shippingPrice:
-          type: number
-          example: 20000.09
-          description: Service shipping price.
-        metaData:
-          type: object
-          properties:
-            '{keyValue}':
-              description: Carrier additional information.
-              type: string
-          example:
-            anyKey: anyValue
-        shippingEstimatedDate:
-          type: string
-          example: '2024-05-29T22:36:37.589Z'
-          description: Shipping estimated date in [UTC time format](https://learn.microsoft.com/en-us/rest/api/storageservices/formatting-datetime-values), as in `YYYY-MM-DDThh:mm:ssZ`.
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-          description: Shipping labels, there may be more than one per order due to breakage in packages.
-    Rate:
-      required:
-      - shippingPrice
-      - insurancePrice
-      type: object
-      description: Rate cost information.
-      properties:
-        shippingPrice:
-          $ref: '#/components/schemas/ShippingPrice'
-        insurancePrice:
-          $ref: '#/components/schemas/InsurancePrice'
-      example:
-        shippingPrice:
-          value: 0
-          currency: USD
-        insurancePrice:
-          value: 0
-          currency: USD
-    generatedObject:
-      required:
-      - type
-      - note
-      - author
-      type: object
-      properties:
-        type:
-          type: string
-          description: Type of extra information about the item's shipping.
-        note:
-          type: string
-          description: Text with extra information about the item's shipping.
-        author:
-          type: string
-          description: Author.
-      example:
-        type: COMMENT
-        note: The package is delivered at the door
-        author: afterShip
-    ServiceBody:
-      required:
-      - message
-      - data
-      type: object
-      properties:
-        message:
-          type: string
-          description: Status message about the request.
-        data:
-          $ref: '#/components/schemas/Data'
-          type: object
-          description: Service general information.
-    ShippingPrice1:
-      required:
-      - value
-      - currency
-      type: object
-      description: Shipping cost information.
-      properties:
-        value:
-          type: integer
-          format: int32
-          description: Shipping cost in cents.
-        currency:
-          type: string
-          description: Cost currency code in [ISO 4217](https://www.iban.com/currency-codes) format..
-      example:
-        value: 284.02
-        currency: USD
   parameters:
-    Authorization:
-      name: Authorization
-      in: header
-      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: '{token}'
     Accept:
       name: Accept
       in: header
@@ -1390,6 +1381,15 @@ components:
       schema:
         type: string
         example: application/json
+    Authorization:
+      name: Authorization
+      in: header
+      description: Authentication JWT. JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information as a JSON object between parties.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: '{token}'
     Content-Type:
       name: Content-Type
       in: header

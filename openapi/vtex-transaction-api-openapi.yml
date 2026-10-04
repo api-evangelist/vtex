@@ -1910,203 +1910,66 @@ paths:
           default: vtexcommercestable
 components:
   schemas:
-    Cart:
+    CreateGiftCardCancellationTransactionRequest:
       type: object
-      description: Cart information.
-      properties:
-        grandTotal:
-          type: integer
-          description: Total payment value.
-          example: 0
-        relationName:
-          type: string
-          description: Represents the relationship between the client and the store.
-          example: loyalty-program
-        redemptionCode:
-          type: string
-          description: Gift card identification code used at checkout. Minimum of 6 characters.
-          example: '***********ASDQ'
-        discounts:
-          type: integer
-          description: Discounts value.
-          example: 20
-        shipping:
-          type: integer
-          description: Shipping value.
-          example: 2
-        taxes:
-          type: integer
-          description: Taxes value.
-          example: 0
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-          description: Items information.
-        itemsTotal:
-          type: integer
-          description: Total items value.
-          example: 200
-    Shipping:
-      type: object
-      description: Shipping information.
       required:
-      - receiverName
-      - postalCode
-      - city
-      - state
-      - country
-      - street
-      - number
-      - neighborhood
-      - complement
-      - reference
+      - value
+      - requestId
       properties:
-        receiverName:
+        value:
+          type: number
+          description: Transaction value.
+          example: 4.1
+        requestId:
           type: string
-          description: Name of the person who is going to receive the order.
-          example: Michael Scott
-        postalCode:
-          type: string
-          description: Postal code.
-          example: '22250040'
-        city:
-          type: string
-          description: City of the shipping address.
-          example: Rio de Janeiro
-        state:
-          type: string
-          description: State of the shipping address.
-          example: RJ
-        country:
-          type: string
-          description: Country of the shipping address.
-          example: BRA
-        street:
-          type: string
-          description: Street of the shipping address.
-          example: Praia de Botafogo
-        number:
-          type: string
-          description: Number of the building, house or apartment in the shipping address.
-          example: '111'
-        neighborhood:
-          type: string
-          description: Neighborhood of the address.
-          example: Botafogo
-        complement:
-          type:
-          - string
-          - 'null'
-          description: Complement to the shipping address in case it applies.
-          example: House
-        reference:
-          type:
-          - string
-          - 'null'
-          description: Complement that might help locate the shipping address more precisely in case of delivery.
-          example: Subway
-    Client:
+          description: Request identification of the transaction.
+          example: 12093812masoidj120398
+    Item:
       type: object
-      description: Client information.
+      description: Items information.
       properties:
+        productId:
+          type: string
+          description: Product ID.
+          example: '2000000'
         id:
           type: string
-          description: Customer's identification.
-          example: 3b1abc17-988e-4a14-8b7f-31fc6a5b955c
-        email:
+          description: The ID of the SKU in VTEX platform.
+          example: '2000002'
+        refId:
           type: string
-          description: Customer's email address.
-          example: email@domain.com
-        document:
+          description: Product Reference ID.
+          example: MEV41
+        name:
           type: string
-          description: Document number informed by the customer.
-          example: '42151783120'
-    GetGiftCardfromGiftCardProviderRequest:
-      required:
-      - client
-      - cart
+          description: Product name.
+          example: Shoes
+        price:
+          type: integer
+          description: Product price.
+          example: 200
+        quantity:
+          type: integer
+          description: Product quantity.
+          example: 1
+    OrderInfo:
       type: object
+      description: Order information.
       properties:
-        client:
-          $ref: '#/components/schemas/Client'
+        orderId:
+          type: string
+          description: Order ID.
+          example: v5006128str
+        sequence:
+          type: integer
+          description: Sequence number.
+          example: 5006128
         cart:
-          $ref: '#/components/schemas/Cart'
-    Cart1:
-      type: object
-      description: Cart information.
-      required:
-      - items
-      - grandTotal
-      - discounts
-      - shipping
-      - taxes
-      - itemsTotal
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item1'
-        grandTotal:
-          type: integer
-          description: Total payment value.
-          example: 0
-        discounts:
-          type: number
-          description: Discounts value.
-          example: -7.5
+          $ref: '#/components/schemas/Cart1'
+        clientProfile:
+          $ref: '#/components/schemas/ClientProfile'
         shipping:
-          type: number
-          description: Shipping value.
-          example: 7.27
-        taxes:
-          type: integer
-          description: Taxes value.
-          example: 0
-        itemsTotal:
-          type: number
-          description: Total items value.
-          example: 14.99
-    ClientProfile:
-      type: object
-      description: Client profile information.
-      required:
-      - email
-      - firstName
-      - lastName
-      - document
-      - phone
-      - birthDate
-      - isCorporate
-      properties:
-        email:
-          type: string
-          description: Customer's email address.
-          example: michael.scott96@mail.com
-        firstName:
-          type: string
-          description: Customer's first name.
-          example: Michael
-        lastName:
-          type: string
-          description: Customer's last name.
-          example: Scott
-        document:
-          type: string
-          description: Document number informed by the customer.
-          example: 02906792063
-        phone:
-          type: string
-          description: Customer's phone number.
-          example: '+551111111111'
-        birthDate:
-          type: string
-          description: Customer's birth date.
-          example: '0001-01-01T00:00:00'
-        isCorporate:
-          type: boolean
-          description: Defines if the customer is a company (`true`) or not (`false`).
-          example: false
+          $ref: '#/components/schemas/Shipping'
     CreateGiftCardTransactionRequest:
       required:
       - operation
@@ -2211,6 +2074,203 @@ components:
               type: integer
               description: Price tag value.
               example: 0
+    ClientProfile:
+      type: object
+      description: Client profile information.
+      required:
+      - email
+      - firstName
+      - lastName
+      - document
+      - phone
+      - birthDate
+      - isCorporate
+      properties:
+        email:
+          type: string
+          description: Customer's email address.
+          example: michael.scott96@mail.com
+        firstName:
+          type: string
+          description: Customer's first name.
+          example: Michael
+        lastName:
+          type: string
+          description: Customer's last name.
+          example: Scott
+        document:
+          type: string
+          description: Document number informed by the customer.
+          example: 02906792063
+        phone:
+          type: string
+          description: Customer's phone number.
+          example: '+551111111111'
+        birthDate:
+          type: string
+          description: Customer's birth date.
+          example: '0001-01-01T00:00:00'
+        isCorporate:
+          type: boolean
+          description: Defines if the customer is a company (`true`) or not (`false`).
+          example: false
+    Shipping:
+      type: object
+      description: Shipping information.
+      required:
+      - receiverName
+      - postalCode
+      - city
+      - state
+      - country
+      - street
+      - number
+      - neighborhood
+      - complement
+      - reference
+      properties:
+        receiverName:
+          type: string
+          description: Name of the person who is going to receive the order.
+          example: Michael Scott
+        postalCode:
+          type: string
+          description: Postal code.
+          example: '22250040'
+        city:
+          type: string
+          description: City of the shipping address.
+          example: Rio de Janeiro
+        state:
+          type: string
+          description: State of the shipping address.
+          example: RJ
+        country:
+          type: string
+          description: Country of the shipping address.
+          example: BRA
+        street:
+          type: string
+          description: Street of the shipping address.
+          example: Praia de Botafogo
+        number:
+          type: string
+          description: Number of the building, house or apartment in the shipping address.
+          example: '111'
+        neighborhood:
+          type: string
+          description: Neighborhood of the address.
+          example: Botafogo
+        complement:
+          type:
+          - string
+          - 'null'
+          description: Complement to the shipping address in case it applies.
+          example: House
+        reference:
+          type:
+          - string
+          - 'null'
+          description: Complement that might help locate the shipping address more precisely in case of delivery.
+          example: Subway
+    Client:
+      type: object
+      description: Client information.
+      properties:
+        id:
+          type: string
+          description: Customer's identification.
+          example: 3b1abc17-988e-4a14-8b7f-31fc6a5b955c
+        email:
+          type: string
+          description: Customer's email address.
+          example: email@domain.com
+        document:
+          type: string
+          description: Document number informed by the customer.
+          example: '42151783120'
+    GetGiftCardfromGiftCardProviderRequest:
+      required:
+      - client
+      - cart
+      type: object
+      properties:
+        client:
+          $ref: '#/components/schemas/Client'
+        cart:
+          $ref: '#/components/schemas/Cart'
+    Cart:
+      type: object
+      description: Cart information.
+      properties:
+        grandTotal:
+          type: integer
+          description: Total payment value.
+          example: 0
+        relationName:
+          type: string
+          description: Represents the relationship between the client and the store.
+          example: loyalty-program
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: '***********ASDQ'
+        discounts:
+          type: integer
+          description: Discounts value.
+          example: 20
+        shipping:
+          type: integer
+          description: Shipping value.
+          example: 2
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: Items information.
+        itemsTotal:
+          type: integer
+          description: Total items value.
+          example: 200
+    Cart1:
+      type: object
+      description: Cart information.
+      required:
+      - items
+      - grandTotal
+      - discounts
+      - shipping
+      - taxes
+      - itemsTotal
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item1'
+        grandTotal:
+          type: integer
+          description: Total payment value.
+          example: 0
+        discounts:
+          type: number
+          description: Discounts value.
+          example: -7.5
+        shipping:
+          type: number
+          description: Shipping value.
+          example: 7.27
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        itemsTotal:
+          type: number
+          description: Total items value.
+          example: 14.99
     CreateGiftCardinGiftCardProviderRequest:
       required:
       - relationName
@@ -2259,7 +2319,7 @@ components:
           type: string
           description: Currency code in ISO 4217.
           example: USD
-    CreateGiftCardCancellationTransactionRequest:
+    GiftCardTransactionRequest:
       type: object
       required:
       - value
@@ -2267,43 +2327,33 @@ components:
       properties:
         value:
           type: number
-          description: Transaction value.
-          example: 4.1
+          description: Value information.
+          example: 17.4
         requestId:
           type: string
-          description: Request identification of the transaction.
-          example: 12093812masoidj120398
-    Item:
+          description: VTEX request identifier.
+          example: 6360f98eb0cf6fd5afa77e39bba8c20fe5807d8c
+    response7:
       type: object
-      description: Items information.
+      required:
+      - oid
+      - value
+      - date
       properties:
-        productId:
+        oid:
           type: string
-          description: Product ID.
-          example: '2000000'
-        id:
+          description: Operation identification.
+          example: 239d35b430fc75379db966c1d3670c6f
+        value:
+          type: number
+          description: Value information.
+          example: 13.4
+        date:
           type: string
-          description: The ID of the SKU in VTEX platform.
-          example: '2000002'
-        refId:
-          type: string
-          description: Product Reference ID.
-          example: MEV41
-        name:
-          type: string
-          description: Product name.
-          example: Shoes
-        price:
-          type: integer
-          description: Product price.
-          example: 200
-        quantity:
-          type: integer
-          description: Product quantity.
-          example: 1
-    OrderInfo:
+          description: Date of the transaction in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format (`YYYY-MM-DDThh:mm:ss.fff`).
+          example: '2016-04-06T00:00:00'
+    OrderInfo_2:
       type: object
-      description: Order information.
       properties:
         orderId:
           type: string
@@ -2314,11 +2364,48 @@ components:
           description: Sequence number.
           example: 5006128
         cart:
-          $ref: '#/components/schemas/Cart1'
+          $ref: '#/components/schemas/Cart1_2'
         clientProfile:
-          $ref: '#/components/schemas/ClientProfile'
+          $ref: '#/components/schemas/ClientProfile_2'
         shipping:
           $ref: '#/components/schemas/Shipping'
+    CreateGiftCardTransactionRequest_2:
+      type: object
+      required:
+      - operation
+      - value
+      - description
+      - redemptionToken
+      - redemptionCode
+      - requestId
+      properties:
+        operation:
+          type: string
+          description: 'Type of operation. Possible values are: `Debit` or `Credit`.'
+          example: Debit
+        value:
+          type: number
+          format: decimal
+          description: Operation value.
+          example: 3
+        description:
+          type: string
+          description: Description information.
+          example: GiftCardHub
+        redemptionToken:
+          type: string
+          description: Gift card redemption token.
+          example: b2dac6f2-f365-48cd-82a9-0b376a55557a
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: '***********ASDQ'
+        requestId:
+          type: string
+          description: Request identification of the transaction. You need to send a different `requestId` value every time you make a new transaction. If you send the same `requestId`two or more times with a specific `redemptionCode`or `redemptionToken`, the gift card balance will not be updated.
+          example: B56CBE231DEE4E1A859183C1030CE926
+        orderInfo:
+          $ref: '#/components/schemas/OrderInfo_2'
     PriceTag:
       type: object
       required:
@@ -2333,6 +2420,53 @@ components:
           type: integer
           description: Price tag value.
           example: 0
+    response5:
+      type: object
+      properties:
+        value:
+          type: number
+          description: Transaction value.
+          example: 140
+        description:
+          type: string
+          description: Transaction description.
+          example: GiftCardHub
+        date:
+          type: string
+          description: Date of the transaction in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format (`YYYY-MM-DDThh:mm:ss.fff`).
+          example: '2023-06-02T18:24:49.252855Z'
+        requestId:
+          type: string
+          description: VTEX request identifier.
+          example: '3'
+        settlement:
+          type: object
+          description: Settlement transaction information.
+          properties:
+            href:
+              type: string
+              description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+              example: /cosmetics2/giftcards/3b1abc17-988e-4a14-8b7f-31fc6a5b955c_70/transactions/faa6831230634c4b8fb897e02ba9c5a1/settlements
+        cancellation:
+          type: object
+          description: Cancellation transaction information.
+          properties:
+            href:
+              type: string
+              description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+              example: /cosmetics2/giftcards/3b1abc17-988e-4a14-8b7f-31fc6a5b955c_70/transactions/faa6831230634c4b8fb897e02ba9c5a1/cancellations
+        authorization:
+          type: object
+          description: Authorization transaction information.
+          properties:
+            href:
+              type: string
+              description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+              example: /cosmetics2/giftcards/3b1abc17-988e-4a14-8b7f-31fc6a5b955c_70/transactions/faa6831230634c4b8fb897e02ba9c5a1/authorization
+        operation:
+          type: string
+          description: Operation information (`credit` or `debit`).
+          example: Credit
     Item2:
       type: object
       required:
@@ -2388,41 +2522,47 @@ components:
           description: Array of price tags, each of which modifies the price in some way, like discounts or rates that apply to the item in the context of the order.
           items:
             $ref: '#/components/schemas/PriceTag'
-    Cart1_2:
+    response6:
       type: object
       required:
-      - items
-      - grandTotal
-      - discounts
-      - shipping
-      - taxes
-      - itemsTotal
+      - oid
+      - value
+      - date
       properties:
-        items:
-          type: array
-          description: Items information.
-          items:
-            $ref: '#/components/schemas/Item2'
-        grandTotal:
-          type: integer
-          description: Total payment value.
-          example: 0
-        discounts:
+        oid:
+          type: string
+          description: Operation identification.
+          example: 7cf8d7970e1c81d05620e46cceb6819f
+        value:
           type: number
-          description: Discounts value.
-          example: -7.5
-        shipping:
-          type: number
-          description: Shipping value.
-          example: 7.27
-        taxes:
-          type: integer
-          description: Taxes value.
-          example: 0
-        itemsTotal:
-          type: number
-          description: Total items value.
-          example: 14.99
+          description: Value information.
+          example: 123.4
+        date:
+          type: string
+          description: Date of the transaction in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format (`YYYY-MM-DDThh:mm:ss.fff`).
+          example: '2016-01-01T00:00:00'
+    response3:
+      type: object
+      required:
+      - id
+      - _self
+      properties:
+        id:
+          type: string
+          description: Transaction identification.
+          example: '268'
+        _self:
+          $ref: '#/components/schemas/Self'
+    Self:
+      type: object
+      description: Object that carries an auto reference of the transaction (on its API).
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
+          example: cards/890/transactions/268
     ClientProfile_2:
       type: object
       description: Client Profile information.
@@ -2463,181 +2603,41 @@ components:
           type: boolean
           description: Defines if the customer is a company (`true`) or not (`false`).
           example: false
-    response6:
+    Cart1_2:
       type: object
       required:
-      - oid
-      - value
-      - date
+      - items
+      - grandTotal
+      - discounts
+      - shipping
+      - taxes
+      - itemsTotal
       properties:
-        oid:
-          type: string
-          description: Operation identification.
-          example: 7cf8d7970e1c81d05620e46cceb6819f
-        value:
-          type: number
-          description: Value information.
-          example: 123.4
-        date:
-          type: string
-          description: Date of the transaction in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format (`YYYY-MM-DDThh:mm:ss.fff`).
-          example: '2016-01-01T00:00:00'
-    Self:
-      type: object
-      description: Object that carries an auto reference of the transaction (on its API).
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
-          example: cards/890/transactions/268
-    GiftCardTransactionRequest:
-      type: object
-      required:
-      - value
-      - requestId
-      properties:
-        value:
-          type: number
-          description: Value information.
-          example: 17.4
-        requestId:
-          type: string
-          description: VTEX request identifier.
-          example: 6360f98eb0cf6fd5afa77e39bba8c20fe5807d8c
-    CreateGiftCardTransactionRequest_2:
-      type: object
-      required:
-      - operation
-      - value
-      - description
-      - redemptionToken
-      - redemptionCode
-      - requestId
-      properties:
-        operation:
-          type: string
-          description: 'Type of operation. Possible values are: `Debit` or `Credit`.'
-          example: Debit
-        value:
-          type: number
-          format: decimal
-          description: Operation value.
-          example: 3
-        description:
-          type: string
-          description: Description information.
-          example: GiftCardHub
-        redemptionToken:
-          type: string
-          description: Gift card redemption token.
-          example: b2dac6f2-f365-48cd-82a9-0b376a55557a
-        redemptionCode:
-          type: string
-          description: Gift card identification code used at checkout. Minimum of 6 characters.
-          example: '***********ASDQ'
-        requestId:
-          type: string
-          description: Request identification of the transaction. You need to send a different `requestId` value every time you make a new transaction. If you send the same `requestId`two or more times with a specific `redemptionCode`or `redemptionToken`, the gift card balance will not be updated.
-          example: B56CBE231DEE4E1A859183C1030CE926
-        orderInfo:
-          $ref: '#/components/schemas/OrderInfo_2'
-    response5:
-      type: object
-      properties:
-        value:
-          type: number
-          description: Transaction value.
-          example: 140
-        description:
-          type: string
-          description: Transaction description.
-          example: GiftCardHub
-        date:
-          type: string
-          description: Date of the transaction in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format (`YYYY-MM-DDThh:mm:ss.fff`).
-          example: '2023-06-02T18:24:49.252855Z'
-        requestId:
-          type: string
-          description: VTEX request identifier.
-          example: '3'
-        settlement:
-          type: object
-          description: Settlement transaction information.
-          properties:
-            href:
-              type: string
-              description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
-              example: /cosmetics2/giftcards/3b1abc17-988e-4a14-8b7f-31fc6a5b955c_70/transactions/faa6831230634c4b8fb897e02ba9c5a1/settlements
-        cancellation:
-          type: object
-          description: Cancellation transaction information.
-          properties:
-            href:
-              type: string
-              description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
-              example: /cosmetics2/giftcards/3b1abc17-988e-4a14-8b7f-31fc6a5b955c_70/transactions/faa6831230634c4b8fb897e02ba9c5a1/cancellations
-        authorization:
-          type: object
-          description: Authorization transaction information.
-          properties:
-            href:
-              type: string
-              description: Gift card resource URL. The first number described in the URL refers to the gift card identification. The second number, refers to the transaction identification.
-              example: /cosmetics2/giftcards/3b1abc17-988e-4a14-8b7f-31fc6a5b955c_70/transactions/faa6831230634c4b8fb897e02ba9c5a1/authorization
-        operation:
-          type: string
-          description: Operation information (`credit` or `debit`).
-          example: Credit
-    response7:
-      type: object
-      required:
-      - oid
-      - value
-      - date
-      properties:
-        oid:
-          type: string
-          description: Operation identification.
-          example: 239d35b430fc75379db966c1d3670c6f
-        value:
-          type: number
-          description: Value information.
-          example: 13.4
-        date:
-          type: string
-          description: Date of the transaction in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format (`YYYY-MM-DDThh:mm:ss.fff`).
-          example: '2016-04-06T00:00:00'
-    response3:
-      type: object
-      required:
-      - id
-      - _self
-      properties:
-        id:
-          type: string
-          description: Transaction identification.
-          example: '268'
-        _self:
-          $ref: '#/components/schemas/Self'
-    OrderInfo_2:
-      type: object
-      properties:
-        orderId:
-          type: string
-          description: Order ID.
-          example: v5006128str
-        sequence:
+        items:
+          type: array
+          description: Items information.
+          items:
+            $ref: '#/components/schemas/Item2'
+        grandTotal:
           type: integer
-          description: Sequence number.
-          example: 5006128
-        cart:
-          $ref: '#/components/schemas/Cart1_2'
-        clientProfile:
-          $ref: '#/components/schemas/ClientProfile_2'
+          description: Total payment value.
+          example: 0
+        discounts:
+          type: number
+          description: Discounts value.
+          example: -7.5
         shipping:
-          $ref: '#/components/schemas/Shipping'
+          type: number
+          description: Shipping value.
+          example: 7.27
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        itemsTotal:
+          type: number
+          description: Total items value.
+          example: 14.99
   securitySchemes:
     appKey:
       type: apiKey
