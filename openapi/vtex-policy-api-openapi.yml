@@ -434,20 +434,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    PolicyActionGetResponse:
-      title: PolicyActionGetResponse
-      type: object
-      description: Object with policy conditions.
-      properties:
-        id:
-          type: string
-          description: Action ID.
-          title: id
-        metadata:
-          type: object
-          description: Metadata object from the current action.
-          title: metadata
-          additionalProperties: true
     StatementGetResponse:
       type: object
       description: Object with policy conditions.
@@ -568,29 +554,6 @@ components:
           - dateTimeUtcGreaterThan
           - dateTimeUtcLessThan
           - between
-    PolicySaveRequest:
-      required:
-      - name
-      - description
-      - statements
-      type: object
-      properties:
-        name:
-          type: string
-          description: Policy name.
-          title: name
-          example: id
-        description:
-          type: string
-          description: Policy description, only for internal use.
-          title: description
-          example: TesteMarcosPromotionsAlert
-        statements:
-          type: array
-          title: statements
-          items:
-            $ref: '#/components/schemas/StatementGetResponse'
-          description: Requirements for the the policy to be applied.
     EvaluatePolicyRequest:
       required:
       - resource
@@ -635,20 +598,57 @@ components:
           items:
             $ref: '#/components/schemas/StatementGetResponse'
           description: Requirements for the policy to be applied.
+    PolicyActionGetResponse:
+      title: PolicyActionGetResponse
+      type: object
+      description: Object with policy conditions.
+      properties:
+        id:
+          type: string
+          description: Action ID.
+          title: id
+        metadata:
+          type: object
+          description: Metadata object from the current action.
+          title: metadata
+          additionalProperties: true
+    PolicySaveRequest:
+      required:
+      - name
+      - description
+      - statements
+      type: object
+      properties:
+        name:
+          type: string
+          description: Policy name.
+          title: name
+          example: id
+        description:
+          type: string
+          description: Policy description, only for internal use.
+          title: description
+          example: TesteMarcosPromotionsAlert
+        statements:
+          type: array
+          title: statements
+          items:
+            $ref: '#/components/schemas/StatementGetResponse'
+          description: Requirements for the the policy to be applied.
   parameters:
-    Content-Type:
-      name: Content-Type
+    Accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
         type: string
         default: application/json
-    Accept:
-      name: Accept
+    Content-Type:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:

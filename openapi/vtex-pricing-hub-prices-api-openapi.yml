@@ -149,52 +149,16 @@ paths:
           description: OK
 components:
   schemas:
-    ConfigExternalPriceSourceRequest:
+    response2:
       required:
-      - appName
+      - items
       type: object
       properties:
-        active:
-          type: boolean
-          example: false
-          description: Defines if the external price source is active (`true`) or not (`false`). If not set, the default value will be `false`.
-        appName:
-          type: string
-          description: Name of the app that communicates with the external pricing source.
-          example: apiexamples_app_name
-    Item1:
-      required:
-      - index
-      - skuId
-      - price
-      - costPrice
-      - listPrice
-      - priceTable
-      - priceValidUntil
-      type: object
-      description: Each price item.
-      properties:
-        index:
-          type: integer
-          description: The same index referring to Checkout's cart that was passed to the API.
-        skuId:
-          type: string
-          description: The same skuId that was passed to the API.
-        price:
-          type: number
-          description: The price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
-        costPrice:
-          type: number
-          description: The cost price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
-        listPrice:
-          type: number
-          description: The list price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
-        priceTable:
-          type: string
-          description: The price table that was used to price the item.
-        priceValidUntil:
-          type: string
-          description: The moment up until the price is valid. After that moment, it will be necessary to call the pricing API again. The format of the string is in RFC3339.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item1'
+          description: List of items and their respective prices applied by Pricing Hub.
     items:
       required:
       - itemsObject
@@ -289,16 +253,52 @@ components:
           type: string
           example: customer@email.com
           description: Customer's email address. If there is no value, use an empty string.
-    response2:
+    ConfigExternalPriceSourceRequest:
       required:
-      - items
+      - appName
       type: object
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Item1'
-          description: List of items and their respective prices applied by Pricing Hub.
+        active:
+          type: boolean
+          example: false
+          description: Defines if the external price source is active (`true`) or not (`false`). If not set, the default value will be `false`.
+        appName:
+          type: string
+          description: Name of the app that communicates with the external pricing source.
+          example: apiexamples_app_name
+    Item1:
+      required:
+      - index
+      - skuId
+      - price
+      - costPrice
+      - listPrice
+      - priceTable
+      - priceValidUntil
+      type: object
+      description: Each price item.
+      properties:
+        index:
+          type: integer
+          description: The same index referring to Checkout's cart that was passed to the API.
+        skuId:
+          type: string
+          description: The same skuId that was passed to the API.
+        price:
+          type: number
+          description: The price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
+        costPrice:
+          type: number
+          description: The cost price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
+        listPrice:
+          type: number
+          description: The list price returned by the pricing API that was used by Pricing Hub. It is measured in cents, so 5000 means 50,00 in local currency.
+        priceTable:
+          type: string
+          description: The price table that was used to price the item.
+        priceValidUntil:
+          type: string
+          description: The moment up until the price is valid. After that moment, it will be necessary to call the pricing API again. The format of the string is in RFC3339.
   securitySchemes:
     appKey:
       type: apiKey

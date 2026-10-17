@@ -79,6 +79,23 @@ paths:
                     traceId: 00-f8949e0e2a80ff4481b4375908349701-a6a7ecf8b50a2043-00
 components:
   schemas:
+    200_OK:
+      type: object
+      additionalProperties: true
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - emailNotFound
+          - emailNotVerified
+          - created
+        dkimKeys:
+          type:
+          - array
+          - 'null'
+          additionalProperties: true
     401_Unauthorized:
       type: object
       additionalProperties: true
@@ -103,23 +120,6 @@ components:
         traceId:
           type: string
           pattern: ^00-[0-9a-f]{32}-[0-9a-f]{16}-00$
-    200_OK:
-      type: object
-      additionalProperties: true
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          enum:
-          - emailNotFound
-          - emailNotVerified
-          - created
-        dkimKeys:
-          type:
-          - array
-          - 'null'
-          additionalProperties: true
   securitySchemes:
     appKey:
       type: apiKey

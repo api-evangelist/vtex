@@ -268,6 +268,94 @@ paths:
       deprecated: false
 components:
   schemas:
+    ListAllGiftCardsRequest:
+      description: Gift cards information.
+      required:
+      - client
+      - cart
+      type: object
+      properties:
+        client:
+          $ref: '#/components/schemas/Client'
+        cart:
+          $ref: '#/components/schemas/Cart'
+    Self:
+      required:
+      - href
+      type: object
+      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
+      properties:
+        href:
+          type: string
+          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
+    Cart:
+      description: Cart information.
+      required:
+      - grandTotal
+      - relationName
+      - redemptionCode
+      - discounts
+      - shipping
+      - taxes
+      - items
+      - itemsTotal
+      type: object
+      properties:
+        grandTotal:
+          type: integer
+          description: Total payment value.
+          example: 182
+        relationName:
+          type:
+          - string
+          - 'null'
+          description: Represents the relationship between the client and the store.
+          example: null
+        redemptionCode:
+          type: string
+          description: Gift card identification code used at checkout. Minimum of 6 characters.
+          example: BAHD-ASDB-ADQW-ASDQ
+        discounts:
+          type: integer
+          description: Discounts value.
+          example: 20
+        shipping:
+          type: integer
+          description: Shipping value.
+          example: 2
+        taxes:
+          type: integer
+          description: Taxes value.
+          example: 0
+        items:
+          type: array
+          description: Items information.
+          items:
+            $ref: '#/components/schemas/Item'
+        itemsTotal:
+          type: integer
+          description: Total items value.
+          example: 200
+    response:
+      description: Response information.
+      required:
+      - id
+      - provider
+      - balance
+      - _self
+      type: object
+      properties:
+        id:
+          type: string
+          description: Gift card identification.
+        provider:
+          type: string
+          description: Provider's name.
+        balance:
+          type: number
+          description: Gift card current balance.
+        _self:
+          $ref: '#/components/schemas/Self'
     Item:
       description: Items information.
       required:
@@ -303,46 +391,6 @@ components:
           type: integer
           description: Product quantity.
           example: 1
-    response:
-      description: Response information.
-      required:
-      - id
-      - provider
-      - balance
-      - _self
-      type: object
-      properties:
-        id:
-          type: string
-          description: Gift card identification.
-        provider:
-          type: string
-          description: Provider's name.
-        balance:
-          type: number
-          description: Gift card current balance.
-        _self:
-          $ref: '#/components/schemas/Self'
-    ListAllGiftCardsRequest:
-      description: Gift cards information.
-      required:
-      - client
-      - cart
-      type: object
-      properties:
-        client:
-          $ref: '#/components/schemas/Client'
-        cart:
-          $ref: '#/components/schemas/Cart'
-    Self:
-      required:
-      - href
-      type: object
-      description: It is an object that carries an auto reference from the provider at the Hub (on its API).
-      properties:
-        href:
-          type: string
-          description: This is one of the fields inside the `_self`. It is exactly the route that identifies this provider on the Hub's API, but it is not the same thing as the `serviceURL`.
     Client:
       description: Customer information.
       required:
@@ -407,54 +455,6 @@ components:
           type: string
           description: Currency code in ISO 4217.
           example: USD
-    Cart:
-      description: Cart information.
-      required:
-      - grandTotal
-      - relationName
-      - redemptionCode
-      - discounts
-      - shipping
-      - taxes
-      - items
-      - itemsTotal
-      type: object
-      properties:
-        grandTotal:
-          type: integer
-          description: Total payment value.
-          example: 182
-        relationName:
-          type:
-          - string
-          - 'null'
-          description: Represents the relationship between the client and the store.
-          example: null
-        redemptionCode:
-          type: string
-          description: Gift card identification code used at checkout. Minimum of 6 characters.
-          example: BAHD-ASDB-ADQW-ASDQ
-        discounts:
-          type: integer
-          description: Discounts value.
-          example: 20
-        shipping:
-          type: integer
-          description: Shipping value.
-          example: 2
-        taxes:
-          type: integer
-          description: Taxes value.
-          example: 0
-        items:
-          type: array
-          description: Items information.
-          items:
-            $ref: '#/components/schemas/Item'
-        itemsTotal:
-          type: integer
-          description: Total items value.
-          example: 200
   securitySchemes:
     appKey:
       type: apiKey

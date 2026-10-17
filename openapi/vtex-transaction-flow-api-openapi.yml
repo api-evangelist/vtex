@@ -220,51 +220,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    RefundthetransactionRequest:
-      required:
-      - value
-      type: object
-      description: Refund transaction request body information.
-      properties:
-        value:
-          type: number
-          description: Purchase value. The value must be described without using separation for decimals, e.g. to capture a value of 320.50, send 32050.
-        freight:
-          type: number
-          description: Freigth value, if applicable.
-        tax:
-          type: number
-          description: Tax value, if applicable.
-        minicart:
-          type: object
-          description: This field is filled with the content of the cart of the transaction, which can be obtained using [Get Orders](https://developers.vtex.com/docs/api-reference/orders-api?endpoint=get-/api/oms/pvt/orders/-orderId-) or [Transaction Details](https://developers.vtex.com/docs/api-reference/payments-gateway-api?endpoint=get-/api/pvt/transactions/-transactionId-) endpoints. It should only be included for transactions with split payment.
-          items:
-            type: array
-            description: Array containing cart items.
-            items:
-              type: object
-              description: Cart items information.
-              properties:
-                id:
-                  type: string
-                  description: Item identifier.
-                  example: '122323'
-                name:
-                  type: string
-                  description: Item name.
-                  example: Tenis Preto I
-                value:
-                  type: number
-                  description: Item value.
-                  example: 1000
-                shippingDiscount:
-                  type: integer
-                  description: Discount to be applied for the shipping value.
-                  example: 0
-                discount:
-                  type: integer
-                  description: Discount applied on item.
-                  example: 50
     SettleResponse:
       required:
       - id
@@ -341,16 +296,52 @@ components:
           type: number
           description: Value to be settled. The value must be described without using separation for decimals, e.g. to capture a value of 320.50, send 32050.
           example: 10050
+    RefundthetransactionRequest:
+      required:
+      - value
+      type: object
+      description: Refund transaction request body information.
+      properties:
+        value:
+          type: number
+          description: Purchase value. The value must be described without using separation for decimals, e.g. to capture a value of 320.50, send 32050.
+        freight:
+          type: number
+          description: Freigth value, if applicable.
+        tax:
+          type: number
+          description: Tax value, if applicable.
+        minicart:
+          type: object
+          description: This field is filled with the content of the cart of the transaction, which can be obtained using [Get Orders](https://developers.vtex.com/docs/api-reference/orders-api?endpoint=get-/api/oms/pvt/orders/-orderId-) or [Transaction Details](https://developers.vtex.com/docs/api-reference/payments-gateway-api?endpoint=get-/api/pvt/transactions/-transactionId-) endpoints. It should only be included for transactions with split payment.
+          items:
+            type: array
+            description: Array containing cart items.
+            items:
+              type: object
+              description: Cart items information.
+              properties:
+                id:
+                  type: string
+                  description: Item identifier.
+                  example: '122323'
+                name:
+                  type: string
+                  description: Item name.
+                  example: Tenis Preto I
+                value:
+                  type: number
+                  description: Item value.
+                  example: 1000
+                shippingDiscount:
+                  type: integer
+                  description: Discount to be applied for the shipping value.
+                  example: 0
+                discount:
+                  type: integer
+                  description: Discount applied on item.
+                  example: 50
   parameters:
-    transactionId:
-      name: transactionId
-      in: path
-      description: Transaction identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: A3BDE325F76B4B758B398D900DF06150
     Accept:
       name: Accept
       in: header
@@ -360,6 +351,15 @@ components:
       schema:
         type: string
         example: application/json
+    transactionId:
+      name: transactionId
+      in: path
+      description: Transaction identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: A3BDE325F76B4B758B398D900DF06150
     Content-Type:
       name: Content-Type
       in: header

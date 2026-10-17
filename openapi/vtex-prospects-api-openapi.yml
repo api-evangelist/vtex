@@ -766,6 +766,11 @@ components:
           $ref: '#/components/schemas/Prospect'
         meta:
           $ref: '#/components/schemas/ProspectMeta'
+    ProspectId:
+      title: id
+      type: string
+      description: ID of the prospect.
+      example: c2cbebba-214e-40b2-b68f-98f862e755d5
     PaymentData:
       title: paymentData
       type: object
@@ -885,161 +890,6 @@ components:
           - 'null'
           description: Last denied transaction.
           example: null
-    MaskedProspectResponse:
-      title: Masked prospect information.
-      type: object
-      description: Masked prospect information.
-      properties:
-        id:
-          $ref: '#/components/schemas/ProspectId'
-        document:
-          $ref: '#/components/schemas/Prospect'
-        meta:
-          $ref: '#/components/schemas/ProspectMeta'
-    Payment:
-      title: Payment
-      required:
-      - id
-      - paymentSystem
-      - paymentSystemName
-      - value
-      - installments
-      - referenceValue
-      - cardHolder
-      - cardNumber
-      - firstDigits
-      - lastDigits
-      - cvv2
-      - expireMonth
-      - expireYear
-      - url
-      - giftCardId
-      - giftCardName
-      - giftCardCaption
-      - redemptionCode
-      - group
-      - tid
-      - dueDate
-      - connectorResponses
-      type: object
-      description: Payment information.
-      properties:
-        id:
-          type: string
-          description: Payment ID.
-        paymentSystem:
-          type: string
-          description: Payment system.
-        paymentSystemName:
-          type: string
-          description: Payment system name.
-        value:
-          type: integer
-          format: int32
-          description: Payment value in cents.
-        installments:
-          type: integer
-          format: int32
-          description: Payment installments.
-        referenceValue:
-          type: integer
-          format: int32
-          description: Reference value for interest calculation in cents.
-        cardHolder:
-          type:
-          - string
-          - 'null'
-          description: Card holder.
-        cardNumber:
-          type:
-          - string
-          - 'null'
-          description: Card number.
-        firstDigits:
-          type:
-          - string
-          - 'null'
-          description: Card first digits.
-        lastDigits:
-          type:
-          - string
-          - 'null'
-          description: Card last digits.
-        cvv2:
-          type:
-          - string
-          - 'null'
-          description: Card verification code.
-        expireMonth:
-          type:
-          - string
-          - 'null'
-          description: Card expiration month.
-        expireYear:
-          type:
-          - string
-          - 'null'
-          description: Card expiration year.
-        url:
-          type: string
-          description: Payment URL.
-        giftCardId:
-          type:
-          - string
-          - 'null'
-          description: Gift card ID.
-        giftCardName:
-          type:
-          - string
-          - 'null'
-          description: Gift card name.
-        giftCardCaption:
-          type:
-          - string
-          - 'null'
-          description: Gift card caption.
-        redemptionCode:
-          type:
-          - string
-          - 'null'
-          description: Redemption code.
-        group:
-          type: string
-          description: Payment group.
-        tid:
-          type:
-          - string
-          - 'null'
-          description: Payment TID.
-        dueDate:
-          type: string
-          description: Due date.
-        connectorResponses:
-          type: object
-          description: Connector responses.
-      example:
-        id: D3DEECAB3C6C4B9EAF8EF4C1FE062FF3
-        paymentSystem: '6'
-        paymentSystemName: Boleto Bancário
-        value: 4450
-        installments: 1
-        referenceValue: 4450
-        cardHolder: null
-        cardNumber: null
-        firstDigits: null
-        lastDigits: null
-        cvv2: null
-        expireMonth: null
-        expireYear: null
-        url: https://luxstore.vtexpayments.com.br:443/BankIssuedInvoice/Transaction/418213DE29634837A63DD693A937A696/Payment/D3DEECAB3C6C4B9EAF8EF4C1FE062FF3/Installment/{Installment}
-        giftCardId: null
-        giftCardName: null
-        giftCardCaption: null
-        redemptionCode: null
-        group: bankInvoice
-        tid: null
-        dueDate: '2019-02-02'
-        connectorResponses: {}
     ProspectMeta:
       title: Prospect information metadata.
       description: Prospect information metadata.
@@ -1215,21 +1065,171 @@ components:
           type: string
           description: Prospect's customer code.
           example: 5397eefe-f237-41d4-976e-bdf772cc42e0
-    ProspectId:
-      title: id
-      type: string
-      description: ID of the prospect.
-      example: c2cbebba-214e-40b2-b68f-98f862e755d5
+    Payment:
+      title: Payment
+      required:
+      - id
+      - paymentSystem
+      - paymentSystemName
+      - value
+      - installments
+      - referenceValue
+      - cardHolder
+      - cardNumber
+      - firstDigits
+      - lastDigits
+      - cvv2
+      - expireMonth
+      - expireYear
+      - url
+      - giftCardId
+      - giftCardName
+      - giftCardCaption
+      - redemptionCode
+      - group
+      - tid
+      - dueDate
+      - connectorResponses
+      type: object
+      description: Payment information.
+      properties:
+        id:
+          type: string
+          description: Payment ID.
+        paymentSystem:
+          type: string
+          description: Payment system.
+        paymentSystemName:
+          type: string
+          description: Payment system name.
+        value:
+          type: integer
+          format: int32
+          description: Payment value in cents.
+        installments:
+          type: integer
+          format: int32
+          description: Payment installments.
+        referenceValue:
+          type: integer
+          format: int32
+          description: Reference value for interest calculation in cents.
+        cardHolder:
+          type:
+          - string
+          - 'null'
+          description: Card holder.
+        cardNumber:
+          type:
+          - string
+          - 'null'
+          description: Card number.
+        firstDigits:
+          type:
+          - string
+          - 'null'
+          description: Card first digits.
+        lastDigits:
+          type:
+          - string
+          - 'null'
+          description: Card last digits.
+        cvv2:
+          type:
+          - string
+          - 'null'
+          description: Card verification code.
+        expireMonth:
+          type:
+          - string
+          - 'null'
+          description: Card expiration month.
+        expireYear:
+          type:
+          - string
+          - 'null'
+          description: Card expiration year.
+        url:
+          type: string
+          description: Payment URL.
+        giftCardId:
+          type:
+          - string
+          - 'null'
+          description: Gift card ID.
+        giftCardName:
+          type:
+          - string
+          - 'null'
+          description: Gift card name.
+        giftCardCaption:
+          type:
+          - string
+          - 'null'
+          description: Gift card caption.
+        redemptionCode:
+          type:
+          - string
+          - 'null'
+          description: Redemption code.
+        group:
+          type: string
+          description: Payment group.
+        tid:
+          type:
+          - string
+          - 'null'
+          description: Payment TID.
+        dueDate:
+          type: string
+          description: Due date.
+        connectorResponses:
+          type: object
+          description: Connector responses.
+      example:
+        id: D3DEECAB3C6C4B9EAF8EF4C1FE062FF3
+        paymentSystem: '6'
+        paymentSystemName: Boleto Bancário
+        value: 4450
+        installments: 1
+        referenceValue: 4450
+        cardHolder: null
+        cardNumber: null
+        firstDigits: null
+        lastDigits: null
+        cvv2: null
+        expireMonth: null
+        expireYear: null
+        url: https://luxstore.vtexpayments.com.br:443/BankIssuedInvoice/Transaction/418213DE29634837A63DD693A937A696/Payment/D3DEECAB3C6C4B9EAF8EF4C1FE062FF3/Installment/{Installment}
+        giftCardId: null
+        giftCardName: null
+        giftCardCaption: null
+        redemptionCode: null
+        group: bankInvoice
+        tid: null
+        dueDate: '2019-02-02'
+        connectorResponses: {}
+    MaskedProspectResponse:
+      title: Masked prospect information.
+      type: object
+      description: Masked prospect information.
+      properties:
+        id:
+          $ref: '#/components/schemas/ProspectId'
+        document:
+          $ref: '#/components/schemas/Prospect'
+        meta:
+          $ref: '#/components/schemas/ProspectMeta'
   parameters:
-    reason:
-      name: reason
-      in: query
-      description: Reason for requesting unmasked data.
+    prospectId:
+      name: prospectId
+      in: path
+      description: ID of the prospect as returned by the [Create prospect](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/prospects) endpoint's response, in the `id` field.
       required: true
-      style: form
+      style: simple
       schema:
         type: string
-        example: data-validation
+        example: 98478f6b-d025-4f35-a560-dd1ee7a6f26e
     Accept:
       name: Accept
       in: header
@@ -1248,15 +1248,15 @@ components:
       schema:
         type: string
         example: application/json
-    prospectId:
-      name: prospectId
-      in: path
-      description: ID of the prospect as returned by the [Create prospect](https://developers.vtex.com/docs/api-reference/profile-system#post-/api/storage/profile-system/prospects) endpoint's response, in the `id` field.
+    reason:
+      name: reason
+      in: query
+      description: Reason for requesting unmasked data.
       required: true
-      style: simple
+      style: form
       schema:
         type: string
-        example: 98478f6b-d025-4f35-a560-dd1ee7a6f26e
+        example: data-validation
   securitySchemes:
     appKey:
       type: apiKey

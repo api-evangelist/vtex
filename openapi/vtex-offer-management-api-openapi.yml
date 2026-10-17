@@ -1821,6 +1821,22 @@ components:
           type: string
           description: This field informs Sent Offers about an offer's lifecycle. When the integration has been recently installed, and producst are being sent for the first time, the value should be `setup`. If it's an update log, when the interaction is already up and running, the value should be `ongoing`.
           default: setup
+    Evidence:
+      title: Evidence
+      description: cURL with the call that the connector has made for a VTEX system. It will provide the evidence needed to contextualize the entry, if the user needs to fully understand the process ocurred, or solve any errors.
+      required:
+      - request
+      - response
+      type: object
+      properties:
+        request:
+          type: string
+          description: cURL with the request call that the connector has made for a VTEX system. It will provide the evidence needed to contextualize the entry, if the user needs to fully understand the process ocurred, or solve any errors.
+          default: GET https://www.vtex.com
+        response:
+          type: string
+          description: cURL with the response of the call that the connector has made for a VTEX system. It will provide the evidence needed to contextualize the entry, if the user needs to fully understand the process occurred, or solve any errors.
+          default: 200 Ok
     UpdateFeedRequest:
       title: UpdateFeedRequest
       required:
@@ -1836,6 +1852,71 @@ components:
           type: string
           description: This attribute is created by the seller, in their VTEX store configuration.
           default: '1'
+    CreateLogRequest:
+      title: CreateLogRequest
+      required:
+      - description
+      - date
+      - type
+      - agent
+      - evidence
+      - data
+      - errors
+      type: object
+      properties:
+        description:
+          type: string
+          description: In this field, connectors should describe relevant information about the log, so Sent Offers users can better understand the action taking place.
+          default: Insert your message
+        date:
+          type: string
+          description: Logs follow a chronological timeline, so make sure the date included corresponds to the correct order of logs.
+          default: '2020-03-22'
+        type:
+          type: string
+          description: "Connectors are responsible for attributing the correct type for each log. Therefore, be mindful of their correct usage. \n\n`success`: only logs that conclude an interaction’s goal should be `“type”=”success”`. \n\n`information`: logs that expose the actions of an update process, to provide visibility and contribute with more technical investigations. Information logs may include internal processes of a system (`agent` attribute), or calls between two systems. \n\n`warning`: logs used in cases where the communication between two systems fails, and there are no actions that the user can take to fix it. They are usually cases where the connector should perform a retry, and provide visibility of what is being attempted again. \n\n`failure`: logs noticed by the connector as errors that prevent an offer from being correctly sent and synced to a channel."
+          default: information
+        agent:
+          type: string
+          description: Entity responsible for creating the entry.
+          default: broadcaster
+        evidence:
+          $ref: '#/components/schemas/Evidence'
+        data:
+          $ref: '#/components/schemas/Data'
+        errors:
+          $ref: '#/components/schemas/Errors'
+    Data:
+      title: Data
+      description: Data related to an offer, that will be updated or sent for the first time during setup.
+      required:
+      - externalOfferId
+      - inventory
+      - salesPrice
+      - currency
+      - status
+      type: object
+      properties:
+        externalOfferId:
+          type: string
+          description: The ID used by the channel to identify this offer. Fill in this field if there are any updates in that ID.
+          default: '123456'
+        inventory:
+          type: string
+          description: Updated inventory level of that offer. Fill in this field if there are any updates in inventory.
+          default: '33'
+        salesPrice:
+          type: string
+          description: The value the offer is being sold for, on the channel. Fill in this field if there are any updates in price.
+          default: '79.99'
+        currency:
+          type: string
+          description: The currency applied to the offer's `salesPrice`. The international currency code should be used as value for this field. Fill in this field if there are any updates in price.
+          default: BRL
+        status:
+          type: string
+          description: "The offer status can have the following values: \n\n`Synced`:  when offers are successfully sent to a channel and are currently being synced between both entities.\n\n`Sending`: intermediate state, when offers are still in the process of being sent to a channel. This status involves offers that are either sent for the first time to the marketplace, migrated to a new marketplace, or resent offers that were once deleted from a channel. \n\n`Error`: when Sent Offers finds an error that prevents sending or updating an offer to a channel. Therefore this status requires manual correction. \n\n`Disabled`: when the offer is discarded by the connector, by being inactive or not included in the trade policy,"
+          default: disabled
     CreateFeedRequest:
       title: CreateFeedRequest
       required:
@@ -1889,87 +1970,6 @@ components:
           default:
           - catalog
           - price
-    Evidence:
-      title: Evidence
-      description: cURL with the call that the connector has made for a VTEX system. It will provide the evidence needed to contextualize the entry, if the user needs to fully understand the process ocurred, or solve any errors.
-      required:
-      - request
-      - response
-      type: object
-      properties:
-        request:
-          type: string
-          description: cURL with the request call that the connector has made for a VTEX system. It will provide the evidence needed to contextualize the entry, if the user needs to fully understand the process ocurred, or solve any errors.
-          default: GET https://www.vtex.com
-        response:
-          type: string
-          description: cURL with the response of the call that the connector has made for a VTEX system. It will provide the evidence needed to contextualize the entry, if the user needs to fully understand the process occurred, or solve any errors.
-          default: 200 Ok
-    Data:
-      title: Data
-      description: Data related to an offer, that will be updated or sent for the first time during setup.
-      required:
-      - externalOfferId
-      - inventory
-      - salesPrice
-      - currency
-      - status
-      type: object
-      properties:
-        externalOfferId:
-          type: string
-          description: The ID used by the channel to identify this offer. Fill in this field if there are any updates in that ID.
-          default: '123456'
-        inventory:
-          type: string
-          description: Updated inventory level of that offer. Fill in this field if there are any updates in inventory.
-          default: '33'
-        salesPrice:
-          type: string
-          description: The value the offer is being sold for, on the channel. Fill in this field if there are any updates in price.
-          default: '79.99'
-        currency:
-          type: string
-          description: The currency applied to the offer's `salesPrice`. The international currency code should be used as value for this field. Fill in this field if there are any updates in price.
-          default: BRL
-        status:
-          type: string
-          description: "The offer status can have the following values: \n\n`Synced`:  when offers are successfully sent to a channel and are currently being synced between both entities.\n\n`Sending`: intermediate state, when offers are still in the process of being sent to a channel. This status involves offers that are either sent for the first time to the marketplace, migrated to a new marketplace, or resent offers that were once deleted from a channel. \n\n`Error`: when Sent Offers finds an error that prevents sending or updating an offer to a channel. Therefore this status requires manual correction. \n\n`Disabled`: when the offer is discarded by the connector, by being inactive or not included in the trade policy,"
-          default: disabled
-    CreateLogRequest:
-      title: CreateLogRequest
-      required:
-      - description
-      - date
-      - type
-      - agent
-      - evidence
-      - data
-      - errors
-      type: object
-      properties:
-        description:
-          type: string
-          description: In this field, connectors should describe relevant information about the log, so Sent Offers users can better understand the action taking place.
-          default: Insert your message
-        date:
-          type: string
-          description: Logs follow a chronological timeline, so make sure the date included corresponds to the correct order of logs.
-          default: '2020-03-22'
-        type:
-          type: string
-          description: "Connectors are responsible for attributing the correct type for each log. Therefore, be mindful of their correct usage. \n\n`success`: only logs that conclude an interaction’s goal should be `“type”=”success”`. \n\n`information`: logs that expose the actions of an update process, to provide visibility and contribute with more technical investigations. Information logs may include internal processes of a system (`agent` attribute), or calls between two systems. \n\n`warning`: logs used in cases where the communication between two systems fails, and there are no actions that the user can take to fix it. They are usually cases where the connector should perform a retry, and provide visibility of what is being attempted again. \n\n`failure`: logs noticed by the connector as errors that prevent an offer from being correctly sent and synced to a channel."
-          default: information
-        agent:
-          type: string
-          description: Entity responsible for creating the entry.
-          default: broadcaster
-        evidence:
-          $ref: '#/components/schemas/Evidence'
-        data:
-          $ref: '#/components/schemas/Data'
-        errors:
-          $ref: '#/components/schemas/Errors'
   securitySchemes:
     appKey:
       type: apiKey

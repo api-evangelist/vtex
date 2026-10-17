@@ -237,6 +237,36 @@ paths:
           default: vtexcommercestable
 components:
   schemas:
+    ConnectorResponses:
+      title: ConnectorResponses
+      required:
+      - Tid
+      - ReturnCode
+      - Message
+      - authId
+      type: object
+      properties:
+        Tid:
+          type: string
+          description: Connector transaction ID.
+        ReturnCode:
+          type:
+          - string
+          - 'null'
+          description: Connector return code.
+        Message:
+          type:
+          - string
+          - 'null'
+          description: Information about the connector's responses.
+        authId:
+          type: string
+          description: Connector authorization ID.
+      example:
+        Tid: '101770752'
+        ReturnCode: null
+        Message: null
+        authId: '170852'
     GetPaymenttransaction:
       title: GetPaymenttransaction
       required:
@@ -296,36 +326,6 @@ components:
             ReturnCode: '200'
             Message: logMessage
             authId: '170852'
-    ConnectorResponses:
-      title: ConnectorResponses
-      required:
-      - Tid
-      - ReturnCode
-      - Message
-      - authId
-      type: object
-      properties:
-        Tid:
-          type: string
-          description: Connector transaction ID.
-        ReturnCode:
-          type:
-          - string
-          - 'null'
-          description: Connector return code.
-        Message:
-          type:
-          - string
-          - 'null'
-          description: Information about the connector's responses.
-        authId:
-          type: string
-          description: Connector authorization ID.
-      example:
-        Tid: '101770752'
-        ReturnCode: null
-        Message: null
-        authId: '170852'
     Payment1:
       title: Payment1
       required:
@@ -477,10 +477,10 @@ components:
       schema:
         type: string
         example: 70caf3941s6df1
-    Content-Type:
-      name: Content-Type
+    Accept:
+      name: Accept
       in: header
-      description: Type of the content being sent.
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
       required: true
       style: simple
       schema:
@@ -495,10 +495,10 @@ components:
       schema:
         type: string
         example: 45hsfg5jkyu1384jdsfgh654sfgj1
-    Accept:
-      name: Accept
+    Content-Type:
+      name: Content-Type
       in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:

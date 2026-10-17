@@ -214,32 +214,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Getappkeysfromaccount:
-      description: Response body for getting all application keys from the account.
-      required:
-      - id
-      - appKey
-      - label
-      - createdIn
-      - isActive
-      type: object
-      properties:
-        id:
-          description: ID of the application key.
-          type: string
-        appKey:
-          description: AppKey.
-          type: string
-        label:
-          description: Label of the application key.
-          type: string
-        createdIn:
-          description: Creation date of the application key.
-          type: string
-          format: date-time
-        isActive:
-          description: Defines if the application key is active (`true`) or not (`false`).
-          type: boolean
     UpdateappkeyRequest:
       description: Request body for activating or deactivating application keys.
       required:
@@ -250,6 +224,34 @@ components:
           description: Defines if the application key is active (`true`) or not (`false`).
           type: boolean
           example: true
+    VLMError:
+      description: Object representing VLMError.
+      type: object
+      properties:
+        Details:
+          description: Details of error.
+          type:
+          - string
+          - 'null'
+        HttpStatusCode:
+          description: Status code of HTTP response.
+          type: integer
+        VLMErrorCode:
+          description: Error code for License Manager.
+          type: integer
+        Message:
+          description: Error message.
+          type: string
+    CreatenewappkeyRequest:
+      description: Request body for creating new application key (/api/vlm/appkeys)
+      required:
+      - label
+      type: object
+      properties:
+        label:
+          description: Label of the application key.
+          type: string
+          example: appkey-test
     CreatenewappkeyResponse:
       description: Response body of sucessful call to /api/vlm/appkeys.
       required:
@@ -282,34 +284,32 @@ components:
         isActive:
           description: Defines if the application key is active (`true`) or not (`false`).
           type: boolean
-    CreatenewappkeyRequest:
-      description: Request body for creating new application key (/api/vlm/appkeys)
+    Getappkeysfromaccount:
+      description: Response body for getting all application keys from the account.
       required:
+      - id
+      - appKey
       - label
+      - createdIn
+      - isActive
       type: object
       properties:
+        id:
+          description: ID of the application key.
+          type: string
+        appKey:
+          description: AppKey.
+          type: string
         label:
           description: Label of the application key.
           type: string
-          example: appkey-test
-    VLMError:
-      description: Object representing VLMError.
-      type: object
-      properties:
-        Details:
-          description: Details of error.
-          type:
-          - string
-          - 'null'
-        HttpStatusCode:
-          description: Status code of HTTP response.
-          type: integer
-        VLMErrorCode:
-          description: Error code for License Manager.
-          type: integer
-        Message:
-          description: Error message.
+        createdIn:
+          description: Creation date of the application key.
           type: string
+          format: date-time
+        isActive:
+          description: Defines if the application key is active (`true`) or not (`false`).
+          type: boolean
   parameters:
     Content-Type:
       name: Content-Type

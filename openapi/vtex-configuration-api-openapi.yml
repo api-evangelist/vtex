@@ -3781,26 +3781,6 @@ paths:
           default: apiexamples
 components:
   schemas:
-    PaymentConfiguration:
-      title: PaymentConfiguration
-      description: Payment Configuration object.
-      required:
-      - requiresAuthenticationForPreAuthorizedPaymentOption
-      type: object
-      properties:
-        requiresAuthenticationForPreAuthorizedPaymentOption:
-          type: boolean
-          description: Determines whether pre-authorized payments require authentication.
-        allowInstallmentsMerge:
-          type: boolean
-          description: By default (when `false`), on a multi-seller purchase is on the run, a simple intersection with installments options configured by every seller will be available. When `true`, this option allows a more complex but flexible installment option, since it considers max installments of every seller configuration, even if those don't match. Installment values ​​may not be equal in this case.
-        blockPaymentSession:
-          type: boolean
-          description: Indicates whether shoppers can add credit cards in your store's `My Account` section.
-      example:
-        requiresAuthenticationForPreAuthorizedPaymentOption: false
-        allowInstallmentsMerge: false
-        blockPaymentSession: false
     WaitingTime:
       type: object
       description: Object containing the days after order cancelation by a seller.
@@ -3944,9 +3924,386 @@ components:
         apps: null
         allowMultipleDeliveries: null
         allowManualPrice: null
-    RulesRequest:
+    PaymentConfiguration:
+      title: PaymentConfiguration
+      description: Payment Configuration object.
+      required:
+      - requiresAuthenticationForPreAuthorizedPaymentOption
+      type: object
+      properties:
+        requiresAuthenticationForPreAuthorizedPaymentOption:
+          type: boolean
+          description: Determines whether pre-authorized payments require authentication.
+        allowInstallmentsMerge:
+          type: boolean
+          description: By default (when `false`), on a multi-seller purchase is on the run, a simple intersection with installments options configured by every seller will be available. When `true`, this option allows a more complex but flexible installment option, since it considers max installments of every seller configuration, even if those don't match. Installment values ​​may not be equal in this case.
+        blockPaymentSession:
+          type: boolean
+          description: Indicates whether shoppers can add credit cards in your store's `My Account` section.
+      example:
+        requiresAuthenticationForPreAuthorizedPaymentOption: false
+        allowInstallmentsMerge: false
+        blockPaymentSession: false
+    Antifraud:
+      required:
+      - implementation
+      - affiliationId
+      type:
+      - object
+      - 'null'
+      description: Anti-fraud information.
+      properties:
+        implementation:
+          type:
+          - string
+          - 'null'
+          description: Connector (anti-fraud provider) implementation class name.
+          example: Vtex.PaymentGateway.Connectors.ClearSaleConnector
+        affiliationId:
+          type:
+          - string
+          - 'null'
+          description: Affiliation connector (anti-fraud provider) identification.
+          example: 0a8488e6-0c30-4150-be96-b0dcaaa6a0cd
+    Validator:
+      required:
+      - regex
+      - mask
+      - cardCodeMask
+      - cardCodeRegex
+      - weights
+      - useCvv
+      - useExpirationDate
+      - useCardHolderName
+      - useBillingAddress
+      - validCardLengths
+      type: object
+      description: Validator information.
+      properties:
+        regex:
+          type:
+          - string
+          - 'null'
+          description: '[Regex](https://regexr.com/) information.'
+        mask:
+          type:
+          - string
+          - 'null'
+          description: Validator mask.
+        cardCodeMask:
+          type:
+          - string
+          - 'null'
+          description: Card code regular mask.
+        cardCodeRegex:
+          type:
+          - string
+          - 'null'
+          description: Card code regular expression.
+        weights:
+          type:
+          - array
+          - 'null'
+          description: Array containing weigths information.
+          items:
+            type: integer
+            description: Weigths information.
+        useCvv:
+          type: boolean
+          description: Indicates whether it is necessary to use the CVV code to complete a transaction with payment made by card.
+        useExpirationDate:
+          type: boolean
+          description: Indicates whether it is necessary to use the expiration date to complete a card payment transaction.
+        useCardHolderName:
+          type: boolean
+          description: Indicates whether it is necessary to use the card holder name to complete a payment transaction made by card.
+        useBillingAddress:
+          type: boolean
+          description: Indicates whether it is necessary to use the billing address to complete a card payment transaction.
+        validCardLengths:
+          type:
+          - string
+          - 'null'
+          description: Information about valid card lengths.
+    AffiliationResponse:
+      type: object
+      description: Affiliation by ID response body information.
       required:
       - id
+      - implementation
+      - name
+      - configuration
+      - isdelivered
+      - isConfigured
+      properties:
+        id:
+          type: string
+          description: Provider identification.
+        implementation:
+          type: string
+          description: Provider implementation class name.
+        name:
+          type: string
+          description: Provider name.
+        configuration:
+          type: array
+          description: Array containing provider configuration information.
+          items:
+            type: object
+            description: Provider configuration information.
+            required:
+            - name
+            - value
+            - valueKey
+            properties:
+              name:
+                type: string
+                description: Configuration parameter name.
+              value:
+                type: string
+                description: Configuration parameter value.
+              valueKey:
+                type:
+                - string
+                - 'null'
+                description: Value key information.
+        isdelivered:
+          type: boolean
+          description: Indicates whether the provider is published and available for use.
+          example: true
+        isConfigured:
+          type: boolean
+          description: Indicates whether the provider is configured.
+          example: true
+    UpdateAffiliationRequest:
+      type: object
+      description: Update affiliation by ID request body information.
+      required:
+      - id
+      - implementation
+      - name
+      - configuration
+      - isdelivered
+      - isConfigured
+      properties:
+        id:
+          type: string
+          description: Provider identification.
+          example: fg8b4ea5-0b24-47dc-971e-2f6635ea1f14
+        implementation:
+          type: string
+          description: Provider implementation class name.
+          example: Vtex.PaymentGateway.Connectors.CieloV3Connector
+        name:
+          type: string
+          description: Provider name.
+          example: CieloV3 - Test
+        configuration:
+          type: array
+          description: Array containing provider configuration information.
+          items:
+            type: object
+            description: Provider configuration information.
+            required:
+            - name
+            - value
+            - valueKey
+            properties:
+              name:
+                type: string
+                description: Configuration parameter name.
+                example: MerchantId
+              value:
+                type: string
+                description: Configuration parameter value.
+                example: sampleData
+              valueKey:
+                type:
+                - string
+                - 'null'
+                description: Value key information.
+                example: valuekey_1
+        isdelivered:
+          type: boolean
+          description: Indicates whether the provider is published and available for use.
+          example: true
+        isConfigured:
+          type: boolean
+          description: Indicates whether the provider is configured.
+          example: true
+      example:
+        id: fg8b4ea5-0b24-47dc-971e-2f6635ea1f14
+        implementation: Vtex.PaymentGateway.Connectors.CieloV3Connector
+        name: CieloV3 - Test
+        configuration:
+        - name: HowTo
+          value: https://developercielo.github.io/payment-method-enablement/
+          valueKey: null
+        - name: MerchantId
+          value: sampleData
+          valueKey: null
+        - name: MerchantKey
+          value: '**********'
+          valueKey: null
+        - name: softDescriptor
+          value: teste
+          valueKey: null
+        - name: bankInvoiceProvider
+          value: Disabled
+          valueKey: null
+        - name: bankIDebitProvider
+          value: Disabled
+          valueKey: null
+        - name: useEarlySecurityCapture
+          value: '0'
+          valueKey: null
+        - name: isProduction
+          value: 'false'
+          valueKey: null
+        - name: bankDebitProvider
+          value: Disabled
+          valueKey: null
+        - name: Registered
+          value: 'false'
+          valueKey: null
+        isdelivered: true
+        isConfigured: true
+    PaymentSystemsResponse:
+      required:
+      - id
+      - name
+      - requiresDocument
+      - implementation
+      - connectorImplementation
+      - antifraudConnectorImplementation
+      - groupName
+      - redirect
+      - isCustom
+      - isSelfAuthorized
+      - requiresAuthentication
+      - allowInstallments
+      - allowBinExclusion
+      - allowMultiple
+      - allowIssuer
+      - allowCountry
+      - allowCommercialPolicy
+      - allowCommercialCondition
+      - allowPeriod
+      - isAvailable
+      - description
+      - supportRecurrence
+      - validator
+      - appDependencies
+      - displayDocument
+      - dueDate
+      - allowNotification
+      - affiliationId
+      - availablePayments
+      - dueDateMinutes
+      type: object
+      description: Available payment methods response body information.
+      properties:
+        id:
+          type: number
+          description: Payment method identification.
+        name:
+          type: string
+          description: Payment method name.
+        requiresDocument:
+          type: boolean
+          description: Indicates whether a document is required.
+        implementation:
+          type: string
+          description: Payment method implementation class name.
+        connectorImplementation:
+          type: string
+          description: Connector (payment provider) implementation class name.
+        antifraudConnectorImplementation:
+          type:
+          - string
+          - 'null'
+          description: Connector (anti-fraud provider) implementation class name.
+        groupName:
+          type: string
+          description: Payment group name.
+        redirect:
+          type: boolean
+          description: Indicates whether the payment method allows redirection.
+        isCustom:
+          type: boolean
+          description: Indicates whether it is custom.
+        isSelfAuthorized:
+          type: boolean
+          description: Indicates whether the payment is automatically authorized.
+        requiresAuthentication:
+          type: boolean
+          description: Indicates whether it is necessary to log in to make the payment.
+        allowInstallments:
+          type: boolean
+          description: Indicates whether the payment method allows installments.
+        allowBinExclusion:
+          type: boolean
+          description: Indicates whether it is possible to restrict the use of specific BIN codes (only applicable for cards).
+        allowMultiple:
+          type: boolean
+          description: 'Indicates whether the method allows multiple payments. Example of `false`: debit card.'
+        allowIssuer:
+          type: boolean
+          description: Indicates whether it is possible to identify the name of the bank responsible for issuing the card.
+        allowCountry:
+          type: boolean
+          description: Indicates whether it is possible to restrict a payment rule by the country where the purchase is made.
+        allowCommercialPolicy:
+          type: boolean
+          description: Indicates whether to restrict a payment rule by commercial policy type.
+        allowCommercialCondition:
+          type: boolean
+          description: Indicates whether to restrict a payment rule by commercial condition type.
+        allowPeriod:
+          type: boolean
+          description: Indicates whether it is possible to restrict a period for making the payment.
+        isAvailable:
+          type: boolean
+          description: Indicates whether the payment method is available for use.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the payment method.
+        supportRecurrence:
+          type: boolean
+          description: Indicates whether the payment method supports recurrence.
+        validator:
+          $ref: '#/components/schemas/Validator'
+        appDependencies:
+          type:
+          - string
+          - 'null'
+          description: App dependencies information.
+        displayDocument:
+          type: boolean
+          description: Indicates whether a document is shown.
+        dueDate:
+          type: string
+          description: Payment due date.
+        allowNotification:
+          type: boolean
+          description: Indicates the possibility of payment notification (used by bank invoices and notes payable).
+        affiliationId:
+          type:
+          - string
+          - 'null'
+          description: Affiliation connector (payment provider) identification.
+        availablePayments:
+          type:
+          - string
+          - 'null'
+          description: Information about payment availability.
+        dueDateMinutes:
+          type: number
+          description: Amount of time (in minutes) until the payment date (`dueDate`).
+    InsertRuleRequest:
+      required:
       - name
       - salesChannels
       - paymentSystem
@@ -3966,16 +4323,12 @@ components:
       - country
       - dateIntervals
       type: object
-      description: Payment rules information.
+      description: New payment rule request body information.
       properties:
-        id:
-          type: string
-          description: Rule identification.
-          example: 9e11ed95-4b7f-4445-a53e-2512f260ff1c
         name:
           type: string
           description: Rule name.
-          example: American Express
+          example: Test_API_2
         salesChannels:
           $ref: '#/components/schemas/SalesChannel'
         paymentSystem:
@@ -4071,7 +4424,7 @@ components:
         enabled:
           type: boolean
           description: Indicates whether the rule is enabled in the store.
-          example: true
+          example: false
         installmentsService:
           type: boolean
           description: Indicates whether any specific type of installment service is used.
@@ -4231,56 +4584,35 @@ components:
           - number
           - 'null'
           description: Range of card bins excluded from application of this rule.
-    AffiliationResponse:
-      type: object
-      description: Affiliation by ID response body information.
+    Issuer:
       required:
-      - id
-      - implementation
       - name
-      - configuration
-      - isdelivered
-      - isConfigured
+      type: object
+      description: Card issuer information.
       properties:
-        id:
-          type: string
-          description: Provider identification.
+        name:
+          type:
+          - string
+          - 'null'
+          description: Card issuer name.
+          example: barclays
+    Connector:
+      required:
+      - implementation
+      - affiliationId
+      type:
+      - object
+      - 'null'
+      description: Connector (payment provider) information.
+      properties:
         implementation:
           type: string
-          description: Provider implementation class name.
-        name:
+          description: Connector (payment provider) implementation class name.
+          example: Vtex.PaymentGateway.Connectors.CieloV3Connector
+        affiliationId:
           type: string
-          description: Provider name.
-        configuration:
-          type: array
-          description: Array containing provider configuration information.
-          items:
-            type: object
-            description: Provider configuration information.
-            required:
-            - name
-            - value
-            - valueKey
-            properties:
-              name:
-                type: string
-                description: Configuration parameter name.
-              value:
-                type: string
-                description: Configuration parameter value.
-              valueKey:
-                type:
-                - string
-                - 'null'
-                description: Value key information.
-        isdelivered:
-          type: boolean
-          description: Indicates whether the provider is published and available for use.
-          example: true
-        isConfigured:
-          type: boolean
-          description: Indicates whether the provider is configured.
-          example: true
+          description: Affiliation connector (payment provider) identification.
+          example: 0a8488e6-0c30-4150-be96-b0dcaaa6a0cd
     SalesChannel:
       type: array
       description: Array containing information about the Sales channel.
@@ -4294,253 +4626,6 @@ components:
             type: string
             description: Sales channel identification.
             example: '1'
-    PaymentSystem:
-      required:
-      - id
-      - name
-      - implementation
-      type: object
-      description: Payment system information.
-      properties:
-        id:
-          type: number
-          description: Payment system identification.
-          example: 1
-        name:
-          type: string
-          description: Payment system name.
-          example: CieloV3 - Test
-        implementation:
-          type:
-          - string
-          - 'null'
-          description: Payment system implementation class name.
-          example: Vtex.PaymentGateway.Connectors.CieloV3Connector
-    Antifraud:
-      required:
-      - implementation
-      - affiliationId
-      type:
-      - object
-      - 'null'
-      description: Anti-fraud information.
-      properties:
-        implementation:
-          type:
-          - string
-          - 'null'
-          description: Connector (anti-fraud provider) implementation class name.
-          example: Vtex.PaymentGateway.Connectors.ClearSaleConnector
-        affiliationId:
-          type:
-          - string
-          - 'null'
-          description: Affiliation connector (anti-fraud provider) identification.
-          example: 0a8488e6-0c30-4150-be96-b0dcaaa6a0cd
-    PaymentSystemsResponse:
-      required:
-      - id
-      - name
-      - requiresDocument
-      - implementation
-      - connectorImplementation
-      - antifraudConnectorImplementation
-      - groupName
-      - redirect
-      - isCustom
-      - isSelfAuthorized
-      - requiresAuthentication
-      - allowInstallments
-      - allowBinExclusion
-      - allowMultiple
-      - allowIssuer
-      - allowCountry
-      - allowCommercialPolicy
-      - allowCommercialCondition
-      - allowPeriod
-      - isAvailable
-      - description
-      - supportRecurrence
-      - validator
-      - appDependencies
-      - displayDocument
-      - dueDate
-      - allowNotification
-      - affiliationId
-      - availablePayments
-      - dueDateMinutes
-      type: object
-      description: Available payment methods response body information.
-      properties:
-        id:
-          type: number
-          description: Payment method identification.
-        name:
-          type: string
-          description: Payment method name.
-        requiresDocument:
-          type: boolean
-          description: Indicates whether a document is required.
-        implementation:
-          type: string
-          description: Payment method implementation class name.
-        connectorImplementation:
-          type: string
-          description: Connector (payment provider) implementation class name.
-        antifraudConnectorImplementation:
-          type:
-          - string
-          - 'null'
-          description: Connector (anti-fraud provider) implementation class name.
-        groupName:
-          type: string
-          description: Payment group name.
-        redirect:
-          type: boolean
-          description: Indicates whether the payment method allows redirection.
-        isCustom:
-          type: boolean
-          description: Indicates whether it is custom.
-        isSelfAuthorized:
-          type: boolean
-          description: Indicates whether the payment is automatically authorized.
-        requiresAuthentication:
-          type: boolean
-          description: Indicates whether it is necessary to log in to make the payment.
-        allowInstallments:
-          type: boolean
-          description: Indicates whether the payment method allows installments.
-        allowBinExclusion:
-          type: boolean
-          description: Indicates whether it is possible to restrict the use of specific BIN codes (only applicable for cards).
-        allowMultiple:
-          type: boolean
-          description: 'Indicates whether the method allows multiple payments. Example of `false`: debit card.'
-        allowIssuer:
-          type: boolean
-          description: Indicates whether it is possible to identify the name of the bank responsible for issuing the card.
-        allowCountry:
-          type: boolean
-          description: Indicates whether it is possible to restrict a payment rule by the country where the purchase is made.
-        allowCommercialPolicy:
-          type: boolean
-          description: Indicates whether to restrict a payment rule by commercial policy type.
-        allowCommercialCondition:
-          type: boolean
-          description: Indicates whether to restrict a payment rule by commercial condition type.
-        allowPeriod:
-          type: boolean
-          description: Indicates whether it is possible to restrict a period for making the payment.
-        isAvailable:
-          type: boolean
-          description: Indicates whether the payment method is available for use.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Description of the payment method.
-        supportRecurrence:
-          type: boolean
-          description: Indicates whether the payment method supports recurrence.
-        validator:
-          $ref: '#/components/schemas/Validator'
-        appDependencies:
-          type:
-          - string
-          - 'null'
-          description: App dependencies information.
-        displayDocument:
-          type: boolean
-          description: Indicates whether a document is shown.
-        dueDate:
-          type: string
-          description: Payment due date.
-        allowNotification:
-          type: boolean
-          description: Indicates the possibility of payment notification (used by bank invoices and notes payable).
-        affiliationId:
-          type:
-          - string
-          - 'null'
-          description: Affiliation connector (payment provider) identification.
-        availablePayments:
-          type:
-          - string
-          - 'null'
-          description: Information about payment availability.
-        dueDateMinutes:
-          type: number
-          description: Amount of time (in minutes) until the payment date (`dueDate`).
-    InsertAffiliationRequest:
-      type: object
-      description: Insert new affiliation request body information.
-      required:
-      - implementation
-      - name
-      - configuration
-      - isdelivered
-      - isConfigured
-      properties:
-        implementation:
-          type: string
-          description: Provider implementation class name.
-          example: Vtex.PaymentGateway.Connectors.CieloV3Connector
-        name:
-          type: string
-          description: Provider name.
-          example: CieloV3 - Test
-        configuration:
-          type: array
-          description: Array containing provider configuration information.
-          items:
-            type: object
-            description: Provider configuration information.
-            required:
-            - name
-            - value
-            properties:
-              name:
-                type: string
-                description: Configuration parameter name.
-                example: MerchantId
-              value:
-                type: string
-                description: Configuration parameter value.
-                example: sampleData
-        isdelivered:
-          type: boolean
-          description: Indicates whether the provider is published and available for use.
-          example: true
-        isConfigured:
-          type: boolean
-          description: Indicates whether the provider is configured.
-          example: true
-      example:
-        implementation: Vtex.PaymentGateway.Connectors.CieloV3Connector
-        name: CieloV3 - Test
-        configuration:
-        - name: HowTo
-          value: https://developercielo.github.io/payment-method-enablement/
-        - name: MerchantId
-          value: sampleData
-        - name: MerchantKey
-          value: '**********'
-        - name: softDescriptor
-          value: teste
-        - name: bankInvoiceProvider
-          value: Disabled
-        - name: bankIDebitProvider
-          value: Disabled
-        - name: useEarlySecurityCapture
-          value: '0'
-        - name: isProduction
-          value: 'false'
-        - name: bankDebitProvider
-          value: Disabled
-        - name: Registered
-          value: 'false'
-        isdelivered: true
-        isConfigured: true
     GetRulesResponse:
       required:
       - id
@@ -4831,21 +4916,16 @@ components:
             - number
             - 'null'
             description: Range of card bins excluded from application of this rule.
-    UpdateAffiliationRequest:
+    InsertAffiliationRequest:
       type: object
-      description: Update affiliation by ID request body information.
+      description: Insert new affiliation request body information.
       required:
-      - id
       - implementation
       - name
       - configuration
       - isdelivered
       - isConfigured
       properties:
-        id:
-          type: string
-          description: Provider identification.
-          example: fg8b4ea5-0b24-47dc-971e-2f6635ea1f14
         implementation:
           type: string
           description: Provider implementation class name.
@@ -4863,7 +4943,6 @@ components:
             required:
             - name
             - value
-            - valueKey
             properties:
               name:
                 type: string
@@ -4873,12 +4952,6 @@ components:
                 type: string
                 description: Configuration parameter value.
                 example: sampleData
-              valueKey:
-                type:
-                - string
-                - 'null'
-                description: Value key information.
-                example: valuekey_1
         isdelivered:
           type: boolean
           description: Indicates whether the provider is published and available for use.
@@ -4888,44 +4961,34 @@ components:
           description: Indicates whether the provider is configured.
           example: true
       example:
-        id: fg8b4ea5-0b24-47dc-971e-2f6635ea1f14
         implementation: Vtex.PaymentGateway.Connectors.CieloV3Connector
         name: CieloV3 - Test
         configuration:
         - name: HowTo
           value: https://developercielo.github.io/payment-method-enablement/
-          valueKey: null
         - name: MerchantId
           value: sampleData
-          valueKey: null
         - name: MerchantKey
           value: '**********'
-          valueKey: null
         - name: softDescriptor
           value: teste
-          valueKey: null
         - name: bankInvoiceProvider
           value: Disabled
-          valueKey: null
         - name: bankIDebitProvider
           value: Disabled
-          valueKey: null
         - name: useEarlySecurityCapture
           value: '0'
-          valueKey: null
         - name: isProduction
           value: 'false'
-          valueKey: null
         - name: bankDebitProvider
           value: Disabled
-          valueKey: null
         - name: Registered
           value: 'false'
-          valueKey: null
         isdelivered: true
         isConfigured: true
-    InsertRuleRequest:
+    RulesRequest:
       required:
+      - id
       - name
       - salesChannels
       - paymentSystem
@@ -4945,12 +5008,16 @@ components:
       - country
       - dateIntervals
       type: object
-      description: New payment rule request body information.
+      description: Payment rules information.
       properties:
+        id:
+          type: string
+          description: Rule identification.
+          example: 9e11ed95-4b7f-4445-a53e-2512f260ff1c
         name:
           type: string
           description: Rule name.
-          example: Test_API_2
+          example: American Express
         salesChannels:
           $ref: '#/components/schemas/SalesChannel'
         paymentSystem:
@@ -5046,7 +5113,7 @@ components:
         enabled:
           type: boolean
           description: Indicates whether the rule is enabled in the store.
-          example: false
+          example: true
         installmentsService:
           type: boolean
           description: Indicates whether any specific type of installment service is used.
@@ -5206,95 +5273,28 @@ components:
           - number
           - 'null'
           description: Range of card bins excluded from application of this rule.
-    Connector:
+    PaymentSystem:
       required:
-      - implementation
-      - affiliationId
-      type:
-      - object
-      - 'null'
-      description: Connector (payment provider) information.
-      properties:
-        implementation:
-          type: string
-          description: Connector (payment provider) implementation class name.
-          example: Vtex.PaymentGateway.Connectors.CieloV3Connector
-        affiliationId:
-          type: string
-          description: Affiliation connector (payment provider) identification.
-          example: 0a8488e6-0c30-4150-be96-b0dcaaa6a0cd
-    Validator:
-      required:
-      - regex
-      - mask
-      - cardCodeMask
-      - cardCodeRegex
-      - weights
-      - useCvv
-      - useExpirationDate
-      - useCardHolderName
-      - useBillingAddress
-      - validCardLengths
-      type: object
-      description: Validator information.
-      properties:
-        regex:
-          type:
-          - string
-          - 'null'
-          description: '[Regex](https://regexr.com/) information.'
-        mask:
-          type:
-          - string
-          - 'null'
-          description: Validator mask.
-        cardCodeMask:
-          type:
-          - string
-          - 'null'
-          description: Card code regular mask.
-        cardCodeRegex:
-          type:
-          - string
-          - 'null'
-          description: Card code regular expression.
-        weights:
-          type:
-          - array
-          - 'null'
-          description: Array containing weigths information.
-          items:
-            type: integer
-            description: Weigths information.
-        useCvv:
-          type: boolean
-          description: Indicates whether it is necessary to use the CVV code to complete a transaction with payment made by card.
-        useExpirationDate:
-          type: boolean
-          description: Indicates whether it is necessary to use the expiration date to complete a card payment transaction.
-        useCardHolderName:
-          type: boolean
-          description: Indicates whether it is necessary to use the card holder name to complete a payment transaction made by card.
-        useBillingAddress:
-          type: boolean
-          description: Indicates whether it is necessary to use the billing address to complete a card payment transaction.
-        validCardLengths:
-          type:
-          - string
-          - 'null'
-          description: Information about valid card lengths.
-    Issuer:
-      required:
+      - id
       - name
+      - implementation
       type: object
-      description: Card issuer information.
+      description: Payment system information.
       properties:
+        id:
+          type: number
+          description: Payment system identification.
+          example: 1
         name:
+          type: string
+          description: Payment system name.
+          example: CieloV3 - Test
+        implementation:
           type:
           - string
           - 'null'
-          description: Card issuer name.
-          example: barclays
+          description: Payment system implementation class name.
+          example: Vtex.PaymentGateway.Connectors.CieloV3Connector
   parameters:
     Accept:
       name: Accept
@@ -5314,24 +5314,6 @@ components:
       schema:
         type: string
         default: application/json
-    Accept_2:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
-    Content-Type_2:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     affiliationId:
       name: affiliationId
       in: path
@@ -5341,6 +5323,15 @@ components:
       schema:
         type: string
         example: e046d326-5421-45ab-95ae-f13d37f260b5
+    Accept_2:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
     ruleId:
       name: ruleId
       in: path
@@ -5350,6 +5341,15 @@ components:
       schema:
         type: string
         example: fe6c470b-f80b-4bb1-a75c-378617f8767a
+    Content-Type_2:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

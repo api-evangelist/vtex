@@ -4406,24 +4406,6 @@ paths:
           default: vtexcommercestable
 components:
   parameters:
-    transactionId:
-      name: transactionId
-      in: path
-      description: Pre-authorization identification.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: B2E754DCD7304D22866CB6F221CF0FEB
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
     creditAccountId:
       name: creditAccountId
       in: path
@@ -4433,6 +4415,15 @@ components:
       schema:
         type: string
         example: 01bce461-9g03-12ds-8217-b3d39271e15b
+    transactionId:
+      name: transactionId
+      in: path
+      description: Pre-authorization identification.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: B2E754DCD7304D22866CB6F221CF0FEB
     Accept:
       name: Accept
       in: header
@@ -4442,60 +4433,44 @@ components:
       schema:
         type: string
         example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
   schemas:
-    SiteItems:
-      description: Object containing complete information from a store.
+    AppKeyItems:
+      description: Object representing application keys.
       type: object
       properties:
         id:
-          description: ID of the store.
-          type: number
-        name:
-          description: Store name.
+          description: ID of the application key.
           type: string
-        tradingName:
-          description: Trading name of the store.
+        appKey:
+          description: AppKey.
           type: string
-        LV:
+        appToken:
+          description: AppToken. For security reasons, it should always be null.
           type:
           - string
           - 'null'
-          description: Level.
-          deprecated: true
-        logo:
-          type:
-          - string
-          - 'null'
-          description: Logo.
-          deprecated: true
-        monetaryUnitId:
-          type: number
-          description: Monetary unit ID.
-          deprecated: true
-        domains:
-          type:
-          - array
-          - 'null'
-          description: List of domains.
-          items:
-            type: string
-            description: Domain.
-            deprecated: true
-          deprecated: true
-        hosts:
-          description: Hosts associated to the store.
-          type: array
-          items:
-            type: string
-            description: Host address.
-        aliases:
-          type: array
-          description: Aliases.
-          items:
-            type: string
-            description: Alias.
-            deprecated: true
-          deprecated: true
+        label:
+          description: Label of the application key.
+          type: string
+        createdIn:
+          description: Creation date of the application key.
+          type: string
+          format: date-time
+        isActive:
+          description: Defines if the application key is active (`true`) or not (`false`).
+          type: boolean
+        isBlocked:
+          description: Defines if the application key is blocked (`true`) or not (`false`).
+          type: boolean
     LicenseItems:
       description: Object representing licenses.
       type: object
@@ -4739,34 +4714,59 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AppKeyItems'
-    AppKeyItems:
-      description: Object representing application keys.
+    SiteItems:
+      description: Object containing complete information from a store.
       type: object
       properties:
         id:
-          description: ID of the application key.
+          description: ID of the store.
+          type: number
+        name:
+          description: Store name.
           type: string
-        appKey:
-          description: AppKey.
+        tradingName:
+          description: Trading name of the store.
           type: string
-        appToken:
-          description: AppToken. For security reasons, it should always be null.
+        LV:
           type:
           - string
           - 'null'
-        label:
-          description: Label of the application key.
-          type: string
-        createdIn:
-          description: Creation date of the application key.
-          type: string
-          format: date-time
-        isActive:
-          description: Defines if the application key is active (`true`) or not (`false`).
-          type: boolean
-        isBlocked:
-          description: Defines if the application key is blocked (`true`) or not (`false`).
-          type: boolean
+          description: Level.
+          deprecated: true
+        logo:
+          type:
+          - string
+          - 'null'
+          description: Logo.
+          deprecated: true
+        monetaryUnitId:
+          type: number
+          description: Monetary unit ID.
+          deprecated: true
+        domains:
+          type:
+          - array
+          - 'null'
+          description: List of domains.
+          items:
+            type: string
+            description: Domain.
+            deprecated: true
+          deprecated: true
+        hosts:
+          description: Hosts associated to the store.
+          type: array
+          items:
+            type: string
+            description: Host address.
+        aliases:
+          type: array
+          description: Aliases.
+          items:
+            type: string
+            description: Alias.
+            deprecated: true
+          deprecated: true
   securitySchemes:
     appKey:
       type: apiKey

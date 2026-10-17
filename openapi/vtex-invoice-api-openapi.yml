@@ -379,6 +379,24 @@ components:
         trackingUrl: https://www.tracking.com/url
         courier: carrierOne
         dispatchedDate: '2022-02-08T13:16:13.4617653+00:00'
+    Updatepartialinvoice.SendTrackingNumber:
+      title: Updatepartialinvoice.SendTrackingNumber
+      required:
+      - date
+      - orderId
+      - receipt
+      type: object
+      properties:
+        date:
+          type: string
+        orderId:
+          type: string
+        receipt:
+          type: string
+      example:
+        date: '2019-02-08T13:16:13.4617653+00:00'
+        orderId: 00-v5195004lux-01
+        receipt: 527b1ae251264ef1b7a9b597cd8f16b9
     Item1:
       title: Item1
       required:
@@ -407,24 +425,6 @@ components:
         price: 10000
         description: '335'
         quantity: 1
-    Updatepartialinvoice.SendTrackingNumber:
-      title: Updatepartialinvoice.SendTrackingNumber
-      required:
-      - date
-      - orderId
-      - receipt
-      type: object
-      properties:
-        date:
-          type: string
-        orderId:
-          type: string
-        receipt:
-          type: string
-      example:
-        date: '2019-02-08T13:16:13.4617653+00:00'
-        orderId: 00-v5195004lux-01
-        receipt: 527b1ae251264ef1b7a9b597cd8f16b9
     InvoiceNotificationRequest:
       title: InvoiceNotificationRequest
       required:
@@ -1005,32 +1005,6 @@ components:
         - id: '1234'
           price: 10000
           quantity: 1
-    Item1_2:
-      title: Item1
-      required:
-      - itemIndex
-      - price
-      - quantity
-      type: object
-      properties:
-        itemIndex:
-          type: string
-          description: Index of the SKU being invoiced.
-          example: 67
-        price:
-          type: integer
-          format: int32
-          description: Total price of the SKU being invoiced in cents. Do not use any decimal separator. For instance, `$24.99` should be represented as `2499`.
-          example: 2499
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity cof the SKU being invoiced.
-          example: 3
-      example:
-        id: '1234'
-        price: 10000
-        quantity: 1
     InvoiceNotificationRequest_2:
       title: InvoiceNotificationRequest
       required:
@@ -1118,11 +1092,46 @@ components:
         - id: '1234'
           price: 10000
           quantity: 1
+    Item1_2:
+      title: Item1
+      required:
+      - itemIndex
+      - price
+      - quantity
+      type: object
+      properties:
+        itemIndex:
+          type: string
+          description: Index of the SKU being invoiced.
+          example: 67
+        price:
+          type: integer
+          format: int32
+          description: Total price of the SKU being invoiced in cents. Do not use any decimal separator. For instance, `$24.99` should be represented as `2499`.
+          example: 2499
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity cof the SKU being invoiced.
+          example: 3
+      example:
+        id: '1234'
+        price: 10000
+        quantity: 1
   parameters:
     Accept:
       name: Accept
       in: header
       description: HTTP Client Negotiation _Accept_ Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: application/json
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
       required: true
       style: simple
       schema:
@@ -1137,15 +1146,6 @@ components:
       schema:
         type: string
         example: 70caf3941s6df1
-    Content-Type:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
-      required: true
-      style: simple
-      schema:
-        type: string
-        example: application/json
   securitySchemes:
     appKey:
       type: apiKey

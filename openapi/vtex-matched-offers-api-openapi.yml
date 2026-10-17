@@ -267,24 +267,6 @@ paths:
       deprecated: false
 components:
   parameters:
-    environment:
-      name: environment
-      in: path
-      required: true
-      description: Environment to use. Used as part of the URL.
-      schema:
-        type: string
-        default: vtexcommercestable
-    start:
-      name: start
-      in: query
-      description: Number corresponding to the row from which the offer list will begin, used for pagination. Filters the list of offers by retrieving the offers starting from the row defined. The default value is 0, if the param is not included in the call.
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: integer
-        default: 0
     fq:
       name: fq
       in: query
@@ -295,34 +277,22 @@ components:
       schema:
         type: string
         example: skuId:172
-    rows:
-      name: rows
-      in: query
-      description: Number of rows included in the response. Each row corresponds to a single offer. The default amount of rows in the response is 1, and the maximum amount is 50. To have more than one offer listed in the response, please add the `rows` parameter with a number greater than 1.
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: integer
-        example: 20
-    skuId:
-      name: skuId
+    environment:
+      name: environment
       in: path
-      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
       required: true
-      style: simple
+      description: Environment to use. Used as part of the URL.
       schema:
         type: string
-        example: '1234'
-    contentType:
-      name: Content-Type
-      in: header
-      description: Type of the content being sent.
+        default: vtexcommercestable
+    accountName:
+      name: accountName
+      in: path
       required: true
-      style: simple
+      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
       schema:
         type: string
-        default: application/json
+        example: apiexamples
     productId:
       name: productId
       in: path
@@ -332,15 +302,6 @@ components:
       schema:
         type: string
         example: '123456'
-    accept:
-      name: Accept
-      in: header
-      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
-      required: true
-      style: simple
-      schema:
-        type: string
-        default: application/json
     sort:
       name: sort
       in: query
@@ -351,125 +312,54 @@ components:
       schema:
         type: string
         example: availability,desc
-    accountName:
-      name: accountName
+    skuId:
+      name: skuId
       in: path
+      description: A string that identifies the seller's SKU that suffered the change. This is the ID that the marketplace will use for all  references to this SKU, such as price and inventory notifications.
       required: true
-      description: Name of the VTEX account that belongs to the marketplace. The notification will be posted into this account.
+      style: simple
       schema:
         type: string
-        example: apiexamples
+        example: '1234'
+    start:
+      name: start
+      in: query
+      description: Number corresponding to the row from which the offer list will begin, used for pagination. Filters the list of offers by retrieving the offers starting from the row defined. The default value is 0, if the param is not included in the call.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        default: 0
+    accept:
+      name: Accept
+      in: header
+      description: HTTP Client Negotiation Accept Header. Indicates the types of responses the client can understand.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
+    rows:
+      name: rows
+      in: query
+      description: Number of rows included in the response. Each row corresponds to a single offer. The default amount of rows in the response is 1, and the maximum amount is 50. To have more than one offer listed in the response, please add the `rows` parameter with a number greater than 1.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        example: 20
+    contentType:
+      name: Content-Type
+      in: header
+      description: Type of the content being sent.
+      required: true
+      style: simple
+      schema:
+        type: string
+        default: application/json
   schemas:
-    Offer:
-      title: Offer
-      required:
-      - SellerId
-      - SellerSkuId
-      - OffersPerSalesChannel
-      - AvailableSalesChannels
-      type: object
-      properties:
-        SellerId:
-          type: string
-          description: ID of the seller in the marketplace. This ID must be created by the marketplace.
-          default: '1'
-        SellerSkuId:
-          type: string
-          description: A string that identifies the SKU in the seller. This is the ID that the marketplace will use for future references to this SKU, such as price and inventory notifications.
-          default: '1070268'
-        OffersPerSalesChannel:
-          type: array
-          items:
-            $ref: '#/components/schemas/OffersPerSalesChannel'
-          description: Each element in the array corresponds to an offer in a specific sales channel.
-        AvailableSalesChannels:
-          type:
-          - string
-          - 'null'
-          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) ID in which the SKU is available.
-          default: '1'
-      example:
-        SellerId: '1'
-        SellerSkuId: '1070268'
-        OffersPerSalesChannel:
-        - SaleChannel: 1
-          Price: 0
-          ListPrice: 0
-          PriceWithoutDiscount: 0
-          AvailableQuantity: 0
-        AvailableSalesChannels: null
-    responseGetMatchedOffersDataByProductId:
-      type: array
-      description: Array of matched offers data by product ID.
-      items:
-        type: object
-        description: Schema for individual offer data.
-        properties:
-          productId:
-            type: string
-            description: The unique identifier for the product.
-            example: '1561208'
-          skuId:
-            type: string
-            description: The unique identifier for the product SKU.
-            example: '1559161'
-          nameComplete:
-            type: string
-            description: The complete name of the product.
-            example: Blusa Cardigan Manga Longa Vestem - Feminina - CINZA G
-          mainImage:
-            type: object
-            description: Schema for the main product image.
-            required:
-            - imagePath
-            properties:
-              imagePath:
-                type: string
-                description: The file path of the main product image.
-                example: ~/arquivos/ids/8567753-#width#-#height#/image-05b40d3167b5b7ed42285124f6862f12.jpg
-          sellersOffers:
-            type: array
-            description: Array of offers from different sellers.
-            items:
-              type: object
-              description: Schema for individual seller offer data.
-              properties:
-                sellerId:
-                  type: string
-                  description: The unique identifier for the seller.
-                  example: '1'
-                sellerSkuId:
-                  type: string
-                  description: The unique identifier for the seller's SKU.
-                  example: '1559161'
-                salesChannelOffer:
-                  type: object
-                  description: Schema for the offer data on a specific sales channel.
-                  properties:
-                    salesChannelId:
-                      type: string
-                      description: The unique identifier for the sales channel.
-                      example: '1'
-                    salesChannelName:
-                      type: string
-                      description: The name of the sales channel.
-                      example: Principal
-                    price:
-                      type: number
-                      description: The offer price.
-                      example: 0
-                    listPrice:
-                      type: number
-                      description: The list price of the product.
-                      example: 0
-                    priceWithoutDiscount:
-                      type: number
-                      description: The offer price without any discount.
-                      example: 0
-                    availableQuantity:
-                      type: integer
-                      description: The available quantity of the product.
-                      example: 0
     MainImage:
       title: MainImage
       required:
@@ -526,148 +416,6 @@ components:
         IsZoomSize: true
         ImageText: image-8b4364782e664d76a6ebc8702008e478
         LastModified: '2021-04-06T03:01:30.747'
-    responseGetMatchedOffersList:
-      type: array
-      description: Response with the list of offers available on the Marketplace.
-      items:
-        type: object
-        description: Array of SKUs in the offer.
-        properties:
-          LastModified:
-            type: string
-            description: Last date the offer was modified.
-            example: '2021-05-06T21:37:24.262529'
-          ProductId:
-            type: string
-            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
-            example: '941947'
-          CategoryId:
-            type: integer
-            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
-            example: 1563
-          BrandId:
-            type: integer
-            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
-            example: 2004291
-          ProductName:
-            type: string
-            description: Name of the offer's product.
-            example: Name of the Product - 123
-          Skus:
-            type: array
-            items:
-              $ref: '#/components/schemas/Sku2'
-    responseGetMatchedOffersDataBySKU:
-      description: Array of matched offers data by SKU.
-      type: array
-      items:
-        type: object
-        description: Schema for individual offer data.
-        properties:
-          productId:
-            type: string
-            description: The unique identifier for the product.
-            example: '1561208'
-          skuId:
-            type: string
-            description: The unique identifier for the product SKU.
-            example: '1559161'
-          nameComplete:
-            type: string
-            description: The complete name of the product.
-            example: Blusa Cardigan Manga Longa Vestem - Feminina - CINZA G
-          mainImage:
-            type: object
-            description: Schema for the main product image.
-            required:
-            - imagePath
-            properties:
-              imagePath:
-                type: string
-                description: The file path of the main product image.
-                example: ~/arquivos/ids/8567753-#width#-#height#/image-05b40d3167b5b7ed42285124f6862f12.jpg
-          sellersOffers:
-            type: array
-            description: Array of offers from different sellers.
-            items:
-              type: object
-              description: Schema for individual seller offer data.
-              properties:
-                sellerId:
-                  type: string
-                  description: The unique identifier for the seller.
-                  example: '1'
-                sellerSkuId:
-                  type: string
-                  description: The unique identifier for the seller's SKU.
-                  example: '1559161'
-                salesChannelOffer:
-                  type: array
-                  description: Array of offers on different sales channels from the same seller.
-                  items:
-                    type: object
-                    description: Schema for individual sales channel offer data.
-                    properties:
-                      salesChannelId:
-                        type: string
-                        description: The unique identifier for the sales channel.
-                        example: '1'
-                      salesChannelName:
-                        type: string
-                        description: The name of the sales channel.
-                        example: Principal
-                      price:
-                        type: number
-                        description: The offer price.
-                        example: 0
-                      listPrice:
-                        type: number
-                        description: The list price of the product.
-                        example: 0
-                      priceWithoutDiscount:
-                        type: number
-                        description: The offer price without any discount.
-                        example: 0
-                      availableQuantity:
-                        type: integer
-                        description: The available quantity of the product.
-                        example: 8
-    OffersPerSalesChannel:
-      title: OffersPerSalesChannel
-      required:
-      - SaleChannel
-      - Price
-      - ListPrice
-      - PriceWithoutDiscount
-      - AvailableQuantity
-      type: object
-      properties:
-        SaleChannel:
-          type: integer
-          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) of the SKU.
-          default: 1
-        Price:
-          type: integer
-          description: SKU's price.
-          default: 1300
-        ListPrice:
-          type: integer
-          description: SKU's suggested selling price
-          default: 1200
-        PriceWithoutDiscount:
-          type: integer
-          description: SKU's price without discount applied.
-          default: 1400
-        AvailableQuantity:
-          type: integer
-          description: Available SKU stock quantity
-          default: 30
-      example:
-        SaleChannel: 1
-        Price: 0
-        ListPrice: 0
-        PriceWithoutDiscount: 0
-        AvailableQuantity: 0
     Sku2:
       title: Sku
       required:
@@ -754,6 +502,258 @@ components:
             PriceWithoutDiscount: 1200
             AvailableQuantity: 10000000
           AvailableSalesChannels: null
+    OffersPerSalesChannel:
+      title: OffersPerSalesChannel
+      required:
+      - SaleChannel
+      - Price
+      - ListPrice
+      - PriceWithoutDiscount
+      - AvailableQuantity
+      type: object
+      properties:
+        SaleChannel:
+          type: integer
+          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) of the SKU.
+          default: 1
+        Price:
+          type: integer
+          description: SKU's price.
+          default: 1300
+        ListPrice:
+          type: integer
+          description: SKU's suggested selling price
+          default: 1200
+        PriceWithoutDiscount:
+          type: integer
+          description: SKU's price without discount applied.
+          default: 1400
+        AvailableQuantity:
+          type: integer
+          description: Available SKU stock quantity
+          default: 30
+      example:
+        SaleChannel: 1
+        Price: 0
+        ListPrice: 0
+        PriceWithoutDiscount: 0
+        AvailableQuantity: 0
+    responseGetMatchedOffersDataBySKU:
+      description: Array of matched offers data by SKU.
+      type: array
+      items:
+        type: object
+        description: Schema for individual offer data.
+        properties:
+          productId:
+            type: string
+            description: The unique identifier for the product.
+            example: '1561208'
+          skuId:
+            type: string
+            description: The unique identifier for the product SKU.
+            example: '1559161'
+          nameComplete:
+            type: string
+            description: The complete name of the product.
+            example: Blusa Cardigan Manga Longa Vestem - Feminina - CINZA G
+          mainImage:
+            type: object
+            description: Schema for the main product image.
+            required:
+            - imagePath
+            properties:
+              imagePath:
+                type: string
+                description: The file path of the main product image.
+                example: ~/arquivos/ids/8567753-#width#-#height#/image-05b40d3167b5b7ed42285124f6862f12.jpg
+          sellersOffers:
+            type: array
+            description: Array of offers from different sellers.
+            items:
+              type: object
+              description: Schema for individual seller offer data.
+              properties:
+                sellerId:
+                  type: string
+                  description: The unique identifier for the seller.
+                  example: '1'
+                sellerSkuId:
+                  type: string
+                  description: The unique identifier for the seller's SKU.
+                  example: '1559161'
+                salesChannelOffer:
+                  type: array
+                  description: Array of offers on different sales channels from the same seller.
+                  items:
+                    type: object
+                    description: Schema for individual sales channel offer data.
+                    properties:
+                      salesChannelId:
+                        type: string
+                        description: The unique identifier for the sales channel.
+                        example: '1'
+                      salesChannelName:
+                        type: string
+                        description: The name of the sales channel.
+                        example: Principal
+                      price:
+                        type: number
+                        description: The offer price.
+                        example: 0
+                      listPrice:
+                        type: number
+                        description: The list price of the product.
+                        example: 0
+                      priceWithoutDiscount:
+                        type: number
+                        description: The offer price without any discount.
+                        example: 0
+                      availableQuantity:
+                        type: integer
+                        description: The available quantity of the product.
+                        example: 8
+    Offer:
+      title: Offer
+      required:
+      - SellerId
+      - SellerSkuId
+      - OffersPerSalesChannel
+      - AvailableSalesChannels
+      type: object
+      properties:
+        SellerId:
+          type: string
+          description: ID of the seller in the marketplace. This ID must be created by the marketplace.
+          default: '1'
+        SellerSkuId:
+          type: string
+          description: A string that identifies the SKU in the seller. This is the ID that the marketplace will use for future references to this SKU, such as price and inventory notifications.
+          default: '1070268'
+        OffersPerSalesChannel:
+          type: array
+          items:
+            $ref: '#/components/schemas/OffersPerSalesChannel'
+          description: Each element in the array corresponds to an offer in a specific sales channel.
+        AvailableSalesChannels:
+          type:
+          - string
+          - 'null'
+          description: The sales channel (or [trade policy](https://help.vtex.com/en/tutorial/como-funciona-uma-politica-comercial--6Xef8PZiFm40kg2STrMkMV#master-data)) ID in which the SKU is available.
+          default: '1'
+      example:
+        SellerId: '1'
+        SellerSkuId: '1070268'
+        OffersPerSalesChannel:
+        - SaleChannel: 1
+          Price: 0
+          ListPrice: 0
+          PriceWithoutDiscount: 0
+          AvailableQuantity: 0
+        AvailableSalesChannels: null
+    responseGetMatchedOffersList:
+      type: array
+      description: Response with the list of offers available on the Marketplace.
+      items:
+        type: object
+        description: Array of SKUs in the offer.
+        properties:
+          LastModified:
+            type: string
+            description: Last date the offer was modified.
+            example: '2021-05-06T21:37:24.262529'
+          ProductId:
+            type: string
+            description: A string that identifies the seller's product. This is the ID that the marketplace will use for all references to this product.
+            example: '941947'
+          CategoryId:
+            type: integer
+            description: Offer's Category ID that the product belongs to, configured in the Catalog. It should be the marketplace's category chosen for the offer to be matched with.
+            example: 1563
+          BrandId:
+            type: integer
+            description: Offer's brand ID that the product belongs to, configured in the Catalog. It should be the marketplace's brand chosen for the offer to be matched with.
+            example: 2004291
+          ProductName:
+            type: string
+            description: Name of the offer's product.
+            example: Name of the Product - 123
+          Skus:
+            type: array
+            items:
+              $ref: '#/components/schemas/Sku2'
+    responseGetMatchedOffersDataByProductId:
+      type: array
+      description: Array of matched offers data by product ID.
+      items:
+        type: object
+        description: Schema for individual offer data.
+        properties:
+          productId:
+            type: string
+            description: The unique identifier for the product.
+            example: '1561208'
+          skuId:
+            type: string
+            description: The unique identifier for the product SKU.
+            example: '1559161'
+          nameComplete:
+            type: string
+            description: The complete name of the product.
+            example: Blusa Cardigan Manga Longa Vestem - Feminina - CINZA G
+          mainImage:
+            type: object
+            description: Schema for the main product image.
+            required:
+            - imagePath
+            properties:
+              imagePath:
+                type: string
+                description: The file path of the main product image.
+                example: ~/arquivos/ids/8567753-#width#-#height#/image-05b40d3167b5b7ed42285124f6862f12.jpg
+          sellersOffers:
+            type: array
+            description: Array of offers from different sellers.
+            items:
+              type: object
+              description: Schema for individual seller offer data.
+              properties:
+                sellerId:
+                  type: string
+                  description: The unique identifier for the seller.
+                  example: '1'
+                sellerSkuId:
+                  type: string
+                  description: The unique identifier for the seller's SKU.
+                  example: '1559161'
+                salesChannelOffer:
+                  type: object
+                  description: Schema for the offer data on a specific sales channel.
+                  properties:
+                    salesChannelId:
+                      type: string
+                      description: The unique identifier for the sales channel.
+                      example: '1'
+                    salesChannelName:
+                      type: string
+                      description: The name of the sales channel.
+                      example: Principal
+                    price:
+                      type: number
+                      description: The offer price.
+                      example: 0
+                    listPrice:
+                      type: number
+                      description: The list price of the product.
+                      example: 0
+                    priceWithoutDiscount:
+                      type: number
+                      description: The offer price without any discount.
+                      example: 0
+                    availableQuantity:
+                      type: integer
+                      description: The available quantity of the product.
+                      example: 0
   securitySchemes:
     appKey:
       type: apiKey
